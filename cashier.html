@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Cashier Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== TOP NAVIGATION BAR ===== -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-icon">🍴</span>
+            <h2>Buono <span class="topbar-badge cashier-badge-top">Cashier</span></h2>
+        </div>
+        <div class="topbar-right">
+            <span id="welcomeUser">👋 Welcome</span>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+
+    <!-- ===== MAIN DASHBOARD CONTAINER ===== -->
+    <div class="dashboard-container">
+
+        <!-- ===== STAT CARDS ===== -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">👤</div>
+                <div class="stat-info">
+                    <h3 id="cashierNameCard">-</h3>
+                    <p>Cashier</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3 id="todayDate">-</h3>
+                    <p>Today</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3 id="currentTime">-</h3>
+                    <p>Current Time</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-info">
+                    <h3 id="totalReportsCard">0</h3>
+                    <p>My Reports</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== NAVIGATION TABS ===== -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('newReport')">📝 New Report</button>
+            <button class="nav-tab" onclick="showSection('myReports')">📋 My Reports</button>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 1: NEW DAY END REPORT FORM -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-newReport" class="dashboard-section active">
+            
+            <div class="section-header">
+                <h2>📝 New Day End Report</h2>
+            </div>
+
+            <div class="report-form-container">
+
+                <!-- 📌 Basic Info -->
+                <div class="form-section">
+                    <h3 class="form-section-title">📌 Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>📅 Date</label>
+                            <input type="date" id="reportDate" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>👤 Cashier Name</label>
+                            <input type="text" id="reportCashier" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>🔄 Shift Type</label>
+                            <select id="shiftType">
+                                <option value="">-- Select Shift --</option>
+                                <option value="Morning">🌅 Morning Shift</option>
+                                <option value="Evening">🌆 Evening Shift</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>💰 Starting Cash Balance (Rs.)</label>
+                            <input type="number" id="startingCash" placeholder="0.00" oninput="calculateShortExcess()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 💵 Sales & Income -->
+                <div class="form-section">
+                    <h3 class="form-section-title">💵 Sales & Income</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>🖥️ POS System Sale (Rs.)</label>
+                            <input type="number" id="posSale" placeholder="0.00" oninput="calculateShortExcess()">
+                        </div>
+                        <div class="form-group">
+                            <label>💳 Service Charge (Rs.)</label>
+                            <input type="number" id="serviceCharge" placeholder="0.00" oninput="calculateShortExcess()">
+                        </div>
+                        <div class="form-group form-group-full">
+                            <label>💳 Card Machine Summary (Rs.)</label>
+                            <input type="number" id="cardMachine" placeholder="0.00">
+                            <small style="color:#666; font-size:11px; margin-top:4px;">ℹ️ Card payment cash flow එකට බලපාන්නේ නැහැ (record only)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 📤 Expenses (Multi-row) -->
+                <div class="form-section">
+                    <h3 class="form-section-title">📤 Expenses</h3>
+                    <div class="multi-row-container" id="expensesContainer">
+                        <div class="multi-row" id="expense-row-0">
+                            <input type="text" placeholder="Description (උදා: Milk, Gas...)" class="expense-desc">
+                            <input type="number" placeholder="Amount" class="expense-amount amount-input" oninput="calculateShortExcess()">
+                            <button type="button" class="btn-remove-row" onclick="removeRow('expense-row-0')" title="Remove">✕</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-row" onclick="addExpenseRow()">+ Add Expense</button>
+                    <div class="multi-row-total">
+                        <span>Total Expenses:</span>
+                        <span id="totalExpenses">Rs. 0.00</span>
+                    </div>
+                </div>
+
+                <!-- 💰 Day End Cash -->
+                <div class="form-section">
+                    <h3 class="form-section-title">💰 Day End Cash</h3>
+                    <div class="form-grid">
+                        <div class="form-group form-group-full">
+                            <label>💰 Day End Cash Balance (Rs.)</label>
+                            <input type="number" id="dayEndCash" placeholder="0.00" oninput="calculateShortExcess()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🏦 Bank Deposits (Multi-row) -->
+                <div class="form-section">
+                    <h3 class="form-section-title">🏦 Bank Deposits</h3>
+                    <div class="multi-row-container" id="depositsContainer">
+                        <div class="multi-row" id="deposit-row-0">
+                            <select class="deposit-bank">
+                                <option value="">-- Select Bank --</option>
+                                <option value="BOC">BOC</option>
+                                <option value="Commercial Bank">Commercial Bank</option>
+                                <option value="Sampath Bank">Sampath Bank</option>
+                                <option value="HNB">HNB</option>
+                                <option value="People's Bank">People's Bank</option>
+                            </select>
+                            <input type="number" placeholder="Amount" class="deposit-amount amount-input" oninput="calculateShortExcess()">
+                            <button type="button" class="btn-remove-row" onclick="removeRow('deposit-row-0')" title="Remove">✕</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-row" onclick="addDepositRow()">+ Add Bank Deposit</button>
+                    <div class="multi-row-total">
+                        <span>Total Deposits:</span>
+                        <span id="totalDeposits">Rs. 0.00</span>
+                    </div>
+                </div>
+
+                <!-- 📊 Short / Excess (Auto Calculate) -->
+                <div class="short-excess-box" id="shortExcessBox">
+                    <div class="short-excess-label">SHORT / EXCESS</div>
+                    <div class="short-excess-value" id="shortExcessValue">Rs. 0.00</div>
+                    <div class="short-excess-status" id="shortExcessStatus">⏳ Data enter කරන්න...</div>
+                </div>
+
+                <!-- ✅ Submit Button -->
+                <button type="button" class="btn-submit-report" id="btnSubmit" onclick="submitReport()">
+                    ✅ SUBMIT DAY END REPORT
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 2: MY REPORTS -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-myReports" class="dashboard-section">
+            
+            <div class="section-header">
+                <h2>📋 My Reports</h2>
+                <button class="btn-secondary" onclick="loadMyReports()">🔄 Refresh</button>
+            </div>
+
+            <div class="reports-list" id="reportsList">
+                <div style="text-align:center; padding:40px; color:#888;">
+                    ⏳ Loading reports...
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- ✅ SUCCESS MODAL -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="successModal" class="modal" style="display: none;">
+        <div class="modal-content modal-small" style="text-align:center;">
+            <div style="font-size:60px; margin-bottom:15px;">✅</div>
+            <h2 style="color:#4CAF50; margin-bottom:10px;">Report Submitted!</h2>
+            <p style="color:#ccc; margin-bottom:20px;">Day End Report successfully save උනා.</p>
+            <button class="btn-primary" onclick="closeSuccessModal()">OK</button>
+        </div>
+    </div>
+
+    <!-- ===== FIREBASE SDK ===== -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // ===================================
+        // 🔥 Firebase Config (ඔයාගේ config එක)
+        // ===================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+            authDomain: "buono-project-927b8.firebaseapp.com",
+            projectId: "buono-project-927b8",
+            storageBucket: "buono-project-927b8.firebasestorage.app",
+            messagingSenderId: "706681135399",
+            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ===================================
+        // 🔐 LOGIN CHECK - Cashier ද බලනවා
+        // ===================================
+        function checkLogin() {
+            const user = sessionStorage.getItem('loggedInUser');
+
+            if (!user) {
+                window.location.href = "login.html";
+                return null;
+            }
+
+            const userData = JSON.parse(user);
+
+            // Cashier, Manager, Admin ට access දෙනවා
+            if (userData.access !== 'Cashier' && userData.access !== 'Manager' && userData.access !== 'Admin') {
+                alert('⛔ You do not have Cashier access!');
+                sessionStorage.removeItem('loggedInUser');
+                window.location.href = "login.html";
+                return null;
+            }
+
+            // Welcome message update
+            const welcomeEl = document.getElementById('welcomeUser');
+            if (welcomeEl) {
+                welcomeEl.textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
+            }
+
+            // Cashier name card
+            document.getElementById('cashierNameCard').textContent = userData.name;
+
+            // Form fields auto-fill
+            document.getElementById('reportCashier').value = userData.name;
+
+            return userData;
+        }
+
+        // Page load වෙද්දී login check
+        const currentUser = checkLogin();
+
+        // ===================================
+        // 🚪 LOGOUT FUNCTION
+        // ===================================
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = "login.html";
+        }
+
+        // ===================================
+        // 📅 DATE & TIME UPDATE
+        // ===================================
+        function updateDateTime() {
+            const now = new Date();
+
+            const options = { year: 'numeric', month: 'short', day: '2-digit' };
+            document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', options);
+
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        // Today's date set කරනවා form එකේ
+        function setupReportDate() {
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            document.getElementById('reportDate').value = `${yyyy}-${mm}-${dd}`;
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        setupReportDate();
+
+        // ===================================
+        // 📑 SECTION SWITCHING
+        // ===================================
+        function showSection(sectionName) {
+            document.querySelectorAll('.dashboard-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById('section-' + sectionName).classList.add('active');
+            event.target.classList.add('active');
+
+            // My Reports tab click කරොත් reports load කරනවා
+            if (sectionName === 'myReports') {
+                loadMyReports();
+            }
+        }
+
+        // ===================================
+        // ➕ MULTI-ROW: Expenses
+        // ===================================
+        let expenseRowCount = 1;
+
+        function addExpenseRow() {
+            const container = document.getElementById('expensesContainer');
+            const rowId = 'expense-row-' + expenseRowCount;
+            const row = document.createElement('div');
+            row.className = 'multi-row';
+            row.id = rowId;
+            row.innerHTML = `
+                <input type="text" placeholder="Description (උදා: Milk, Gas...)" class="expense-desc">
+                <input type="number" placeholder="Amount" class="expense-amount amount-input" oninput="calculateShortExcess()">
+                <button type="button" class="btn-remove-row" onclick="removeRow('${rowId}')" title="Remove">✕</button>
+            `;
+            container.appendChild(row);
+            expenseRowCount++;
+        }
+
+        // ===================================
+        // ➕ MULTI-ROW: Bank Deposits
+        // ===================================
+        let depositRowCount = 1;
+
+        function addDepositRow() {
+            const container = document.getElementById('depositsContainer');
+            const rowId = 'deposit-row-' + depositRowCount;
+            const row = document.createElement('div');
+            row.className = 'multi-row';
+            row.id = rowId;
+            row.innerHTML = `
+                <select class="deposit-bank">
+                    <option value="">-- Select Bank --</option>
+                    <option value="BOC">BOC</option>
+                    <option value="Commercial Bank">Commercial Bank</option>
+                    <option value="Sampath Bank">Sampath Bank</option>
+                    <option value="HNB">HNB</option>
+                    <option value="People's Bank">People's Bank</option>
+                </select>
+                <input type="number" placeholder="Amount" class="deposit-amount amount-input" oninput="calculateShortExcess()">
+                <button type="button" class="btn-remove-row" onclick="removeRow('${rowId}')" title="Remove">✕</button>
+            `;
+            container.appendChild(row);
+            depositRowCount++;
+        }
+
+        // ===================================
+        // ❌ REMOVE ROW
+        // ===================================
+        function removeRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.remove();
+                calculateShortExcess();
+            }
+        }
+
+        // ===================================
+        // 🧮 SHORT / EXCESS REAL-TIME CALCULATION
+        // ===================================
+        function calculateShortExcess() {
+            const startingCash = parseFloat(document.getElementById('startingCash').value) || 0;
+            const posSale = parseFloat(document.getElementById('posSale').value) || 0;
+            const serviceCharge = parseFloat(document.getElementById('serviceCharge').value) || 0;
+            const dayEndCash = parseFloat(document.getElementById('dayEndCash').value) || 0;
+
+            // Total Expenses
+            let totalExpenses = 0;
+            document.querySelectorAll('.expense-amount').forEach(input => {
+                totalExpenses += parseFloat(input.value) || 0;
+            });
+            document.getElementById('totalExpenses').textContent = 'Rs. ' + totalExpenses.toFixed(2);
+
+            // Total Deposits
+            let totalDeposits = 0;
+            document.querySelectorAll('.deposit-amount').forEach(input => {
+                totalDeposits += parseFloat(input.value) || 0;
+            });
+            document.getElementById('totalDeposits').textContent = 'Rs. ' + totalDeposits.toFixed(2);
+
+            // Expected Cash = Starting + POS + Service - Expenses - Deposits
+            const expectedCash = startingCash + posSale + serviceCharge - totalExpenses - totalDeposits;
+
+            // Short/Excess = Day End - Expected
+            const shortExcess = dayEndCash - expectedCash;
+
+            const box = document.getElementById('shortExcessBox');
+            const valueEl = document.getElementById('shortExcessValue');
+            const statusEl = document.getElementById('shortExcessStatus');
+
+            box.className = 'short-excess-box';
+            valueEl.className = 'short-excess-value';
+
+            if (dayEndCash === 0 && startingCash === 0 && posSale === 0) {
+                valueEl.textContent = 'Rs. 0.00';
+                statusEl.textContent = '⏳ Data enter කරන්න...';
+                statusEl.style.color = '#888';
+            } else if (Math.abs(shortExcess) < 0.01) {
+                box.classList.add('perfect');
+                valueEl.classList.add('perfect');
+                valueEl.textContent = 'Rs. 0.00';
+                statusEl.textContent = '✅ PERFECT! හරියටම ගැලපෙනවා!';
+                statusEl.style.color = '#4CAF50';
+            } else if (shortExcess > 0) {
+                box.classList.add('excess');
+                valueEl.classList.add('excess');
+                valueEl.textContent = '+ Rs. ' + shortExcess.toFixed(2);
+                statusEl.textContent = '⬆️ EXCESS - සල්ලි වැඩියි';
+                statusEl.style.color = '#f0a500';
+            } else {
+                box.classList.add('short');
+                valueEl.classList.add('short');
+                valueEl.textContent = '- Rs. ' + Math.abs(shortExcess).toFixed(2);
+                statusEl.textContent = '⬇️ SHORT - සල්ලි අඩුයි';
+                statusEl.style.color = '#ff4444';
+            }
+        }
+
+        // ===================================
+        // ✅ SUBMIT REPORT TO FIREBASE
+        // ===================================
+        async function submitReport() {
+            const shiftType = document.getElementById('shiftType').value;
+            const startingCash = parseFloat(document.getElementById('startingCash').value) || 0;
+            const posSale = parseFloat(document.getElementById('posSale').value) || 0;
+            const serviceCharge = parseFloat(document.getElementById('serviceCharge').value) || 0;
+            const cardMachine = parseFloat(document.getElementById('cardMachine').value) || 0;
+            const dayEndCash = parseFloat(document.getElementById('dayEndCash').value) || 0;
+
+            // Validation
+            if (!shiftType) {
+                alert('⚠️ කරුණාකර Shift Type select කරන්න!');
+                return;
+            }
+
+            if (startingCash === 0 && posSale === 0 && dayEndCash === 0) {
+                alert('⚠️ කරුණාකර values enter කරන්න!');
+                return;
+            }
+
+            // Expenses collect කරනවා
+            const expenses = [];
+            let totalExpenses = 0;
+            document.querySelectorAll('.multi-row[id^="expense-row"]').forEach(row => {
+                const desc = row.querySelector('.expense-desc').value.trim();
+                const amount = parseFloat(row.querySelector('.expense-amount').value) || 0;
+                if (desc && amount > 0) {
+                    expenses.push({ description: desc, amount: amount });
+                    totalExpenses += amount;
+                }
+            });
+
+            // Deposits collect කරනවා
+            const deposits = [];
+            let totalDeposits = 0;
+            document.querySelectorAll('.multi-row[id^="deposit-row"]').forEach(row => {
+                const bank = row.querySelector('.deposit-bank').value;
+                const amount = parseFloat(row.querySelector('.deposit-amount').value) || 0;
+                if (bank && amount > 0) {
+                    deposits.push({ bank: bank, amount: amount });
+                    totalDeposits += amount;
+                }
+            });
+
+            // Short/Excess calculate
+            const expectedCash = startingCash + posSale + serviceCharge - totalExpenses - totalDeposits;
+            const shortExcess = dayEndCash - expectedCash;
+
+            // Report object
+            const report = {
+                date: document.getElementById('reportDate').value,
+                cashierName: currentUser.name,
+                cashierNickname: currentUser.nickname,
+                shiftType: shiftType,
+                startingCash: startingCash,
+                posSale: posSale,
+                serviceCharge: serviceCharge,
+                cardMachine: cardMachine,
+                expenses: expenses,
+                totalExpenses: totalExpenses,
+                deposits: deposits,
+                totalDeposits: totalDeposits,
+                dayEndCash: dayEndCash,
+                expectedCash: expectedCash,
+                shortExcess: shortExcess,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: currentUser.nickname
+            };
+
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.textContent = '⏳ Submitting...';
+
+            try {
+                await db.collection('dayEndReports').add(report);
+
+                // Success modal
+                document.getElementById('successModal').style.display = 'flex';
+
+                // Form reset
+                resetForm();
+
+                // Button reset
+                btn.disabled = false;
+                btn.textContent = '✅ SUBMIT DAY END REPORT';
+
+                // Report count update
+                loadReportCount();
+
+            } catch (error) {
+                console.error('Error submitting report:', error);
+                alert('❌ Error! Report save වුණේ නැහැ. නැවත try කරන්න.\n\n' + error.message);
+                btn.disabled = false;
+                btn.textContent = '✅ SUBMIT DAY END REPORT';
+            }
+        }
+
+        // ===================================
+        // 🔄 FORM RESET
+        // ===================================
+        function resetForm() {
+            document.getElementById('shiftType').value = '';
+            document.getElementById('startingCash').value = '';
+            document.getElementById('posSale').value = '';
+            document.getElementById('serviceCharge').value = '';
+            document.getElementById('cardMachine').value = '';
+            document.getElementById('dayEndCash').value = '';
+
+            // Expenses reset
+            document.getElementById('expensesContainer').innerHTML = `
+                <div class="multi-row" id="expense-row-0">
+                    <input type="text" placeholder="Description (උදා: Milk, Gas...)" class="expense-desc">
+                    <input type="number" placeholder="Amount" class="expense-amount amount-input" oninput="calculateShortExcess()">
+                    <button type="button" class="btn-remove-row" onclick="removeRow('expense-row-0')" title="Remove">✕</button>
+                </div>
+            `;
+            expenseRowCount = 1;
+
+            // Deposits reset
+            document.getElementById('depositsContainer').innerHTML = `
+                <div class="multi-row" id="deposit-row-0">
+                    <select class="deposit-bank">
+                        <option value="">-- Select Bank --</option>
+                        <option value="BOC">BOC</option>
+                        <option value="Commercial Bank">Commercial Bank</option>
+                        <option value="Sampath Bank">Sampath Bank</option>
+                        <option value="HNB">HNB</option>
+                        <option value="People's Bank">People's Bank</option>
+                    </select>
+                    <input type="number" placeholder="Amount" class="deposit-amount amount-input" oninput="calculateShortExcess()">
+                    <button type="button" class="btn-remove-row" onclick="removeRow('deposit-row-0')" title="Remove">✕</button>
+                </div>
+            `;
+            depositRowCount = 1;
+
+            calculateShortExcess();
+        }
+
+        // ===================================
+        // ✅ SUCCESS MODAL CLOSE
+        // ===================================
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
+        // ===================================
+        // 📋 LOAD MY REPORTS
+        // ===================================
+        async function loadMyReports() {
+            const container = document.getElementById('reportsList');
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">⏳ Loading reports...</div>';
+
+            try {
+                let query;
+
+                // Admin/Manager → all reports | Cashier → only own reports
+                if (currentUser.access === 'Admin' || currentUser.access === 'Manager') {
+                    query = db.collection('dayEndReports').orderBy('createdAt', 'desc');
+                } else {
+                    query = db.collection('dayEndReports')
+                        .where('cashierNickname', '==', currentUser.nickname);
+                }
+
+                const snapshot = await query.get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding:60px 20px; color:#666;">
+                            <div style="font-size:60px; margin-bottom:15px;">📭</div>
+                            <div style="font-size:18px; color:#888;">තාම Reports නැහැ</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sort by createdAt (Cashier query එකේ orderBy ගැහුවොත් index ඕනේ)
+                let reports = [];
+                snapshot.forEach(doc => {
+                    reports.push({ id: doc.id, ...doc.data() });
+                });
+
+                // JS sort - newest first
+                reports.sort((a, b) => {
+                    const timeA = a.createdAt?.seconds || 0;
+                    const timeB = b.createdAt?.seconds || 0;
+                    return timeB - timeA;
+                });
+
+                let html = '';
+                reports.forEach(r => {
+                    const docId = r.id;
+
+                    // Short/Excess status
+                    let seClass = 'perfect';
+                    let seText = '✅ PERFECT';
+                    let seValue = 'Rs. 0.00';
+
+                    if (Math.abs(r.shortExcess) < 0.01) {
+                        seClass = 'perfect';
+                        seText = '✅ PERFECT';
+                        seValue = 'Rs. 0.00';
+                    } else if (r.shortExcess > 0) {
+                        seClass = 'excess';
+                        seText = '⬆️ EXCESS';
+                        seValue = '+ Rs. ' + r.shortExcess.toFixed(2);
+                    } else {
+                        seClass = 'short';
+                        seText = '⬇️ SHORT';
+                        seValue = '- Rs. ' + Math.abs(r.shortExcess).toFixed(2);
+                    }
+
+                    // Expenses HTML
+                    let expensesHtml = '';
+                    if (r.expenses && r.expenses.length > 0) {
+                        r.expenses.forEach(exp => {
+                            expensesHtml += `
+                                <div class="expense-item">
+                                    <span>${exp.description}</span>
+                                    <span>Rs. ${exp.amount.toFixed(2)}</span>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        expensesHtml = '<div style="color:#666; font-size:13px; padding:5px;">No expenses</div>';
+                    }
+
+                    // Deposits HTML
+                    let depositsHtml = '';
+                    if (r.deposits && r.deposits.length > 0) {
+                        r.deposits.forEach(dep => {
+                            depositsHtml += `
+                                <div class="deposit-item">
+                                    <span>🏦 ${dep.bank}</span>
+                                    <span>Rs. ${dep.amount.toFixed(2)}</span>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        depositsHtml = '<div style="color:#666; font-size:13px; padding:5px;">No deposits</div>';
+                    }
+
+                    html += `
+                        <div class="report-card">
+                            <div class="report-card-header">
+                                <div>
+                                    <span class="report-date">📅 ${r.date}</span>
+                                    <span style="color:#888; font-size:13px; margin-left:10px;">by ${r.cashierName}</span>
+                                </div>
+                                <span class="report-shift-badge ${r.shiftType.toLowerCase()}">${r.shiftType === 'Morning' ? '🌅' : '🌆'} ${r.shiftType}</span>
+                            </div>
+
+                            <div class="report-details-grid">
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">Starting Cash</span>
+                                    <span class="report-detail-value">Rs. ${r.startingCash.toFixed(2)}</span>
+                                </div>
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">POS Sale</span>
+                                    <span class="report-detail-value">Rs. ${r.posSale.toFixed(2)}</span>
+                                </div>
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">Service Charge</span>
+                                    <span class="report-detail-value">Rs. ${r.serviceCharge.toFixed(2)}</span>
+                                </div>
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">Card Machine</span>
+                                    <span class="report-detail-value">Rs. ${r.cardMachine.toFixed(2)}</span>
+                                </div>
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">Total Expenses</span>
+                                    <span class="report-detail-value" style="color:#ff4444;">Rs. ${r.totalExpenses.toFixed(2)}</span>
+                                </div>
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">Total Deposits</span>
+                                    <span class="report-detail-value" style="color:#FF9800;">Rs. ${r.totalDeposits.toFixed(2)}</span>
+                                </div>
+                                <div class="report-detail-item">
+                                    <span class="report-detail-label">Day End Cash</span>
+                                    <span class="report-detail-value">Rs. ${r.dayEndCash.toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            <div class="report-short-excess ${seClass}">
+                                ${seText}: ${seValue}
+                            </div>
+
+                            <button class="report-expand-btn" onclick="toggleExpand('${docId}')">
+                                📋 View Expenses & Deposits Details
+                            </button>
+
+                            <div class="report-expanded" id="expand-${docId}">
+                                <div class="detail-list">
+                                    <h4>📤 Expenses</h4>
+                                    ${expensesHtml}
+                                </div>
+                                <div class="detail-list">
+                                    <h4>🏦 Bank Deposits</h4>
+                                    ${depositsHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                container.innerHTML = `
+                    <div style="text-align:center; padding:60px 20px; color:#666;">
+                        <div style="font-size:60px; margin-bottom:15px;">❌</div>
+                        <div style="font-size:18px; color:#ff4444;">Reports load වුණේ නැහැ</div>
+                        <div style="color:#666; font-size:13px; margin-top:10px;">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // ===================================
+        // 📋 TOGGLE EXPAND
+        // ===================================
+        function toggleExpand(docId) {
+            const el = document.getElementById('expand-' + docId);
+            el.classList.toggle('show');
+        }
+
+        // ===================================
+        // 📊 LOAD REPORT COUNT (Stat Card)
+        // ===================================
+        async function loadReportCount() {
+            try {
+                let query;
+                if (currentUser.access === 'Admin' || currentUser.access === 'Manager') {
+                    query = db.collection('dayEndReports');
+                } else {
+                    query = db.collection('dayEndReports')
+                        .where('cashierNickname', '==', currentUser.nickname);
+                }
+                const snapshot = await query.get();
+                document.getElementById('totalReportsCard').textContent = snapshot.size;
+            } catch (error) {
+                console.error('Error loading count:', error);
+            }
+        }
+
+        // Initial load
+        loadReportCount();
+
+        // Modal outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>

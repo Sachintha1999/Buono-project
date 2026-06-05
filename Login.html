@@ -22,7 +22,6 @@
             <button type="button" id="loginBtn" onclick="loginUser()">🔐 Login</button>
         </form>
 
-        <!-- Login error message -->
         <p id="loginError" style="color: #ff4444; text-align: center; margin-top: 10px; display: none;">
             ❌ Nickname or Password wrong!
         </p>
@@ -34,7 +33,7 @@
 
     <script>
         // ===================================
-        // Firebase Config - ඔයාගේ project settings
+        // Firebase Config
         // ===================================
         const firebaseConfig = {
             apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
@@ -45,19 +44,48 @@
             appId: "1:706681135399:web:c15f197f1efe3a64f00902"
         };
 
-        // Firebase Initialize
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         // ===================================
-        // LOGIN FUNCTION - Access type අනුව redirect කරනවා
+        // 🚀 REDIRECT FUNCTION (Access type අනුව)
+        // ===================================
+        function redirectByAccess(access) {
+            switch(access) {
+                case 'Admin':
+                    window.location.href = 'index.html';
+                    break;
+                case 'Manager':
+                    window.location.href = 'manager.html';
+                    break;
+                case 'Cashier':
+                    window.location.href = 'cashier.html';  // 🆕 Cashier dashboard
+                    break;
+                case 'Head Chef':
+                    alert('⚠️ Head Chef Dashboard coming soon!');
+                    break;
+                case 'Waiter':
+                    alert('⚠️ Waiter Dashboard coming soon!');
+                    break;
+                case 'Call Operator':
+                    alert('⚠️ Call Operator Dashboard coming soon!');
+                    break;
+                case 'Purchasing Officer':
+                    alert('⚠️ Purchasing Dashboard coming soon!');
+                    break;
+                default:
+                    alert('⚠️ Unknown access type!');
+            }
+        }
+
+        // ===================================
+        // LOGIN FUNCTION
         // ===================================
         async function loginUser() {
             const nickname = document.getElementById('loginNickname').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
             const errorEl = document.getElementById('loginError');
 
-            // Empty check - හිස්ද බලනවා
             if (!nickname || !password) {
                 errorEl.textContent = "⚠️ Please enter Nickname and Password!";
                 errorEl.style.display = "block";
@@ -65,32 +93,26 @@
             }
 
             try {
-                // Firebase එකෙන් nickname match කරනවා
                 const snapshot = await db.collection('employees')
                     .where('nickname', '==', nickname)
                     .get();
 
                 if (snapshot.empty) {
-                    // Nickname හම්බ උනේ නැහැ
                     errorEl.textContent = "❌ Nickname not found!";
                     errorEl.style.display = "block";
                     return;
                 }
 
-                // User data ගන්නවා
                 const userDoc = snapshot.docs[0];
                 const userData = userDoc.data();
 
-                // Password check කරනවා
                 if (userData.password !== password) {
                     errorEl.textContent = "❌ Wrong Password!";
                     errorEl.style.display = "block";
                     return;
                 }
 
-                // ===================================
-                // LOGIN SUCCESS! - Session එකට save කරනවා
-                // ===================================
+                // LOGIN SUCCESS
                 const userInfo = {
                     id: userDoc.id,
                     name: userData.name,
@@ -100,42 +122,8 @@
 
                 sessionStorage.setItem('loggedInUser', JSON.stringify(userInfo));
 
-                // ===================================
-                // ACCESS TYPE අනුව REDIRECT කරනවා
-                // Admin → index.html
-                // Manager → manager.html
-                // අනිත් ඔක්කොම → staff.html (පස්සේ හදනවා)
-                // ===================================
-                switch(userData.access) {
-                    case 'Admin':
-                        window.location.href = 'index.html';
-                        break;
-                    case 'Manager':
-                        window.location.href = 'manager.html';
-                        break;
-                    case 'Cashier':
-                        // window.location.href = 'cashier.html'; // පස්සේ හදනවා
-                        alert('⚠️ Cashier Dashboard coming soon!');
-                        break;
-                    case 'Head Chef':
-                        // window.location.href = 'chef.html'; // පස්සේ හදනවා
-                        alert('⚠️ Head Chef Dashboard coming soon!');
-                        break;
-                    case 'Waiter':
-                        // window.location.href = 'waiter.html'; // පස්සේ හදනවා
-                        alert('⚠️ Waiter Dashboard coming soon!');
-                        break;
-                    case 'Call Operator':
-                        // window.location.href = 'operator.html'; // පස්සේ හදනවා
-                        alert('⚠️ Call Operator Dashboard coming soon!');
-                        break;
-                    case 'Purchasing Officer':
-                        // window.location.href = 'purchasing.html'; // පස්සේ හදනවා
-                        alert('⚠️ Purchasing Dashboard coming soon!');
-                        break;
-                    default:
-                        alert('⚠️ Unknown access type!');
-                }
+                // Redirect
+                redirectByAccess(userData.access);
 
             } catch (error) {
                 console.error("Login error:", error);
@@ -144,32 +132,18 @@
             }
         }
 
-        // ===================================
-        // ENTER key press කරද්දී login වෙනවා
-        // ===================================
+        // ENTER key press
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 loginUser();
             }
         });
 
-        // ===================================
-        // දැනටමත් login වෙලා නම් redirect කරනවා
-        // ===================================
+        // දැනටමත් login වෙලා නම් redirect
         const existingUser = sessionStorage.getItem('loggedInUser');
         if (existingUser) {
             const user = JSON.parse(existingUser);
-            switch(user.access) {
-                case 'Admin':
-                    window.location.href = 'index.html';
-                    break;
-                case 'Manager':
-                    window.location.href = 'manager.html';
-                    break;
-                default:
-                    // අනිත් roles පස්සේ add කරනවා
-                    break;
-            }
+            redirectByAccess(user.access);
         }
     </script>
 
