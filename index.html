@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Buono Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🍴 Buono Employee Dashboard</h1>
+
+    <div class="form-box">
+      <h2>Add Employee</h2>
+      <input type="text" id="empName" placeholder="Employee Name">
+      <input type="text" id="nickName" placeholder="Nick Name">
+      <input type="password" id="password" placeholder="Password">
+      <select id="access">
+        <option value="">-- Select Access --</option>
+        <option value="Admin">Admin</option>
+        <option value="Manager">Manager</option>
+        <option value="Staff">Staff</option>
+      </select>
+      <button onclick="addEmployee()">➕ Add Employee</button>
+    </div>
+
+    <div class="list-box">
+      <h2>Employees List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Nick Name</th>
+            <th>Password</th>
+            <th>Access</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="empList"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
