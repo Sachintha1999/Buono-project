@@ -1205,3 +1205,289 @@ tr:last-child td {
         padding: 20px;
     }
 }
+
+
+/* ═══════════════════════════════════════════
+   🆕 PERMISSION CHECKBOXES (Admin Dashboard)
+═══════════════════════════════════════════ */
+
+.permission-block {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border: 1px solid #2a2a4a;
+    transition: border-color 0.3s;
+}
+
+.permission-block:hover {
+    border-color: #f0a500;
+}
+
+.permission-block-title {
+    color: #f0a500;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #2a2a4a;
+}
+
+.permission-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+}
+
+.perm-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #16213e;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid transparent;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.perm-checkbox:hover {
+    background: #1e2d4a;
+    border-color: #f0a500;
+}
+
+.perm-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #f0a500;
+    margin: 0;
+}
+
+.perm-checkbox input[type="checkbox"]:checked + span {
+    color: #f0a500;
+    font-weight: 600;
+}
+
+.perm-checkbox span {
+    transition: color 0.3s;
+}
+
+
+/* ═══════════════════════════════════════════
+   🆕 ACCESS PAGE - Database Cards
+═══════════════════════════════════════════ */
+
+.access-welcome {
+    text-align: center;
+    padding: 30px 20px;
+    margin-bottom: 20px;
+}
+
+.access-welcome h1 {
+    color: #f0a500;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.access-welcome p {
+    color: #8892b0;
+    font-size: 15px;
+}
+
+.databases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.database-card {
+    background: #16213e;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid #2a2a4a;
+}
+
+.database-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(240, 165, 0, 0.2);
+    border-color: #f0a500;
+}
+
+.db-card-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+}
+
+.db-card-title {
+    color: #f0a500;
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.db-card-subtitle {
+    color: #8892b0;
+    font-size: 13px;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.db-card-description {
+    color: #ccc;
+    font-size: 14px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.db-permissions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+    padding: 12px;
+    background: #0f1a2e;
+    border-radius: 8px;
+    min-height: 50px;
+    align-items: center;
+}
+
+.db-perm-badge {
+    background: rgba(240, 165, 0, 0.15);
+    color: #f0a500;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.db-card-btn {
+    width: 100%;
+    padding: 12px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.db-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════════
+   🆕 DATABASE SWITCHER (Top Bar)
+═══════════════════════════════════════════ */
+
+.db-switcher {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #0f3460;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 15px;
+    border: 1px solid transparent;
+}
+
+.db-switcher:hover {
+    background: #1a4080;
+    border-color: #f0a500;
+}
+
+.db-switcher-icon {
+    font-size: 18px;
+}
+
+.db-switcher-name {
+    color: #f0a500;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.db-switcher-arrow {
+    color: #f0a500;
+    font-size: 10px;
+    transition: transform 0.3s;
+}
+
+.db-switcher-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    background: #16213e;
+    border-radius: 10px;
+    padding: 10px;
+    min-width: 280px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    border: 1px solid #2a2a4a;
+}
+
+.db-switcher-dropdown.show {
+    display: block;
+    animation: fadeIn 0.2s ease;
+}
+
+.db-dropdown-title {
+    color: #8892b0;
+    font-size: 12px;
+    padding: 8px 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.db-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    color: #ccc;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.db-dropdown-item:hover {
+    background: #1e2d4a;
+    color: #f0a500;
+}
+
+.db-dropdown-item.current {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.db-dropdown-divider {
+    height: 1px;
+    background: #2a2a4a;
+    margin: 8px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .db-switcher {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    
+    .db-switcher-dropdown {
+        min-width: 250px;
+        left: auto;
+        right: 0;
+    }
+}

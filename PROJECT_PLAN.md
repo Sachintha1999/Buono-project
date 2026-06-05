@@ -31,4 +31,4 @@
 
 ## 🏗️ SYSTEM ARCHITECTURE (IMPORTANT!)
 
-### ✅ Dashboard Concept (Database-Wise, NOT Role-Wise):
+### ✅ Database Concept (Database-Wise, NOT Role-Wise):

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - My Databases</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== TOP NAVIGATION BAR ===== -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-icon">🍴</span>
+            <h2>Buono <span class="topbar-badge" id="userAccessBadge">User</span></h2>
+        </div>
+        <div class="topbar-right">
+            <span id="welcomeUser">👋 Welcome</span>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+
+    <!-- ===== MAIN CONTAINER ===== -->
+    <div class="dashboard-container">
+
+        <!-- Welcome Section -->
+        <div class="access-welcome">
+            <h1>🏠 Welcome to Your Workspace</h1>
+            <p id="accessSubtitle">Loading your databases...</p>
+        </div>
+
+        <!-- ===== STAT CARDS ===== -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">👤</div>
+                <div class="stat-info">
+                    <h3 id="userName">-</h3>
+                    <p>Logged in as</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3 id="todayDate">-</h3>
+                    <p>Today</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3 id="currentTime">-</h3>
+                    <p>Current Time</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📂</div>
+                <div class="stat-info">
+                    <h3 id="dbCount">0</h3>
+                    <p>Available Databases</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== DATABASES SECTION ===== -->
+        <div class="section-header">
+            <h2>📂 My Databases</h2>
+        </div>
+
+        <!-- Databases Cards Container -->
+        <div class="databases-grid" id="databasesGrid">
+            <div style="text-align:center; padding:60px; color:#888; grid-column:1/-1;">
+                ⏳ Loading databases...
+            </div>
+        </div>
+
+        <!-- No Access Message (Hidden by default) -->
+        <div id="noAccessMsg" style="display:none; text-align:center; padding:60px 20px; background:#16213e; border-radius:15px; margin-top:20px;">
+            <div style="font-size:60px; margin-bottom:15px;">🔒</div>
+            <h2 style="color:#ff4444; margin-bottom:10px;">No Database Access</h2>
+            <p style="color:#8892b0; margin-bottom:20px;">
+                ඔයාට කිසිම database එකකට access නැහැ.<br>
+                Admin හෝ Manager ට කතා කරන්න.
+            </p>
+            <button class="btn-secondary" onclick="logout()">🚪 Logout</button>
+        </div>
+
+    </div>
+
+    <!-- ===== FIREBASE SDK ===== -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // ═══════════════════════════════════════
+        // 🔥 Firebase Config
+        // ═══════════════════════════════════════
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+            authDomain: "buono-project-927b8.firebaseapp.com",
+            projectId: "buono-project-927b8",
+            storageBucket: "buono-project-927b8.firebasestorage.app",
+            messagingSenderId: "706681135399",
+            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ═══════════════════════════════════════
+        // 📂 DATABASES MASTER LIST
+        // මේකට අලුත් database එකක් add කරන්න ඕන තැන
+        // ═══════════════════════════════════════
+        const DATABASES = [
+            {
+                id: 'employeeDB',
+                name: 'Employee Database',
+                subtitle: 'HR Management',
+                icon: '👥',
+                description: 'Manage employees, access types & permissions',
+                color: '#2196F3',
+                url: 'index.html'
+            },
+            {
+                id: 'dayEndReportDB',
+                name: 'Day End Reports',
+                subtitle: 'Cashier Reports',
+                icon: '💰',
+                description: 'Submit & view daily cash reports with auto calculations',
+                color: '#4CAF50',
+                url: 'cashier.html'
+            }
+            // 🔜 Future databases:
+            // {
+            //     id: 'kitchenDB',
+            //     name: 'Kitchen Database',
+            //     subtitle: 'Kitchen Orders',
+            //     icon: '👨‍🍳',
+            //     description: 'Manage kitchen orders & recipes',
+            //     color: '#9C27B0',
+            //     url: 'kitchen.html'
+            // },
+        ];
+
+        // ═══════════════════════════════════════
+        // 🔐 LOGIN CHECK
+        // ═══════════════════════════════════════
+        const userJson = sessionStorage.getItem('loggedInUser');
+
+        if (!userJson) {
+            window.location.href = "login.html";
+        }
+
+        const currentUser = JSON.parse(userJson);
+
+        // ═══════════════════════════════════════
+        // 🎨 UPDATE UI WITH USER INFO
+        // ═══════════════════════════════════════
+        function setupUserInfo() {
+            // Welcome message
+            document.getElementById('welcomeUser').textContent = `👋 Welcome, ${currentUser.name}`;
+            document.getElementById('userName').textContent = currentUser.name;
+
+            // Access badge
+            const badge = document.getElementById('userAccessBadge');
+            badge.textContent = currentUser.access;
+            badge.className = 'topbar-badge ' + getBadgeTopClass(currentUser.access);
+
+            // Subtitle
+            document.getElementById('accessSubtitle').textContent = 
+                `${currentUser.access} access - Select a database to start working`;
+        }
+
+        // Badge color
+        function getBadgeTopClass(access) {
+            switch(access) {
+                case 'Admin': return 'admin-badge-top';
+                case 'Manager': return 'manager-badge';
+                case 'Cashier': return 'cashier-badge-top';
+                default: return 'manager-badge';
+            }
+        }
+
+        // ═══════════════════════════════════════
+        // 📅 DATE & TIME
+        // ═══════════════════════════════════════
+        function updateDateTime() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'short', day: '2-digit' };
+            document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', options);
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            });
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // ═══════════════════════════════════════
+        // 🔍 CHECK IF USER HAS ACCESS TO DATABASE
+        // ═══════════════════════════════════════
+        function hasAccessToDatabase(dbId) {
+            // Admin → සියලු databases access
+            if (currentUser.access === 'Admin') return true;
+
+            // Permissions object check
+            const perms = currentUser.permissions;
+            if (!perms || !perms[dbId]) return false;
+
+            const dbPerms = perms[dbId];
+
+            // කිසියම් permission එකක් true නම් access දෙනවා
+            return dbPerms.add || dbPerms.view || dbPerms.selfView 
+                || dbPerms.edit || dbPerms.delete;
+        }
+
+        // ═══════════════════════════════════════
+        // 📂 LOAD DATABASES FROM FIREBASE
+        // ═══════════════════════════════════════
+        async function loadDatabases() {
+            try {
+                // Latest user data Firebase එකෙන් ගන්නවා
+                const userDoc = await db.collection('employees').doc(currentUser.id).get();
+
+                if (userDoc.exists) {
+                    const latestData = userDoc.data();
+                    // Session update කරනවා latest data වලින්
+                    currentUser.permissions = latestData.permissions || {};
+                    currentUser.access = latestData.access;
+                    sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+                }
+
+                setupUserInfo();
+                renderDatabases();
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                setupUserInfo();
+                renderDatabases();
+            }
+        }
+
+        // ═══════════════════════════════════════
+        // 🎨 RENDER DATABASE CARDS
+        // ═══════════════════════════════════════
+        function renderDatabases() {
+            const grid = document.getElementById('databasesGrid');
+            const noAccessMsg = document.getElementById('noAccessMsg');
+
+            // Available databases filter
+            const availableDBs = DATABASES.filter(db => hasAccessToDatabase(db.id));
+
+            // Count update
+            document.getElementById('dbCount').textContent = availableDBs.length;
+
+            if (availableDBs.length === 0) {
+                grid.style.display = 'none';
+                noAccessMsg.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noAccessMsg.style.display = 'none';
+
+            let html = '';
+            availableDBs.forEach(database => {
+                // Permission details එක ගන්නවා
+                const perms = currentUser.access === 'Admin' 
+                    ? { add: true, view: true, selfView: true, edit: true, delete: true }
+                    : (currentUser.permissions[database.id] || {});
+
+                // Permission badges හදනවා
+                let permBadges = '';
+                if (perms.add) permBadges += '<span class="db-perm-badge">➕ Add</span>';
+                if (perms.view) permBadges += '<span class="db-perm-badge">👁️ View</span>';
+                if (perms.selfView && !perms.view) permBadges += '<span class="db-perm-badge">👤 Self</span>';
+                if (perms.edit) permBadges += '<span class="db-perm-badge">✏️ Edit</span>';
+                if (perms.delete) permBadges += '<span class="db-perm-badge">🗑️ Delete</span>';
+
+                html += `
+                    <div class="database-card" onclick="openDatabase('${database.url}')" style="border-top: 4px solid ${database.color};">
+                        <div class="db-card-icon" style="color: ${database.color};">${database.icon}</div>
+                        <h3 class="db-card-title">${database.name}</h3>
+                        <p class="db-card-subtitle">${database.subtitle}</p>
+                        <p class="db-card-description">${database.description}</p>
+                        
+                        <div class="db-permissions-row">
+                            ${permBadges || '<span style="color:#666; font-size:12px;">No permissions</span>'}
+                        </div>
+                        
+                        <button class="db-card-btn" style="background: ${database.color};">
+                            Open Database →
+                        </button>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        // ═══════════════════════════════════════
+        // 🚀 OPEN DATABASE
+        // ═══════════════════════════════════════
+        function openDatabase(url) {
+            window.location.href = url;
+        }
+
+        // ═══════════════════════════════════════
+        // 🚪 LOGOUT
+        // ═══════════════════════════════════════
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = "login.html";
+        }
+
+        // Initial load
+        loadDatabases();
+    </script>
+
+</body>
+</html>
