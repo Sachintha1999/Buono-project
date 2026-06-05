@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Manager Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== TOP NAVIGATION BAR ===== -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-icon">🍴</span>
+            <h2>Buono <span class="topbar-badge manager-badge">Manager</span></h2>
+        </div>
+        <div class="topbar-right">
+            <span id="welcomeUser">👋 Welcome</span>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+        </div>
+    </div>
+
+    <!-- ===== MAIN DASHBOARD CONTAINER ===== -->
+    <div class="dashboard-container">
+
+        <!-- ===== STAT CARDS - ඉහළම පෙන්වන cards ===== -->
+        <div class="stats-row">
+            <!-- Card 1: Total Employees -->
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3 id="totalEmployees">0</h3>
+                    <p>Total Employees</p>
+                </div>
+            </div>
+
+            <!-- Card 2: Today Date -->
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3 id="todayDate">-</h3>
+                    <p>Today</p>
+                </div>
+            </div>
+
+            <!-- Card 3: Current Time -->
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3 id="currentTime">-</h3>
+                    <p>Current Time</p>
+                </div>
+            </div>
+
+            <!-- Card 4: My Access Level -->
+            <div class="stat-card">
+                <div class="stat-icon">🔑</div>
+                <div class="stat-info">
+                    <h3 id="myAccess">Manager</h3>
+                    <p>Access Level</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== NAVIGATION TABS - Dashboard sections switch කරන්න ===== -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('employees')">👥 Employees</button>
+            <button class="nav-tab" onclick="showSection('dashboards')">📊 Dashboards</button>
+            <button class="nav-tab" onclick="showSection('settings')">⚙️ Settings</button>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 1: EMPLOYEE MANAGEMENT -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-employees" class="dashboard-section active">
+            
+            <div class="section-header">
+                <h2>👥 Employee Management</h2>
+                <button class="btn-primary" onclick="openAddModal()">➕ Add Employee</button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchEmployee" placeholder="🔍 Search employee name or nickname..." onkeyup="searchEmployees()">
+            </div>
+
+            <!-- Employees Table -->
+            <div class="table-container">
+                <table id="employeeTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Nickname</th>
+                            <th>Access Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                        <!-- Firebase data මෙතනට load වෙනවා -->
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 20px;">
+                                ⏳ Loading employees...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 2: DASHBOARDS ACCESS -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-dashboards" class="dashboard-section">
+            
+            <div class="section-header">
+                <h2>📊 All Dashboards</h2>
+            </div>
+
+            <div class="dashboard-cards">
+                <!-- Admin Dashboard Card -->
+                <div class="dash-card">
+                    <div class="dash-card-icon">👨‍💼</div>
+                    <h3>Admin Dashboard</h3>
+                    <p>Full system control & employee management</p>
+                    <span class="dash-card-status">🔒 Admin Only</span>
+                </div>
+
+                <!-- Manager Dashboard Card -->
+                <div class="dash-card active-card">
+                    <div class="dash-card-icon">🧑‍💼</div>
+                    <h3>Manager Dashboard</h3>
+                    <p>Employee management, reports & monitoring</p>
+                    <span class="dash-card-status status-active">✅ You are here</span>
+                </div>
+
+                <!-- Cashier Dashboard Card -->
+                <div class="dash-card">
+                    <div class="dash-card-icon">💰</div>
+                    <h3>Cashier Dashboard</h3>
+                    <p>POS system, billing & payments</p>
+                    <span class="dash-card-status">🔜 Coming Soon</span>
+                </div>
+
+                <!-- Head Chef Dashboard Card -->
+                <div class="dash-card">
+                    <div class="dash-card-icon">👨‍🍳</div>
+                    <h3>Head Chef Dashboard</h3>
+                    <p>Kitchen orders, menu & recipes</p>
+                    <span class="dash-card-status">🔜 Coming Soon</span>
+                </div>
+
+                <!-- Waiter Dashboard Card -->
+                <div class="dash-card">
+                    <div class="dash-card-icon">🍽️</div>
+                    <h3>Waiter Dashboard</h3>
+                    <p>Table orders & customer service</p>
+                    <span class="dash-card-status">🔜 Coming Soon</span>
+                </div>
+
+                <!-- Call Operator Card -->
+                <div class="dash-card">
+                    <div class="dash-card-icon">📞</div>
+                    <h3>Call Operator Dashboard</h3>
+                    <p>Phone orders & delivery management</p>
+                    <span class="dash-card-status">🔜 Coming Soon</span>
+                </div>
+
+                <!-- Purchasing Officer Card -->
+                <div class="dash-card">
+                    <div class="dash-card-icon">📦</div>
+                    <h3>Purchasing Dashboard</h3>
+                    <p>Stock management & supplier orders</p>
+                    <span class="dash-card-status">🔜 Coming Soon</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 3: SETTINGS -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-settings" class="dashboard-section">
+            
+            <div class="section-header">
+                <h2>⚙️ Settings</h2>
+            </div>
+
+            <div class="settings-container">
+                <div class="setting-card">
+                    <h3>👤 My Profile</h3>
+                    <p><strong>Name:</strong> <span id="settingName">-</span></p>
+                    <p><strong>Nickname:</strong> <span id="settingNickname">-</span></p>
+                    <p><strong>Access:</strong> <span id="settingAccess">-</span></p>
+                </div>
+
+                <div class="setting-card">
+                    <h3>🏢 Business Info</h3>
+                    <p><strong>Business:</strong> Buono Cafe & Academy</p>
+                    <p><strong>System:</strong> Employee Management v1.0</p>
+                    <p><strong>Developer:</strong> Naveen</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- ADD EMPLOYEE MODAL (Popup) -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="addModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">➕ Add New Employee</h2>
+                <button class="modal-close" onclick="closeModal()">✖</button>
+            </div>
+
+            <form id="employeeForm" onsubmit="return false;">
+                <label>Full Name:</label>
+                <input type="text" id="empName" placeholder="Enter full name" required>
+
+                <label>Nickname:</label>
+                <input type="text" id="empNickname" placeholder="Enter nickname (for login)" required>
+
+                <label>Password:</label>
+                <input type="text" id="empPassword" placeholder="Enter password" required>
+
+                <label>Access Type:</label>
+                <select id="empAccess" required>
+                    <option value="">-- Select Access --</option>
+                    <option value="Admin">👨‍💼 Admin</option>
+                    <option value="Manager">🧑‍💼 Manager</option>
+                    <option value="Cashier">💰 Cashier</option>
+                    <option value="Purchasing Officer">📦 Purchasing Officer</option>
+                    <option value="Head Chef">👨‍🍳 Head Chef</option>
+                    <option value="Call Operator">📞 Call Operator</option>
+                    <option value="Waiter">🍽️ Waiter</option>
+                </select>
+
+                <!-- Hidden field - Edit mode එකේදී document ID save කරන්න -->
+                <input type="hidden" id="editDocId" value="">
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-primary" id="saveBtn" onclick="saveEmployee()">💾 Save</button>
+                    <button type="button" class="btn-secondary" onclick="closeModal()">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- DELETE CONFIRM MODAL -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="deleteModal" class="modal" style="display: none;">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>⚠️ Delete Employee</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">✖</button>
+            </div>
+            <p style="text-align: center; font-size: 16px; margin: 20px 0;">
+                Are you sure you want to delete <strong id="deleteEmpName">this employee</strong>?
+            </p>
+            <p style="text-align: center; color: #ff4444; font-size: 14px;">
+                ⚠️ This action cannot be undone!
+            </p>
+            <div class="modal-buttons">
+                <button class="btn-danger" id="confirmDeleteBtn" onclick="confirmDelete()">🗑️ Yes, Delete</button>
+                <button class="btn-secondary" onclick="closeDeleteModal()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FIREBASE SDK ===== -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+        // ===================================
+        // Firebase Config
+        // ===================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+            authDomain: "buono-project-927b8.firebaseapp.com",
+            projectId: "buono-project-927b8",
+            storageBucket: "buono-project-927b8.firebasestorage.app",
+            messagingSenderId: "706681135399",
+            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ===================================
+        // GLOBAL VARIABLES
+        // ===================================
+        let deleteDocId = ''; // Delete කරන්න තියෙන employee ID
+        let allEmployees = []; // Search function එකට
+
+        // ===================================
+        // LOGIN CHECK - Manager ද බලනවා
+        // ===================================
+        function checkLogin() {
+            const user = sessionStorage.getItem('loggedInUser');
+
+            if (!user) {
+                // Login නැත්නම් login page ට යවනවා
+                window.location.href = "login.html";
+                return null;
+            }
+
+            const userData = JSON.parse(user);
+
+            // Manager හෝ Admin විතරක් access දෙනවා
+            if (userData.access !== 'Manager' && userData.access !== 'Admin') {
+                alert('⛔ You do not have Manager access!');
+                sessionStorage.removeItem('loggedInUser');
+                window.location.href = "login.html";
+                return null;
+            }
+
+            // Welcome message update
+            const welcomeEl = document.getElementById('welcomeUser');
+            if (welcomeEl) {
+                welcomeEl.textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
+            }
+
+            // Settings section update
+            document.getElementById('settingName').textContent = userData.name;
+            document.getElementById('settingNickname').textContent = userData.nickname;
+            document.getElementById('settingAccess').textContent = userData.access;
+            document.getElementById('myAccess').textContent = userData.access;
+
+            return userData;
+        }
+
+        // Page load වෙද්දී login check
+        const currentUser = checkLogin();
+
+        // ===================================
+        // LOGOUT FUNCTION
+        // ===================================
+        function logout() {
+            sessionStorage.removeItem('loggedInUser');
+            window.location.href = "login.html";
+        }
+
+        // ===================================
+        // SECTION SWITCHING - Tab click කරද්දී section මාරු කරනවා
+        // ===================================
+        function showSection(sectionName) {
+            // හැම section එකක්ම hide කරනවා
+            document.querySelectorAll('.dashboard-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            // හැම tab එකක්ම deactivate කරනවා
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Click කරපු section එක show කරනවා
+            document.getElementById('section-' + sectionName).classList.add('active');
+
+            // Click කරපු tab එක activate කරනවා
+            event.target.classList.add('active');
+        }
+
+        // ===================================
+        // DATE & TIME UPDATE - ඉහළ cards වල
+        // ===================================
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Date format: "Jun 05, 2026"
+            const options = { year: 'numeric', month: 'short', day: '2-digit' };
+            document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', options);
+            
+            // Time format: "2:05 PM"
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        // හැම තත්පරයකටම time update වෙනවා
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // ===================================
+        // LOAD EMPLOYEES - Firebase එකෙන් real-time data
+        // ===================================
+        function loadEmployees() {
+            db.collection('employees').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+                const tbody = document.getElementById('employeeTableBody');
+                tbody.innerHTML = '';
+
+                // Total count update
+                document.getElementById('totalEmployees').textContent = snapshot.size;
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 20px; color: #888;">
+                                📭 No employees found. Click "Add Employee" to add one!
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                allEmployees = []; // Search array reset
+
+                let count = 0;
+                snapshot.forEach((doc) => {
+                    count++;
+                    const emp = doc.data();
+
+                    // Search array එකට add කරනවා
+                    allEmployees.push({ id: doc.id, ...emp });
+
+                    // Access type badge color
+                    const badgeClass = getBadgeClass(emp.access);
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${count}</td>
+                            <td>${emp.name}</td>
+                            <td>${emp.nickname}</td>
+                            <td><span class="badge ${badgeClass}">${emp.access}</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-edit" onclick="editEmployee('${doc.id}', '${emp.name}', '${emp.nickname}', '${emp.password}', '${emp.access}')">✏️ Edit</button>
+                                <button class="btn-delete" onclick="openDeleteModal('${doc.id}', '${emp.name}')">🗑️ Delete</button>
+                            </td>
+                        </tr>`;
+                });
+            });
+        }
+
+        // Employees load කරනවා
+        loadEmployees();
+
+        // ===================================
+        // BADGE COLOR FUNCTION - Access type අනුව color
+        // ===================================
+        function getBadgeClass(access) {
+            switch(access) {
+                case 'Admin': return 'badge-admin';
+                case 'Manager': return 'badge-manager';
+                case 'Cashier': return 'badge-cashier';
+                case 'Purchasing Officer': return 'badge-purchasing';
+                case 'Head Chef': return 'badge-chef';
+                case 'Call Operator': return 'badge-operator';
+                case 'Waiter': return 'badge-waiter';
+                default: return 'badge-default';
+            }
+        }
+
+        // ===================================
+        // SEARCH EMPLOYEES - Type කරද්දී filter වෙනවා
+        // ===================================
+        function searchEmployees() {
+            const searchText = document.getElementById('searchEmployee').value.toLowerCase();
+            const tbody = document.getElementById('employeeTableBody');
+            tbody.innerHTML = '';
+
+            const filtered = allEmployees.filter(emp => 
+                emp.name.toLowerCase().includes(searchText) || 
+                emp.nickname.toLowerCase().includes(searchText) ||
+                emp.access.toLowerCase().includes(searchText)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; color: #888;">
+                            🔍 No results found for "${searchText}"
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            filtered.forEach((emp, index) => {
+                const badgeClass = getBadgeClass(emp.access);
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${emp.name}</td>
+                        <td>${emp.nickname}</td>
+                        <td><span class="badge ${badgeClass}">${emp.access}</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-edit" onclick="editEmployee('${emp.id}', '${emp.name}', '${emp.nickname}', '${emp.password}', '${emp.access}')">✏️ Edit</button>
+                            <button class="btn-delete" onclick="openDeleteModal('${emp.id}', '${emp.name}')">🗑️ Delete</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        // ===================================
+        // ADD EMPLOYEE MODAL - Popup open කරනවා
+        // ===================================
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '➕ Add New Employee';
+            document.getElementById('saveBtn').textContent = '💾 Save';
+            document.getElementById('empName').value = '';
+            document.getElementById('empNickname').value = '';
+            document.getElementById('empPassword').value = '';
+            document.getElementById('empAccess').value = '';
+            document.getElementById('editDocId').value = '';
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        // ===================================
+        // EDIT EMPLOYEE - Data fill කරලා modal open කරනවා
+        // ===================================
+        function editEmployee(docId, name, nickname, password, access) {
+            document.getElementById('modalTitle').textContent = '✏️ Edit Employee';
+            document.getElementById('saveBtn').textContent = '💾 Update';
+            document.getElementById('empName').value = name;
+            document.getElementById('empNickname').value = nickname;
+            document.getElementById('empPassword').value = password;
+            document.getElementById('empAccess').value = access;
+            document.getElementById('editDocId').value = docId;
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        // ===================================
+        // CLOSE MODAL
+        // ===================================
+        function closeModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        // ===================================
+        // SAVE/UPDATE EMPLOYEE - Firebase ට save කරනවා
+        // ===================================
+        async function saveEmployee() {
+            const name = document.getElementById('empName').value.trim();
+            const nickname = document.getElementById('empNickname').value.trim();
+            const password = document.getElementById('empPassword').value.trim();
+            const access = document.getElementById('empAccess').value;
+            const editDocId = document.getElementById('editDocId').value;
+
+            // Validation
+            if (!name || !nickname || !password || !access) {
+                alert('⚠️ Please fill all fields!');
+                return;
+            }
+
+            try {
+                if (editDocId) {
+                    // UPDATE - දැනට තියෙන employee update කරනවා
+                    await db.collection('employees').doc(editDocId).update({
+                        name: name,
+                        nickname: nickname,
+                        password: password,
+                        access: access
+                    });
+                    alert('✅ Employee updated successfully!');
+                } else {
+                    // ADD NEW - අලුත් employee add කරනවා
+                    // Nickname duplicate check
+                    const existCheck = await db.collection('employees')
+                        .where('nickname', '==', nickname).get();
+                    
+                    if (!existCheck.empty) {
+                        alert('⚠️ This nickname already exists! Please use a different one.');
+                        return;
+                    }
+
+                    await db.collection('employees').add({
+                        name: name,
+                        nickname: nickname,
+                        password: password,
+                        access: access,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    alert('✅ Employee added successfully!');
+                }
+
+                closeModal();
+
+            } catch (error) {
+                console.error("Save error:", error);
+                alert('❌ Error saving employee! Check console.');
+            }
+        }
+
+        // ===================================
+        // DELETE EMPLOYEE - Confirm modal open
+        // ===================================
+        function openDeleteModal(docId, name) {
+            deleteDocId = docId;
+            document.getElementById('deleteEmpName').textContent = name;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            deleteDocId = '';
+        }
+
+        // Delete confirm කරද්දී
+        async function confirmDelete() {
+            if (!deleteDocId) return;
+
+            try {
+                await db.collection('employees').doc(deleteDocId).delete();
+                alert('✅ Employee deleted successfully!');
+                closeDeleteModal();
+            } catch (error) {
+                console.error("Delete error:", error);
+                alert('❌ Error deleting employee!');
+            }
+        }
+
+        // ===================================
+        // MODAL OUTSIDE CLICK - ඉවත close කරන්න
+        // ===================================
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>
