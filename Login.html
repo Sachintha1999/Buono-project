@@ -1,130 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="login-body">
 
-    <!-- LOGIN PAGE -->
+    <!-- ===== LOGIN FORM ===== -->
     <div class="login-container">
-        <div class="login-box">
-            <h1>🍴 Buono</h1>
-            <p class="login-subtitle">Employee Management System</p>
-            
-            <div class="login-form">
-                <input type="text" id="loginNickname" placeholder="Nick Name" autocomplete="off">
-                <input type="password" id="loginPassword" placeholder="Password">
-                <button id="loginBtn" onclick="loginUser()">🔐 Login</button>
-            </div>
-            
-            <p id="loginError" class="error-msg"></p>
+        <div class="login-header">
+            <span class="login-icon">🍴</span>
+            <h1>Buono</h1>
+            <p>Employee Management System</p>
         </div>
+
+        <form id="loginForm" onsubmit="return false;">
+            <input type="text" id="loginNickname" placeholder="Nick Name" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="button" id="loginBtn" onclick="loginUser()">🔐 Login</button>
+        </form>
+
+        <!-- Login error message -->
+        <p id="loginError" style="color: #ff4444; text-align: center; margin-top: 10px; display: none;">
+            ❌ Nickname or Password wrong!
+        </p>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    
+    <!-- ===== FIREBASE SDK ===== -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script>
-        // Firebase Configuration
-      const firebaseConfig = {
-  apiKey: "AIzaSyC1r8M_Gb2-TWbEXViM4DLpKil3mduMWOU",
-  authDomain: "buono-project-927b8.firebaseapp.com",
-  projectId: "buono-project-927b8",
-  storageBucket: "buono-project-927b8.firebasestorage.app",
-  messagingSenderId: "706681135399",
-  appId: "1:706681135399:web:c15f197f1efe3a64f00902"
-};
+        // ===================================
+        // Firebase Config - ඔයාගේ project settings
+        // ===================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+            authDomain: "buono-project-927b8.firebaseapp.com",
+            projectId: "buono-project-927b8",
+            storageBucket: "buono-project-927b8.firebasestorage.app",
+            messagingSenderId: "706681135399",
+            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+        };
 
-
-        // IMPORTANT: ඔයාගේ app.js එකේ තියෙන firebaseConfig එක මෙතන දාන්න!
-        // උඩ තියෙන එක sample එකක් විතරයි
-
+        // Firebase Initialize
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Login Function
+        // ===================================
+        // LOGIN FUNCTION - Access type අනුව redirect කරනවා
+        // ===================================
         async function loginUser() {
             const nickname = document.getElementById('loginNickname').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
-            const errorMsg = document.getElementById('loginError');
-            const loginBtn = document.getElementById('loginBtn');
+            const errorEl = document.getElementById('loginError');
 
-            // Empty check
+            // Empty check - හිස්ද බලනවා
             if (!nickname || !password) {
-                errorMsg.textContent = "⚠️ Please enter Nickname and Password!";
-                errorMsg.style.color = "#ff4444";
+                errorEl.textContent = "⚠️ Please enter Nickname and Password!";
+                errorEl.style.display = "block";
                 return;
             }
 
-            // Button disable (double click avoid)
-            loginBtn.disabled = true;
-            loginBtn.textContent = "⏳ Checking...";
-
             try {
-                // Firestore එකෙන් nickname එකෙන් search කරනවා
-                const snapshot = await db.collection("employees")
-                    .where("nickname", "==", nickname)
+                // Firebase එකෙන් nickname match කරනවා
+                const snapshot = await db.collection('employees')
+                    .where('nickname', '==', nickname)
                     .get();
 
                 if (snapshot.empty) {
-                    // Nickname එකක් හම්බ වුණේ නැත්තං
-                    errorMsg.textContent = "❌ Invalid Nickname!";
-                    errorMsg.style.color = "#ff4444";
-                    loginBtn.disabled = false;
-                    loginBtn.textContent = "🔐 Login";
+                    // Nickname හම්බ උනේ නැහැ
+                    errorEl.textContent = "❌ Nickname not found!";
+                    errorEl.style.display = "block";
                     return;
                 }
 
                 // User data ගන්නවා
-                const userData = snapshot.docs[0].data();
+                const userDoc = snapshot.docs[0];
+                const userData = userDoc.data();
 
+                // Password check කරනවා
                 if (userData.password !== password) {
-                    // Password වැරදියි
-                    errorMsg.textContent = "❌ Wrong Password!";
-                    errorMsg.style.color = "#ff4444";
-                    loginBtn.disabled = false;
-                    loginBtn.textContent = "🔐 Login";
+                    errorEl.textContent = "❌ Wrong Password!";
+                    errorEl.style.display = "block";
                     return;
                 }
 
-                // LOGIN SUCCESS! 🎉
-                // User info browser එකේ save කරනවා
-                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                // ===================================
+                // LOGIN SUCCESS! - Session එකට save කරනවා
+                // ===================================
+                const userInfo = {
+                    id: userDoc.id,
                     name: userData.name,
                     nickname: userData.nickname,
                     access: userData.access
-                }));
+                };
 
-                errorMsg.textContent = "✅ Login Success! Redirecting...";
-                errorMsg.style.color = "#00ff88";
+                sessionStorage.setItem('loggedInUser', JSON.stringify(userInfo));
 
-                // 1 second පස්සේ dashboard එකට යනවා
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1000);
+                // ===================================
+                // ACCESS TYPE අනුව REDIRECT කරනවා
+                // Admin → index.html
+                // Manager → manager.html
+                // අනිත් ඔක්කොම → staff.html (පස්සේ හදනවා)
+                // ===================================
+                switch(userData.access) {
+                    case 'Admin':
+                        window.location.href = 'index.html';
+                        break;
+                    case 'Manager':
+                        window.location.href = 'manager.html';
+                        break;
+                    case 'Cashier':
+                        // window.location.href = 'cashier.html'; // පස්සේ හදනවා
+                        alert('⚠️ Cashier Dashboard coming soon!');
+                        break;
+                    case 'Head Chef':
+                        // window.location.href = 'chef.html'; // පස්සේ හදනවා
+                        alert('⚠️ Head Chef Dashboard coming soon!');
+                        break;
+                    case 'Waiter':
+                        // window.location.href = 'waiter.html'; // පස්සේ හදනවා
+                        alert('⚠️ Waiter Dashboard coming soon!');
+                        break;
+                    case 'Call Operator':
+                        // window.location.href = 'operator.html'; // පස්සේ හදනවා
+                        alert('⚠️ Call Operator Dashboard coming soon!');
+                        break;
+                    case 'Purchasing Officer':
+                        // window.location.href = 'purchasing.html'; // පස්සේ හදනවා
+                        alert('⚠️ Purchasing Dashboard coming soon!');
+                        break;
+                    default:
+                        alert('⚠️ Unknown access type!');
+                }
 
             } catch (error) {
-                errorMsg.textContent = "❌ Error: " + error.message;
-                errorMsg.style.color = "#ff4444";
-                loginBtn.disabled = false;
-                loginBtn.textContent = "🔐 Login";
+                console.error("Login error:", error);
+                errorEl.textContent = "❌ Connection error! Try again.";
+                errorEl.style.display = "block";
             }
         }
 
-        // Enter key press කරාම login වෙන්න
+        // ===================================
+        // ENTER key press කරද්දී login වෙනවා
+        // ===================================
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 loginUser();
             }
         });
 
-        // Already logged in නම් dashboard එකට redirect
-        if (sessionStorage.getItem('loggedInUser')) {
-            window.location.href = "index.html";
+        // ===================================
+        // දැනටමත් login වෙලා නම් redirect කරනවා
+        // ===================================
+        const existingUser = sessionStorage.getItem('loggedInUser');
+        if (existingUser) {
+            const user = JSON.parse(existingUser);
+            switch(user.access) {
+                case 'Admin':
+                    window.location.href = 'index.html';
+                    break;
+                case 'Manager':
+                    window.location.href = 'manager.html';
+                    break;
+                default:
+                    // අනිත් roles පස්සේ add කරනවා
+                    break;
+            }
         }
     </script>
 

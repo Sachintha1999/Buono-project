@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,62 +8,103 @@
 </head>
 <body>
 
-    <!-- TOP BAR with User Info and Logout -->
-    <div class="top-bar">
-        <div class="top-bar-left">
-            <span>🍴 Buono Admin Dashboard</span>
+    <!-- ===== TOP NAVIGATION BAR ===== -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <span class="topbar-icon">🍴</span>
+            <h2>Buono <span class="topbar-badge admin-badge-top">Admin</span></h2>
         </div>
-        <div class="top-bar-right">
-            <span id="welcomeUser">Welcome!</span>
-            <button class="logout-btn" onclick="logoutUser()">🚪 Logout</button>
+        <div class="topbar-right">
+            <span id="welcomeUser">👋 Welcome</span>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </div>
 
-    <div class="container">
-        <!-- ADD EMPLOYEE SECTION -->
-        <div class="card">
-            <h2>➕ Add Employee</h2>
-            <input type="text" id="empName" placeholder="Employee Name">
-            <input type="text" id="empNickname" placeholder="Nick Name">
-            <input type="password" id="empPassword" placeholder="Password">
-            <select id="empAccess">
-                <option value="">-- Select Access --</option>
-                <option value="Admin">Admin</option>
-                <option value="Manager">Manager</option>
-                <option value="Cashier">Cashier</option>
-                <option value="Purchasing Officer">Purchasing Officer</option>
-                <option value="Head Chef">Head Chef</option>
-                <option value="Call Operator">Call Operator</option>
-                <option value="Waiter">Waiter</option>
-            </select>
-            <button class="add-btn" onclick="addEmployee()">➕ Add Employee</button>
-        </div>
+    <!-- ===== MAIN CONTAINER ===== -->
+    <div class="dashboard-container">
 
-        <!-- EMPLOYEES LIST SECTION -->
-        <div class="card">
-            <h2>👥 Employees List</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Nick Name</th>
-                            <th>Password</th>
-                            <th>Access</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="employeeList">
-                        <!-- Data loads here -->
-                    </tbody>
-                </table>
+        <!-- ===== STAT CARDS ===== -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3 id="totalEmployees">0</h3>
+                    <p>Total Employees</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <h3 id="todayDate">-</h3>
+                    <p>Today</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3 id="currentTime">-</h3>
+                    <p>Current Time</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🔑</div>
+                <div class="stat-info">
+                    <h3 id="myAccess">Admin</h3>
+                    <p>Access Level</p>
+                </div>
             </div>
         </div>
+
+        <!-- ===== ADD EMPLOYEE FORM ===== -->
+        <div id="addEmployeeForm">
+            <h2>➕ Add New Employee</h2>
+            <div class="form-row">
+                <input type="text" id="empName" placeholder="Full Name">
+                <input type="text" id="empNickname" placeholder="Nickname">
+                <input type="text" id="empPassword" placeholder="Password">
+                <select id="empAccess">
+                    <option value="">-- Access --</option>
+                    <option value="Admin">👨‍💼 Admin</option>
+                    <option value="Manager">🧑‍💼 Manager</option>
+                    <option value="Cashier">💰 Cashier</option>
+                    <option value="Purchasing Officer">📦 Purchasing Officer</option>
+                    <option value="Head Chef">👨‍🍳 Head Chef</option>
+                    <option value="Call Operator">📞 Call Operator</option>
+                    <option value="Waiter">🍽️ Waiter</option>
+                </select>
+                <button onclick="addEmployee()">💾 Add</button>
+            </div>
+        </div>
+
+        <!-- ===== EMPLOYEE TABLE ===== -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Nickname</th>
+                        <th>Access Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px;">
+                            ⏳ Loading employees...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <!-- ===== FIREBASE SDK ===== -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="app.js"></script>
 
 </body>

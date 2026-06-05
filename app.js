@@ -1,95 +1,123 @@
-// ==============================
-// BUONO EMPLOYEE MANAGEMENT SYSTEM
-// app.js - Main Application Logic
-// ==============================
+// ═══════════════════════════════════════════
+// BUONO - ADMIN DASHBOARD (app.js)
+// Admin Dashboard එකට විතරක් use වෙනවා
+// Manager Dashboard එකේ script එක manager.html ඇතුලේ තියෙනවා
+// ═══════════════════════════════════════════
 
-// ----- Firebase Configuration -----
-// ⚠️ මේ values ඔයාගේ Firebase project එකේ values වලින් replace කරන්න!
+// ===================================
+// Firebase Config - ඔයාගේ project settings
+// ===================================
 const firebaseConfig = {
-  apiKey: "AIzaSyC1r8M_Gb2-TWbEXViM4DLpKil3mduMWOU",
-  authDomain: "buono-project-927b8.firebaseapp.com",
-  projectId: "buono-project-927b8",
-  storageBucket: "buono-project-927b8.firebasestorage.app",
-  messagingSenderId: "706681135399",
-  appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+    apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+    authDomain: "buono-project-927b8.firebaseapp.com",
+    projectId: "buono-project-927b8",
+    storageBucket: "buono-project-927b8.firebasestorage.app",
+    messagingSenderId: "706681135399",
+    appId: "1:706681135399:web:c15f197f1efe3a64f00902"
 };
-
 
 // Firebase Initialize
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ==============================
-// LOGIN CHECK - Dashboard open කරද්දී check කරනවා
-// ==============================
-
+// ===================================
+// LOGIN CHECK - Admin ද බලනවා
+// Dashboard open කරද්දී check කරනවා
+// ===================================
 function checkLogin() {
     const user = sessionStorage.getItem('loggedInUser');
-    
+
     if (!user) {
-        // Login වෙලා නැත්තං login page එකට යවනවා
+        // Login නැත්නම් login page ට යවනවා
         window.location.href = "login.html";
         return null;
     }
-    
+
     const userData = JSON.parse(user);
-    
+
+    // Admin විතරක් access දෙනවා admin dashboard ට
+    if (userData.access !== 'Admin') {
+        alert('⛔ You do not have Admin access!');
+        sessionStorage.removeItem('loggedInUser');
+        window.location.href = "login.html";
+        return null;
+    }
+
     // Welcome message update
     const welcomeEl = document.getElementById('welcomeUser');
     if (welcomeEl) {
         welcomeEl.textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
     }
-    
+
+    // Access level card update
+    const accessEl = document.getElementById('myAccess');
+    if (accessEl) {
+        accessEl.textContent = userData.access;
+    }
+
     return userData;
 }
 
-// Page load වෙද්දී login check කරනවා
+// Page load වෙද්දී login check
 const currentUser = checkLogin();
 
-// ==============================
+// ===================================
 // LOGOUT FUNCTION
-// ==============================
-
-function logoutUser() {
-    if (confirm("Are you sure you want to logout?")) {
-        sessionStorage.removeItem('loggedInUser');
-        window.location.href = "login.html";
-    }
+// ===================================
+function logout() {
+    sessionStorage.removeItem('loggedInUser');
+    window.location.href = "login.html";
 }
 
-// ==============================
-// ADD EMPLOYEE FUNCTION
-// ==============================
+// ===================================
+// DATE & TIME UPDATE - ඉහළ cards වල
+// ===================================
+function updateDateTime() {
+    const now = new Date();
+    
+    const options = { year: 'numeric', month: 'short', day: '2-digit' };
+    const dateEl = document.getElementById('todayDate');
+    if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', options);
+    
+    const timeEl = document.getElementById('currentTime');
+    if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+}
 
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+// ===================================
+// ADD EMPLOYEE FUNCTION
+// Form එකෙන් data ගන්නවා + Firebase ට save කරනවා
+// ===================================
 async function addEmployee() {
     const name = document.getElementById('empName').value.trim();
     const nickname = document.getElementById('empNickname').value.trim();
     const password = document.getElementById('empPassword').value.trim();
     const access = document.getElementById('empAccess').value;
 
-    // Validation
+    // Validation - හිස්ද බලනවා
     if (!name || !nickname || !password || !access) {
-        alert("⚠️ Please fill all fields!");
+        alert('⚠️ Please fill all fields!');
         return;
     }
 
-    // Nickname duplicate check
     try {
-        const existing = await db.collection("employees")
-            .where("nickname", "==", nickname)
-            .get();
+        // Nickname duplicate check
+        const existCheck = await db.collection('employees')
+            .where('nickname', '==', nickname).get();
         
-        if (!existing.empty) {
-            alert("⚠️ This nickname already exists! Please use a different one.");
+        if (!existCheck.empty) {
+            alert('⚠️ This nickname already exists!');
             return;
         }
-    } catch (error) {
-        console.error("Error checking nickname:", error);
-    }
 
-    // Add to Firestore
-    try {
-        await db.collection("employees").add({
+        // Firebase ට add කරනවා
+        await db.collection('employees').add({
             name: name,
             nickname: nickname,
             password: password,
@@ -97,95 +125,93 @@ async function addEmployee() {
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Clear form
+        alert('✅ Employee added successfully!');
+
+        // Form clear කරනවා
         document.getElementById('empName').value = '';
         document.getElementById('empNickname').value = '';
         document.getElementById('empPassword').value = '';
         document.getElementById('empAccess').value = '';
 
-        alert("✅ Employee added successfully!");
-
     } catch (error) {
-        alert("❌ Error: " + error.message);
+        console.error("Error adding employee:", error);
+        alert('❌ Error adding employee!');
     }
 }
 
-// ==============================
+// ===================================
 // DELETE EMPLOYEE FUNCTION
-// ==============================
+// ===================================
+async function deleteEmployee(docId, empName) {
+    const confirmDelete = confirm(`⚠️ Are you sure you want to delete "${empName}"?`);
+    
+    if (!confirmDelete) return;
 
-async function deleteEmployee(id, name) {
-    if (confirm(`Are you sure you want to delete "${name}"?`)) {
-        try {
-            await db.collection("employees").doc(id).delete();
-            alert("✅ Employee deleted!");
-        } catch (error) {
-            alert("❌ Error: " + error.message);
-        }
+    try {
+        await db.collection('employees').doc(docId).delete();
+        alert('✅ Employee deleted!');
+    } catch (error) {
+        console.error("Error deleting:", error);
+        alert('❌ Error deleting employee!');
     }
 }
 
-// ==============================
-// GET ACCESS BADGE (Color coded)
-// ==============================
-
-function getAccessBadge(access) {
-    const badges = {
-        'Admin': 'badge-admin',
-        'Manager': 'badge-manager',
-        'Cashier': 'badge-cashier',
-        'Purchasing Officer': 'badge-purchasing',
-        'Head Chef': 'badge-headchef',
-        'Call Operator': 'badge-calloperator',
-        'Waiter': 'badge-waiter'
-    };
-    
-    const badgeClass = badges[access] || 'badge-admin';
-    return `<span class="badge ${badgeClass}">${access}</span>`;
+// ===================================
+// BADGE COLOR FUNCTION
+// Access type එක අනුව badge color දෙනවා
+// ===================================
+function getBadgeClass(access) {
+    switch(access) {
+        case 'Admin': return 'badge-admin';
+        case 'Manager': return 'badge-manager';
+        case 'Cashier': return 'badge-cashier';
+        case 'Purchasing Officer': return 'badge-purchasing';
+        case 'Head Chef': return 'badge-chef';
+        case 'Call Operator': return 'badge-operator';
+        case 'Waiter': return 'badge-waiter';
+        default: return 'badge-default';
+    }
 }
 
-// ==============================
-// REAL-TIME DATA LOAD (Live updates)
-// ==============================
+// ===================================
+// LOAD EMPLOYEES - Real-time Firebase listener
+// Employees collection එකේ changes ආවම auto update වෙනවා
+// ===================================
+db.collection('employees').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+    const tbody = document.getElementById('employeeTableBody');
+    if (!tbody) return;
 
-db.collection("employees")
-    .orderBy("createdAt", "desc")
-    .onSnapshot((snapshot) => {
-        const employeeList = document.getElementById("employeeList");
-        
-        if (!employeeList) return; // Login page එකේ table නැහැ
-        
-        employeeList.innerHTML = "";
+    tbody.innerHTML = '';
 
-        if (snapshot.empty) {
-            employeeList.innerHTML = `
-                <tr>
-                    <td colspan="5" style="text-align:center; color:#6b7a90; padding:30px;">
-                        No employees found. Add your first employee above! 👆
-                    </td>
-                </tr>
-            `;
-            return;
-        }
+    // Total count update
+    const totalEl = document.getElementById('totalEmployees');
+    if (totalEl) totalEl.textContent = snapshot.size;
 
-        snapshot.forEach((doc) => {
-            const emp = doc.data();
-            const row = document.createElement("tr");
-            
-            row.innerHTML = `
-                <td>${emp.name || '-'}</td>
-                <td>${emp.nickname || '-'}</td>
-                <td>${emp.password || '-'}</td>
-                <td>${getAccessBadge(emp.access)}</td>
-                <td>
-                    <button class="delete-btn" onclick="deleteEmployee('${doc.id}', '${emp.name}')">
-                        🗑️ Delete
-                    </button>
+    if (snapshot.empty) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 20px; color: #888;">
+                    📭 No employees found.
                 </td>
-            `;
-            
-            employeeList.appendChild(row);
-        });
-    }, (error) => {
-        console.error("Error loading employees:", error);
+            </tr>`;
+        return;
+    }
+
+    let count = 0;
+    snapshot.forEach((doc) => {
+        count++;
+        const emp = doc.data();
+        const badgeClass = getBadgeClass(emp.access);
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${count}</td>
+                <td>${emp.name}</td>
+                <td>${emp.nickname}</td>
+                <td><span class="badge ${badgeClass}">${emp.access}</span></td>
+                <td>
+                    <button class="btn-delete" onclick="deleteEmployee('${doc.id}', '${emp.name}')">🗑️ Delete</button>
+                </td>
+            </tr>`;
     });
+});
