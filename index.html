@@ -1,45 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Buono Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>🍴 Buono Employee Dashboard</h1>
 
-    <div class="form-box">
-      <h2>Add Employee</h2>
-      <input type="text" id="empName" placeholder="Employee Name">
-      <input type="text" id="nickName" placeholder="Nick Name">
-      <input type="password" id="password" placeholder="Password">
-      <select id="access">
-        <option value="">-- Select Access --</option>
-        <option value="Admin">Admin</option>
-        <option value="Manager">Manager</option>
-        <option value="Staff">Staff</option>
-      </select>
-      <button onclick="addEmployee()">➕ Add Employee</button>
+    <!-- TOP BAR with User Info and Logout -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <span>🍴 Buono Admin Dashboard</span>
+        </div>
+        <div class="top-bar-right">
+            <span id="welcomeUser">Welcome!</span>
+            <button class="logout-btn" onclick="logoutUser()">🚪 Logout</button>
+        </div>
     </div>
 
-    <div class="list-box">
-      <h2>Employees List</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Nick Name</th>
-            <th>Password</th>
-            <th>Access</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="empList"></tbody>
-      </table>
-    </div>
-  </div>
+    <div class="container">
+        <!-- ADD EMPLOYEE SECTION -->
+        <div class="card">
+            <h2>➕ Add Employee</h2>
+            <input type="text" id="empName" placeholder="Employee Name">
+            <input type="text" id="empNickname" placeholder="Nick Name">
+            <input type="password" id="empPassword" placeholder="Password">
+            <select id="empAccess">
+                <option value="">-- Select Access --</option>
+                <option value="Admin">Admin</option>
+                <option value="Manager">Manager</option>
+                <option value="Cashier">Cashier</option>
+                <option value="Purchasing Officer">Purchasing Officer</option>
+                <option value="Head Chef">Head Chef</option>
+                <option value="Call Operator">Call Operator</option>
+                <option value="Waiter">Waiter</option>
+            </select>
+            <button class="add-btn" onclick="addEmployee()">➕ Add Employee</button>
+        </div>
 
-  <script type="module" src="app.js"></script>
+        <!-- EMPLOYEES LIST SECTION -->
+        <div class="card">
+            <h2>👥 Employees List</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Nick Name</th>
+                            <th>Password</th>
+                            <th>Access</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeList">
+                        <!-- Data loads here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="app.js"></script>
+
 </body>
 </html>

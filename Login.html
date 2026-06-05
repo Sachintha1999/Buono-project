@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LOGIN PAGE -->
+    <div class="login-container">
+        <div class="login-box">
+            <h1>🍴 Buono</h1>
+            <p class="login-subtitle">Employee Management System</p>
+            
+            <div class="login-form">
+                <input type="text" id="loginNickname" placeholder="Nick Name" autocomplete="off">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button id="loginBtn" onclick="loginUser()">🔐 Login</button>
+            </div>
+            
+            <p id="loginError" class="error-msg"></p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase Configuration
+      const firebaseConfig = {
+  apiKey: "AIzaSyC1r8M_Gb2-TWbEXViM4DLpKil3mduMWOU",
+  authDomain: "buono-project-927b8.firebaseapp.com",
+  projectId: "buono-project-927b8",
+  storageBucket: "buono-project-927b8.firebasestorage.app",
+  messagingSenderId: "706681135399",
+  appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+};
+
+
+        // IMPORTANT: ඔයාගේ app.js එකේ තියෙන firebaseConfig එක මෙතන දාන්න!
+        // උඩ තියෙන එක sample එකක් විතරයි
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Login Function
+        async function loginUser() {
+            const nickname = document.getElementById('loginNickname').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const errorMsg = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Empty check
+            if (!nickname || !password) {
+                errorMsg.textContent = "⚠️ Please enter Nickname and Password!";
+                errorMsg.style.color = "#ff4444";
+                return;
+            }
+
+            // Button disable (double click avoid)
+            loginBtn.disabled = true;
+            loginBtn.textContent = "⏳ Checking...";
+
+            try {
+                // Firestore එකෙන් nickname එකෙන් search කරනවා
+                const snapshot = await db.collection("employees")
+                    .where("nickname", "==", nickname)
+                    .get();
+
+                if (snapshot.empty) {
+                    // Nickname එකක් හම්බ වුණේ නැත්තං
+                    errorMsg.textContent = "❌ Invalid Nickname!";
+                    errorMsg.style.color = "#ff4444";
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = "🔐 Login";
+                    return;
+                }
+
+                // User data ගන්නවා
+                const userData = snapshot.docs[0].data();
+
+                if (userData.password !== password) {
+                    // Password වැරදියි
+                    errorMsg.textContent = "❌ Wrong Password!";
+                    errorMsg.style.color = "#ff4444";
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = "🔐 Login";
+                    return;
+                }
+
+                // LOGIN SUCCESS! 🎉
+                // User info browser එකේ save කරනවා
+                sessionStorage.setItem('loggedInUser', JSON.stringify({
+                    name: userData.name,
+                    nickname: userData.nickname,
+                    access: userData.access
+                }));
+
+                errorMsg.textContent = "✅ Login Success! Redirecting...";
+                errorMsg.style.color = "#00ff88";
+
+                // 1 second පස්සේ dashboard එකට යනවා
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
+
+            } catch (error) {
+                errorMsg.textContent = "❌ Error: " + error.message;
+                errorMsg.style.color = "#ff4444";
+                loginBtn.disabled = false;
+                loginBtn.textContent = "🔐 Login";
+            }
+        }
+
+        // Enter key press කරාම login වෙන්න
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginUser();
+            }
+        });
+
+        // Already logged in නම් dashboard එකට redirect
+        if (sessionStorage.getItem('loggedInUser')) {
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+</html>
