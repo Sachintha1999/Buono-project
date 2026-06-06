@@ -276,11 +276,15 @@
 
         // ═══════════════════════════════════════
         // 📂 DATABASES MASTER LIST
+        // 🆕 Reports Database added!
         // ═══════════════════════════════════════
-        const DATABASES = [
-            { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-            { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' }
-        ];
+     const DATABASES = [
+    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
+    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
+    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
+    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
+    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+];
 
         // ═══════════════════════════════════════
         // 🌐 GLOBAL VARS
@@ -293,7 +297,6 @@
 
         // ═══════════════════════════════════════
         // 🔐 LOGIN & PERMISSION CHECK (ASYNC)
-        // 🆕 Firebase එකෙන් LATEST permissions ගන්නවා
         // ═══════════════════════════════════════
         async function initializeApp() {
             const user = sessionStorage.getItem('loggedInUser');
@@ -304,7 +307,6 @@
 
             const userData = JSON.parse(user);
 
-            // 🆕 Firebase එකෙන් latest data
             try {
                 const userDoc = await db.collection('employees').doc(userData.id).get();
                 if (userDoc.exists) {
@@ -348,17 +350,23 @@
 
         // ═══════════════════════════════════════
         // 📂 DATABASE SWITCHER
+        // 🆕 Reports Database support added!
         // ═══════════════════════════════════════
         function buildDatabaseSwitcher() {
             const list = document.getElementById('dbDropdownList');
+            const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
             let html = '';
 
             DATABASES.forEach(database => {
+                // 🆕 adminManagerOnly check
+                if (database.adminManagerOnly && !isAdminOrMgr) return;
+
                 const isAdmin = currentUser.access === 'Admin';
                 const dbPerms = currentUser.permissions?.[database.id] || {};
                 const hasAccess = isAdmin || dbPerms.add || dbPerms.view || dbPerms.selfView || dbPerms.edit || dbPerms.delete;
 
-                if (!hasAccess) return;
+                // 🆕 Reports DB access = adminManagerOnly flag handles it
+                if (!database.adminManagerOnly && !hasAccess) return;
 
                 const isCurrent = database.id === 'dayEndReportDB';
 
@@ -373,7 +381,6 @@
 
             list.innerHTML = html;
 
-            // 🆕 Switcher click handler (FIXED!)
             const switcher = document.getElementById('dbSwitcher');
             switcher.addEventListener('click', function(e) {
                 e.stopPropagation();

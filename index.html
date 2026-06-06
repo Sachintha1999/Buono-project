@@ -16,7 +16,6 @@
             <span class="topbar-icon">🍴</span>
             <h2 style="margin-right:15px;">Buono</h2>
             
-            <!-- 🆕 Database Switcher -->
             <div class="db-switcher" id="dbSwitcher">
                 <span class="db-switcher-icon">📂</span>
                 <span class="db-switcher-name">Employee Database</span>
@@ -43,7 +42,6 @@
     <!-- ===== MAIN CONTAINER ===== -->
     <div class="dashboard-container">
 
-        <!-- ===== STAT CARDS ===== -->
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-icon">👥</div>
@@ -78,23 +76,19 @@
             </div>
         </div>
 
-        <!-- Page Title -->
         <div class="section-header" style="margin-bottom: 15px;">
             <h2>📂 Employee Database (HR Module)</h2>
         </div>
 
-        <!-- ===== SEARCH BAR ===== -->
         <div class="search-bar" id="searchBar">
             <input type="text" id="searchEmployee" placeholder="🔍 Search employee name, nickname or access..." onkeyup="searchEmployees()">
         </div>
 
-        <!-- ===== ACTION BUTTON ===== -->
         <div class="section-header">
             <h2 id="empListTitle">👥 All Employees</h2>
             <button class="btn-primary" id="addBtn" onclick="openAddModal()" style="display:none;">➕ Add New Employee</button>
         </div>
 
-        <!-- ===== EMPLOYEE TABLE ===== -->
         <div class="table-container">
             <table>
                 <thead>
@@ -161,6 +155,7 @@
                         </p>
                     </div>
 
+                    <!-- 📂 Employee Database -->
                     <div class="permission-block">
                         <div class="permission-block-title">📂 Employee Database (HR)</div>
                         <div class="permission-checkboxes">
@@ -187,8 +182,9 @@
                         </div>
                     </div>
 
+                    <!-- 💰 Day End Report Database -->
                     <div class="permission-block">
-                        <div class="permission-block-title">📂 Day End Report Database</div>
+                        <div class="permission-block-title">💰 Day End Report Database</div>
                         <div class="permission-checkboxes">
                             <label class="perm-checkbox">
                                 <input type="checkbox" id="der_add" onchange="autoCheckSelfView('der')">
@@ -213,9 +209,63 @@
                         </div>
                     </div>
 
+                    <!-- 📦 Inventory Database -->
+                    <div class="permission-block">
+                        <div class="permission-block-title">📦 Inventory Database</div>
+                        <div class="permission-checkboxes">
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_add" onchange="autoCheckSelfView('inv')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_view" onchange="autoCheckSelfView('inv')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 🍳 Kitchen Database -->
+                    <div class="permission-block">
+                        <div class="permission-block-title">🍳 Kitchen Database</div>
+                        <div class="permission-checkboxes">
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_add" onchange="autoCheckSelfView('kit')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_view" onchange="autoCheckSelfView('kit')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div style="background: #1a1a2e; padding: 12px 15px; border-radius: 8px; margin-top: 12px; border: 1px dashed #2a2a4a;">
                         <p style="color: #555; font-size: 12px; text-align: center; margin: 0;">
-                            🔜 More databases coming soon (Kitchen, Inventory, Sales...)
+                            🔜 More databases coming soon (Purchasing, Sales...)
                         </p>
                     </div>
                 </div>
@@ -253,9 +303,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // ═══════════════════════════════════════
-        // 🔥 Firebase Config
-        // ═══════════════════════════════════════
         const firebaseConfig = {
             apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
             authDomain: "buono-project-927b8.firebaseapp.com",
@@ -268,152 +315,102 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ═══════════════════════════════════════
-        // 📂 DATABASES MASTER LIST
-        // ═══════════════════════════════════════
         const DATABASES = [
-            { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-            { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' }
-        ];
+    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
+    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
+    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
+    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
+    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+];
 
-        // ═══════════════════════════════════════
-        // 🌐 GLOBAL VARIABLES
-        // ═══════════════════════════════════════
         let allEmployees = [];
         let deleteDocId = '';
         let currentUser = null;
         let myPerms = null;
 
-        // ═══════════════════════════════════════
-        // 🔐 LOGIN & PERMISSION CHECK (ASYNC!)
-        // 🆕 Firebase එකෙන් LATEST permissions ගන්නවා
-        // ═══════════════════════════════════════
         async function initializeApp() {
             const user = sessionStorage.getItem('loggedInUser');
-
-            if (!user) {
-                window.location.href = "login.html";
-                return;
-            }
-
+            if (!user) { window.location.href = "login.html"; return; }
             const userData = JSON.parse(user);
 
-            // 🆕 Firebase එකෙන් LATEST data ගන්නවා
             try {
                 const userDoc = await db.collection('employees').doc(userData.id).get();
                 if (userDoc.exists) {
-                    const latestData = userDoc.data();
-                    userData.access = latestData.access;
-                    userData.permissions = latestData.permissions || {};
-                    userData.name = latestData.name;
-                    userData.nickname = latestData.nickname;
-                    // Session update කරනවා
+                    const d = userDoc.data();
+                    userData.access = d.access;
+                    userData.permissions = d.permissions || {};
+                    userData.name = d.name;
+                    userData.nickname = d.nickname;
                     sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
                 }
-            } catch (error) {
-                console.error('Could not fetch latest user data:', error);
-            }
+            } catch (e) { console.error(e); }
 
-            // Admin → full access
             const isAdmin = userData.access === 'Admin';
             const perms = userData.permissions?.employeeDB || {};
             const hasAccess = isAdmin || perms.add || perms.view || perms.selfView || perms.edit || perms.delete;
 
             if (!hasAccess) {
-                alert('⛔ ඔයාට Employee Database එකට access නැහැ!\nAccess Home ට යවනවා.');
+                alert('⛔ ඔයාට Employee Database එකට access නැහැ!');
                 window.location.href = "access.html";
                 return;
             }
 
-            myPerms = isAdmin 
-                ? { add: true, view: true, selfView: true, edit: true, delete: true }
-                : perms;
-
+            myPerms = isAdmin ? { add: true, view: true, selfView: true, edit: true, delete: true } : perms;
             currentUser = userData;
 
-            // UI updates
             document.getElementById('welcomeUser').textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
             document.getElementById('myAccess').textContent = userData.access;
 
-            // Setup everything
             buildDatabaseSwitcher();
             setupActionButtons();
             startEmployeeListener();
         }
 
-        // Initialize when page loads
         initializeApp();
 
-        // ═══════════════════════════════════════
-        // 📂 DATABASE SWITCHER
-        // ═══════════════════════════════════════
         function buildDatabaseSwitcher() {
             const list = document.getElementById('dbDropdownList');
+            const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
             let html = '';
 
-            DATABASES.forEach(database => {
+            DATABASES.forEach(d => {
+                if (d.adminManagerOnly && !isAdminOrMgr) return;
                 const isAdmin = currentUser.access === 'Admin';
-                const dbPerms = currentUser.permissions?.[database.id] || {};
-                const hasAccess = isAdmin || dbPerms.add || dbPerms.view || dbPerms.selfView || dbPerms.edit || dbPerms.delete;
-
-                if (!hasAccess) return;
-
-                const isCurrent = database.id === 'employeeDB';
-
-                html += `
-                    <a href="${database.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}">
-                        <span>${database.icon}</span>
-                        <span>${database.name}</span>
-                        ${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}
-                    </a>
-                `;
+                const dp = currentUser.permissions?.[d.id] || {};
+                const hasAccess = isAdmin || dp.add || dp.view || dp.selfView || dp.edit || dp.delete;
+                if (!d.adminManagerOnly && !hasAccess) return;
+                const isCurrent = d.id === 'employeeDB';
+                html += `<a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}"><span>${d.icon}</span><span>${d.name}</span>${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}</a>`;
             });
 
             list.innerHTML = html;
 
-            // 🆕 Switcher click handler (FIXED!)
-            const switcher = document.getElementById('dbSwitcher');
-            switcher.addEventListener('click', function(e) {
+            document.getElementById('dbSwitcher').addEventListener('click', function(e) {
                 e.stopPropagation();
                 document.getElementById('dbDropdown').classList.toggle('show');
             });
-
-            // Click outside close
             document.addEventListener('click', function(e) {
-                const dropdown = document.getElementById('dbDropdown');
-                if (dropdown && !dropdown.contains(e.target) && !e.target.closest('#dbSwitcher')) {
-                    dropdown.classList.remove('show');
-                }
+                const dd = document.getElementById('dbDropdown');
+                if (dd && !dd.contains(e.target) && !e.target.closest('#dbSwitcher')) dd.classList.remove('show');
             });
         }
 
-        // ═══════════════════════════════════════
-        // 🚪 LOGOUT
-        // ═══════════════════════════════════════
         function logout() {
             sessionStorage.removeItem('loggedInUser');
             window.location.href = "login.html";
         }
 
-        // ═══════════════════════════════════════
-        // 📅 DATE & TIME
-        // ═══════════════════════════════════════
         function updateDateTime() {
             const now = new Date();
             const options = { year: 'numeric', month: 'short', day: '2-digit' };
             const dateEl = document.getElementById('todayDate');
             if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', options);
             const timeEl = document.getElementById('currentTime');
-            if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', {
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
         }
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // ═══════════════════════════════════════
-        // 🎨 BADGE COLOR
-        // ═══════════════════════════════════════
         function getBadgeClass(access) {
             switch(access) {
                 case 'Admin': return 'badge-admin';
@@ -427,9 +424,6 @@
             }
         }
 
-        // ═══════════════════════════════════════
-        // 🔢 PERMISSION COUNT
-        // ═══════════════════════════════════════
         function getPermissionCount(permissions) {
             if (!permissions) return 0;
             let count = 0;
@@ -441,28 +435,17 @@
             return count;
         }
 
-        // ═══════════════════════════════════════
-        // 📋 SETUP UI BASED ON PERMISSIONS
-        // ═══════════════════════════════════════
         function setupActionButtons() {
-            // Add button
-            if (myPerms.add) {
-                document.getElementById('addBtn').style.display = 'inline-block';
-            }
+            if (myPerms.add) document.getElementById('addBtn').style.display = 'inline-block';
 
-            // Title update
             if (myPerms.view) {
                 document.getElementById('empListTitle').textContent = '👥 All Employees';
             } else if (myPerms.selfView) {
                 document.getElementById('empListTitle').textContent = '👤 My Profile';
-                // Hide search bar for self-view only users
                 document.getElementById('searchBar').style.display = 'none';
             }
         }
 
-        // ═══════════════════════════════════════
-        // 📋 LOAD EMPLOYEES
-        // ═══════════════════════════════════════
         function startEmployeeListener() {
             db.collection('employees').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
                 allEmployees = [];
@@ -471,31 +454,20 @@
                 });
 
                 let visibleEmployees = [];
-                if (myPerms.view) {
-                    visibleEmployees = allEmployees;
-                } else if (myPerms.selfView) {
-                    visibleEmployees = allEmployees.filter(emp => emp.id === currentUser.id);
-                }
+                if (myPerms.view) visibleEmployees = allEmployees;
+                else if (myPerms.selfView) visibleEmployees = allEmployees.filter(emp => emp.id === currentUser.id);
 
                 document.getElementById('totalEmployees').textContent = visibleEmployees.length;
                 renderEmployees(visibleEmployees);
             });
         }
 
-        // ═══════════════════════════════════════
-        // 🎨 RENDER EMPLOYEES
-        // ═══════════════════════════════════════
         function renderEmployees(employees) {
             const tbody = document.getElementById('employeeTableBody');
             tbody.innerHTML = '';
 
             if (employees.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 20px; color: #888;">
-                            📭 No employees to display.
-                        </td>
-                    </tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">📭 No employees to display.</td></tr>`;
                 return;
             }
 
@@ -507,22 +479,10 @@
                 const permColor = emp.access === 'Admin' ? '#4CAF50' : (permCount > 0 ? '#f0a500' : '#888');
                 const permText = emp.access === 'Admin' ? '🌟 ALL (Admin)' : `🔐 ${permCount} permissions`;
 
-                // Actions based on permissions
                 let actionsHtml = '';
-                
-                // Edit - self edit allowed even without view permission
-                if (myPerms.edit) {
-                    actionsHtml += `<button class="btn-edit" onclick="editEmployee('${emp.id}')">✏️ Edit</button>`;
-                }
-                
-                // Delete - only with view + delete (cannot delete self in selfView mode)
-                if (myPerms.delete && myPerms.view) {
-                    actionsHtml += `<button class="btn-delete" onclick="openDeleteModal('${emp.id}', '${emp.name}')">🗑️ Delete</button>`;
-                }
-                
-                if (!actionsHtml) {
-                    actionsHtml = '<span style="color:#666; font-size:12px;">View only</span>';
-                }
+                if (myPerms.edit) actionsHtml += `<button class="btn-edit" onclick="editEmployee('${emp.id}')">✏️ Edit</button>`;
+                if (myPerms.delete && myPerms.view) actionsHtml += `<button class="btn-delete" onclick="openDeleteModal('${emp.id}', '${emp.name}')">🗑️ Delete</button>`;
+                if (!actionsHtml) actionsHtml = '<span style="color:#666; font-size:12px;">View only</span>';
 
                 tbody.innerHTML += `
                     <tr>
@@ -536,9 +496,6 @@
             });
         }
 
-        // ═══════════════════════════════════════
-        // 🔍 SEARCH
-        // ═══════════════════════════════════════
         function searchEmployees() {
             const searchText = document.getElementById('searchEmployee').value.toLowerCase();
             let visible = myPerms.view ? allEmployees : allEmployees.filter(e => e.id === currentUser.id);
@@ -550,16 +507,11 @@
             renderEmployees(filtered);
         }
 
-        // ═══════════════════════════════════════
-        // 🔐 PERMISSION HELPERS
-        // ═══════════════════════════════════════
         function autoCheckSelfView(prefix) {
             const addCheck = document.getElementById(prefix + '_add');
             const viewCheck = document.getElementById(prefix + '_view');
             const selfViewCheck = document.getElementById(prefix + '_selfView');
-            if (addCheck.checked || viewCheck.checked) {
-                selfViewCheck.checked = true;
-            }
+            if (addCheck.checked || viewCheck.checked) selfViewCheck.checked = true;
         }
 
         function handleAccessChange() {
@@ -577,16 +529,15 @@
 
         function checkAllPermissions(checked) {
             const ids = ['emp_add','emp_view','emp_selfView','emp_edit','emp_delete',
-                         'der_add','der_view','der_selfView','der_edit','der_delete'];
+                         'der_add','der_view','der_selfView','der_edit','der_delete',
+                         'inv_add','inv_view','inv_selfView','inv_edit','inv_delete',
+                         'kit_add','kit_view','kit_selfView','kit_edit','kit_delete'];
             ids.forEach(id => {
                 const cb = document.getElementById(id);
                 if (cb) cb.checked = checked;
             });
         }
 
-        // ═══════════════════════════════════════
-        // ➕ ADD / EDIT
-        // ═══════════════════════════════════════
         function openAddModal() {
             document.getElementById('modalTitle').textContent = '➕ Add New Employee';
             document.getElementById('saveBtn').textContent = '💾 Save';
@@ -605,7 +556,6 @@
             const emp = allEmployees.find(e => e.id === docId);
             if (!emp) return;
 
-            // Self edit check - selfView only user ට තමන්ගේ විතරයි edit
             if (!myPerms.view && emp.id !== currentUser.id) {
                 alert('⛔ ඔයාට මේ profile එක edit කරන්න permission නැහැ!');
                 return;
@@ -636,11 +586,24 @@
                     document.getElementById('der_edit').checked = emp.permissions.dayEndReportDB.edit || false;
                     document.getElementById('der_delete').checked = emp.permissions.dayEndReportDB.delete || false;
                 }
+                if (emp.permissions.inventoryDB) {
+                    document.getElementById('inv_add').checked = emp.permissions.inventoryDB.add || false;
+                    document.getElementById('inv_view').checked = emp.permissions.inventoryDB.view || false;
+                    document.getElementById('inv_selfView').checked = emp.permissions.inventoryDB.selfView || false;
+                    document.getElementById('inv_edit').checked = emp.permissions.inventoryDB.edit || false;
+                    document.getElementById('inv_delete').checked = emp.permissions.inventoryDB.delete || false;
+                }
+                if (emp.permissions.kitchenDB) {
+                    document.getElementById('kit_add').checked = emp.permissions.kitchenDB.add || false;
+                    document.getElementById('kit_view').checked = emp.permissions.kitchenDB.view || false;
+                    document.getElementById('kit_selfView').checked = emp.permissions.kitchenDB.selfView || false;
+                    document.getElementById('kit_edit').checked = emp.permissions.kitchenDB.edit || false;
+                    document.getElementById('kit_delete').checked = emp.permissions.kitchenDB.delete || false;
+                }
             }
 
             handleAccessChange();
 
-            // 🆕 Non-admin users ට access/permissions edit කරන්න ඉඩ දෙන්නේ නැහැ
             if (currentUser.access !== 'Admin' && currentUser.access !== 'Manager') {
                 document.getElementById('empAccess').disabled = true;
                 document.getElementById('permissionsSection').style.opacity = '0.5';
@@ -654,7 +617,6 @@
 
         function closeModal() {
             document.getElementById('employeeModal').style.display = 'none';
-            // Reset disabled state
             document.getElementById('empAccess').disabled = false;
         }
 
@@ -684,6 +646,20 @@
                     selfView: document.getElementById('der_selfView').checked,
                     edit: document.getElementById('der_edit').checked,
                     delete: document.getElementById('der_delete').checked
+                },
+                inventoryDB: {
+                    add: document.getElementById('inv_add').checked,
+                    view: document.getElementById('inv_view').checked,
+                    selfView: document.getElementById('inv_selfView').checked,
+                    edit: document.getElementById('inv_edit').checked,
+                    delete: document.getElementById('inv_delete').checked
+                },
+                kitchenDB: {
+                    add: document.getElementById('kit_add').checked,
+                    view: document.getElementById('kit_view').checked,
+                    selfView: document.getElementById('kit_selfView').checked,
+                    edit: document.getElementById('kit_edit').checked,
+                    delete: document.getElementById('kit_delete').checked
                 }
             };
 
@@ -697,25 +673,15 @@
 
             try {
                 if (editDocId) {
-                    // Self-edit: keep existing permissions
                     if (currentUser.access !== 'Admin' && currentUser.access !== 'Manager') {
-                        // Cashier editing own profile - only update basic info
-                        await db.collection('employees').doc(editDocId).update({
-                            name, nickname, password
-                        });
+                        await db.collection('employees').doc(editDocId).update({ name, nickname, password });
                     } else {
-                        await db.collection('employees').doc(editDocId).update({
-                            name, nickname, password, access, permissions
-                        });
+                        await db.collection('employees').doc(editDocId).update({ name, nickname, password, access, permissions });
                     }
                     alert('✅ Employee updated!');
                 } else {
-                    const existCheck = await db.collection('employees')
-                        .where('nickname', '==', nickname).get();
-                    if (!existCheck.empty) {
-                        alert('⚠️ Nickname already exists!');
-                        return;
-                    }
+                    const existCheck = await db.collection('employees').where('nickname', '==', nickname).get();
+                    if (!existCheck.empty) { alert('⚠️ Nickname already exists!'); return; }
                     await db.collection('employees').add({
                         name, nickname, password, access, permissions,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -729,9 +695,6 @@
             }
         }
 
-        // ═══════════════════════════════════════
-        // 🗑️ DELETE
-        // ═══════════════════════════════════════
         function openDeleteModal(docId, name) {
             if (docId === currentUser.id) {
                 alert('⛔ ඔයාගේ ම profile එක delete කරන්න බෑ!');
@@ -758,11 +721,8 @@
             }
         }
 
-        // Modal outside click
         window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
+            if (event.target.classList.contains('modal')) event.target.style.display = 'none';
         }
     </script>
 

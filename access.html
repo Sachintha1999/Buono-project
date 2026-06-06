@@ -1,322 +1,633 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buono - My Databases</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Access - Buono</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* ── TOP BAR ── */
+        .top-bar {
+            background: #16213e;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f0a500;
+        }
+
+        .top-bar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo { font-size: 24px; }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f0a500;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: #888;
+            margin-top: 1px;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-badge {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .logout-btn {
+            background: rgba(255,68,68,0.15);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        /* ── WELCOME ── */
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .welcome-greeting {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0a500;
+            margin-bottom: 6px;
+        }
+
+        .welcome-sub {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .stat-card {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.2);
+            border-radius: 12px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .stat-card .stat-icon { font-size: 28px; }
+
+        .stat-card .stat-info .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f0a500;
+        }
+
+        .stat-card .stat-info .stat-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* ── SECTION TITLE ── */
+        .section-title {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ── DB CARDS GRID ── */
+        .db-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        /* ── DB CARD ── */
+        .db-card {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.2);
+            border-radius: 14px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+        }
+
+        .db-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: #f0a500;
+            transform: scaleX(0);
+            transition: transform 0.25s;
+        }
+
+        .db-card:hover {
+            border-color: #f0a500;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(240,165,0,0.15);
+        }
+
+        .db-card:hover::before { transform: scaleX(1); }
+
+        .db-card.reports-card {
+            border-color: rgba(33,150,243,0.3);
+        }
+
+        .db-card.reports-card::before {
+            background: linear-gradient(90deg, #f0a500, #2196F3);
+        }
+
+        .db-card.reports-card:hover {
+            border-color: #2196F3;
+            box-shadow: 0 8px 24px rgba(33,150,243,0.15);
+        }
+
+        .db-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .db-card-icon { font-size: 36px; }
+
+        .db-card-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-management {
+            background: rgba(33,150,243,0.2);
+            color: #2196F3;
+            border: 1px solid rgba(33,150,243,0.3);
+        }
+
+        .badge-entry {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+            border: 1px solid rgba(240,165,0,0.3);
+        }
+
+        .db-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e0e0e0;
+            margin-bottom: 6px;
+        }
+
+        .db-card-desc {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .perm-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .perm-badge {
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .perm-add    { background: rgba(76,175,80,0.15);  color: #4CAF50; }
+        .perm-view   { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .perm-self   { background: rgba(240,165,0,0.15);  color: #f0a500; }
+        .perm-edit   { background: rgba(156,39,176,0.15); color: #9C27B0; }
+        .perm-delete { background: rgba(255,68,68,0.15);  color: #ff4444; }
+        .perm-reports{ background: rgba(33,150,243,0.15); color: #2196F3; }
+
+        .db-card-arrow {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 18px;
+            color: rgba(240,165,0,0.4);
+            transition: all 0.2s;
+        }
+
+        .db-card:hover .db-card-arrow {
+            color: #f0a500;
+            transform: translateX(4px);
+        }
+
+        .db-card.reports-card:hover .db-card-arrow {
+            color: #2196F3;
+        }
+
+        .no-access-msg {
+            text-align: center;
+            padding: 48px 20px;
+            color: #888;
+        }
+
+        .no-access-msg .na-icon {
+            font-size: 48px;
+            margin-bottom: 14px;
+            opacity: 0.4;
+        }
+
+        .no-access-msg h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #aaa;
+        }
+
+        .no-access-msg p { font-size: 13px; }
+
+        @media (max-width: 600px) {
+            .db-cards-grid { grid-template-columns: 1fr; }
+            .stat-row { grid-template-columns: 1fr 1fr; }
+            .welcome-greeting { font-size: 22px; }
+            .top-bar { padding: 12px 16px; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- ===== TOP NAVIGATION BAR ===== -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <span class="topbar-icon">🍴</span>
-            <h2>Buono <span class="topbar-badge" id="userAccessBadge">User</span></h2>
+<!-- 🔝 TOP BAR -->
+<div class="top-bar">
+    <div class="top-bar-brand">
+        <div class="brand-logo">☕</div>
+        <div>
+            <div class="brand-name">Buono</div>
+            <div class="brand-sub">Cafe + Academy</div>
         </div>
-        <div class="topbar-right">
-            <span id="welcomeUser">👋 Welcome</span>
-            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+    </div>
+    <div class="top-bar-right">
+        <span class="user-badge" id="userBadge">Loading...</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<!-- 🏠 MAIN CONTENT -->
+<div class="main-content">
+
+    <div class="welcome-section">
+        <div class="welcome-greeting" id="welcomeGreeting">Welcome! 👋</div>
+        <div class="welcome-sub">Select a database to continue</div>
+    </div>
+
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="stat-icon">👤</div>
+            <div class="stat-info">
+                <div class="stat-value" id="statUser">-</div>
+                <div class="stat-label">Logged In User</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏷️</div>
+            <div class="stat-info">
+                <div class="stat-value" id="statAccess">-</div>
+                <div class="stat-label">Access Level</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-info">
+                <div class="stat-value" id="statDate">-</div>
+                <div class="stat-label">Today's Date</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🗄️</div>
+            <div class="stat-info">
+                <div class="stat-value" id="statDBCount">-</div>
+                <div class="stat-label">Databases Available</div>
+            </div>
         </div>
     </div>
 
-    <!-- ===== MAIN CONTAINER ===== -->
-    <div class="dashboard-container">
+    <div class="section-title">📂 Available Databases</div>
 
-        <!-- Welcome Section -->
-        <div class="access-welcome">
-            <h1>🏠 Welcome to Your Workspace</h1>
-            <p id="accessSubtitle">Loading your databases...</p>
-        </div>
-
-        <!-- ===== STAT CARDS ===== -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">👤</div>
-                <div class="stat-info">
-                    <h3 id="userName">-</h3>
-                    <p>Logged in as</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">📅</div>
-                <div class="stat-info">
-                    <h3 id="todayDate">-</h3>
-                    <p>Today</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">⏰</div>
-                <div class="stat-info">
-                    <h3 id="currentTime">-</h3>
-                    <p>Current Time</p>
-                </div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">📂</div>
-                <div class="stat-info">
-                    <h3 id="dbCount">0</h3>
-                    <p>Available Databases</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== DATABASES SECTION ===== -->
-        <div class="section-header">
-            <h2>📂 My Databases</h2>
-        </div>
-
-        <!-- Databases Cards Container -->
-        <div class="databases-grid" id="databasesGrid">
-            <div style="text-align:center; padding:60px; color:#888; grid-column:1/-1;">
-                ⏳ Loading databases...
-            </div>
-        </div>
-
-        <!-- No Access Message (Hidden by default) -->
-        <div id="noAccessMsg" style="display:none; text-align:center; padding:60px 20px; background:#16213e; border-radius:15px; margin-top:20px;">
-            <div style="font-size:60px; margin-bottom:15px;">🔒</div>
-            <h2 style="color:#ff4444; margin-bottom:10px;">No Database Access</h2>
-            <p style="color:#8892b0; margin-bottom:20px;">
-                ඔයාට කිසිම database එකකට access නැහැ.<br>
-                Admin හෝ Manager ට කතා කරන්න.
-            </p>
-            <button class="btn-secondary" onclick="logout()">🚪 Logout</button>
-        </div>
-
+    <div class="db-cards-grid" id="dbCardsGrid">
+        <!-- JS fills this -->
     </div>
 
-    <!-- ===== FIREBASE SDK ===== -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</div>
 
-    <script>
-        // ═══════════════════════════════════════
-        // 🔥 Firebase Config
-        // ═══════════════════════════════════════
-        const firebaseConfig = {
-            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
-            authDomain: "buono-project-927b8.firebaseapp.com",
-            projectId: "buono-project-927b8",
-            storageBucket: "buono-project-927b8.firebasestorage.app",
-            messagingSenderId: "706681135399",
-            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+<!-- ===== FIREBASE SDK (Compat v8 - MATCHING!) ===== -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+    // 🔥 Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+        authDomain: "buono-project-927b8.firebaseapp.com",
+        projectId: "buono-project-927b8",
+        storageBucket: "buono-project-927b8.firebasestorage.app",
+        messagingSenderId: "706681135399",
+        appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ══════════════════════════════════════
+    // 👤 SESSION CHECK
+    // ✅ FIXED: loggedInUser key use කරනවා!
+    // ══════════════════════════════════════
+    let currentUser = null;
+
+    async function init() {
+        // ✅ CORRECT session key!
+        const stored = sessionStorage.getItem('loggedInUser');
+        if (!stored) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        currentUser = JSON.parse(stored);
+
+        // 🔄 Latest permissions Firebase එකෙන්
+        try {
+            const userDoc = await db.collection('employees').doc(currentUser.id).get();
+            if (userDoc.exists) {
+                const fresh = userDoc.data();
+                currentUser.permissions = fresh.permissions || {};
+                currentUser.access = fresh.access || currentUser.access;
+                currentUser.name = fresh.name || currentUser.name;
+                currentUser.nickname = fresh.nickname || currentUser.nickname;
+                // ✅ Same key!
+                sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            }
+        } catch (e) {
+            console.warn('Could not refresh permissions:', e);
+        }
+
+        setupUI();
+        buildDatabaseCards();
+    }
+
+    // ══════════════════════════════════════
+    // 🎨 UI SETUP
+    // ══════════════════════════════════════
+    function setupUI() {
+        const badgeColors = {
+            'Admin': '#ff4444',
+            'Manager': '#2196F3',
+            'Cashier': '#4CAF50',
+            'Purchasing Officer': '#FF9800',
+            'Head Chef': '#9C27B0',
+            'Call Operator': '#00BCD4',
+            'Waiter': '#607D8B'
         };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        const badge = document.getElementById('userBadge');
+        badge.textContent = currentUser.access || 'User';
+        badge.style.background = badgeColors[currentUser.access] || '#607D8B';
 
-        // ═══════════════════════════════════════
-        // 📂 DATABASES MASTER LIST
-        // මේකට අලුත් database එකක් add කරන්න ඕන තැන
-        // ═══════════════════════════════════════
-        const DATABASES = [
-            {
-                id: 'employeeDB',
-                name: 'Employee Database',
-                subtitle: 'HR Management',
-                icon: '👥',
-                description: 'Manage employees, access types & permissions',
-                color: '#2196F3',
-                url: 'index.html'
-            },
-            {
-                id: 'dayEndReportDB',
-                name: 'Day End Reports',
-                subtitle: 'Cashier Reports',
-                icon: '💰',
-                description: 'Submit & view daily cash reports with auto calculations',
-                color: '#4CAF50',
-                url: 'cashier.html'
-            }
-            // 🔜 Future databases:
-            // {
-            //     id: 'kitchenDB',
-            //     name: 'Kitchen Database',
-            //     subtitle: 'Kitchen Orders',
-            //     icon: '👨‍🍳',
-            //     description: 'Manage kitchen orders & recipes',
-            //     color: '#9C27B0',
-            //     url: 'kitchen.html'
-            // },
-        ];
+        // Welcome greeting
+        const hour = new Date().getHours();
+        let greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+        document.getElementById('welcomeGreeting').textContent =
+            `${greeting}, ${currentUser.name || currentUser.nickname}! 👋`;
 
-        // ═══════════════════════════════════════
-        // 🔐 LOGIN CHECK
-        // ═══════════════════════════════════════
-        const userJson = sessionStorage.getItem('loggedInUser');
+        // Stats
+        document.getElementById('statUser').textContent = currentUser.name || currentUser.nickname;
+        document.getElementById('statAccess').textContent = currentUser.access || 'N/A';
 
-        if (!userJson) {
-            window.location.href = "login.html";
-        }
+        const now = new Date();
+        document.getElementById('statDate').textContent =
+            now.toLocaleDateString('en-LK', { year:'numeric', month:'short', day:'numeric' });
+    }
 
-        const currentUser = JSON.parse(userJson);
+    // ══════════════════════════════════════
+    // 📂 BUILD DATABASE CARDS
+    // ══════════════════════════════════════
+    function buildDatabaseCards() {
+        const permissions  = currentUser.permissions || {};
+        const access       = currentUser.access || '';
+        const isAdmin      = access === 'Admin';
+        const isAdminOrMgr = ['Admin', 'Manager'].includes(access);
+        const grid         = document.getElementById('dbCardsGrid');
+        grid.innerHTML     = '';
+        let cardCount      = 0;
 
-        // ═══════════════════════════════════════
-        // 🎨 UPDATE UI WITH USER INFO
-        // ═══════════════════════════════════════
-        function setupUserInfo() {
-            // Welcome message
-            document.getElementById('welcomeUser').textContent = `👋 Welcome, ${currentUser.name}`;
-            document.getElementById('userName').textContent = currentUser.name;
-
-            // Access badge
-            const badge = document.getElementById('userAccessBadge');
-            badge.textContent = currentUser.access;
-            badge.className = 'topbar-badge ' + getBadgeTopClass(currentUser.access);
-
-            // Subtitle
-            document.getElementById('accessSubtitle').textContent = 
-                `${currentUser.access} access - Select a database to start working`;
-        }
-
-        // Badge color
-        function getBadgeTopClass(access) {
-            switch(access) {
-                case 'Admin': return 'admin-badge-top';
-                case 'Manager': return 'manager-badge';
-                case 'Cashier': return 'cashier-badge-top';
-                default: return 'manager-badge';
-            }
-        }
-
-        // ═══════════════════════════════════════
-        // 📅 DATE & TIME
-        // ═══════════════════════════════════════
-        function updateDateTime() {
-            const now = new Date();
-            const options = { year: 'numeric', month: 'short', day: '2-digit' };
-            document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', options);
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-
-        // ═══════════════════════════════════════
-        // 🔍 CHECK IF USER HAS ACCESS TO DATABASE
-        // ═══════════════════════════════════════
-        function hasAccessToDatabase(dbId) {
-            // Admin → සියලු databases access
-            if (currentUser.access === 'Admin') return true;
-
-            // Permissions object check
-            const perms = currentUser.permissions;
-            if (!perms || !perms[dbId]) return false;
-
-            const dbPerms = perms[dbId];
-
-            // කිසියම් permission එකක් true නම් access දෙනවා
-            return dbPerms.add || dbPerms.view || dbPerms.selfView 
-                || dbPerms.edit || dbPerms.delete;
-        }
-
-        // ═══════════════════════════════════════
-        // 📂 LOAD DATABASES FROM FIREBASE
-        // ═══════════════════════════════════════
-        async function loadDatabases() {
-            try {
-                // Latest user data Firebase එකෙන් ගන්නවා
-                const userDoc = await db.collection('employees').doc(currentUser.id).get();
-
-                if (userDoc.exists) {
-                    const latestData = userDoc.data();
-                    // Session update කරනවා latest data වලින්
-                    currentUser.permissions = latestData.permissions || {};
-                    currentUser.access = latestData.access;
-                    sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-                }
-
-                setupUserInfo();
-                renderDatabases();
-
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                setupUserInfo();
-                renderDatabases();
-            }
-        }
-
-        // ═══════════════════════════════════════
-        // 🎨 RENDER DATABASE CARDS
-        // ═══════════════════════════════════════
-        function renderDatabases() {
-            const grid = document.getElementById('databasesGrid');
-            const noAccessMsg = document.getElementById('noAccessMsg');
-
-            // Available databases filter
-            const availableDBs = DATABASES.filter(db => hasAccessToDatabase(db.id));
-
-            // Count update
-            document.getElementById('dbCount').textContent = availableDBs.length;
-
-            if (availableDBs.length === 0) {
-                grid.style.display = 'none';
-                noAccessMsg.style.display = 'block';
-                return;
-            }
-
-            grid.style.display = 'grid';
-            noAccessMsg.style.display = 'none';
-
-            let html = '';
-            availableDBs.forEach(database => {
-                // Permission details එක ගන්නවා
-                const perms = currentUser.access === 'Admin' 
-                    ? { add: true, view: true, selfView: true, edit: true, delete: true }
-                    : (currentUser.permissions[database.id] || {});
-
-                // Permission badges හදනවා
-                let permBadges = '';
-                if (perms.add) permBadges += '<span class="db-perm-badge">➕ Add</span>';
-                if (perms.view) permBadges += '<span class="db-perm-badge">👁️ View</span>';
-                if (perms.selfView && !perms.view) permBadges += '<span class="db-perm-badge">👤 Self</span>';
-                if (perms.edit) permBadges += '<span class="db-perm-badge">✏️ Edit</span>';
-                if (perms.delete) permBadges += '<span class="db-perm-badge">🗑️ Delete</span>';
-
-                html += `
-                    <div class="database-card" onclick="openDatabase('${database.url}')" style="border-top: 4px solid ${database.color};">
-                        <div class="db-card-icon" style="color: ${database.color};">${database.icon}</div>
-                        <h3 class="db-card-title">${database.name}</h3>
-                        <p class="db-card-subtitle">${database.subtitle}</p>
-                        <p class="db-card-description">${database.description}</p>
-                        
-                        <div class="db-permissions-row">
-                            ${permBadges || '<span style="color:#666; font-size:12px;">No permissions</span>'}
-                        </div>
-                        
-                        <button class="db-card-btn" style="background: ${database.color};">
-                            Open Database →
-                        </button>
+        // ── 1. EMPLOYEE DATABASE ──
+        const empPerm = permissions.employeeDB || {};
+        const empAccess = isAdmin || empPerm.add || empPerm.view || empPerm.selfView || empPerm.edit;
+        if (empAccess) {
+            const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : empPerm);
+            grid.innerHTML += `
+                <a class="db-card" href="index.html">
+                    <div class="db-card-header">
+                        <div class="db-card-icon">👥</div>
+                        <span class="db-card-badge badge-entry">Data Entry</span>
                     </div>
-                `;
-            });
-
-            grid.innerHTML = html;
+                    <div class="db-card-title">Employee Database</div>
+                    <div class="db-card-desc">
+                        Employee profiles, permissions සහ access management.
+                    </div>
+                    <div class="perm-badges">${permBadges}</div>
+                    <div class="db-card-arrow">→</div>
+                </a>
+            `;
+            cardCount++;
         }
 
-        // ═══════════════════════════════════════
-        // 🚀 OPEN DATABASE
-        // ═══════════════════════════════════════
-        function openDatabase(url) {
-            window.location.href = url;
+        // ── 2. DAY END REPORT DATABASE ──
+        const dayPerm = permissions.dayEndReportDB || {};
+        const dayAccess = isAdmin || dayPerm.add || dayPerm.view || dayPerm.selfView;
+        if (dayAccess) {
+            const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : dayPerm);
+            grid.innerHTML += `
+                <a class="db-card" href="cashier.html">
+                    <div class="db-card-header">
+                        <div class="db-card-icon">💰</div>
+                        <span class="db-card-badge badge-entry">Data Entry</span>
+                    </div>
+                    <div class="db-card-title">Day End Report Database</div>
+                    <div class="db-card-desc">
+                        Daily cashier reports, cash flow සහ bank deposits.
+                    </div>
+                    <div class="perm-badges">${permBadges}</div>
+                    <div class="db-card-arrow">→</div>
+                </a>
+            `;
+            cardCount++;
         }
 
-        // ═══════════════════════════════════════
-        // 🚪 LOGOUT
-        // ═══════════════════════════════════════
-        function logout() {
-            sessionStorage.removeItem('loggedInUser');
-            window.location.href = "login.html";
+                // ── 3. INVENTORY DATABASE ──
+        const invPerm = permissions.inventoryDB || {};
+        const invAccess = isAdmin || invPerm.add || invPerm.view || invPerm.selfView || invPerm.edit;
+        if (invAccess) {
+            const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : invPerm);
+            grid.innerHTML += `
+                <a class="db-card" href="inventory.html">
+                    <div class="db-card-header">
+                        <div class="db-card-icon">📦</div>
+                        <span class="db-card-badge badge-entry">Data Entry</span>
+                    </div>
+                    <div class="db-card-title">Inventory Database</div>
+                    <div class="db-card-desc">
+                        Stock management, items, categories සහ low stock alerts.
+                    </div>
+                    <div class="perm-badges">${permBadges}</div>
+                    <div class="db-card-arrow">→</div>
+                </a>
+            `;
+            cardCount++;
+        }
+                // ── 4. KITCHEN DATABASE ──
+        const kitPerm = permissions.kitchenDB || {};
+        const kitAccess = isAdmin || kitPerm.add || kitPerm.view || kitPerm.selfView || kitPerm.edit;
+        if (kitAccess) {
+            const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : kitPerm);
+            grid.innerHTML += `
+                <a class="db-card" href="kitchen.html">
+                    <div class="db-card-header">
+                        <div class="db-card-icon">🍳</div>
+                        <span class="db-card-badge badge-entry">Kitchen</span>
+                    </div>
+                    <div class="db-card-title">Kitchen Database</div>
+                    <div class="db-card-desc">
+                        Recipes, staff meals, wastage tracking සහ stock count.
+                    </div>
+                    <div class="perm-badges">${permBadges}</div>
+                    <div class="db-card-arrow">→</div>
+                </a>
+            `;
+            cardCount++;
         }
 
-        // Initial load
-        loadDatabases();
-    </script>
+        // ── 3. REPORTS DATABASE (Admin/Manager only) ──
+        if (isAdminOrMgr) {
+            grid.innerHTML += `
+                <a class="db-card reports-card" href="reports.html">
+                    <div class="db-card-header">
+                        <div class="db-card-icon">📊</div>
+                        <span class="db-card-badge badge-management">Management</span>
+                    </div>
+                    <div class="db-card-title">Reports Database</div>
+                    <div class="db-card-desc">
+                        Business reports, analytics සහ management insights.
+                        Day End, Employee, P/L reports සහ තවත් බොහෝ දේ.
+                    </div>
+                    <div class="perm-badges">
+                        <span class="perm-badge perm-reports">📊 View Reports</span>
+                        <span class="perm-badge perm-reports">📋 Day End</span>
+                        <span class="perm-badge perm-reports">👥 Employees</span>
+                    </div>
+                    <div class="db-card-arrow">→</div>
+                </a>
+            `;
+            cardCount++;
+        }
 
+        // DB Count stat
+        document.getElementById('statDBCount').textContent = cardCount;
+
+        // No access message
+        if (cardCount === 0) {
+            grid.innerHTML = `
+                <div class="no-access-msg">
+                    <div class="na-icon">🔒</div>
+                    <h3>No Database Access</h3>
+                    <p>ඔයාට databases access කිරීමට permission නෑ.<br>Admin ට contact කරන්න.</p>
+                </div>
+            `;
+        }
+    }
+
+    // ══════════════════════════════════════
+    // 🏷️ PERMISSION BADGES
+    // ══════════════════════════════════════
+    function buildPermBadges(perm) {
+        let html = '';
+        if (perm.add)      html += `<span class="perm-badge perm-add">➕ Add</span>`;
+        if (perm.view)     html += `<span class="perm-badge perm-view">👁️ View All</span>`;
+        if (perm.selfView && !perm.view)
+                           html += `<span class="perm-badge perm-self">👤 Self View</span>`;
+        if (perm.edit)     html += `<span class="perm-badge perm-edit">✏️ Edit</span>`;
+        if (perm.delete)   html += `<span class="perm-badge perm-delete">🗑️ Delete</span>`;
+        return html;
+    }
+
+    // ══════════════════════════════════════
+    // 🚪 LOGOUT
+    // ══════════════════════════════════════
+    function logout() {
+        sessionStorage.removeItem('loggedInUser');
+        window.location.href = 'login.html';
+    }
+
+    // 🚀 START
+    init();
+</script>
 </body>
 </html>

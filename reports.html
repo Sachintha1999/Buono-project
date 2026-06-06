@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Reports Database</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ═══════════════════════════════════
+           📊 REPORTS DATABASE STYLES
+        ═══════════════════════════════════ */
+
+        /* TOP BAR */
+        .reports-topbar {
+            background: #16213e;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f0a500;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            height: 60px;
+        }
+
+        .reports-topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            color: #f0a500;
+            font-size: 22px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .reports-topbar-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f0a500;
+        }
+
+        .reports-topbar-title span {
+            color: #e0e0e0;
+            font-weight: 400;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .reports-topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .rpt-db-switcher { position: relative; }
+
+        .rpt-db-switcher-btn {
+            background: rgba(240,165,0,0.15);
+            border: 1px solid #f0a500;
+            color: #f0a500;
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .rpt-db-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: #16213e;
+            border: 1px solid #f0a500;
+            border-radius: 10px;
+            min-width: 220px;
+            z-index: 2000;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .rpt-db-dropdown.show { display: block; }
+
+        .rpt-db-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .rpt-db-dropdown a:hover {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+        }
+
+        .rpt-db-dropdown a.current {
+            background: rgba(240,165,0,0.2);
+            color: #f0a500;
+            font-weight: 600;
+        }
+
+        .rpt-user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #e0e0e0;
+        }
+
+        .rpt-user-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            color: white;
+        }
+
+        .rpt-logout-btn {
+            background: rgba(255,68,68,0.15);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .rpt-logout-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        /* LAYOUT */
+        .reports-layout {
+            display: flex;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* SIDEBAR */
+        .reports-sidebar {
+            width: 240px;
+            background: #16213e;
+            border-right: 1px solid rgba(240,165,0,0.2);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-hdr {
+            padding: 20px 16px 12px;
+            border-bottom: 1px solid rgba(240,165,0,0.15);
+        }
+
+        .sidebar-hdr p {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .sidebar-nav { padding: 12px 0; }
+
+        .sb-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .sb-item:hover {
+            background: rgba(240,165,0,0.08);
+            color: #e0e0e0;
+        }
+
+        .sb-item.active {
+            background: rgba(240,165,0,0.12);
+            color: #f0a500;
+            border-left-color: #f0a500;
+            font-weight: 600;
+        }
+
+        .sb-item .sb-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sb-item .sb-label { flex: 1; }
+
+        .sb-count-badge {
+            background: #ff4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .sb-soon {
+            background: rgba(255,255,255,0.1);
+            color: #666;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .sb-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 8px 16px;
+        }
+
+        /* CONTENT */
+        .reports-content {
+            margin-left: 240px;
+            flex: 1;
+            padding: 28px;
+        }
+
+        .rpt-section-header {
+            margin-bottom: 24px;
+        }
+
+        .rpt-section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0a500;
+            margin-bottom: 6px;
+        }
+
+        .rpt-section-subtitle {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* SUMMARY CARDS */
+        .rpt-summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .rpt-summary-card {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.2);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .rpt-summary-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .rpt-summary-card .sc-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .rpt-summary-card .sc-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f0a500;
+            margin-bottom: 4px;
+        }
+
+        .rpt-summary-card .sc-label {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .rpt-summary-card.green .sc-value { color: #4CAF50; }
+        .rpt-summary-card.red .sc-value { color: #ff4444; }
+        .rpt-summary-card.blue .sc-value { color: #2196F3; }
+        .rpt-summary-card.orange .sc-value { color: #f0a500; }
+        .rpt-summary-card.yellow .sc-value { color: #FFC107; }
+
+        /* FILTERS */
+        .rpt-filters {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .rpt-filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .rpt-filter-group label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .rpt-filter-group input,
+        .rpt-filter-group select {
+            background: #0f3460;
+            border: 1px solid rgba(240,165,0,0.3);
+            color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            min-width: 140px;
+        }
+
+        .rpt-filter-btn {
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .rpt-filter-btn.apply {
+            background: #f0a500;
+            color: #1a1a2e;
+        }
+
+        .rpt-filter-btn.reset {
+            background: rgba(255,255,255,0.08);
+            color: #aaa;
+        }
+
+        /* ISSUE TABS (Pending/Noted/Resolved) */
+        .issue-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            background: #16213e;
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid rgba(240,165,0,0.15);
+        }
+
+        .issue-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #aaa;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .issue-tab:hover {
+            background: rgba(240,165,0,0.08);
+            color: #e0e0e0;
+        }
+
+        .issue-tab.active {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+        }
+
+        .issue-tab .tab-count {
+            background: rgba(255,255,255,0.1);
+            color: #ccc;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .issue-tab.active .tab-count {
+            background: #f0a500;
+            color: #1a1a2e;
+        }
+
+        /* ISSUE CARDS */
+        .issue-card {
+            background: #16213e;
+            border: 1px solid rgba(255,68,68,0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .issue-card:hover {
+            border-color: rgba(255,68,68,0.5);
+        }
+
+        .issue-card.resolved {
+            border-color: rgba(76,175,80,0.3);
+        }
+
+        .issue-card.noted {
+            border-color: rgba(33,150,243,0.3);
+        }
+
+        .issue-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .issue-card-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .issue-date {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .severity-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .severity-badge.minor {
+            background: rgba(240,165,0,0.2);
+            color: #f0a500;
+            border: 1px solid #f0a500;
+        }
+
+        .severity-badge.major {
+            background: rgba(255,87,34,0.2);
+            color: #FF5722;
+            border: 1px solid #FF5722;
+        }
+
+        .severity-badge.critical {
+            background: rgba(255,68,68,0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            animation: critical-pulse 1.5s infinite;
+        }
+
+        @keyframes critical-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(255,68,68,0); }
+        }
+
+        .type-badge {
+            background: rgba(33,150,243,0.15);
+            color: #2196F3;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .type-badge.wastage {
+            background: rgba(255,68,68,0.15);
+            color: #ff4444;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-badge.pending {
+            background: rgba(255,68,68,0.15);
+            color: #ff4444;
+        }
+
+        .status-badge.noted {
+            background: rgba(33,150,243,0.15);
+            color: #2196F3;
+        }
+
+        .status-badge.resolved {
+            background: rgba(76,175,80,0.15);
+            color: #4CAF50;
+        }
+
+        /* Issue details grid */
+        .issue-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        .issue-detail {
+            background: rgba(0,0,0,0.2);
+            padding: 10px 12px;
+            border-radius: 8px;
+        }
+
+        .issue-detail .id-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .issue-detail .id-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e0e0e0;
+        }
+
+        .issue-detail .id-value.red { color: #ff4444; }
+        .issue-detail .id-value.orange { color: #f0a500; }
+        .issue-detail .id-value.green { color: #4CAF50; }
+
+        .issue-reason {
+            background: rgba(255,255,255,0.03);
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #ccc;
+            border-left: 3px solid #f0a500;
+        }
+
+        .issue-reason strong {
+            color: #f0a500;
+        }
+
+        .reported-by {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        /* Manager notes section */
+        .manager-notes-section {
+            background: rgba(33,150,243,0.05);
+            border: 1px solid rgba(33,150,243,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .manager-notes-section label {
+            font-size: 11px;
+            color: #2196F3;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .manager-notes-section textarea {
+            width: 100%;
+            background: #0f3460;
+            border: 1px solid rgba(33,150,243,0.3);
+            color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 60px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .manager-notes-section textarea:focus {
+            border-color: #2196F3;
+        }
+
+        .resolved-notes {
+            background: rgba(76,175,80,0.08);
+            border: 1px solid rgba(76,175,80,0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .resolved-notes .resolved-by {
+            font-size: 11px;
+            color: #4CAF50;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        /* Issue actions */
+        .issue-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .issue-action-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .issue-action-btn.resolve {
+            background: rgba(76,175,80,0.15);
+            color: #4CAF50;
+            border: 1px solid rgba(76,175,80,0.3);
+        }
+
+        .issue-action-btn.resolve:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .issue-action-btn.note {
+            background: rgba(33,150,243,0.15);
+            color: #2196F3;
+            border: 1px solid rgba(33,150,243,0.3);
+        }
+
+        .issue-action-btn.note:hover {
+            background: #2196F3;
+            color: white;
+        }
+
+        .issue-action-btn.reopen {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+            border: 1px solid rgba(240,165,0,0.3);
+        }
+
+        .issue-action-btn.reopen:hover {
+            background: #f0a500;
+            color: #1a1a2e;
+        }
+
+        /* Loading + Empty states */
+        .rpt-loading, .rpt-empty {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .rpt-empty .empty-icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        /* Day End Reports existing styles */
+        .rpt-list-container {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .rpt-list-header {
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(240,165,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .rpt-count-badge {
+            font-size: 12px;
+            color: #888;
+            background: rgba(240,165,0,0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .rpt-item {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .rpt-item-header {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .rpt-item-header:hover {
+            background: rgba(240,165,0,0.06);
+        }
+
+        .rpt-date-badge {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .rpt-cashier-info { flex: 1; }
+        .rpt-cashier-info .rci-name { font-size: 14px; font-weight: 600; color: #e0e0e0; }
+        .rpt-cashier-info .rci-shift { font-size: 11px; color: #888; margin-top: 2px; }
+
+        .rpt-amounts { text-align: right; }
+        .rpt-amounts .ra-pos { font-size: 14px; font-weight: 700; color: #4CAF50; }
+        .rpt-amounts .ra-label { font-size: 10px; color: #888; }
+
+        .se-mini {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .se-mini.perfect { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .se-mini.excess { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .se-mini.short { background: rgba(255,68,68,0.15); color: #ff4444; }
+
+        .rpt-expand-icon {
+            color: #888;
+            font-size: 12px;
+            transition: transform 0.2s;
+        }
+
+        .rpt-item.expanded .rpt-expand-icon { transform: rotate(180deg); }
+
+        .rpt-item-details {
+            display: none;
+            padding: 0 20px 16px 20px;
+        }
+
+        .rpt-item.expanded .rpt-item-details { display: block; }
+
+        .rpt-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .rpt-detail-box {
+            background: rgba(255,255,255,0.04);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .rpt-detail-box h4 {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .rpt-d-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 3px 0;
+        }
+
+        .rpt-d-row .dl { color: #aaa; }
+        .rpt-d-row .dv { color: #e0e0e0; font-weight: 500; }
+        .rpt-d-row .dv.green { color: #4CAF50; }
+        .rpt-d-row .dv.red { color: #ff4444; }
+        .rpt-d-row .dv.orange { color: #f0a500; }
+        .rpt-d-row .dv.blue { color: #2196F3; }
+
+        /* Employee */
+        .emp-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .emp-sc {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.15);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .emp-sc .es-num { font-size: 28px; font-weight: 700; color: #f0a500; }
+        .emp-sc .es-label { font-size: 12px; color: #888; margin-top: 4px; }
+        .emp-sc.admin .es-num { color: #ff4444; }
+        .emp-sc.manager .es-num { color: #2196F3; }
+        .emp-sc.cashier .es-num { color: #4CAF50; }
+        .emp-sc.other .es-num { color: #9C27B0; }
+
+        .emp-rpt-table {
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.15);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .emp-rpt-table table { width: 100%; border-collapse: collapse; }
+        .emp-rpt-table thead tr { background: rgba(240,165,0,0.1); }
+        .emp-rpt-table th { padding: 12px 16px; text-align: left; font-size: 12px; color: #f0a500; text-transform: uppercase; }
+        .emp-rpt-table td { padding: 12px 16px; font-size: 13px; color: #e0e0e0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        .rpt-search-box { position: relative; margin-bottom: 16px; }
+        .rpt-search-box input {
+            width: 100%;
+            max-width: 320px;
+            background: #16213e;
+            border: 1px solid rgba(240,165,0,0.3);
+            color: #e0e0e0;
+            padding: 9px 14px 9px 36px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+        }
+        .rpt-search-box .rpt-search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .rpt-coming-soon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            text-align: center;
+        }
+
+        .rpt-coming-soon .cs-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            opacity: 0.4;
+        }
+
+        .rpt-access-denied {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+        }
+
+        .rpt-access-denied .ad-icon { font-size: 64px; margin-bottom: 20px; }
+        .rpt-access-denied h2 { font-size: 24px; color: #ff4444; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .hamburger-btn { display: block; }
+            .reports-sidebar { transform: translateX(-100%); }
+            .reports-sidebar.open { transform: translateX(0); }
+            .reports-content { margin-left: 0; padding: 16px; }
+            .rpt-summary-cards { grid-template-columns: repeat(2, 1fr); }
+            .rpt-filters { flex-direction: column; align-items: stretch; }
+            .issue-tabs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="reports-topbar">
+    <div class="reports-topbar-left">
+        <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+        <div class="reports-topbar-title">
+            📊 Reports Database
+            <span>| Management View</span>
+        </div>
+    </div>
+
+    <div class="reports-topbar-right">
+        <div class="rpt-db-switcher">
+            <button class="rpt-db-switcher-btn" id="rptSwitcherBtn">📂 Switch Database ▼</button>
+            <div class="rpt-db-dropdown" id="rptSwitcherDropdown"></div>
+        </div>
+        <div class="rpt-user-info">
+            <span class="rpt-user-badge" id="rptUserBadge">Admin</span>
+            <span id="rptUserName">User</span>
+            <button class="rpt-logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</div>
+
+<div class="reports-layout">
+
+    <!-- SIDEBAR -->
+    <div class="reports-sidebar" id="reportsSidebar">
+        <div class="sidebar-hdr">
+            <p>📊 Report Sections</p>
+        </div>
+        <div class="sidebar-nav">
+
+            <div class="sb-item active" id="menu-dayend" onclick="showSection('dayend')">
+                <span class="sb-icon">📋</span>
+                <span class="sb-label">Day End Reports</span>
+            </div>
+
+            <div class="sb-item" id="menu-employees" onclick="showSection('employees')">
+                <span class="sb-icon">👥</span>
+                <span class="sb-label">Employee Reports</span>
+            </div>
+
+            <!-- 🚨 STOCK ISSUES (NEW!) -->
+            <div class="sb-item" id="menu-stockissues" onclick="showSection('stockissues')">
+                <span class="sb-icon">🚨</span>
+                <span class="sb-label">Stock Issues</span>
+                <span class="sb-count-badge" id="sidebarIssuesCount" style="display:none;">0</span>
+            </div>
+
+            <div class="sb-divider"></div>
+
+            <div class="sb-item" style="cursor:default; opacity:0.5;">
+                <span class="sb-icon">💰</span>
+                <span class="sb-label">Sales Reports</span>
+                <span class="sb-soon">Soon</span>
+            </div>
+
+            <div class="sb-item" style="cursor:default; opacity:0.5;">
+                <span class="sb-icon">📦</span>
+                <span class="sb-label">Inventory Reports</span>
+                <span class="sb-soon">Soon</span>
+            </div>
+
+            <div class="sb-item" style="cursor:default; opacity:0.5;">
+                <span class="sb-icon">🍳</span>
+                <span class="sb-label">Kitchen Reports</span>
+                <span class="sb-soon">Soon</span>
+            </div>
+
+            <div class="sb-divider"></div>
+
+            <div class="sb-item" style="cursor:default; opacity:0.5;">
+                <span class="sb-icon">📊</span>
+                <span class="sb-label">P/L Report</span>
+                <span class="sb-soon">Soon</span>
+            </div>
+
+            <div class="sb-item" style="cursor:default; opacity:0.5;">
+                <span class="sb-icon">📝</span>
+                <span class="sb-label">Audit Log</span>
+                <span class="sb-soon">Soon</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="reports-content">
+
+        <!-- Access Denied -->
+        <div class="rpt-access-denied" id="rptAccessDenied" style="display:none;">
+            <div class="ad-icon">🔒</div>
+            <h2>Access Denied</h2>
+            <p style="color:#888;">Reports Database = Management only.</p>
+            <button onclick="window.location.href='access.html'" style="background:#f0a500; color:#1a1a2e; border:none; padding:10px 24px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:20px;">← Back</button>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- DAY END REPORTS SECTION                       -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-dayend" class="rpt-section">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">📋 Day End Reports</div>
+                <div class="rpt-section-subtitle">All cashier day end reports</div>
+            </div>
+
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card">
+                    <div class="sc-icon">📋</div>
+                    <div class="sc-value" id="scTotalReports">-</div>
+                    <div class="sc-label">Total Reports</div>
+                </div>
+                <div class="rpt-summary-card green">
+                    <div class="sc-icon">💰</div>
+                    <div class="sc-value" id="scTotalPOS">-</div>
+                    <div class="sc-label">Total POS Sales</div>
+                </div>
+                <div class="rpt-summary-card red">
+                    <div class="sc-icon">📤</div>
+                    <div class="sc-value" id="scTotalExpenses">-</div>
+                    <div class="sc-label">Total Expenses</div>
+                </div>
+                <div class="rpt-summary-card blue">
+                    <div class="sc-icon">🏦</div>
+                    <div class="sc-value" id="scTotalDeposits">-</div>
+                    <div class="sc-label">Total Deposits</div>
+                </div>
+            </div>
+
+            <div class="rpt-filters">
+                <div class="rpt-filter-group">
+                    <label>📅 From Date</label>
+                    <input type="date" id="filterFromDate">
+                </div>
+                <div class="rpt-filter-group">
+                    <label>📅 To Date</label>
+                    <input type="date" id="filterToDate">
+                </div>
+                <div class="rpt-filter-group">
+                    <label>👤 Cashier</label>
+                    <select id="filterCashier"><option value="">All</option></select>
+                </div>
+                <div class="rpt-filter-group">
+                    <label>🌅 Shift</label>
+                    <select id="filterShift">
+                        <option value="">All</option>
+                        <option value="Morning">Morning</option>
+                        <option value="Evening">Evening</option>
+                    </select>
+                </div>
+                <button class="rpt-filter-btn apply" onclick="applyFilters()">🔍 Apply</button>
+                <button class="rpt-filter-btn reset" onclick="resetFilters()">↺ Reset</button>
+            </div>
+
+            <div class="rpt-list-container">
+                <div class="rpt-list-header">
+                    <h3 style="font-size:15px; color:#e0e0e0;">📋 Reports</h3>
+                    <span class="rpt-count-badge" id="rptCountBadge">Loading...</span>
+                </div>
+                <div id="dayendReportsList">
+                    <div class="rpt-loading">⏳ Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- EMPLOYEE REPORTS SECTION                      -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-employees" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">👥 Employee Reports</div>
+                <div class="rpt-section-subtitle">Employee summary & statistics</div>
+            </div>
+
+            <div class="emp-stats-grid">
+                <div class="emp-sc">
+                    <div class="es-num" id="esTotal">-</div>
+                    <div class="es-label">Total Employees</div>
+                </div>
+                <div class="emp-sc admin">
+                    <div class="es-num" id="esAdmin">-</div>
+                    <div class="es-label">Admin</div>
+                </div>
+                <div class="emp-sc manager">
+                    <div class="es-num" id="esManager">-</div>
+                    <div class="es-label">Manager</div>
+                </div>
+                <div class="emp-sc cashier">
+                    <div class="es-num" id="esCashier">-</div>
+                    <div class="es-label">Cashier</div>
+                </div>
+                <div class="emp-sc other">
+                    <div class="es-num" id="esOther">-</div>
+                    <div class="es-label">Other</div>
+                </div>
+            </div>
+
+            <div class="rpt-search-box">
+                <span class="rpt-search-icon">🔍</span>
+                <input type="text" id="empSearchInput" placeholder="Search..." oninput="filterEmpTable()">
+            </div>
+
+            <div class="emp-rpt-table">
+                <table>
+                    <thead><tr><th>#</th><th>Name</th><th>Nickname</th><th>Access</th><th>Databases</th></tr></thead>
+                    <tbody id="empTableBody"><tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">⏳ Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- 🚨 STOCK ISSUES SECTION (NEW!)               -->
+        <!-- ═══════════════════════════════════════════ -->
+        <div id="section-stockissues" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">🚨 Stock Issues</div>
+                <div class="rpt-section-subtitle">Stock shortages flagged from Staff Meals & Wastage - Manager review required</div>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card red">
+                    <div class="sc-icon">🟡</div>
+                    <div class="sc-value" id="scPending">0</div>
+                    <div class="sc-label">Pending Review</div>
+                </div>
+                <div class="rpt-summary-card blue">
+                    <div class="sc-icon">📝</div>
+                    <div class="sc-value" id="scNoted">0</div>
+                    <div class="sc-label">Noted</div>
+                </div>
+                <div class="rpt-summary-card green">
+                    <div class="sc-icon">✅</div>
+                    <div class="sc-value" id="scResolved">0</div>
+                    <div class="sc-label">Resolved</div>
+                </div>
+                <div class="rpt-summary-card orange">
+                    <div class="sc-icon">⚡</div>
+                    <div class="sc-value" id="scCritical">0</div>
+                    <div class="sc-label">Critical Issues</div>
+                </div>
+                <div class="rpt-summary-card yellow">
+                    <div class="sc-icon">💸</div>
+                    <div class="sc-value" id="scTotalLoss">Rs. 0</div>
+                    <div class="sc-label">Total Cost Impact</div>
+                </div>
+            </div>
+
+            <!-- Status Tabs -->
+            <div class="issue-tabs">
+                <button class="issue-tab active" id="tab-pending" onclick="showIssueTab('pending', this)">
+                    🟡 Pending <span class="tab-count" id="pendingCount">0</span>
+                </button>
+                <button class="issue-tab" id="tab-noted" onclick="showIssueTab('noted', this)">
+                    📝 Noted <span class="tab-count" id="notedCount">0</span>
+                </button>
+                <button class="issue-tab" id="tab-resolved" onclick="showIssueTab('resolved', this)">
+                    ✅ Resolved <span class="tab-count" id="resolvedCount">0</span>
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="rpt-filters">
+                <div class="rpt-filter-group">
+                    <label>📅 From</label>
+                    <input type="date" id="issueFromDate" onchange="filterIssues()">
+                </div>
+                <div class="rpt-filter-group">
+                    <label>📅 To</label>
+                    <input type="date" id="issueToDate" onchange="filterIssues()">
+                </div>
+                <div class="rpt-filter-group">
+                    <label>⚡ Severity</label>
+                    <select id="issueSeverity" onchange="filterIssues()">
+                        <option value="">All</option>
+                        <option value="minor">🟡 Minor</option>
+                        <option value="major">🟠 Major</option>
+                        <option value="critical">🔴 Critical</option>
+                    </select>
+                </div>
+                <div class="rpt-filter-group">
+                    <label>📂 Type</label>
+                    <select id="issueType" onchange="filterIssues()">
+                        <option value="">All</option>
+                        <option value="staffMeal">🍽️ Staff Meal</option>
+                        <option value="wastage">🗑️ Wastage</option>
+                    </select>
+                </div>
+                <button class="rpt-filter-btn reset" onclick="resetIssueFilters()">↺ Reset</button>
+            </div>
+
+            <!-- Issues List -->
+            <div id="issuesList">
+                <div class="rpt-loading">⏳ Loading issues...</div>
+            </div>
+        </div>
+
+        <!-- Other coming soon sections -->
+        <div id="section-sales" class="rpt-section" style="display:none;">
+            <div class="rpt-coming-soon"><div class="cs-icon">💰</div><h3>Sales Reports</h3><p>Coming soon</p></div>
+        </div>
+        <div id="section-inventory" class="rpt-section" style="display:none;">
+            <div class="rpt-coming-soon"><div class="cs-icon">📦</div><h3>Inventory Reports</h3><p>Coming soon</p></div>
+        </div>
+        <div id="section-kitchen" class="rpt-section" style="display:none;">
+            <div class="rpt-coming-soon"><div class="cs-icon">🍳</div><h3>Kitchen Reports</h3><p>Coming soon</p></div>
+        </div>
+        <div id="section-pl" class="rpt-section" style="display:none;">
+            <div class="rpt-coming-soon"><div class="cs-icon">📊</div><h3>P/L Report</h3><p>Coming soon</p></div>
+        </div>
+        <div id="section-audit" class="rpt-section" style="display:none;">
+            <div class="rpt-coming-soon"><div class="cs-icon">📝</div><h3>Audit Log</h3><p>Coming soon</p></div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+        authDomain: "buono-project-927b8.firebaseapp.com",
+        projectId: "buono-project-927b8",
+        storageBucket: "buono-project-927b8.firebasestorage.app",
+        messagingSenderId: "706681135399",
+        appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const DATABASES = [
+        { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
+        { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
+        { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
+        { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
+        { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+    ];
+
+    let currentUser = null;
+    let allDayEndReports = [];
+    let allEmployees = [];
+    let allStockIssues = [];
+    let filteredReports = [];
+    let filteredIssues = [];
+    let currentIssueStatus = 'pending';
+
+    async function initializeApp() {
+        const stored = sessionStorage.getItem('loggedInUser');
+        if (!stored) { window.location.href = 'login.html'; return; }
+
+        currentUser = JSON.parse(stored);
+
+        try {
+            const userDoc = await db.collection('employees').doc(currentUser.id).get();
+            if (userDoc.exists) {
+                const d = userDoc.data();
+                currentUser.access = d.access;
+                currentUser.permissions = d.permissions || {};
+                currentUser.name = d.name;
+                currentUser.nickname = d.nickname;
+                sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            }
+        } catch (e) { console.warn(e); }
+
+        const allowed = ['Admin', 'Manager'];
+        if (!allowed.includes(currentUser.access)) {
+            document.getElementById('rptAccessDenied').style.display = 'flex';
+            document.getElementById('reportsSidebar').style.display = 'none';
+            document.querySelectorAll('.rpt-section').forEach(s => s.style.display = 'none');
+            return;
+        }
+
+        document.getElementById('rptUserName').textContent = currentUser.name || currentUser.nickname;
+        document.getElementById('rptUserBadge').textContent = currentUser.access;
+
+        const badgeColors = { 'Admin': '#ff4444', 'Manager': '#2196F3' };
+        document.getElementById('rptUserBadge').style.background = badgeColors[currentUser.access] || '#f0a500';
+
+        buildSwitcher();
+        loadDayEndReports();
+        loadStockIssues(); // Load issues for sidebar count
+
+        // 🔗 Check URL hash for direct navigation
+        if (window.location.hash === '#stockissues') {
+            showSection('stockissues');
+        }
+    }
+
+    initializeApp();
+
+    function buildSwitcher() {
+        const dropdown = document.getElementById('rptSwitcherDropdown');
+        const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
+        dropdown.innerHTML = '';
+
+        const homeLink = document.createElement('a');
+        homeLink.href = 'access.html';
+        homeLink.innerHTML = '🏠 Access Home';
+        dropdown.appendChild(homeLink);
+
+        DATABASES.forEach(d => {
+            if (d.adminManagerOnly && !isAdminOrMgr) return;
+            const isAdmin = currentUser.access === 'Admin';
+            const dp = currentUser.permissions?.[d.id] || {};
+            const hasAccess = isAdmin || dp.add || dp.view || dp.selfView || dp.edit || dp.delete;
+            if (!d.adminManagerOnly && !hasAccess) return;
+            const a = document.createElement('a');
+            a.href = d.url;
+            a.innerHTML = `${d.icon} ${d.name}`;
+            if (d.url === 'reports.html') a.classList.add('current');
+            dropdown.appendChild(a);
+        });
+
+        document.getElementById('rptSwitcherBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
+        document.addEventListener('click', function() {
+            dropdown.classList.remove('show');
+        });
+    }
+
+    function showSection(name) {
+        document.querySelectorAll('.rpt-section').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+
+        const section = document.getElementById('section-' + name);
+        if (section) section.style.display = 'block';
+
+        const menu = document.getElementById('menu-' + name);
+        if (menu) menu.classList.add('active');
+
+        if (name === 'employees' && allEmployees.length === 0) loadEmployeeReports();
+        if (name === 'stockissues') renderIssues();
+
+        closeSidebarMobile();
+    }
+
+    function toggleSidebar() {
+        document.getElementById('reportsSidebar').classList.toggle('open');
+    }
+
+    function closeSidebarMobile() {
+        if (window.innerWidth <= 768) {
+            document.getElementById('reportsSidebar').classList.remove('open');
+        }
+    }
+
+    function logout() {
+        sessionStorage.removeItem('loggedInUser');
+        window.location.href = 'login.html';
+    }
+
+    // ═══════════════════════════════════════
+    // DAY END REPORTS
+    // ═══════════════════════════════════════
+    async function loadDayEndReports() {
+        try {
+            const snap = await db.collection('dayEndReports').orderBy('date', 'desc').get();
+            allDayEndReports = [];
+            snap.forEach(doc => allDayEndReports.push({ id: doc.id, ...doc.data() }));
+            buildCashierDropdown();
+            filteredReports = [...allDayEndReports];
+            renderDayEndReports(filteredReports);
+            updateSummary(filteredReports);
+        } catch (e) {
+            document.getElementById('dayendReportsList').innerHTML = `<div class="rpt-empty">⚠️ Error loading.</div>`;
+        }
+    }
+
+    function buildCashierDropdown() {
+        const select = document.getElementById('filterCashier');
+        const names = [...new Set(allDayEndReports.map(r => r.cashierName).filter(Boolean))].sort();
+        select.innerHTML = '<option value="">All</option>';
+        names.forEach(name => {
+            select.innerHTML += `<option value="${name}">${name}</option>`;
+        });
+    }
+
+    function updateSummary(reports) {
+        document.getElementById('scTotalReports').textContent = reports.length;
+        document.getElementById('scTotalPOS').textContent = fmt(reports.reduce((s, r) => s + (r.posSale || 0), 0));
+        document.getElementById('scTotalExpenses').textContent = fmt(reports.reduce((s, r) => s + (r.totalExpenses || 0), 0));
+        document.getElementById('scTotalDeposits').textContent = fmt(reports.reduce((s, r) => s + (r.totalDeposits || 0), 0));
+    }
+
+    function renderDayEndReports(reports) {
+        const container = document.getElementById('dayendReportsList');
+        document.getElementById('rptCountBadge').textContent = `${reports.length} reports`;
+
+        if (reports.length === 0) {
+            container.innerHTML = `<div class="rpt-empty">📋 No reports found.</div>`;
+            return;
+        }
+
+        let html = '';
+        reports.forEach(r => {
+            const se = r.shortExcess || 0;
+            let seClass = 'perfect', seLabel = '✅ Perfect';
+            if (se > 0) { seClass = 'excess'; seLabel = `⬆️ +${fmt(se)}`; }
+            else if (se < 0) { seClass = 'short'; seLabel = `⬇️ ${fmt(se)}`; }
+
+            html += `
+                <div class="rpt-item" id="rpt-${r.id}">
+                    <div class="rpt-item-header" onclick="toggleRpt('${r.id}')">
+                        <div class="rpt-date-badge">📅 ${r.date}</div>
+                        <div class="rpt-cashier-info">
+                            <div class="rci-name">👤 ${r.cashierName}</div>
+                            <div class="rci-shift">🌅 ${r.shiftType}</div>
+                        </div>
+                        <div class="rpt-amounts">
+                            <div class="ra-pos">${fmt(r.posSale)}</div>
+                            <div class="ra-label">POS Sales</div>
+                        </div>
+                        <div class="se-mini ${seClass}">${seLabel}</div>
+                        <div class="rpt-expand-icon">▼</div>
+                    </div>
+                    <div class="rpt-item-details">
+                        <div class="rpt-details-grid">
+                            <div class="rpt-detail-box">
+                                <h4>💵 Cash Flow</h4>
+                                <div class="rpt-d-row"><span class="dl">Starting</span><span class="dv">${fmt(r.startingCash)}</span></div>
+                                <div class="rpt-d-row"><span class="dl">POS</span><span class="dv green">${fmt(r.posSale)}</span></div>
+                                <div class="rpt-d-row"><span class="dl">Service</span><span class="dv green">${fmt(r.serviceCharge)}</span></div>
+                                <div class="rpt-d-row"><span class="dl">Day End</span><span class="dv orange">${fmt(r.dayEndCash)}</span></div>
+                            </div>
+                            <div class="rpt-detail-box">
+                                <h4>Summary</h4>
+                                <div class="rpt-d-row"><span class="dl">Expected</span><span class="dv">${fmt(r.expectedCash)}</span></div>
+                                <div class="rpt-d-row"><span class="dl">Actual</span><span class="dv">${fmt(r.dayEndCash)}</span></div>
+                                <div class="rpt-d-row"><span class="dl"><strong>Short/Excess</strong></span><span class="dv ${se === 0 ? 'green' : se > 0 ? 'orange' : 'red'}"><strong>${se >= 0 ? '+' : ''}${fmt(se)}</strong></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function applyFilters() {
+        const fromDate = document.getElementById('filterFromDate').value;
+        const toDate = document.getElementById('filterToDate').value;
+        const cashier = document.getElementById('filterCashier').value;
+        const shift = document.getElementById('filterShift').value;
+        filteredReports = allDayEndReports.filter(r => {
+            if (fromDate && r.date < fromDate) return false;
+            if (toDate && r.date > toDate) return false;
+            if (cashier && r.cashierName !== cashier) return false;
+            if (shift && r.shiftType !== shift) return false;
+            return true;
+        });
+        renderDayEndReports(filteredReports);
+        updateSummary(filteredReports);
+    }
+
+    function resetFilters() {
+        document.getElementById('filterFromDate').value = '';
+        document.getElementById('filterToDate').value = '';
+        document.getElementById('filterCashier').value = '';
+        document.getElementById('filterShift').value = '';
+        filteredReports = [...allDayEndReports];
+        renderDayEndReports(filteredReports);
+        updateSummary(filteredReports);
+    }
+
+    function toggleRpt(id) {
+        document.getElementById('rpt-' + id).classList.toggle('expanded');
+    }
+
+    // ═══════════════════════════════════════
+    // EMPLOYEE REPORTS
+    // ═══════════════════════════════════════
+    async function loadEmployeeReports() {
+        try {
+            const snap = await db.collection('employees').get();
+            allEmployees = [];
+            snap.forEach(doc => allEmployees.push({ id: doc.id, ...doc.data() }));
+            renderEmpStats();
+            renderEmpTable(allEmployees);
+        } catch (e) { console.error(e); }
+    }
+
+    function renderEmpStats() {
+        const total = allEmployees.length;
+        const admins = allEmployees.filter(e => e.access === 'Admin').length;
+        const managers = allEmployees.filter(e => e.access === 'Manager').length;
+        const cashiers = allEmployees.filter(e => e.access === 'Cashier').length;
+        const others = total - admins - managers - cashiers;
+        document.getElementById('esTotal').textContent = total;
+        document.getElementById('esAdmin').textContent = admins;
+        document.getElementById('esManager').textContent = managers;
+        document.getElementById('esCashier').textContent = cashiers;
+        document.getElementById('esOther').textContent = others > 0 ? others : 0;
+    }
+
+    function renderEmpTable(employees) {
+        const tbody = document.getElementById('empTableBody');
+        if (employees.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">No employees.</td></tr>`;
+            return;
+        }
+        const colors = { 'Admin': '#ff4444', 'Manager': '#2196F3', 'Cashier': '#4CAF50', 'Purchasing Officer': '#FF9800', 'Head Chef': '#9C27B0', 'Call Operator': '#00BCD4', 'Waiter': '#607D8B' };
+        tbody.innerHTML = '';
+        employees.forEach((emp, i) => {
+            const color = colors[emp.access] || '#607D8B';
+            const dbCount = Object.keys(emp.permissions || {}).length;
+            tbody.innerHTML += `<tr><td>${i + 1}</td><td><strong>${emp.name}</strong></td><td>${emp.nickname}</td><td><span style="background:${color}22; color:${color}; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">${emp.access}</span></td><td>${dbCount} DBs</td></tr>`;
+        });
+    }
+
+    function filterEmpTable() {
+        const q = document.getElementById('empSearchInput').value.toLowerCase();
+        renderEmpTable(allEmployees.filter(e => (e.name || '').toLowerCase().includes(q) || (e.nickname || '').toLowerCase().includes(q)));
+    }
+
+    // ═══════════════════════════════════════
+    // 🚨 STOCK ISSUES - LOAD + RENDER
+    // ═══════════════════════════════════════
+    function loadStockIssues() {
+        db.collection('stockIssues').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+            allStockIssues = [];
+            snap.forEach(doc => allStockIssues.push({ id: doc.id, ...doc.data() }));
+            updateIssueStats();
+            updateSidebarBadge();
+            renderIssues();
+        }, (err) => {
+            console.error('Issues error:', err);
+        });
+    }
+
+    function updateIssueStats() {
+        const pending = allStockIssues.filter(i => i.status === 'pending').length;
+        const noted = allStockIssues.filter(i => i.status === 'noted').length;
+        const resolved = allStockIssues.filter(i => i.status === 'resolved').length;
+        const critical = allStockIssues.filter(i => i.severity === 'critical' && i.status === 'pending').length;
+        const totalLoss = allStockIssues.reduce((s, i) => s + (i.costLoss || 0), 0);
+
+        document.getElementById('scPending').textContent = pending;
+        document.getElementById('scNoted').textContent = noted;
+        document.getElementById('scResolved').textContent = resolved;
+        document.getElementById('scCritical').textContent = critical;
+        document.getElementById('scTotalLoss').textContent = 'Rs. ' + totalLoss.toLocaleString('en-LK', {maximumFractionDigits: 0});
+
+        document.getElementById('pendingCount').textContent = pending;
+        document.getElementById('notedCount').textContent = noted;
+        document.getElementById('resolvedCount').textContent = resolved;
+    }
+
+    function updateSidebarBadge() {
+        const pending = allStockIssues.filter(i => i.status === 'pending').length;
+        const badge = document.getElementById('sidebarIssuesCount');
+        if (pending > 0) {
+            badge.textContent = pending;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function showIssueTab(status, btn) {
+        currentIssueStatus = status;
+        document.querySelectorAll('.issue-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        renderIssues();
+    }
+
+    function filterIssues() {
+        renderIssues();
+    }
+
+    function resetIssueFilters() {
+        document.getElementById('issueFromDate').value = '';
+        document.getElementById('issueToDate').value = '';
+        document.getElementById('issueSeverity').value = '';
+        document.getElementById('issueType').value = '';
+        renderIssues();
+    }
+
+    function renderIssues() {
+        const container = document.getElementById('issuesList');
+        const fromDate = document.getElementById('issueFromDate').value;
+        const toDate = document.getElementById('issueToDate').value;
+        const severity = document.getElementById('issueSeverity').value;
+        const type = document.getElementById('issueType').value;
+
+        filteredIssues = allStockIssues.filter(i => {
+            if (i.status !== currentIssueStatus) return false;
+            if (fromDate && i.date < fromDate) return false;
+            if (toDate && i.date > toDate) return false;
+            if (severity && i.severity !== severity) return false;
+            if (type && i.type !== type) return false;
+            return true;
+        });
+
+        if (filteredIssues.length === 0) {
+            const emoji = currentIssueStatus === 'pending' ? '✅' : currentIssueStatus === 'noted' ? '📝' : '🎉';
+            const msg = currentIssueStatus === 'pending' ? 'No pending issues! All clear.' : currentIssueStatus === 'noted' ? 'No noted issues.' : 'No resolved issues yet.';
+            container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">${emoji}</span>${msg}</div>`;
+            return;
+        }
+
+        let html = '';
+        filteredIssues.forEach(issue => {
+            const typeIcon = issue.type === 'staffMeal' ? '🍽️' : '🗑️';
+            const typeLabel = issue.type === 'staffMeal' ? 'Staff Meal' : 'Wastage';
+            const typeClass = issue.type === 'staffMeal' ? '' : 'wastage';
+
+            let actions = '';
+            if (issue.status === 'pending') {
+                actions = `
+                    <div class="manager-notes-section">
+                        <label>📝 Manager Notes (required for resolve)</label>
+                        <textarea id="notes-${issue.id}" placeholder="e.g., Investigated - hidden wastage found / Stock count error corrected / Employee notified..."></textarea>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="issue-action-btn note" onclick="markIssue('${issue.id}', 'noted')">📝 Mark Noted</button>
+                        <button class="issue-action-btn resolve" onclick="markIssue('${issue.id}', 'resolved')">✅ Mark Resolved</button>
+                    </div>
+                `;
+            } else if (issue.status === 'noted') {
+                actions = `
+                    <div class="resolved-notes">
+                        📝 <strong>Note:</strong> ${issue.managerNotes || 'No notes'}
+                        <div class="resolved-by">By: ${issue.resolvedByName || 'N/A'} | ${issue.resolvedAt ? formatTimestamp(issue.resolvedAt) : 'N/A'}</div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="issue-action-btn reopen" onclick="reopenIssue('${issue.id}')">🔄 Reopen</button>
+                        <button class="issue-action-btn resolve" onclick="markIssue('${issue.id}', 'resolved')">✅ Mark Resolved</button>
+                    </div>
+                `;
+            } else {
+                actions = `
+                    <div class="resolved-notes">
+                        ✅ <strong>Resolution:</strong> ${issue.managerNotes || 'No notes provided'}
+                        <div class="resolved-by">Resolved by: ${issue.resolvedByName || 'N/A'} | ${issue.resolvedAt ? formatTimestamp(issue.resolvedAt) : 'N/A'}</div>
+                    </div>
+                    <div class="issue-actions">
+                        <button class="issue-action-btn reopen" onclick="reopenIssue('${issue.id}')">🔄 Reopen</button>
+                    </div>
+                `;
+            }
+
+            const cardClass = issue.status === 'resolved' ? 'resolved' : issue.status === 'noted' ? 'noted' : '';
+
+            html += `
+                <div class="issue-card ${cardClass}">
+                    <div class="issue-card-header">
+                        <div class="issue-card-left">
+                            <span class="issue-date">📅 ${issue.date}</span>
+                            <span class="severity-badge ${issue.severity}">${issue.severity}</span>
+                            <span class="type-badge ${typeClass}">${typeIcon} ${typeLabel}</span>
+                        </div>
+                        <span class="status-badge ${issue.status}">${issue.status}</span>
+                    </div>
+
+                    <div style="font-size:16px; font-weight:700; color:#e0e0e0; margin-bottom:8px;">
+                        📦 ${issue.itemName}
+                    </div>
+
+                    <div class="issue-details-grid">
+                        <div class="issue-detail">
+                            <div class="id-label">Requested</div>
+                            <div class="id-value orange">${issue.requested} ${issue.unit}</div>
+                        </div>
+                        <div class="issue-detail">
+                            <div class="id-label">Available</div>
+                            <div class="id-value">${issue.available} ${issue.unit}</div>
+                        </div>
+                        <div class="issue-detail">
+                            <div class="id-label">Shortage</div>
+                            <div class="id-value red">${issue.shortage} ${issue.unit}</div>
+                        </div>
+                        <div class="issue-detail">
+                            <div class="id-label">Cost Impact</div>
+                            <div class="id-value red">Rs. ${(issue.costLoss || 0).toFixed(2)}</div>
+                        </div>
+                    </div>
+
+                    <div class="issue-reason">
+                        <strong>Reason:</strong> ${issue.reason}
+                    </div>
+
+                    <div class="reported-by">
+                        👤 Reported by: <strong>${issue.reportedByName || issue.reportedBy}</strong> | 🕐 ${formatTimestamp(issue.createdAt)}
+                    </div>
+
+                    ${actions}
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    async function markIssue(issueId, newStatus) {
+        const notes = document.getElementById('notes-' + issueId)?.value.trim() || '';
+        
+        if (newStatus === 'resolved' && !notes) {
+            alert('⚠️ Resolve කරන්න notes add කරන්න!');
+            return;
+        }
+
+        try {
+            await db.collection('stockIssues').doc(issueId).update({
+                status: newStatus,
+                managerNotes: notes,
+                resolvedBy: currentUser.nickname,
+                resolvedByName: currentUser.name,
+                resolvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert(`✅ Issue marked as ${newStatus}!`);
+        } catch (e) {
+            alert('❌ ' + e.message);
+        }
+    }
+
+    async function reopenIssue(issueId) {
+        if (!confirm('🔄 Reopen this issue?')) return;
+        try {
+            await db.collection('stockIssues').doc(issueId).update({
+                status: 'pending',
+                managerNotes: '',
+                resolvedBy: null,
+                resolvedByName: null,
+                resolvedAt: null
+            });
+            alert('✅ Issue reopened!');
+        } catch (e) {
+            alert('❌ ' + e.message);
+        }
+    }
+
+    function formatTimestamp(ts) {
+        if (!ts || !ts.toDate) return 'N/A';
+        const d = ts.toDate();
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    }
+
+    function fmt(amount) {
+        if (amount === undefined || amount === null) return 'Rs. 0';
+        return 'Rs. ' + Number(amount).toLocaleString('en-LK');
+    }
+
+</script>
+</body>
+</html>
