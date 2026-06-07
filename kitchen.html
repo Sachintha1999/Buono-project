@@ -6,7 +6,6 @@
     <title>Buono - Kitchen Database</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ═══════ STAT CARDS ═══════ */
         .stat-card.success { border-color: #4CAF50; }
         .stat-card.success h3 { color: #4CAF50; }
         .stat-card.warning { border-color: #f0a500; }
@@ -26,16 +25,28 @@
             gap: 12px;
         }
         .dashboard-alert.show { display: flex; }
+        .dashboard-alert.rejected {
+            background: linear-gradient(90deg, rgba(255,68,68,0.4), rgba(255,0,0,0.2));
+            border: 2px solid #ff0000;
+            animation: shake-alert 0.5s infinite alternate;
+        }
         .dashboard-alert .alert-icon { font-size: 28px; }
         .dashboard-alert .alert-text { flex: 1; color: #fff; }
         .dashboard-alert .alert-title { font-weight: 700; font-size: 15px; color: #ff4444; }
+        .dashboard-alert.rejected .alert-title { color: #ffcccc; }
         .dashboard-alert .alert-subtitle { font-size: 12px; color: #ddd; margin-top: 2px; }
         .dashboard-alert .alert-btn {
             background: #ff4444; color: white; border: none; padding: 8px 16px;
             border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;
         }
+        .dashboard-alert .alert-btn:disabled { background: #666; opacity: 0.7; cursor: not-allowed; }
 
-        /* ═══════ RECIPE CARDS ═══════ */
+        @keyframes shake-alert {
+            0% { transform: translateX(-3px); }
+            100% { transform: translateX(3px); }
+        }
+
+        /* RECIPE CARDS */
         .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 16px; }
         .recipe-card { background: #16213e; border: 1px solid rgba(240,165,0,0.2); border-radius: 12px; overflow: hidden; }
         .recipe-card-top { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -44,7 +55,6 @@
         .rc-cat { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: rgba(240,165,0,0.15); color: #f0a500; font-weight: 600; }
         .rc-price { font-size: 22px; font-weight: 700; color: #4CAF50; }
         .rc-price-label { font-size: 11px; color: #888; }
-
         .cost-breakdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding: 10px 18px; background: rgba(0,0,0,0.15); }
         .cost-item { text-align: center; }
         .cost-item .ci-value { font-size: 13px; font-weight: 700; }
@@ -53,42 +63,24 @@
         .ci-value.green { color: #4CAF50; }
         .ci-value.orange { color: #f0a500; }
         .ci-value.blue { color: #2196F3; }
-
         .rc-ingredients { padding: 10px 18px; max-height: 120px; overflow-y: auto; }
         .rc-ingredients h4 { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 6px; }
         .rc-ing-item { display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0; }
         .rc-ing-item .ing-name { color: #ccc; }
         .rc-ing-item .ing-qty { color: #888; }
-
         .rc-actions { padding: 10px 18px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 6px; justify-content: flex-end; }
 
-        /* ═══════ FORM ROWS ═══════ */
-        .ingredient-row, .meal-item-row {
-            display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
-            background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px;
-            border: 1px solid rgba(240,165,0,0.1);
-        }
-        .ingredient-row select, .ingredient-row input,
-        .meal-item-row select, .meal-item-row input {
-            background: #0f3460; border: 1px solid rgba(240,165,0,0.2);
-            color: #e0e0e0; padding: 7px 10px; border-radius: 6px; font-size: 13px; outline: none;
-        }
+        /* FORM ROWS */
+        .ingredient-row, .meal-item-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: rgba(255,255,255,0.03); padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(240,165,0,0.1); }
+        .ingredient-row select, .ingredient-row input, .meal-item-row select, .meal-item-row input { background: #0f3460; border: 1px solid rgba(240,165,0,0.2); color: #e0e0e0; padding: 7px 10px; border-radius: 6px; font-size: 13px; outline: none; }
         .ingredient-row select, .meal-item-row select { flex: 2; min-width: 120px; }
         .ingredient-row input[type="number"], .meal-item-row input[type="number"] { flex: 1; min-width: 70px; }
         .ingredient-row .ing-unit-display { color: #888; font-size: 12px; min-width: 30px; }
-        .ingredient-row .ing-cost-display, .meal-item-row .meal-cost-display {
-            color: #f0a500; font-size: 12px; font-weight: 600; min-width: 70px; text-align: right;
-        }
-        .btn-remove-ing {
-            background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid rgba(255,68,68,0.3);
-            width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 14px;
-        }
+        .ingredient-row .ing-cost-display, .meal-item-row .meal-cost-display { color: #f0a500; font-size: 12px; font-weight: 600; min-width: 70px; text-align: right; }
+        .btn-remove-ing { background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid rgba(255,68,68,0.3); width: 26px; height: 26px; border-radius: 6px; cursor: pointer; font-size: 14px; }
 
-        /* ═══════ COST SUMMARY ═══════ */
-        .cost-summary-box {
-            background: #0f3460; border: 1px solid rgba(240,165,0,0.3);
-            border-radius: 10px; padding: 14px 18px; margin-top: 12px;
-        }
+        /* COST SUMMARY */
+        .cost-summary-box { background: #0f3460; border: 1px solid rgba(240,165,0,0.3); border-radius: 10px; padding: 14px 18px; margin-top: 12px; }
         .cost-summary-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
         .cost-summary-row .cs-label { color: #aaa; }
         .cost-summary-row .cs-value { font-weight: 600; }
@@ -97,60 +89,38 @@
         .cs-value.orange { color: #f0a500; }
         .cs-value.blue { color: #2196F3; }
         .cost-summary-row.total { border-top: 1px solid rgba(240,165,0,0.2); padding-top: 8px; margin-top: 4px; font-size: 15px; }
-
         .margin-bar { margin-top: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; height: 24px; }
         .margin-fill { height: 100%; border-radius: 8px; transition: width 0.3s; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
 
-        /* ═══════ STOCK ISSUE WARNING ═══════ */
-        .stock-issue-warning {
-            background: linear-gradient(135deg, rgba(255,68,68,0.15), rgba(240,165,0,0.15));
-            border: 2px solid #ff4444; border-radius: 10px; padding: 14px; margin-top: 12px; display: none;
-        }
+        /* STOCK ISSUE WARNING */
+        .stock-issue-warning { background: linear-gradient(135deg, rgba(255,68,68,0.15), rgba(240,165,0,0.15)); border: 2px solid #ff4444; border-radius: 10px; padding: 14px; margin-top: 12px; display: none; }
         .stock-issue-warning.show { display: block; }
         .stock-issue-warning h3 { color: #ff4444; font-size: 15px; margin-bottom: 8px; }
         .stock-issue-warning .issue-list { background: rgba(0,0,0,0.2); border-radius: 6px; padding: 8px 12px; margin-top: 8px; }
         .stock-issue-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .stock-issue-row .si-item { color: #ccc; }
         .stock-issue-row .si-detail { color: #ff4444; font-weight: 600; }
-
         .severity-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-left: 8px; }
         .severity-badge.minor { background: rgba(240,165,0,0.2); color: #f0a500; }
         .severity-badge.major { background: rgba(255,87,34,0.2); color: #FF5722; }
         .severity-badge.critical { background: rgba(255,68,68,0.2); color: #ff4444; }
-
         .record-card.has-issue { border-color: #f0a500; box-shadow: 0 0 0 1px rgba(240,165,0,0.3); }
-        .issue-flag-badge {
-            display: inline-block; background: rgba(255,68,68,0.15); color: #ff4444;
-            padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700;
-            margin-left: 8px; border: 1px solid rgba(255,68,68,0.3);
-        }
+        .issue-flag-badge { display: inline-block; background: rgba(255,68,68,0.15); color: #ff4444; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; margin-left: 8px; border: 1px solid rgba(255,68,68,0.3); }
 
-        /* ═══════ FILTER BAR ═══════ */
-        .kitchen-filter-bar {
-            background: #16213e; border: 1px solid rgba(240,165,0,0.15);
-            border-radius: 12px; padding: 14px 18px; margin-bottom: 16px;
-            display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-        }
-        .kitchen-filter-bar input, .kitchen-filter-bar select {
-            background: #0f3460; border: 1px solid rgba(240,165,0,0.3);
-            color: #e0e0e0; padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none;
-        }
+        /* FILTER BAR */
+        .kitchen-filter-bar { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 12px; padding: 14px 18px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .kitchen-filter-bar input, .kitchen-filter-bar select { background: #0f3460; border: 1px solid rgba(240,165,0,0.3); color: #e0e0e0; padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; }
         .kitchen-filter-bar input[type="text"] { flex: 1; min-width: 200px; }
 
-        /* ═══════ FORM SECTIONS ═══════ */
         .form-section-kit { background: rgba(240,165,0,0.05); border: 1px solid rgba(240,165,0,0.15); border-radius: 10px; padding: 14px; margin-top: 14px; }
         .form-section-kit h3 { color: #f0a500; font-size: 14px; margin-bottom: 10px; }
-
         .staff-select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin-top: 6px; }
-        .staff-check-card {
-            background: rgba(255,255,255,0.04); border: 2px solid transparent;
-            border-radius: 8px; padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px;
-        }
+        .staff-check-card { background: rgba(255,255,255,0.04); border: 2px solid transparent; border-radius: 8px; padding: 8px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .staff-check-card.selected { background: rgba(240,165,0,0.15); border-color: #f0a500; }
         .staff-check-card .staff-name { font-size: 13px; color: #e0e0e0; font-weight: 600; }
         .staff-check-card .staff-role { font-size: 10px; color: #888; }
 
-        /* ═══════ RECORD CARDS ═══════ */
+        /* RECORD CARDS */
         .record-card { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
         .record-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .record-date-badge { background: rgba(240,165,0,0.15); color: #f0a500; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
@@ -168,15 +138,88 @@
         .reason-badge.Quality { background: rgba(156,39,176,0.15); color: #9C27B0; }
         .reason-badge.Other { background: rgba(96,125,139,0.15); color: #607D8B; }
 
-        /* ═══════ STOCK COUNT SUB TABS ═══════ */
-        .sub-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #16213e; padding: 6px; border-radius: 10px; }
-        .sub-tab { flex: 1; background: transparent; border: none; color: #aaa; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        /* ═══════ STOCK COUNT SUB TABS (UPDATED!) ═══════ */
+        .sub-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            background: #16213e;
+            padding: 6px;
+            border-radius: 10px;
+            flex-wrap: wrap;
+        }
+        .sub-tab {
+            flex: 1;
+            min-width: 110px;
+            background: transparent;
+            border: none;
+            color: #aaa;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .sub-tab:hover { background: rgba(240,165,0,0.08); color: #e0e0e0; }
         .sub-tab.active { background: rgba(240,165,0,0.15); color: #f0a500; }
-        .sub-tab .tab-count { background: rgba(255,255,255,0.1); color: #ccc; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 6px; }
+
+        /* Approved tab style */
+        .sub-tab.approved-tab { color: #4CAF50; }
+        .sub-tab.approved-tab.active { background: rgba(76,175,80,0.15); color: #4CAF50; }
+
+        /* 🚨 REJECTED tab - EYE-CATCHING! */
+        .sub-tab.rejected-tab {
+            color: #ff4444;
+        }
+        .sub-tab.rejected-tab.active {
+            background: rgba(255,68,68,0.15);
+            color: #ff4444;
+        }
+        .sub-tab.rejected-tab.has-new {
+            background: rgba(255,68,68,0.2);
+            color: #ff4444;
+            animation: rejected-pulse 1.2s infinite;
+            border: 2px solid #ff4444;
+        }
+        @keyframes rejected-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(255,68,68,0.7);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(255,68,68,0);
+                transform: scale(1.05);
+            }
+        }
+
+        .sub-tab .tab-count {
+            background: rgba(255,255,255,0.1);
+            color: #ccc;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 4px;
+            font-weight: 700;
+        }
         .sub-tab.active .tab-count { background: #f0a500; color: #1a1a2e; }
+        .sub-tab.approved-tab.active .tab-count { background: #4CAF50; color: white; }
+        .sub-tab.rejected-tab.has-new .tab-count {
+            background: #ff0000;
+            color: white;
+            animation: pulse-count 0.8s infinite;
+        }
+        @keyframes pulse-count {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
 
         .count-form-section { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
-
         .count-table { width: 100%; border-collapse: collapse; background: #16213e; }
         .count-table th { padding: 12px; text-align: left; font-size: 11px; color: #f0a500; text-transform: uppercase; background: rgba(240,165,0,0.08); }
         .count-table td { padding: 10px 12px; font-size: 13px; color: #e0e0e0; border-bottom: 1px solid rgba(255,255,255,0.04); }
@@ -185,24 +228,19 @@
         .count-table tr.row-shortage { background: rgba(240,165,0,0.05); }
         .count-table tr.row-critical { background: rgba(255,68,68,0.08); border-left: 3px solid #ff4444; }
         .count-table tr.row-skipped { opacity: 0.4; }
-
         .count-input { background: #0f3460; border: 1px solid rgba(240,165,0,0.3); color: #e0e0e0; padding: 6px 10px; border-radius: 6px; font-size: 13px; width: 80px; text-align: center; outline: none; }
         .count-input.flagged { border-color: #ff4444; background: rgba(255,68,68,0.05); }
-
         .diff-display.match { color: #4CAF50; font-weight: 700; }
         .diff-display.surplus { color: #2196F3; font-weight: 700; }
         .diff-display.shortage { color: #f0a500; font-weight: 700; }
         .diff-display.critical { color: #ff4444; font-weight: 700; }
-
         .row-status-badge { padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .row-status-badge.match { background: rgba(76,175,80,0.15); color: #4CAF50; }
         .row-status-badge.surplus { background: rgba(33,150,243,0.15); color: #2196F3; }
         .row-status-badge.shortage { background: rgba(240,165,0,0.15); color: #f0a500; }
         .row-status-badge.critical { background: rgba(255,68,68,0.15); color: #ff4444; }
-
         .skip-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; }
         .skip-btn.skipped { background: rgba(255,68,68,0.15); color: #ff4444; }
-
         .recheck-warning { background: linear-gradient(135deg, rgba(255,68,68,0.15), rgba(240,165,0,0.15)); border: 2px solid #ff4444; border-radius: 10px; padding: 16px 20px; margin: 16px 0; display: none; }
         .recheck-warning.show { display: block; }
         .recheck-warning h3 { color: #ff4444; font-size: 16px; margin-bottom: 8px; }
@@ -211,9 +249,7 @@
         .recheck-item { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .recheck-item .ri-name { color: #ccc; }
         .recheck-item .ri-diff { color: #ff4444; font-weight: 700; }
-
         .btn-confirmed { background: #4CAF50; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-
         .count-summary-box { background: #0f3460; border: 1px solid rgba(240,165,0,0.3); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; }
         .count-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
         .count-summary-item { text-align: center; }
@@ -223,31 +259,130 @@
         .csi-value.red { color: #ff4444; }
         .csi-value.orange { color: #f0a500; }
         .csi-value.blue { color: #2196F3; }
-
         .btn-submit-count { background: #f0a500; color: #1a1a2e; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; }
         .btn-submit-count:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .count-history-card { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
-        .count-history-card.pending { border-left: 3px solid #f0a500; }
-        .count-history-card.approved { border-left: 3px solid #4CAF50; }
-        .count-history-card.rejected { border-left: 3px solid #ff4444; opacity: 0.7; }
+        /* ═══════ STATUS CARDS (Pending/Approved/Rejected/History) ═══════ */
+        .status-count-card {
+            background: #16213e;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 12px;
+            border-left: 4px solid #f0a500;
+        }
+        .status-count-card.pending { border-left-color: #f0a500; }
+        .status-count-card.approved { border-left-color: #4CAF50; }
+        .status-count-card.suspicious_approved {
+            border-left-color: #FF9800;
+            background: linear-gradient(90deg, rgba(255,152,0,0.05), #16213e);
+        }
+        .status-count-card.rejected {
+            border-left: 4px solid #ff4444;
+            background: linear-gradient(90deg, rgba(255,68,68,0.08), #16213e);
+            animation: rejected-card-pulse 2s infinite;
+        }
+        @keyframes rejected-card-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4); }
+            50% { box-shadow: 0 0 20px rgba(255,68,68,0.3); }
+        }
 
-        .count-status-badge { padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .count-status-badge.pending_approval { background: rgba(240,165,0,0.15); color: #f0a500; }
-        .count-status-badge.approved { background: rgba(76,175,80,0.15); color: #4CAF50; }
-        .count-status-badge.rejected { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .scc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .scc-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .scc-date-badge {
+            background: rgba(240,165,0,0.15);
+            color: #f0a500;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .scc-status-badge {
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .scc-status-badge.pending_approval { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .scc-status-badge.approved { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .scc-status-badge.suspicious_approved {
+            background: rgba(255,152,0,0.2);
+            color: #FF9800;
+            border: 1px solid #FF9800;
+        }
+        .scc-status-badge.rejected {
+            background: rgba(255,68,68,0.2);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+        }
 
-        .count-history-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; padding: 10px 0; }
-        .count-history-stat { text-align: center; }
-        .count-history-stat .chs-value { font-size: 16px; font-weight: 700; color: #f0a500; }
-        .count-history-stat .chs-label { font-size: 10px; color: #888; }
+        .scc-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .scc-stat { text-align: center; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; }
+        .scc-stat .scs-value { font-size: 16px; font-weight: 700; color: #f0a500; }
+        .scc-stat .scs-label { font-size: 10px; color: #888; }
 
-        .ch-btn { padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; }
-        .ch-btn.view { background: rgba(33,150,243,0.15); color: #2196F3; }
-        .ch-btn.approve { background: rgba(76,175,80,0.15); color: #4CAF50; }
-        .ch-btn.reject { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .scc-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+        .scc-message.approve {
+            background: rgba(76,175,80,0.08);
+            border: 1px solid rgba(76,175,80,0.2);
+            color: #4CAF50;
+        }
+        .scc-message.suspicious {
+            background: rgba(255,152,0,0.08);
+            border: 1px solid rgba(255,152,0,0.3);
+            color: #FF9800;
+        }
+        .scc-message.reject {
+            background: rgba(255,68,68,0.08);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff4444;
+        }
+        .scc-message strong { display: block; margin-bottom: 4px; }
 
-        /* ═══════ KITCHEN REPORTS ═══════ */
+        .scc-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .scc-btn {
+            padding: 7px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .scc-btn.view { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .scc-btn.recount {
+            background: #ff4444;
+            color: white;
+            animation: recount-pulse 1.5s infinite;
+        }
+        @keyframes recount-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.5); }
+            50% { box-shadow: 0 0 10px rgba(255,68,68,0); }
+        }
+
+        /* KITCHEN REPORTS */
         .report-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-top: 16px; }
         .report-card { background: #16213e; border: 1px solid rgba(240,165,0,0.2); border-radius: 12px; padding: 20px; }
         .report-card h3 { color: #f0a500; font-size: 15px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(240,165,0,0.15); display: flex; align-items: center; gap: 8px; }
@@ -262,63 +397,30 @@
         .top-recipe-item { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; }
         .top-recipe-rank { width: 28px; height: 28px; background: #f0a500; color: #1a1a2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0; }
 
-        /* ═══════ COMING SOON ═══════ */
-        .coming-soon-tab { text-align: center; padding: 60px 20px; color: #666; }
-        .coming-soon-tab .cs-icon { font-size: 60px; margin-bottom: 15px; opacity: 0.4; }
-
-        /* ═══════════════════════════════════════
-           📱 MOBILE RESPONSIVE
-        ═══════════════════════════════════════ */
         @media (max-width: 768px) {
             .recipe-grid, .report-grid { grid-template-columns: 1fr; }
             .kitchen-filter-bar { flex-direction: column; align-items: stretch; }
             .kitchen-filter-bar input, .kitchen-filter-bar select { width: 100%; }
             .ingredient-row, .meal-item-row { flex-wrap: wrap; }
             .cost-breakdown { grid-template-columns: 1fr; }
-            
             .stats-row { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-            
             .sub-tabs { flex-direction: column; gap: 4px; }
-            .sub-tab { width: 100%; }
-            
-            /* Stock Count Table → Card View */
+            .sub-tab { width: 100%; min-width: 0; }
             .count-table thead { display: none; }
             .count-table, .count-table tbody, .count-table tr, .count-table td { display: block; width: 100%; }
-            .count-table tr {
-                background: #16213e !important;
-                border: 1px solid rgba(240,165,0,0.2);
-                border-radius: 10px;
-                margin-bottom: 10px;
-                padding: 12px;
-            }
+            .count-table tr { background: #16213e !important; border: 1px solid rgba(240,165,0,0.2); border-radius: 10px; margin-bottom: 10px; padding: 12px; }
             .count-table tr.row-critical { border-left: 4px solid #ff4444; }
-            .count-table td {
-                padding: 6px 0;
-                border: none;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 13px;
-            }
-            .count-table td::before {
-                content: attr(data-label);
-                color: #f0a500;
-                font-weight: 700;
-                text-transform: uppercase;
-                font-size: 11px;
-                margin-right: 10px;
-            }
+            .count-table td { padding: 6px 0; border: none; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+            .count-table td::before { content: attr(data-label); color: #f0a500; font-weight: 700; text-transform: uppercase; font-size: 11px; margin-right: 10px; }
             .count-table td:first-child { display: none; }
             .count-input { width: 100px; }
-            
             .count-summary-grid { grid-template-columns: 1fr 1fr; }
             .modal-content { width: 95% !important; max-width: 95% !important; }
             .record-card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
             .topbar { flex-wrap: wrap; }
             .db-switcher { font-size: 12px; }
-            .count-history-stats { grid-template-columns: 1fr 1fr; }
+            .scc-stats { grid-template-columns: 1fr 1fr; }
         }
-        
         @media (max-width: 480px) {
             .stats-row { grid-template-columns: 1fr !important; }
             .stat-card { padding: 12px !important; }
@@ -328,7 +430,7 @@
     </style>
 </head>
 <body>
-        <!-- ═══════ TOP BAR ═══════ -->
+    <!-- ═══════ TOP BAR ═══════ -->
     <div class="topbar">
         <div class="topbar-left">
             <span class="topbar-icon">🍴</span>
@@ -353,14 +455,14 @@
 
     <div class="dashboard-container">
 
-        <!-- ═══════ STOCK ISSUE ALERT BANNER ═══════ -->
+        <!-- ═══════ DASHBOARD ALERT ═══════ -->
         <div class="dashboard-alert" id="dashboardAlert">
             <div class="alert-icon">🚨</div>
             <div class="alert-text">
-                <div class="alert-title" id="alertTitle">Pending Stock Issues!</div>
-                <div class="alert-subtitle" id="alertSubtitle">Manager review needed</div>
+                <div class="alert-title" id="alertTitle">Alert</div>
+                <div class="alert-subtitle" id="alertSubtitle">Notification</div>
             </div>
-            <button class="alert-btn" onclick="window.location.href='reports.html#stockissues'">View Issues</button>
+            <button class="alert-btn" id="alertActionBtn" onclick="handleAlertAction()">View</button>
         </div>
 
         <!-- ═══════ TOP STATS CARDS ═══════ -->
@@ -470,19 +572,32 @@
             </div>
         </div>
 
-        <!-- ═══════ TAB 4: STOCK COUNT ═══════ -->
+        <!-- ═══════ TAB 4: STOCK COUNT (5 SUB-TABS!) ═══════ -->
         <div id="section-stockcount" class="dashboard-section">
             <div class="section-header">
                 <h2>📊 Physical Stock Count</h2>
             </div>
 
+            <!-- 🔥 5 SUB TABS -->
             <div class="sub-tabs">
-                <button class="sub-tab active" id="subtab-new" onclick="showCountSubTab('new', this)">📝 New Count</button>
-                <button class="sub-tab" id="subtab-pending" onclick="showCountSubTab('pending', this)">⏳ Pending <span class="tab-count" id="pendingCountBadge">0</span></button>
-                <button class="sub-tab" id="subtab-history" onclick="showCountSubTab('history', this)">📋 History</button>
+                <button class="sub-tab active" id="subtab-new" onclick="showCountSubTab('new', this)">
+                    📝 New Count
+                </button>
+                <button class="sub-tab" id="subtab-pending" onclick="showCountSubTab('pending', this)">
+                    ⏳ Pending <span class="tab-count" id="pendingCountBadge">0</span>
+                </button>
+                <button class="sub-tab approved-tab" id="subtab-approved" onclick="showCountSubTab('approved', this)">
+                    ✅ Approved <span class="tab-count" id="approvedCountBadge">0</span>
+                </button>
+                <button class="sub-tab rejected-tab" id="subtab-rejected" onclick="showCountSubTab('rejected', this)">
+                    ❌ Rejected <span class="tab-count" id="rejectedCountBadge">0</span>
+                </button>
+                <button class="sub-tab" id="subtab-history" onclick="showCountSubTab('history', this)">
+                    📋 History
+                </button>
             </div>
 
-            <!-- NEW COUNT SUB-TAB -->
+            <!-- 📝 NEW COUNT SUB-TAB -->
             <div id="countsubtab-new" class="count-subtab">
                 <div class="count-form-section">
                     <label style="color:#aaa; font-size:12px; text-transform:uppercase;">📅 Date:</label>
@@ -560,14 +675,28 @@
                 </div>
             </div>
 
-            <!-- PENDING SUB-TAB -->
+            <!-- ⏳ PENDING SUB-TAB -->
             <div id="countsubtab-pending" class="count-subtab" style="display:none;">
                 <div id="pendingCountsList">
                     <div style="text-align:center; padding:40px; color:#888;">⏳ Loading...</div>
                 </div>
             </div>
 
-            <!-- HISTORY SUB-TAB -->
+            <!-- ✅ APPROVED SUB-TAB (NEW!) -->
+            <div id="countsubtab-approved" class="count-subtab" style="display:none;">
+                <div id="approvedCountsList">
+                    <div style="text-align:center; padding:40px; color:#888;">⏳ Loading...</div>
+                </div>
+            </div>
+
+            <!-- ❌ REJECTED SUB-TAB (NEW!) -->
+            <div id="countsubtab-rejected" class="count-subtab" style="display:none;">
+                <div id="rejectedCountsList">
+                    <div style="text-align:center; padding:40px; color:#888;">⏳ Loading...</div>
+                </div>
+            </div>
+
+            <!-- 📋 HISTORY SUB-TAB -->
             <div id="countsubtab-history" class="count-subtab" style="display:none;">
                 <div class="kitchen-filter-bar">
                     <input type="date" id="historyFromDate" onchange="renderCountHistory()">
@@ -575,6 +704,7 @@
                     <select id="historyStatusFilter" onchange="renderCountHistory()">
                         <option value="">All</option>
                         <option value="approved">Approved</option>
+                        <option value="suspicious_approved">Suspicious Approved</option>
                         <option value="rejected">Rejected</option>
                     </select>
                 </div>
@@ -621,7 +751,7 @@
         </div>
 
     </div>
-    
+
     <!-- ═══════ MODALS ═══════ -->
 
     <!-- RECIPE MODAL -->
@@ -815,22 +945,6 @@
         </div>
     </div>
 
-    <!-- REJECT MODAL -->
-    <div id="rejectReasonModal" class="modal" style="display: none;">
-        <div class="modal-content modal-small">
-            <div class="modal-header">
-                <h2>❌ Reject Count</h2>
-                <button class="modal-close" onclick="closeRejectModal()">✖</button>
-            </div>
-            <label>📝 Rejection Reason:</label>
-            <textarea id="rejectReasonText" rows="3" placeholder="Why reject?" style="width:100%; background:#0f3460; border:1px solid rgba(255,68,68,0.3); color:#e0e0e0; padding:10px; border-radius:8px;"></textarea>
-            <div class="modal-buttons">
-                <button class="btn-danger" onclick="confirmReject()">❌ Reject</button>
-                <button class="btn-secondary" onclick="closeRejectModal()">❌ Cancel</button>
-            </div>
-        </div>
-    </div>
-
     <!-- DELETE MODALS -->
     <div id="deleteRecipeModal" class="modal" style="display: none;">
         <div class="modal-content modal-small">
@@ -864,14 +978,10 @@
             </div>
         </div>
     </div>
-        <!-- ═══════ FIREBASE SDK ═══════ -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
-        // ═══════════════════════════════════════
-        // FIREBASE CONFIG
-        // ═══════════════════════════════════════
         const firebaseConfig = {
             apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
             authDomain: "buono-project-927b8.firebaseapp.com",
@@ -884,14 +994,15 @@
         const db = firebase.firestore();
 
         const DATABASES = [
-            { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-            { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-            { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-            { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-            { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
-        ];
+    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
+    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
+    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
+    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
+    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
+    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+];
 
-        // ═══════ GLOBAL VARIABLES ═══════
+        // ═══════ GLOBALS ═══════
         let currentUser = null;
         let myPerms = null;
         let allRecipes = [];
@@ -899,7 +1010,6 @@
         let allEmployees = [];
         let allStaffMeals = [];
         let allWastage = [];
-        let allStockIssues = [];
         let allStockCounts = [];
         let currentCountItems = [];
         let filteredMeals = [];
@@ -907,15 +1017,14 @@
         let deleteRecipeId = '';
         let deleteMealId = '';
         let deleteWasteId = '';
-        let rejectCountId = '';
         let ingredientRowCount = 0;
         let mealMenuItemRowCount = 0;
         let mealIngRowCount = 0;
         let selectedStaffIds = [];
+        let seenRejectedIds = new Set();
 
         const OVERHEAD_PERCENT = 0.40;
 
-        // ⭐ HELPER: Clean 3 decimal places
         function fmtQty(num) {
             if (num === null || num === undefined || isNaN(num)) return 0;
             return Math.round(num * 1000) / 1000;
@@ -924,14 +1033,16 @@
             if (num === null || num === undefined || isNaN(num)) return '0';
             return (Math.round(num * 1000) / 1000).toString();
         }
+        function isManagerUser() { return ['Admin', 'Manager'].includes(currentUser?.access); }
 
         // ═══════════════════════════════════════
-        // INITIALIZATION
+        // INIT
         // ═══════════════════════════════════════
         async function initializeApp() {
             const user = sessionStorage.getItem('loggedInUser');
             if (!user) { window.location.href = "login.html"; return; }
             const userData = JSON.parse(user);
+
             try {
                 const userDoc = await db.collection('employees').doc(userData.id).get();
                 if (userDoc.exists) {
@@ -951,18 +1062,22 @@
 
             myPerms = isAdmin ? { add:true, view:true, selfView:true, edit:true, delete:true } : perms;
             currentUser = userData;
-
             document.getElementById('welcomeUser').textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
+
+            // Load seen rejected from localStorage
+            const seen = localStorage.getItem('seenRejectedIds_' + userData.id);
+            if (seen) seenRejectedIds = new Set(JSON.parse(seen));
 
             buildDatabaseSwitcher();
             setupUI();
             setDefaultDates();
+
             await loadInventoryItems();
             await loadEmployees();
+
             loadRecipes();
             loadStaffMeals();
             loadWastage();
-            loadStockIssues();
             loadStockCounts();
         }
 
@@ -1025,9 +1140,7 @@
             });
         }
 
-        // ═══════════════════════════════════════
-        // DATA LOADERS
-        // ═══════════════════════════════════════
+        // ═══════ DATA LOADERS ═══════
         async function loadInventoryItems() {
             try {
                 const snap = await db.collection('inventoryItems').orderBy('itemName').get();
@@ -1054,24 +1167,100 @@
             } catch (e) { console.error(e); }
         }
 
-        function loadStockIssues() {
-            db.collection('stockIssues').where('status', '==', 'pending').onSnapshot((snap) => {
-                allStockIssues = [];
-                snap.forEach(doc => allStockIssues.push({ id: doc.id, ...doc.data() }));
+        function loadStockCounts() {
+            db.collection('stockCounts').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+                allStockCounts = [];
+                snap.forEach(doc => allStockCounts.push({ id: doc.id, ...doc.data() }));
+                updateTabBadges();
+                renderPendingCounts();
+                renderApprovedCounts();
+                renderRejectedCounts();
+                renderCountHistory();
                 updateDashboardAlert();
             });
         }
 
+        // 🔥 Update all tab count badges
+        function updateTabBadges() {
+    const pending = allStockCounts.filter(c => c.status === 'pending_approval').length;
+    const approved = allStockCounts.filter(c => c.status === 'approved' || c.status === 'suspicious_approved').length;
+    // 🔥 Only count ACTIVE rejected (not archived)
+    const rejected = allStockCounts.filter(c => c.status === 'rejected').length;
+            // Pending badge
+            const pBadge = document.getElementById('pendingCountBadge');
+            pBadge.textContent = pending;
+            pBadge.style.display = pending > 0 ? 'inline-block' : 'none';
+
+            // Approved badge
+            const aBadge = document.getElementById('approvedCountBadge');
+            aBadge.textContent = approved;
+            aBadge.style.display = approved > 0 ? 'inline-block' : 'none';
+
+            // 🚨 Rejected badge + eye-catching animation!
+            const rBadge = document.getElementById('rejectedCountBadge');
+            const rTab = document.getElementById('subtab-rejected');
+            rBadge.textContent = rejected;
+            rBadge.style.display = rejected > 0 ? 'inline-block' : 'none';
+
+            // Check for NEW rejected counts (not yet seen by user)
+            const rejectedCounts = allStockCounts.filter(c => c.status === 'rejected');
+            const hasNewRejected = rejectedCounts.some(c => !seenRejectedIds.has(c.id));
+
+            if (hasNewRejected && rejected > 0) {
+                rTab.classList.add('has-new');
+            } else {
+                rTab.classList.remove('has-new');
+            }
+        }
+
+        // ═══════ DASHBOARD ALERT ═══════
         function updateDashboardAlert() {
             const alert = document.getElementById('dashboardAlert');
-            const pending = allStockIssues.length;
-            if (pending > 0) {
-                document.getElementById('alertTitle').textContent = `${pending} Pending Stock Issue${pending > 1 ? 's' : ''}!`;
-                document.getElementById('alertSubtitle').textContent = 'Manager review required';
+            const title = document.getElementById('alertTitle');
+            const subtitle = document.getElementById('alertSubtitle');
+            const actionBtn = document.getElementById('alertActionBtn');
+
+            const pendingApprovals = allStockCounts.filter(c => c.status === 'pending_approval').length;
+            const rejectedNew = allStockCounts.filter(c => c.status === 'rejected' && !seenRejectedIds.has(c.id));
+
+            // 🚨 PRIORITY 1: Rejected counts (most important!)
+            if (rejectedNew.length > 0) {
+                alert.classList.add('rejected');
+                title.textContent = `🚨 ${rejectedNew.length} Stock Count${rejectedNew.length > 1 ? 's' : ''} REJECTED by Manager!`;
+                subtitle.textContent = 'Stock Count tab → ❌ Rejected sub-tab එකට යන්න';
+                actionBtn.textContent = 'View Rejected';
+                actionBtn.disabled = false;
+                actionBtn.onclick = function() {
+                    showSection('stockcount', document.getElementById('tab-stockcount-btn'));
+                    setTimeout(() => showCountSubTab('rejected', document.getElementById('subtab-rejected')), 100);
+                };
                 alert.classList.add('show');
-            } else {
-                alert.classList.remove('show');
+                return;
             }
+
+            alert.classList.remove('rejected');
+
+            // PRIORITY 2: Pending approvals
+            if (pendingApprovals > 0) {
+                title.textContent = `${pendingApprovals} Stock Count${pendingApprovals > 1 ? 's' : ''} Pending in Reports DB`;
+                subtitle.textContent = isManagerUser() ? 'Approve/Reject in Reports DB' : 'Manager review in progress';
+                if (isManagerUser()) {
+                    actionBtn.textContent = 'Review in Reports DB';
+                    actionBtn.disabled = false;
+                    actionBtn.onclick = function() { window.location.href = 'reports.html#pendingapprovals'; };
+                } else {
+                    actionBtn.textContent = 'Manager Reviewing...';
+                    actionBtn.disabled = true;
+                }
+                alert.classList.add('show');
+                return;
+            }
+
+            alert.classList.remove('show');
+        }
+
+        function handleAlertAction() {
+            // fallback
         }
 
         // ═══════════════════════════════════════
@@ -1084,7 +1273,6 @@
             if (pct <= 50) return 'major';
             return 'critical';
         }
-
         function checkStockShortage(stockNeeded) {
             const issues = [];
             for (const itemId in stockNeeded) {
@@ -1094,24 +1282,15 @@
                 if (needed > item.currentStock) {
                     const shortage = needed - item.currentStock;
                     const severity = classifySeverity(needed, item.currentStock);
-                    issues.push({
-                        itemId, itemName: item.itemName,
-                        requested: needed, available: item.currentStock,
-                        shortage, unit: item.unit, severity,
-                        pricePerUnit: item.pricePerUnit || 0
-                    });
+                    issues.push({ itemId, itemName: item.itemName, requested: needed, available: item.currentStock, shortage, unit: item.unit, severity, pricePerUnit: item.pricePerUnit || 0 });
                 }
             }
             return issues;
         }
-
         function renderStockIssueWarning(issues, warningEl, listEl, saveBtnEl) {
             if (issues.length === 0) {
                 warningEl.classList.remove('show');
-                if (saveBtnEl) {
-                    saveBtnEl.textContent = '💾 Save & Deduct Stock';
-                    saveBtnEl.style.background = '';
-                }
+                if (saveBtnEl) { saveBtnEl.textContent = '💾 Save & Deduct Stock'; saveBtnEl.style.background = ''; }
                 return;
             }
             let html = '';
@@ -1120,15 +1299,10 @@
             });
             listEl.innerHTML = html;
             warningEl.classList.add('show');
-            if (saveBtnEl) {
-                saveBtnEl.textContent = '⚠️ Save with Issue Flag';
-                saveBtnEl.style.background = 'linear-gradient(135deg, #ff4444, #f0a500)';
-            }
+            if (saveBtnEl) { saveBtnEl.textContent = '⚠️ Save with Issue Flag'; saveBtnEl.style.background = 'linear-gradient(135deg, #ff4444, #f0a500)'; }
         }
 
-        // ═══════════════════════════════════════
-        // TAB 1: RECIPES
-        // ═══════════════════════════════════════
+        // ═══════ TAB 1: RECIPES ═══════
         function loadRecipes() {
             db.collection('recipes').orderBy('recipeName').onSnapshot((snap) => {
                 allRecipes = [];
@@ -1141,25 +1315,20 @@
                 filterRecipes();
             });
         }
-
         function filterRecipes() {
             const search = document.getElementById('searchRecipe').value.toLowerCase();
             const catFilter = document.getElementById('filterRecipeCategory').value;
-            let filtered = allRecipes.filter(r => {
+            const filtered = allRecipes.filter(r => {
                 if (search && !r.recipeName.toLowerCase().includes(search)) return false;
                 if (catFilter && r.category !== catFilter) return false;
                 return true;
             });
             renderRecipes(filtered);
         }
-
         function renderRecipes(recipes) {
             const grid = document.getElementById('recipeGrid');
-            if (recipes.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">📭 No recipes found.</div>';
-                return;
-            }
-            const catIcons = {'Hot Beverages':'☕','Cold Beverages':'🧃','Desserts':'🍰','Main Course':'🍔','Appetizers':'🥗','Snacks':'🥪','Bakery':'🍞','Special':'🎂'};
+            if (recipes.length === 0) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">📭 No recipes found.</div>'; return; }
+            const catIcons = { 'Hot Beverages':'☕','Cold Beverages':'🧃','Desserts':'🍰','Main Course':'🍔','Appetizers':'🥗','Snacks':'🥪','Bakery':'🍞','Special':'🎂' };
             let html = '';
             recipes.forEach(r => {
                 const catIcon = catIcons[r.category] || '📋';
@@ -1174,7 +1343,6 @@
             });
             grid.innerHTML = html;
         }
-
         function addIngredientRow(data) {
             const container = document.getElementById('ingredientsList');
             const rowId = 'ing-row-' + ingredientRowCount;
@@ -1190,9 +1358,7 @@
             container.appendChild(row);
             ingredientRowCount++;
         }
-
         function removeIngredientRow(rowId) { document.getElementById(rowId).remove(); calculateRecipeCost(); }
-
         function onIngredientChange(rowId) {
             const row = document.getElementById(rowId);
             const select = row.querySelector('.ing-select');
@@ -1200,7 +1366,6 @@
             row.querySelector('.ing-unit-display').textContent = option && option.value ? option.dataset.unit : '-';
             calculateRecipeCost();
         }
-
         function calculateRecipeCost() {
             let ingredientCost = 0;
             document.querySelectorAll('.ingredient-row').forEach(row => {
@@ -1237,7 +1402,6 @@
             fill.style.background = barColor;
             fill.textContent = margin.toFixed(1) + '%';
         }
-
         function openAddRecipeModal() {
             if (allInventoryItems.length === 0) { alert('⚠️ No inventory items!'); return; }
             document.getElementById('recipeModalTitle').textContent = '➕ Add New Recipe';
@@ -1252,7 +1416,6 @@
             calculateRecipeCost();
             document.getElementById('recipeModal').style.display = 'flex';
         }
-
         function openEditRecipeModal(recipeId) {
             const r = allRecipes.find(x => x.id === recipeId);
             if (!r) return;
@@ -1269,9 +1432,7 @@
             calculateRecipeCost();
             document.getElementById('recipeModal').style.display = 'flex';
         }
-
         function closeRecipeModal() { document.getElementById('recipeModal').style.display = 'none'; }
-
         async function saveRecipe() {
             const recipeName = document.getElementById('recipeName').value.trim();
             const category = document.getElementById('recipeCategory').value;
@@ -1304,7 +1465,6 @@
                 closeRecipeModal();
             } catch (e) { alert('❌ ' + e.message); }
         }
-
         function openDeleteRecipeModal(id, name) {
             deleteRecipeId = id;
             document.getElementById('deleteRecipeName').textContent = name;
@@ -1316,9 +1476,7 @@
             catch (e) { alert('❌ ' + e.message); }
         }
 
-        // ═══════════════════════════════════════
-        // TAB 2: STAFF MEALS
-        // ═══════════════════════════════════════
+        // ═══════ TAB 2: STAFF MEALS ═══════
         function loadStaffMeals() {
             db.collection('staffMeals').orderBy('date', 'desc').onSnapshot((snap) => {
                 allStaffMeals = [];
@@ -1328,7 +1486,6 @@
                 filterStaffMeals();
             });
         }
-
         function filterStaffMeals() {
             const fromDate = document.getElementById('filterMealFromDate').value;
             const toDate = document.getElementById('filterMealToDate').value;
@@ -1341,35 +1498,27 @@
             });
             renderStaffMeals(filteredMeals);
         }
-
         function resetMealFilters() {
             document.getElementById('filterMealFromDate').value = '';
             document.getElementById('filterMealToDate').value = '';
             document.getElementById('filterMealStaff').value = '';
             filterStaffMeals();
         }
-
         function renderStaffMeals(meals) {
             const list = document.getElementById('staffMealsList');
-            if (meals.length === 0) {
-                list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">📭 No staff meals found.</div>';
-                return;
-            }
+            if (meals.length === 0) { list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">📭 No staff meals found.</div>'; return; }
             let html = '';
             meals.forEach(m => {
                 const staffNames = (m.staffNames || []).join(', ');
                 const menuItems = (m.menuItems || []).map(mi => `${mi.recipeName} ×${mi.quantity}`).join(', ');
                 const ingredients = (m.ingredients || []).map(i => `${i.itemName} ${dispQty(i.quantity)}${i.unit}`).join(', ');
                 const hasIssue = m.hasStockIssue;
-                const issueClass = hasIssue ? 'has-issue' : '';
-                const issueFlag = hasIssue ? '<span class="issue-flag-badge">⚠️ Issue Flagged</span>' : '';
                 let actions = '';
                 if (myPerms.delete) actions += `<button class="btn-delete" onclick="openDeleteMealModal('${m.id}')">🗑️ Delete</button>`;
-                html += `<div class="record-card ${issueClass}"><div class="record-card-header"><div><span class="record-date-badge">📅 ${m.date}</span><span style="color:#888; font-size:12px; margin-left:8px;">👥 ${(m.staffIds || []).length} staff</span>${issueFlag}</div><span class="record-cost-badge">Rs. ${(m.totalCost || 0).toFixed(2)}</span></div><div class="record-staff-list"><strong>Staff:</strong> ${staffNames || 'N/A'}</div>${menuItems ? `<div class="record-items-list">🍽️ <strong>Menu:</strong> ${menuItems}</div>` : ''}${ingredients ? `<div class="record-items-list">🧪 <strong>Ingredients:</strong> ${ingredients}</div>` : ''}${m.notes ? `<div class="record-items-list" style="color:#888;">📝 ${m.notes}</div>` : ''}<div style="font-size:11px; color:#666; margin-top:6px;">Per staff: Rs. ${((m.totalCost || 0) / ((m.staffIds || []).length || 1)).toFixed(2)}</div>${actions ? `<div class="record-actions">${actions}</div>` : ''}</div>`;
+                html += `<div class="record-card ${hasIssue ? 'has-issue' : ''}"><div class="record-card-header"><div><span class="record-date-badge">📅 ${m.date}</span><span style="color:#888; font-size:12px; margin-left:8px;">👥 ${(m.staffIds || []).length} staff</span>${hasIssue ? '<span class="issue-flag-badge">⚠️ Issue</span>' : ''}</div><span class="record-cost-badge">Rs. ${(m.totalCost || 0).toFixed(2)}</span></div><div class="record-staff-list"><strong>Staff:</strong> ${staffNames || 'N/A'}</div>${menuItems ? `<div class="record-items-list">🍽️ <strong>Menu:</strong> ${menuItems}</div>` : ''}${ingredients ? `<div class="record-items-list">🧪 <strong>Ingredients:</strong> ${ingredients}</div>` : ''}${m.notes ? `<div class="record-items-list" style="color:#888;">📝 ${m.notes}</div>` : ''}<div style="font-size:11px; color:#666; margin-top:6px;">Per staff: Rs. ${((m.totalCost || 0) / ((m.staffIds || []).length || 1)).toFixed(2)}</div>${actions ? `<div class="record-actions">${actions}</div>` : ''}</div>`;
             });
             list.innerHTML = html;
         }
-
         function openAddMealModal() {
             if (allEmployees.length === 0) { alert('⚠️ No employees!'); return; }
             document.getElementById('mealDate').value = new Date().toISOString().split('T')[0];
@@ -1385,7 +1534,6 @@
             calculateMealCost();
             document.getElementById('mealModal').style.display = 'flex';
         }
-
         function renderStaffSelectGrid() {
             const grid = document.getElementById('staffSelectGrid');
             let html = '';
@@ -1395,7 +1543,6 @@
             });
             grid.innerHTML = html;
         }
-
         function toggleStaffSelect(empId) {
             const idx = selectedStaffIds.indexOf(empId);
             if (idx > -1) selectedStaffIds.splice(idx, 1);
@@ -1403,7 +1550,6 @@
             renderStaffSelectGrid();
             calculateMealCost();
         }
-
         function addMealMenuItemRow() {
             const container = document.getElementById('mealMenuItemsList');
             const rowId = 'meal-menu-' + mealMenuItemRowCount;
@@ -1418,7 +1564,6 @@
             container.appendChild(row);
             mealMenuItemRowCount++;
         }
-
         function addMealIngredientRow() {
             const container = document.getElementById('mealIngredientsList');
             const rowId = 'meal-ing-' + mealIngRowCount;
@@ -1433,9 +1578,7 @@
             container.appendChild(row);
             mealIngRowCount++;
         }
-
         function removeMealRow(rowId) { document.getElementById(rowId).remove(); calculateMealCost(); }
-
         function calculateMealCost() {
             let menuCost = 0;
             const stockNeeded = {};
@@ -1451,8 +1594,7 @@
                     const recipe = allRecipes.find(r => r.id === select.value);
                     if (recipe) {
                         (recipe.ingredients || []).forEach(ing => {
-                            const totalNeeded = ing.quantity * qty;
-                            stockNeeded[ing.itemId] = (stockNeeded[ing.itemId] || 0) + totalNeeded;
+                            stockNeeded[ing.itemId] = (stockNeeded[ing.itemId] || 0) + (ing.quantity * qty);
                         });
                     }
                 } else display.textContent = 'Rs. 0';
@@ -1480,9 +1622,7 @@
             const issues = checkStockShortage(stockNeeded);
             renderStockIssueWarning(issues, document.getElementById('mealStockWarning'), document.getElementById('mealIssueList'), document.getElementById('saveMealBtn'));
         }
-
         function closeMealModal() { document.getElementById('mealModal').style.display = 'none'; }
-
         async function saveStaffMeal() {
             const date = document.getElementById('mealDate').value;
             const notes = document.getElementById('mealNotes').value.trim();
@@ -1525,7 +1665,7 @@
             const stockIssues = checkStockShortage(stockToDeduct);
             const hasStockIssue = stockIssues.length > 0;
             if (hasStockIssue) {
-                if (!confirm(`⚠️ Stock Shortage!\n${stockIssues.length} items short.\nContinue with issue flag?`)) return;
+                if (!confirm(`⚠️ Stock Shortage!\n${stockIssues.length} items short.\nContinue?`)) return;
             }
             const totalCost = menuCost + ingCost;
             const staffNames = selectedStaffIds.map(id => {
@@ -1534,36 +1674,20 @@
             });
             const mealData = { date, staffIds: selectedStaffIds, staffNames, menuItems, ingredients, menuCost, ingredientsCost: ingCost, totalCost, perStaffCost: totalCost / selectedStaffIds.length, notes, hasStockIssue, stockIssueCount: stockIssues.length, createdAt: firebase.firestore.FieldValue.serverTimestamp(), createdBy: currentUser.nickname };
             try {
-                const mealDoc = await db.collection('staffMeals').add(mealData);
-                if (hasStockIssue) {
-                    for (const issue of stockIssues) {
-                        await db.collection('stockIssues').add({
-                            type: 'staffMeal', relatedDocId: mealDoc.id, date,
-                            itemId: issue.itemId, itemName: issue.itemName,
-                            requested: fmtQty(issue.requested), available: fmtQty(issue.available),
-                            shortage: fmtQty(issue.shortage), severity: issue.severity,
-                            unit: issue.unit, costLoss: fmtQty(issue.shortage * issue.pricePerUnit),
-                            reason: `Used in Staff Meal: ${menuItems.map(m => m.recipeName + ' ×' + m.quantity).join(', ')}`,
-                            reportedBy: currentUser.nickname, reportedByName: currentUser.name,
-                            status: 'pending', resolvedBy: null, resolvedAt: null,
-                            managerNotes: '', createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-                }
+                await db.collection('staffMeals').add(mealData);
                 for (const itemId in stockToDeduct) {
                     const item = allInventoryItems.find(i => i.id === itemId);
                     if (item) {
                         const newStock = fmtQty(item.currentStock - stockToDeduct[itemId]);
                         await db.collection('inventoryItems').doc(itemId).update({ currentStock: newStock, updatedAt: firebase.firestore.FieldValue.serverTimestamp(), updatedBy: currentUser.nickname });
-                        await db.collection('stockMovements').add({ itemId, itemName: item.itemName, type: 'OUT', quantity: fmtQty(stockToDeduct[itemId]), reason: 'Staff meal' + (hasStockIssue ? ' (issue)' : ''), previousStock: fmtQty(item.currentStock), newStock, date, handledBy: currentUser.nickname, handledByName: currentUser.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                        await db.collection('stockMovements').add({ itemId, itemName: item.itemName, type: 'OUT', quantity: fmtQty(stockToDeduct[itemId]), reason: 'Staff meal', previousStock: fmtQty(item.currentStock), newStock, date, handledBy: currentUser.nickname, handledByName: currentUser.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                     }
                 }
-                alert(hasStockIssue ? '✅ Saved with issues!' : '✅ Saved!');
+                alert('✅ Saved!');
                 closeMealModal();
                 await loadInventoryItems();
             } catch (e) { alert('❌ ' + e.message); }
         }
-
         function openDeleteMealModal(id) { deleteMealId = id; document.getElementById('deleteMealModal').style.display = 'flex'; }
         function closeDeleteMealModal() { document.getElementById('deleteMealModal').style.display = 'none'; }
         async function confirmDeleteMeal() {
@@ -1571,9 +1695,7 @@
             catch (e) { alert('❌ ' + e.message); }
         }
 
-        // ═══════════════════════════════════════
-        // TAB 3: WASTAGE
-        // ═══════════════════════════════════════
+        // ═══════ TAB 3: WASTAGE ═══════
         function loadWastage() {
             db.collection('wastage').orderBy('date', 'desc').onSnapshot((snap) => {
                 allWastage = [];
@@ -1584,7 +1706,6 @@
                 filterWastage();
             });
         }
-
         function filterWastage() {
             const fromDate = document.getElementById('filterWasteFromDate').value;
             const toDate = document.getElementById('filterWasteToDate').value;
@@ -1597,32 +1718,23 @@
             });
             renderWastage(filteredWastage);
         }
-
         function resetWasteFilters() {
             document.getElementById('filterWasteFromDate').value = '';
             document.getElementById('filterWasteToDate').value = '';
             document.getElementById('filterWasteReason').value = '';
             filterWastage();
         }
-
         function renderWastage(wastage) {
             const list = document.getElementById('wastageList');
-            if (wastage.length === 0) {
-                list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">📭 No wastage.</div>';
-                return;
-            }
+            if (wastage.length === 0) { list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">📭 No wastage.</div>'; return; }
             let html = '';
             wastage.forEach(w => {
-                const hasIssue = w.hasStockIssue;
-                const issueClass = hasIssue ? 'has-issue' : '';
-                const issueFlag = hasIssue ? '<span class="issue-flag-badge">⚠️ Issue</span>' : '';
                 let actions = '';
                 if (myPerms.delete) actions += `<button class="btn-delete" onclick="openDeleteWasteModal('${w.id}')">🗑️ Delete</button>`;
-                html += `<div class="record-card ${issueClass}"><div class="record-card-header"><div><span class="record-date-badge">📅 ${w.date}</span><span class="reason-badge ${w.reason}" style="margin-left:8px;">${w.reason}</span>${issueFlag}</div><span class="record-cost-badge">Rs. ${(w.costLoss || 0).toFixed(2)}</span></div><div class="record-items-list"><strong>📦 ${w.itemName}</strong> — ${dispQty(w.quantity)} ${w.unit}</div>${w.notes ? `<div class="record-items-list" style="color:#888;">📝 ${w.notes}</div>` : ''}<div style="font-size:11px; color:#666; margin-top:6px;">By: ${w.reportedBy || 'N/A'}</div>${actions ? `<div class="record-actions">${actions}</div>` : ''}</div>`;
+                html += `<div class="record-card"><div class="record-card-header"><div><span class="record-date-badge">📅 ${w.date}</span><span class="reason-badge ${w.reason}" style="margin-left:8px;">${w.reason}</span></div><span class="record-cost-badge">Rs. ${(w.costLoss || 0).toFixed(2)}</span></div><div class="record-items-list"><strong>📦 ${w.itemName}</strong> — ${dispQty(w.quantity)} ${w.unit}</div>${w.notes ? `<div class="record-items-list" style="color:#888;">📝 ${w.notes}</div>` : ''}<div style="font-size:11px; color:#666; margin-top:6px;">By: ${w.reportedBy || 'N/A'}</div>${actions ? `<div class="record-actions">${actions}</div>` : ''}</div>`;
             });
             list.innerHTML = html;
         }
-
         function openAddWasteModal() {
             if (allInventoryItems.length === 0) { alert('⚠️ No items!'); return; }
             document.getElementById('wasteDate').value = new Date().toISOString().split('T')[0];
@@ -1636,7 +1748,6 @@
             document.getElementById('wasteStockWarning').classList.remove('show');
             document.getElementById('wasteModal').style.display = 'flex';
         }
-
         function updateWasteCost() {
             const select = document.getElementById('wasteItem');
             const qty = parseFloat(document.getElementById('wasteQuantity').value) || 0;
@@ -1651,9 +1762,7 @@
                 renderStockIssueWarning(issues, document.getElementById('wasteStockWarning'), document.getElementById('wasteIssueList'), null);
             }
         }
-
         function closeWasteModal() { document.getElementById('wasteModal').style.display = 'none'; }
-
         async function saveWastage() {
             const date = document.getElementById('wasteDate').value;
             const itemId = document.getElementById('wasteItem').value;
@@ -1664,38 +1773,17 @@
             const item = allInventoryItems.find(i => i.id === itemId);
             if (!item) return;
             const costLoss = (item.pricePerUnit || 0) * quantity;
-            const stockNeeded = { [itemId]: quantity };
-            const stockIssues = checkStockShortage(stockNeeded);
-            const hasStockIssue = stockIssues.length > 0;
-            if (hasStockIssue) {
-                if (!confirm(`⚠️ Stock short!\nContinue with issue flag?`)) return;
-            }
-            const wasteData = { date, itemId, itemName: item.itemName, quantity: fmtQty(quantity), unit: item.unit, reason, costLoss, notes, hasStockIssue, reportedBy: currentUser.nickname, reportedByName: currentUser.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
+            const wasteData = { date, itemId, itemName: item.itemName, quantity: fmtQty(quantity), unit: item.unit, reason, costLoss, notes, reportedBy: currentUser.nickname, reportedByName: currentUser.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() };
             try {
-                const wasteDoc = await db.collection('wastage').add(wasteData);
-                if (hasStockIssue) {
-                    const issue = stockIssues[0];
-                    await db.collection('stockIssues').add({
-                        type: 'wastage', relatedDocId: wasteDoc.id, date,
-                        itemId: issue.itemId, itemName: issue.itemName,
-                        requested: fmtQty(issue.requested), available: fmtQty(issue.available),
-                        shortage: fmtQty(issue.shortage), severity: issue.severity,
-                        unit: issue.unit, costLoss: fmtQty(issue.shortage * issue.pricePerUnit),
-                        reason: `Wastage: ${reason}` + (notes ? ' - ' + notes : ''),
-                        reportedBy: currentUser.nickname, reportedByName: currentUser.name,
-                        status: 'pending', resolvedBy: null, resolvedAt: null,
-                        managerNotes: '', createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
+                await db.collection('wastage').add(wasteData);
                 const newStock = fmtQty(item.currentStock - quantity);
                 await db.collection('inventoryItems').doc(itemId).update({ currentStock: newStock, updatedAt: firebase.firestore.FieldValue.serverTimestamp(), updatedBy: currentUser.nickname });
-                await db.collection('stockMovements').add({ itemId, itemName: item.itemName, type: 'OUT', quantity: fmtQty(quantity), reason: 'Wastage: ' + reason + (hasStockIssue ? ' (issue)' : ''), previousStock: fmtQty(item.currentStock), newStock, date, handledBy: currentUser.nickname, handledByName: currentUser.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                alert(hasStockIssue ? '✅ Saved with issue!' : '✅ Saved!');
+                await db.collection('stockMovements').add({ itemId, itemName: item.itemName, type: 'OUT', quantity: fmtQty(quantity), reason: 'Wastage: ' + reason, previousStock: fmtQty(item.currentStock), newStock, date, handledBy: currentUser.nickname, handledByName: currentUser.name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                alert('✅ Saved!');
                 closeWasteModal();
                 await loadInventoryItems();
             } catch (e) { alert('❌ ' + e.message); }
         }
-
         function openDeleteWasteModal(id) { deleteWasteId = id; document.getElementById('deleteWasteModal').style.display = 'flex'; }
         function closeDeleteWasteModal() { document.getElementById('deleteWasteModal').style.display = 'none'; }
         async function confirmDeleteWaste() {
@@ -1704,21 +1792,8 @@
         }
 
         // ═══════════════════════════════════════
-        // TAB 4: STOCK COUNT (with all FIXES!) ⭐
+        // TAB 4: STOCK COUNT
         // ═══════════════════════════════════════
-        function loadStockCounts() {
-            db.collection('stockCounts').orderBy('createdAt', 'desc').onSnapshot((snap) => {
-                allStockCounts = [];
-                snap.forEach(doc => allStockCounts.push({ id: doc.id, ...doc.data() }));
-                const pending = allStockCounts.filter(c => c.status === 'pending_approval').length;
-                const badge = document.getElementById('pendingCountBadge');
-                badge.textContent = pending;
-                badge.style.display = pending > 0 ? 'inline-block' : 'none';
-                renderPendingCounts();
-                renderCountHistory();
-            });
-        }
-
         function initStockCountTab() {
             document.getElementById('countDate').value = new Date().toISOString().split('T')[0];
             document.getElementById('countNotes').value = '';
@@ -1733,15 +1808,12 @@
             renderCountItems();
             updateCountSummary();
         }
-
         function populateCountCategoryFilter() {
             const select = document.getElementById('countCategoryFilter');
             const cats = [...new Set(allInventoryItems.map(i => i.category).filter(Boolean))].sort();
             select.innerHTML = '<option value="">🏷️ All Categories</option>';
             cats.forEach(c => { select.innerHTML += `<option value="${c}">${c}</option>`; });
         }
-
-        // ⭐ FIX: Clean decimal display + data-label for mobile
         function renderCountItems() {
             const tbody = document.getElementById('countItemsTableBody');
             const search = document.getElementById('countSearchInput').value.toLowerCase();
@@ -1779,8 +1851,6 @@
             });
             tbody.innerHTML = html;
         }
-
-        // ⭐ FIX: Clean 3 decimal places
         function updateCountItem(itemId, value) {
             const item = currentCountItems.find(i => i.itemId === itemId);
             if (!item) return;
@@ -1802,7 +1872,6 @@
             updateCountSummary();
             updateRecheckWarning();
         }
-
         function toggleSkipItem(itemId) {
             const item = currentCountItems.find(i => i.itemId === itemId);
             if (!item) return;
@@ -1812,7 +1881,6 @@
             updateCountSummary();
             updateRecheckWarning();
         }
-
         function fillAllSystemStock() {
             if (!confirm('All physical = system stock?')) return;
             currentCountItems.forEach(item => {
@@ -1826,7 +1894,6 @@
             updateCountSummary();
             updateRecheckWarning();
         }
-
         function clearAllCounts() {
             if (!confirm('Clear all?')) return;
             currentCountItems.forEach(item => {
@@ -1837,7 +1904,6 @@
             updateCountSummary();
             updateRecheckWarning();
         }
-
         function updateCountSummary() {
             const counted = currentCountItems.filter(i => i.physicalCount !== null && !i.skipped);
             const matches = counted.filter(i => i.status === 'match').length;
@@ -1860,7 +1926,6 @@
             else if (counted.length === 0) { submitBtn.disabled = true; submitBtn.textContent = '📤 Count items first'; }
             else { submitBtn.disabled = false; submitBtn.textContent = '📤 Submit for Approval'; }
         }
-
         function updateRecheckWarning() {
             const warningEl = document.getElementById('recheckWarning');
             const listEl = document.getElementById('recheckItemsList');
@@ -1874,7 +1939,6 @@
             listEl.innerHTML = html;
             warningEl.classList.add('show');
         }
-
         function markAllRechecked() {
             const flagged = currentCountItems.filter(i => i.needsRecheck && !i.rechecked && !i.skipped);
             if (flagged.length === 0) return;
@@ -1885,6 +1949,7 @@
             updateRecheckWarning();
         }
 
+        // 🔥 SUB TAB SWITCHER
         function showCountSubTab(name, btnEl) {
             document.querySelectorAll('.count-subtab').forEach(s => s.style.display = 'none');
             document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
@@ -1892,6 +1957,15 @@
             if (btnEl) btnEl.classList.add('active');
             if (name === 'new') initStockCountTab();
             if (name === 'pending') renderPendingCounts();
+            if (name === 'approved') renderApprovedCounts();
+            if (name === 'rejected') {
+                renderRejectedCounts();
+                // Mark all rejected as seen
+                allStockCounts.filter(c => c.status === 'rejected').forEach(c => seenRejectedIds.add(c.id));
+                localStorage.setItem('seenRejectedIds_' + currentUser.id, JSON.stringify([...seenRejectedIds]));
+                updateTabBadges();
+                updateDashboardAlert();
+            }
             if (name === 'history') renderCountHistory();
         }
 
@@ -1900,70 +1974,211 @@
             initStockCountTab();
         }
 
-        // ⭐⭐⭐ FIX: Pending check (only 1 allowed)
         async function submitCountForApproval() {
-            const date = document.getElementById('countDate').value;
-            const notes = document.getElementById('countNotes').value.trim();
-            if (!date) { alert('⚠️ Date!'); return; }
-            
-            // ⭐ Check for existing pending count
-            const existingPending = allStockCounts.filter(c => c.status === 'pending_approval');
-            if (existingPending.length > 0) {
-                alert(`⚠️ Pending Stock Count එකක් already තියෙනවා!\n\nDate: ${existingPending[0].date}\nBy: ${existingPending[0].performedByName}\n\nManager ඒක Approve/Reject කරනකන් අලුත් count එකක් submit කරන්න බැහැ.\n\n💡 'Pending' tab එකට ගිහින් check කරන්න.`);
-                return;
-            }
-            
-            const counted = currentCountItems.filter(i => i.physicalCount !== null && !i.skipped);
-            if (counted.length === 0) { alert('⚠️ Count items first!'); return; }
-            const flagged = counted.filter(i => i.needsRecheck && !i.rechecked);
-            if (flagged.length > 0) { alert(`⚠️ ${flagged.length} items not rechecked!`); return; }
-            if (!confirm(`Submit for Manager Approval?\n\n📦 Items: ${counted.length}\n💰 Cost Impact: Rs. ${counted.reduce((s,i)=>s+i.costImpact,0).toFixed(2)}\n\nManager review කරනකන් ආයෙ count එකක් කරන්න බැහැ.`)) return;
-            
-            const data = {
-                date, notes, status: 'pending_approval',
-                items: counted.map(i => ({
-                    itemId: i.itemId, itemName: i.itemName, category: i.category,
-                    unit: i.unit, systemStock: fmtQty(i.systemStock), physicalCount: fmtQty(i.physicalCount),
-                    difference: fmtQty(i.difference), differencePercent: i.differencePercent,
-                    costImpact: fmtQty(i.costImpact), pricePerUnit: i.pricePerUnit,
-                    status: i.status, rechecked: i.rechecked
-                })),
-                totalItems: currentCountItems.length, itemsCounted: counted.length,
-                itemsSkipped: currentCountItems.filter(i => i.skipped).length,
-                differencesFound: counted.filter(i => i.status !== 'match').length,
-                criticalIssues: counted.filter(i => i.status === 'critical').length,
-                totalCostImpact: fmtQty(counted.reduce((s, i) => s + i.costImpact, 0)),
-                approvedBy: null, approvedByName: null, approvedAt: null,
-                approvalNotes: '', rejectedReason: '',
-                performedBy: currentUser.nickname, performedByName: currentUser.name,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            try {
-                await db.collection('stockCounts').add(data);
-                alert('✅ Submitted for Manager Approval!\n\nManager review කරනකන් wait කරන්න.');
-                showCountSubTab('pending', document.getElementById('subtab-pending'));
-            } catch (e) { alert('❌ ' + e.message); }
+    const date = document.getElementById('countDate').value;
+    const notes = document.getElementById('countNotes').value.trim();
+    if (!date) { alert('⚠️ Date!'); return; }
+
+    const existingPending = allStockCounts.filter(c => c.status === 'pending_approval');
+    if (existingPending.length > 0) {
+        alert(`⚠️ Pending count එකක් already තියෙනවා!\nManager review කරනකන් wait කරන්න.`);
+        return;
+    }
+
+    const counted = currentCountItems.filter(i => i.physicalCount !== null && !i.skipped);
+    if (counted.length === 0) { alert('⚠️ Count items first!'); return; }
+
+    const flagged = counted.filter(i => i.needsRecheck && !i.rechecked);
+    if (flagged.length > 0) { alert(`⚠️ ${flagged.length} items not rechecked!`); return; }
+
+    // 🔥 Check if recounting from rejected
+    const recountFromId = sessionStorage.getItem('recountFromId');
+    const recountFromRejected = recountFromId ? allStockCounts.find(c => c.id === recountFromId && c.status === 'rejected') : null;
+
+    let confirmMsg = `Submit for Manager Approval?\n📦 Items: ${counted.length}`;
+    if (recountFromRejected) {
+        confirmMsg = `🔄 Recount Submit?\n\n❌ පරණ rejected count එක archive වෙනවා.\n📤 අලුත් count එක Pending තියෙනවා.\n\n📦 Items: ${counted.length}`;
+    }
+
+    if (!confirm(confirmMsg)) return;
+
+    const data = {
+        date, notes, status: 'pending_approval',
+        items: counted.map(i => ({
+            itemId: i.itemId, itemName: i.itemName, category: i.category,
+            unit: i.unit, systemStock: fmtQty(i.systemStock), physicalCount: fmtQty(i.physicalCount),
+            difference: fmtQty(i.difference), differencePercent: i.differencePercent,
+            costImpact: fmtQty(i.costImpact), pricePerUnit: i.pricePerUnit,
+            status: i.status, rechecked: i.rechecked
+        })),
+        totalItems: currentCountItems.length, itemsCounted: counted.length,
+        itemsSkipped: currentCountItems.filter(i => i.skipped).length,
+        differencesFound: counted.filter(i => i.status !== 'match').length,
+        criticalIssues: counted.filter(i => i.status === 'critical').length,
+        totalCostImpact: fmtQty(counted.reduce((s, i) => s + i.costImpact, 0)),
+        approvedBy: null, approvedByName: null, approvedAt: null,
+        approvalNotes: '', rejectedReason: '',
+        performedBy: currentUser.nickname, performedByName: currentUser.name,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        // 🔥 NEW: Link to rejected count
+        isRecount: !!recountFromRejected,
+        recountFromId: recountFromRejected ? recountFromRejected.id : null
+    };
+
+    try {
+        // 1. Add new pending count
+        await db.collection('stockCounts').add(data);
+
+        // 🔥 2. Archive the rejected count (if recounting)
+        if (recountFromRejected) {
+            await db.collection('stockCounts').doc(recountFromRejected.id).update({
+                status: 'archived',
+                archivedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                archivedReason: 'Recounted - new submission pending'
+            });
+            sessionStorage.removeItem('recountFromId');
         }
 
+        alert(recountFromRejected
+            ? '✅ Recount Submitted!\n❌ Rejected eka archived.\n⏳ අලුත් count Pending තියෙනවා.'
+            : '✅ Submitted!\nReports DB එකේ Manager review කරයි.');
+
+        showCountSubTab('pending', document.getElementById('subtab-pending'));
+    } catch (e) {
+        alert('❌ ' + e.message);
+    }
+}
+        
+        
+
+        // ⏳ PENDING
         function renderPendingCounts() {
             const list = document.getElementById('pendingCountsList');
             if (!list) return;
             const pending = allStockCounts.filter(c => c.status === 'pending_approval');
-            if (pending.length === 0) { list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">✅ No pending!</div>'; return; }
-            const isManager = ['Admin', 'Manager'].includes(currentUser.access);
+            if (pending.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">✅ No pending approvals!</div>';
+                return;
+            }
             let html = '';
             pending.forEach(count => {
                 const sign = count.totalCostImpact >= 0 ? '+' : '';
                 const color = count.totalCostImpact >= 0 ? '#4CAF50' : '#ff4444';
-                let actions = `<button class="ch-btn view" onclick="viewCountDetails('${count.id}')">👁️ View</button>`;
-                if (isManager) {
-                    actions += `<button class="ch-btn approve" onclick="viewCountDetails('${count.id}')">✅ Review & Approve</button>`;
-                }
-                html += `<div class="count-history-card pending"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:10px;"><div style="display:flex; gap:10px; align-items:center;"><span class="record-date-badge">📅 ${count.date}</span><span class="count-status-badge pending_approval">⏳ Pending</span></div><span style="font-size:11px; color:#888;">By: ${count.performedByName}</span></div><div class="count-history-stats"><div class="count-history-stat"><div class="chs-value">${count.itemsCounted}</div><div class="chs-label">Counted</div></div><div class="count-history-stat"><div class="chs-value">${count.differencesFound}</div><div class="chs-label">Diffs</div></div><div class="count-history-stat"><div class="chs-value" style="color:#ff4444;">${count.criticalIssues}</div><div class="chs-label">Critical</div></div><div class="count-history-stat"><div class="chs-value" style="color:${color};">${sign}Rs.${Math.abs(count.totalCostImpact).toFixed(0)}</div><div class="chs-label">Impact</div></div></div>${count.notes ? `<div style="margin-top:8px; font-size:12px; color:#aaa;">📝 ${count.notes}</div>` : ''}<div style="display:flex; gap:8px; justify-content:flex-end; margin-top:10px;">${actions}</div></div>`;
+                html += `<div class="status-count-card pending">
+                    <div class="scc-header">
+                        <div class="scc-left">
+                            <span class="scc-date-badge">📅 ${count.date}</span>
+                            <span class="scc-status-badge pending_approval">⏳ Pending</span>
+                        </div>
+                        <span style="font-size:11px; color:#888;">By: ${count.performedByName}</span>
+                    </div>
+                    <div class="scc-stats">
+                        <div class="scc-stat"><div class="scs-value">${count.itemsCounted}</div><div class="scs-label">Counted</div></div>
+                        <div class="scc-stat"><div class="scs-value">${count.differencesFound}</div><div class="scs-label">Diffs</div></div>
+                        <div class="scc-stat"><div class="scs-value" style="color:#ff4444;">${count.criticalIssues}</div><div class="scs-label">Critical</div></div>
+                        <div class="scc-stat"><div class="scs-value" style="color:${color};">${sign}Rs.${Math.abs(count.totalCostImpact).toFixed(0)}</div><div class="scs-label">Impact</div></div>
+                    </div>
+                    ${count.notes ? `<div style="font-size:12px; color:#aaa;">📝 ${count.notes}</div>` : ''}
+                    <div class="scc-message">⏳ <strong>Waiting for Manager Approval</strong> Reports DB එකේ review වෙනවා.</div>
+                    <div class="scc-actions">
+                        <button class="scc-btn view" onclick="viewCountDetails('${count.id}')">👁️ View</button>
+                        ${isManagerUser() ? `<button class="scc-btn view" onclick="window.location.href='reports.html#pendingapprovals'">📊 Review</button>` : ''}
+                    </div>
+                </div>`;
             });
             list.innerHTML = html;
         }
 
+        // ✅ APPROVED
+        function renderApprovedCounts() {
+            const list = document.getElementById('approvedCountsList');
+            if (!list) return;
+            const approved = allStockCounts.filter(c => c.status === 'approved' || c.status === 'suspicious_approved');
+            if (approved.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">📭 No approved counts yet.</div>';
+                return;
+            }
+            let html = '';
+            approved.forEach(count => {
+                const sign = count.totalCostImpact >= 0 ? '+' : '';
+                const color = count.totalCostImpact >= 0 ? '#4CAF50' : '#ff4444';
+                const isSuspicious = count.status === 'suspicious_approved';
+                html += `<div class="status-count-card ${count.status}">
+                    <div class="scc-header">
+                        <div class="scc-left">
+                            <span class="scc-date-badge">📅 ${count.date}</span>
+                            <span class="scc-status-badge ${count.status}">${isSuspicious ? '⚠️ Suspicious Approved' : '✅ Approved'}</span>
+                        </div>
+                        <span style="font-size:11px; color:#888;">By: ${count.performedByName}</span>
+                    </div>
+                    <div class="scc-stats">
+                        <div class="scc-stat"><div class="scs-value">${count.itemsCounted}</div><div class="scs-label">Counted</div></div>
+                        <div class="scc-stat"><div class="scs-value">${count.differencesFound}</div><div class="scs-label">Diffs</div></div>
+                        <div class="scc-stat"><div class="scs-value" style="color:${color};">${sign}Rs.${Math.abs(count.totalCostImpact).toFixed(0)}</div><div class="scs-label">Impact</div></div>
+                    </div>
+                    <div class="scc-message ${isSuspicious ? 'suspicious' : 'approve'}">
+                        <strong>${isSuspicious ? '⚠️ Suspicious Approve' : '✅ Approved by ' + (count.approvedByName || 'Manager')}</strong>
+                        ${count.approvalNotes ? `📝 ${count.approvalNotes}` : ''}
+                        ${isSuspicious && count.suspiciousReason ? `<br>🚨 ${count.suspiciousReason}<br>📊 Stock Issues Report එකේ investigation pending.` : ''}
+                    </div>
+                    <div class="scc-actions">
+                        <button class="scc-btn view" onclick="viewCountDetails('${count.id}')">👁️ View Details</button>
+                    </div>
+                </div>`;
+            });
+            list.innerHTML = html;
+        }
+
+        function renderRejectedCounts() {
+    const list = document.getElementById('rejectedCountsList');
+    if (!list) return;
+
+    // 🔥 Only show ACTIVE rejected (not archived)
+    const rejected = allStockCounts.filter(c => c.status === 'rejected');
+
+    if (rejected.length === 0) {
+        list.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">🎉 No active rejected counts!</div>';
+        return;
+    }
+
+    let html = '';
+    rejected.forEach(count => {
+        // 🔥 Check if recount already submitted
+        const hasRecount = allStockCounts.some(c => c.recountFromId === count.id && c.status === 'pending_approval');
+
+        html += `<div class="status-count-card rejected">
+            <div class="scc-header">
+                <div class="scc-left">
+                    <span class="scc-date-badge">📅 ${count.date}</span>
+                    <span class="scc-status-badge rejected">❌ REJECTED</span>
+                </div>
+                <span style="font-size:11px; color:#888;">By: ${count.performedByName}</span>
+            </div>
+            <div class="scc-message reject">
+                <strong>❌ Rejected by ${count.approvedByName || 'Manager'}</strong>
+                📝 <strong>Reason:</strong> ${count.rejectedReason || 'No reason given'}
+                <br>🔄 <strong>Action:</strong> ${hasRecount ? '⏳ Recount Pending Review' : 'Recount කරලා ආයෙ submit කරන්න!'}
+            </div>
+            <div class="scc-actions">
+                <button class="scc-btn view" onclick="viewCountDetails('${count.id}')">👁️ View</button>
+                ${!hasRecount ? `<button class="scc-btn recount" onclick="startRecount('${count.id}')">🔄 Start Recount</button>` : ''}
+            </div>
+        </div>`;
+    });
+    list.innerHTML = html;
+}
+      
+
+        function startRecount(countId) {
+    if (!confirm('🔄 Recount start කරන්නද?\n\n📌 Submit කරාම පරණ rejected count එක Rejected tab එකෙන් archive වෙනවා.')) return;
+
+    // 🔥 Store rejected count ID for archiving on submit
+    sessionStorage.setItem('recountFromId', countId);
+
+    showCountSubTab('new', document.getElementById('subtab-new'));
+}
+
+        // 📋 HISTORY
         function renderCountHistory() {
             const list = document.getElementById('countHistoryList');
             if (!list) return;
@@ -1982,8 +2197,24 @@
             completed.forEach(count => {
                 const sign = count.totalCostImpact >= 0 ? '+' : '';
                 const color = count.totalCostImpact >= 0 ? '#4CAF50' : '#ff4444';
-                const icon = count.status === 'approved' ? '✅' : '❌';
-                html += `<div class="count-history-card ${count.status}"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><div style="display:flex; gap:10px;"><span class="record-date-badge">📅 ${count.date}</span><span class="count-status-badge ${count.status}">${icon} ${count.status}</span></div><span style="font-size:11px; color:#888;">By: ${count.performedByName}</span></div><div class="count-history-stats"><div class="count-history-stat"><div class="chs-value">${count.itemsCounted}</div><div class="chs-label">Counted</div></div><div class="count-history-stat"><div class="chs-value">${count.differencesFound}</div><div class="chs-label">Diffs</div></div><div class="count-history-stat"><div class="chs-value" style="color:${color};">${sign}Rs.${Math.abs(count.totalCostImpact).toFixed(0)}</div><div class="chs-label">Impact</div></div></div>${count.status === 'approved' && count.approvalNotes ? `<div style="margin-top:8px; font-size:12px; color:#4CAF50;">✅ ${count.approvalNotes}</div>` : ''}${count.status === 'rejected' ? `<div style="margin-top:8px; font-size:12px; color:#ff4444;">❌ ${count.rejectedReason}</div>` : ''}<div style="display:flex; gap:8px; justify-content:flex-end; margin-top:10px;"><button class="ch-btn view" onclick="viewCountDetails('${count.id}')">👁️ View</button></div></div>`;
+                const icons = { approved: '✅', suspicious_approved: '⚠️', rejected: '❌' };
+                html += `<div class="status-count-card ${count.status}">
+                    <div class="scc-header">
+                        <div class="scc-left">
+                            <span class="scc-date-badge">📅 ${count.date}</span>
+                            <span class="scc-status-badge ${count.status}">${icons[count.status]} ${count.status.replace('_', ' ')}</span>
+                        </div>
+                        <span style="font-size:11px; color:#888;">By: ${count.performedByName}</span>
+                    </div>
+                    <div class="scc-stats">
+                        <div class="scc-stat"><div class="scs-value">${count.itemsCounted}</div><div class="scs-label">Counted</div></div>
+                        <div class="scc-stat"><div class="scs-value">${count.differencesFound}</div><div class="scs-label">Diffs</div></div>
+                        <div class="scc-stat"><div class="scs-value" style="color:${color};">${sign}Rs.${Math.abs(count.totalCostImpact).toFixed(0)}</div><div class="scs-label">Impact</div></div>
+                    </div>
+                    <div class="scc-actions">
+                        <button class="scc-btn view" onclick="viewCountDetails('${count.id}')">👁️ View</button>
+                    </div>
+                </div>`;
             });
             list.innerHTML = html;
         }
@@ -1992,170 +2223,29 @@
             const count = allStockCounts.find(c => c.id === countId);
             if (!count) return;
             document.getElementById('countDetailTitle').textContent = `📊 Count - ${count.date}`;
-            const isManager = ['Admin', 'Manager'].includes(currentUser.access);
-            const isPending = count.status === 'pending_approval';
             let itemsHtml = '<table style="width:100%; font-size:12px;"><tr style="color:#f0a500; font-weight:700;"><td>Item</td><td>System</td><td>Physical</td><td>Diff</td><td>Status</td></tr>';
             count.items.forEach(item => {
                 const colors = { match: '#4CAF50', surplus: '#2196F3', shortage: '#f0a500', critical: '#ff4444' };
                 const sign = item.difference >= 0 ? '+' : '';
-                itemsHtml += `<tr><td>${item.itemName}</td><td>${dispQty(item.systemStock)} ${item.unit}</td><td>${dispQty(item.physicalCount)} ${item.unit}</td><td style="color:${colors[item.status]};">${sign}${dispQty(item.difference)}</td><td style="color:${colors[item.status]};">${item.status}${item.rechecked ? ' ✓' : ''}</td></tr>`;
+                itemsHtml += `<tr><td>${item.itemName}</td><td>${dispQty(item.systemStock)} ${item.unit}</td><td>${dispQty(item.physicalCount)} ${item.unit}</td><td style="color:${colors[item.status]};">${sign}${dispQty(item.difference)}</td><td style="color:${colors[item.status]};">${item.status}</td></tr>`;
             });
             itemsHtml += '</table>';
-            let approval = '';
-            if (isManager && isPending) {
-                approval = `<div style="background:rgba(76,175,80,0.05); border:1px solid rgba(76,175,80,0.2); border-radius:8px; padding:12px; margin-top:12px;"><label style="color:#4CAF50; font-size:11px; text-transform:uppercase; font-weight:600;">📝 Approval Notes (optional)</label><textarea id="approvalNotesText" style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:8px; border-radius:6px; margin-top:6px; min-height:60px;"></textarea><div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;"><button class="ch-btn reject" onclick="openRejectModal('${count.id}')">❌ Reject</button><button class="ch-btn approve" onclick="approveCount('${count.id}')">✅ Approve & Update</button></div></div>`;
-            }
-            document.getElementById('countDetailBody').innerHTML = `<div style="background:#0f3460; padding:12px; border-radius:8px; margin-bottom:10px;">Items: ${count.itemsCounted} | Diffs: ${count.differencesFound} | Critical: ${count.criticalIssues}</div><div style="background:#0f3460; padding:12px; border-radius:8px; overflow-x:auto;">${itemsHtml}</div>${count.notes ? `<div style="margin-top:10px; padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:13px; color:#ccc;">📝 ${count.notes}</div>` : ''}${approval}`;
+            document.getElementById('countDetailBody').innerHTML = `
+                <div style="background:#0f3460; padding:12px; border-radius:8px; margin-bottom:10px;">Items: ${count.itemsCounted} | Diffs: ${count.differencesFound} | Critical: ${count.criticalIssues}</div>
+                <div style="background:#0f3460; padding:12px; border-radius:8px; overflow-x:auto;">${itemsHtml}</div>
+                ${count.notes ? `<div style="margin-top:10px; padding:10px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:13px;">📝 ${count.notes}</div>` : ''}`;
             document.getElementById('countDetailModal').style.display = 'flex';
         }
 
-        function closeCountDetailModal() { document.getElementById('countDetailModal').style.display = 'none'; }
-
-                // ⭐⭐⭐ FIXED: Auto-create Stock Issues for Critical items
-        async function approveCount(countId) {
-            const count = allStockCounts.find(c => c.id === countId);
-            if (!count) return;
-            const notes = document.getElementById('approvalNotesText')?.value.trim() || 'Approved';
-            
-            // ⭐ Critical items detect කරන්න - status OR differencePercent check කරනවා
-            const criticalItems = count.items.filter(i => {
-                // Status check
-                if (i.status === 'critical') return true;
-                // Fallback: differencePercent check
-                if (i.differencePercent && i.differencePercent > 20) return true;
-                return false;
-            });
-            
-            const criticalCount = criticalItems.length;
-            
-            let confirmMsg = `Approve count?\n📦 ${count.itemsCounted} items stock will update.`;
-            if (criticalCount > 0) {
-                confirmMsg += `\n\n⚠️ ${criticalCount} CRITICAL items will be flagged as Stock Issues!`;
-            }
-            if (!confirm(confirmMsg)) return;
-            
-            try {
-                // Update stock count status
-                await db.collection('stockCounts').doc(countId).update({
-                    status: 'approved', 
-                    approvalNotes: notes,
-                    approvedBy: currentUser.nickname,
-                    approvedByName: currentUser.name,
-                    approvedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                let issuesCreated = 0;
-                
-                // Update each item
-                for (const item of count.items) {
-                    // Update inventory stock
-                    await db.collection('inventoryItems').doc(item.itemId).update({
-                        currentStock: fmtQty(item.physicalCount),
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        updatedBy: currentUser.nickname
-                    });
-                    
-                    // Log stock movement
-                    if (item.difference !== 0) {
-                        await db.collection('stockMovements').add({
-                            itemId: item.itemId, 
-                            itemName: item.itemName,
-                            type: item.difference > 0 ? 'IN' : 'OUT',
-                            quantity: fmtQty(Math.abs(item.difference)),
-                            reason: `Stock Count Approved (${count.date})`,
-                            previousStock: fmtQty(item.systemStock),
-                            newStock: fmtQty(item.physicalCount),
-                            date: count.date,
-                            handledBy: currentUser.nickname,
-                            handledByName: currentUser.name,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-                    
-                    // ⭐⭐⭐ FIX: Better critical check
-                    const isCritical = item.status === 'critical' || (item.differencePercent && item.differencePercent > 20);
-                    
-                    if (isCritical && item.difference !== 0) {
-                        const shortageAmount = Math.abs(item.difference);
-                        const costLoss = Math.abs(item.costImpact);
-                        const diffPercent = item.differencePercent || (item.systemStock !== 0 ? Math.abs(item.difference / item.systemStock) * 100 : 100);
-                        
-                        try {
-                            await db.collection('stockIssues').add({
-                                type: 'stockCount',
-                                relatedDocId: countId,
-                                date: count.date,
-                                itemId: item.itemId,
-                                itemName: item.itemName,
-                                requested: fmtQty(item.systemStock),
-                                available: fmtQty(item.physicalCount),
-                                shortage: fmtQty(shortageAmount),
-                                severity: 'critical',
-                                unit: item.unit,
-                                costLoss: fmtQty(costLoss),
-                                reason: `Stock Count Discrepancy: System ${dispQty(item.systemStock)} vs Physical ${dispQty(item.physicalCount)} (${diffPercent.toFixed(1)}% difference)`,
-                                reportedBy: currentUser.nickname,
-                                reportedByName: currentUser.name,
-                                status: 'pending',
-                                resolvedBy: null,
-                                resolvedAt: null,
-                                managerNotes: '',
-                                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                            });
-                            issuesCreated++;
-                            console.log('✅ Stock issue created for:', item.itemName);
-                        } catch (issueErr) {
-                            console.error('❌ Failed to create stock issue for', item.itemName, ':', issueErr);
-                        }
-                    }
-                }
-                
-                let successMsg = '✅ Approved! Stock updated.';
-                if (issuesCreated > 0) {
-                    successMsg += `\n\n🚨 ${issuesCreated} Stock Issues created!\nReports DB → Stock Issues check කරන්න.`;
-                } else if (criticalCount > 0) {
-                    successMsg += `\n\n⚠️ ${criticalCount} critical items found, but issues create වුණේ නැහැ. Console check කරන්න.`;
-                }
-                alert(successMsg);
-                closeCountDetailModal();
-                await loadInventoryItems();
-            } catch (e) { 
-                console.error('Approve error:', e);
-                alert('❌ ' + e.message); 
-            }
-        }
-                      
-        function openRejectModal(countId) {
-            rejectCountId = countId;
-            document.getElementById('rejectReasonText').value = '';
-            document.getElementById('rejectReasonModal').style.display = 'flex';
-        }
-        function closeRejectModal() { document.getElementById('rejectReasonModal').style.display = 'none'; }
-        async function confirmReject() {
-            const reason = document.getElementById('rejectReasonText').value.trim();
-            if (!reason) { alert('⚠️ Reason!'); return; }
-            try {
-                await db.collection('stockCounts').doc(rejectCountId).update({
-                    status: 'rejected', rejectedReason: reason,
-                    approvedBy: currentUser.nickname,
-                    approvedByName: currentUser.name,
-                    approvedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert('❌ Rejected!');
-                closeRejectModal();
-                closeCountDetailModal();
-            } catch (e) { alert('❌ ' + e.message); }
+        function closeCountDetailModal() {
+            document.getElementById('countDetailModal').style.display = 'none';
         }
 
-        // ═══════════════════════════════════════
-        // TAB 5: KITCHEN REPORTS 📊
-        // ═══════════════════════════════════════
+        // ═══════ TAB 5: KITCHEN REPORTS ═══════
         async function generateKitchenReports() {
             const from = document.getElementById('kitRepDateFrom').value;
             const to = document.getElementById('kitRepDateTo').value;
             if (!from || !to) return;
-
-            // 1. Recipe Analysis
             let recipeHtml = '';
             if (allRecipes.length > 0) {
                 const sorted = [...allRecipes].sort((a,b) => b.margin - a.margin).slice(0, 5);
@@ -2163,31 +2253,16 @@
                 recipeHtml += `<div class="report-stat-row"><span class="report-stat-label">Avg Margin:</span><span class="report-stat-value">${(allRecipes.reduce((s,r)=>s+(r.margin||0),0)/allRecipes.length).toFixed(1)}%</span></div>`;
             } else recipeHtml = '<div style="text-align:center; color:#666;">No recipes</div>';
             document.getElementById('repRecipeAnalysis').innerHTML = recipeHtml;
-
-            // 2. Staff Meal Trends
             const filteredM = allStaffMeals.filter(m => m.date >= from && m.date <= to);
             const totalMealCost = filteredM.reduce((s,m) => s + (m.totalCost || 0), 0);
-            document.getElementById('repStaffMealTrends').innerHTML = `<div class="report-stat-row"><span class="report-stat-label">Total Meals:</span><span class="report-stat-value">${filteredM.length}</span></div><div class="report-stat-row"><span class="report-stat-label">Total Cost:</span><span class="report-stat-value">Rs. ${totalMealCost.toFixed(0)}</span></div><div class="report-stat-row"><span class="report-stat-label">Avg Per Meal:</span><span class="report-stat-value">Rs. ${filteredM.length ? (totalMealCost/filteredM.length).toFixed(0) : 0}</span></div><div class="report-stat-row"><span class="report-stat-label">Issues Flagged:</span><span class="report-stat-value" style="color:#ff4444;">${filteredM.filter(m=>m.hasStockIssue).length}</span></div>`;
-
-            // 3. Wastage Summary
+            document.getElementById('repStaffMealTrends').innerHTML = `<div class="report-stat-row"><span class="report-stat-label">Total Meals:</span><span class="report-stat-value">${filteredM.length}</span></div><div class="report-stat-row"><span class="report-stat-label">Total Cost:</span><span class="report-stat-value">Rs. ${totalMealCost.toFixed(0)}</span></div>`;
             const filteredW = allWastage.filter(w => w.date >= from && w.date <= to);
             const totalWasteCost = filteredW.reduce((s,w) => s + (w.costLoss || 0), 0);
-            const reasons = {};
-            filteredW.forEach(w => reasons[w.reason] = (reasons[w.reason] || 0) + (w.costLoss || 0));
-            let wasteHtml = `<div class="report-stat-row"><span class="report-stat-label">Total Loss:</span><span class="report-stat-value" style="color:#ff4444;">Rs. ${totalWasteCost.toFixed(0)}</span></div>`;
-            if (totalWasteCost > 0) {
-                Object.keys(reasons).forEach(r => {
-                    const pct = (reasons[r] / totalWasteCost) * 100;
-                    wasteHtml += `<div class="report-bar-container"><div class="report-bar-label"><span>${r}</span><span>Rs. ${reasons[r].toFixed(0)}</span></div><div class="report-bar-bg"><div class="report-bar-fill" style="width:${pct}%; background:#ff4444;"></div></div></div>`;
-                });
-            } else wasteHtml += '<div style="text-align:center; padding:10px; color:#666;">No wastage</div>';
-            document.getElementById('repWastageSummary').innerHTML = wasteHtml;
-
-            // 4. Stock Count Summary
+            document.getElementById('repWastageSummary').innerHTML = `<div class="report-stat-row"><span class="report-stat-label">Total Loss:</span><span class="report-stat-value" style="color:#ff4444;">Rs. ${totalWasteCost.toFixed(0)}</span></div>`;
             const filteredC = allStockCounts.filter(c => c.date >= from && c.date <= to && c.status !== 'pending_approval');
-            const approved = filteredC.filter(c => c.status === 'approved').length;
+            const approved = filteredC.filter(c => c.status === 'approved' || c.status === 'suspicious_approved').length;
             const rejected = filteredC.filter(c => c.status === 'rejected').length;
-            document.getElementById('repStockCountSummary').innerHTML = `<div class="report-stat-row"><span class="report-stat-label">Total Conducted:</span><span class="report-stat-value">${filteredC.length}</span></div><div class="report-stat-row"><span class="report-stat-label">Approved ✅:</span><span class="report-stat-value" style="color:#4CAF50;">${approved}</span></div><div class="report-stat-row"><span class="report-stat-label">Rejected ❌:</span><span class="report-stat-value" style="color:#ff4444;">${rejected}</span></div><div class="report-stat-row"><span class="report-stat-label">Success Rate:</span><span class="report-stat-value">${filteredC.length ? ((approved/filteredC.length)*100).toFixed(0) : 0}%</span></div>`;
+            document.getElementById('repStockCountSummary').innerHTML = `<div class="report-stat-row"><span class="report-stat-label">Total:</span><span class="report-stat-value">${filteredC.length}</span></div><div class="report-stat-row"><span class="report-stat-label">Approved ✅:</span><span class="report-stat-value" style="color:#4CAF50;">${approved}</span></div><div class="report-stat-row"><span class="report-stat-label">Rejected ❌:</span><span class="report-stat-value" style="color:#ff4444;">${rejected}</span></div>`;
         }
 
         function resetKitRepFilters() {

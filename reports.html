@@ -6,906 +6,488 @@
     <title>Buono - Reports Database</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* ═══════════════════════════════════
-           📊 REPORTS DATABASE STYLES
-        ═══════════════════════════════════ */
-
-        /* TOP BAR */
-        .reports-topbar {
-            background: #16213e;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid #f0a500;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            height: 60px;
-        }
-
-        .reports-topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .hamburger-btn {
-            background: none;
-            border: none;
-            color: #f0a500;
-            font-size: 22px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: none;
-        }
-
-        .reports-topbar-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #f0a500;
-        }
-
-        .reports-topbar-title span {
-            color: #e0e0e0;
-            font-weight: 400;
-            font-size: 14px;
-            margin-left: 8px;
-        }
-
-        .reports-topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .reports-topbar { background: #16213e; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #f0a500; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 60px; }
+        .reports-topbar-left { display: flex; align-items: center; gap: 12px; }
+        .hamburger-btn { background: none; border: none; color: #f0a500; font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 6px; display: none; }
+        .reports-topbar-title { font-size: 18px; font-weight: 700; color: #f0a500; }
+        .reports-topbar-title span { color: #e0e0e0; font-weight: 400; font-size: 14px; margin-left: 8px; }
+        .reports-topbar-right { display: flex; align-items: center; gap: 12px; }
         .rpt-db-switcher { position: relative; }
-
-        .rpt-db-switcher-btn {
-            background: rgba(240,165,0,0.15);
-            border: 1px solid #f0a500;
-            color: #f0a500;
-            padding: 7px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .rpt-db-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: #16213e;
-            border: 1px solid #f0a500;
-            border-radius: 10px;
-            min-width: 220px;
-            z-index: 2000;
-            display: none;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-        }
-
+        .rpt-db-switcher-btn { background: rgba(240,165,0,0.15); border: 1px solid #f0a500; color: #f0a500; padding: 7px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .rpt-db-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: #16213e; border: 1px solid #f0a500; border-radius: 10px; min-width: 220px; z-index: 2000; display: none; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
         .rpt-db-dropdown.show { display: block; }
+        .rpt-db-dropdown a { display: flex; align-items: center; gap: 10px; padding: 12px 16px; color: #e0e0e0; text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .rpt-db-dropdown a:hover { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .rpt-db-dropdown a.current { background: rgba(240,165,0,0.2); color: #f0a500; font-weight: 600; }
+        .rpt-user-info { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #e0e0e0; }
+        .rpt-user-badge { padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 12px; color: white; }
+        .rpt-logout-btn { background: rgba(255,68,68,0.15); border: 1px solid #ff4444; color: #ff4444; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .rpt-logout-btn:hover { background: #ff4444; color: white; }
 
-        .rpt-db-dropdown a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            color: #e0e0e0;
-            text-decoration: none;
-            font-size: 14px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .rpt-db-dropdown a:hover {
-            background: rgba(240,165,0,0.15);
-            color: #f0a500;
-        }
-
-        .rpt-db-dropdown a.current {
-            background: rgba(240,165,0,0.2);
-            color: #f0a500;
-            font-weight: 600;
-        }
-
-        .rpt-user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #e0e0e0;
-        }
-
-        .rpt-user-badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 12px;
-            color: white;
-        }
-
-        .rpt-logout-btn {
-            background: rgba(255,68,68,0.15);
-            border: 1px solid #ff4444;
-            color: #ff4444;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .rpt-logout-btn:hover {
-            background: #ff4444;
-            color: white;
-        }
-
-        /* LAYOUT */
-        .reports-layout {
-            display: flex;
-            margin-top: 60px;
-            min-height: calc(100vh - 60px);
-        }
-
-        /* SIDEBAR */
-        .reports-sidebar {
-            width: 240px;
-            background: #16213e;
-            border-right: 1px solid rgba(240,165,0,0.2);
-            position: fixed;
-            top: 60px;
-            left: 0;
-            bottom: 0;
-            overflow-y: auto;
-            z-index: 500;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-hdr {
-            padding: 20px 16px 12px;
-            border-bottom: 1px solid rgba(240,165,0,0.15);
-        }
-
-        .sidebar-hdr p {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
+        .reports-layout { display: flex; margin-top: 60px; min-height: calc(100vh - 60px); }
+        .reports-sidebar { width: 260px; background: #16213e; border-right: 1px solid rgba(240,165,0,0.2); position: fixed; top: 60px; left: 0; bottom: 0; overflow-y: auto; z-index: 500; transition: transform 0.3s ease; }
+        .sidebar-hdr { padding: 20px 16px 12px; border-bottom: 1px solid rgba(240,165,0,0.15); }
+        .sidebar-hdr p { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         .sidebar-nav { padding: 12px 0; }
-
-        .sb-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border-left: 3px solid transparent;
-            font-size: 14px;
-            color: #aaa;
-        }
-
-        .sb-item:hover {
-            background: rgba(240,165,0,0.08);
-            color: #e0e0e0;
-        }
-
-        .sb-item.active {
-            background: rgba(240,165,0,0.12);
-            color: #f0a500;
-            border-left-color: #f0a500;
-            font-weight: 600;
-        }
-
-        .sb-item .sb-icon {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-
+        .sb-item { display: flex; align-items: center; gap: 12px; padding: 12px 20px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; font-size: 14px; color: #aaa; }
+        .sb-item:hover { background: rgba(240,165,0,0.08); color: #e0e0e0; }
+        .sb-item.active { background: rgba(240,165,0,0.12); color: #f0a500; border-left-color: #f0a500; font-weight: 600; }
+        .sb-item .sb-icon { font-size: 18px; width: 24px; text-align: center; }
         .sb-item .sb-label { flex: 1; }
+        .sb-count-badge { background: #ff4444; color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; animation: pulse-badge 2s infinite; }
+        .sb-pending-badge { background: #f0a500; color: #1a1a2e; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; animation: pulse-badge 2s infinite; }
+        .sb-credit-badge { background: #ff4444; color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; }
+        @keyframes pulse-badge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .sb-soon { background: rgba(255,255,255,0.1); color: #666; font-size: 9px; padding: 2px 6px; border-radius: 10px; font-weight: 600; text-transform: uppercase; }
+        .sb-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 8px 16px; }
+        .sb-group-label { padding: 10px 20px 4px; font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
 
-        .sb-count-badge {
-            background: #ff4444;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-weight: 700;
-            animation: pulse-badge 2s infinite;
-        }
+        .reports-content { margin-left: 260px; flex: 1; padding: 28px; }
+        .rpt-section-header { margin-bottom: 24px; }
+        .rpt-section-title { font-size: 22px; font-weight: 700; color: #f0a500; margin-bottom: 6px; }
+        .rpt-section-subtitle { font-size: 13px; color: #888; }
 
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .sb-soon {
-            background: rgba(255,255,255,0.1);
-            color: #666;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .sb-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            margin: 8px 16px;
-        }
-
-        /* CONTENT */
-        .reports-content {
-            margin-left: 240px;
-            flex: 1;
-            padding: 28px;
-        }
-
-        .rpt-section-header {
-            margin-bottom: 24px;
-        }
-
-        .rpt-section-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #f0a500;
-            margin-bottom: 6px;
-        }
-
-        .rpt-section-subtitle {
-            font-size: 13px;
-            color: #888;
-        }
-
-        /* SUMMARY CARDS */
-        .rpt-summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .rpt-summary-card {
-            background: #16213e;
-            border: 1px solid rgba(240,165,0,0.2);
-            border-radius: 12px;
-            padding: 18px;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .rpt-summary-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .rpt-summary-card .sc-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .rpt-summary-card .sc-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #f0a500;
-            margin-bottom: 4px;
-        }
-
-        .rpt-summary-card .sc-label {
-            font-size: 12px;
-            color: #888;
-        }
-
+        .rpt-summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
+        .rpt-summary-card { background: #16213e; border: 1px solid rgba(240,165,0,0.2); border-radius: 12px; padding: 16px; text-align: center; transition: transform 0.2s; }
+        .rpt-summary-card:hover { transform: translateY(-2px); }
+        .rpt-summary-card .sc-icon { font-size: 26px; margin-bottom: 6px; }
+        .rpt-summary-card .sc-value { font-size: 22px; font-weight: 700; color: #f0a500; margin-bottom: 4px; }
+        .rpt-summary-card .sc-label { font-size: 11px; color: #888; }
         .rpt-summary-card.green .sc-value { color: #4CAF50; }
         .rpt-summary-card.red .sc-value { color: #ff4444; }
         .rpt-summary-card.blue .sc-value { color: #2196F3; }
         .rpt-summary-card.orange .sc-value { color: #f0a500; }
         .rpt-summary-card.yellow .sc-value { color: #FFC107; }
+        .rpt-summary-card.purple .sc-value { color: #9C27B0; }
+        .rpt-summary-card.purchasing .sc-value { color: #FF9800; }
 
-        /* FILTERS */
-        .rpt-filters {
-            background: #16213e;
-            border: 1px solid rgba(240,165,0,0.15);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: flex-end;
-        }
+        .rpt-filters { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+        .rpt-filter-group { display: flex; flex-direction: column; gap: 6px; }
+        .rpt-filter-group label { font-size: 11px; color: #888; text-transform: uppercase; font-weight: 600; }
+        .rpt-filter-group input, .rpt-filter-group select { background: #0f3460; border: 1px solid rgba(240,165,0,0.3); color: #e0e0e0; padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; min-width: 140px; }
+        .rpt-filter-btn { padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .rpt-filter-btn.apply { background: #f0a500; color: #1a1a2e; }
+        .rpt-filter-btn.reset { background: rgba(255,255,255,0.08); color: #aaa; }
 
-        .rpt-filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .pending-subtabs { display: flex; gap: 4px; margin-bottom: 18px; background: #16213e; padding: 6px; border-radius: 10px; border: 1px solid rgba(240,165,0,0.15); }
+        .pending-subtab { flex: 1; background: transparent; border: none; color: #aaa; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .pending-subtab:hover { background: rgba(240,165,0,0.08); color: #e0e0e0; }
+        .pending-subtab.active { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .pending-subtab.purchasing-tab.active { background: rgba(255,152,0,0.15); color: #FF9800; }
+        .pending-subtab .tab-count { background: rgba(255,255,255,0.1); color: #ccc; padding: 3px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; }
+        .pending-subtab.active .tab-count { background: #f0a500; color: #1a1a2e; }
+        .pending-subtab.purchasing-tab.active .tab-count { background: #FF9800; color: #1a1a2e; }
 
-        .rpt-filter-group label {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+        .approval-card { background: #16213e; border: 1px solid rgba(240,165,0,0.3); border-left: 4px solid #f0a500; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .approval-card.purchasing { border-left-color: #FF9800; }
+        .approval-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 10px; }
+        .approval-card-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .approval-date { background: rgba(240,165,0,0.15); color: #f0a500; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        .approval-bill-num { background: rgba(255,152,0,0.15); color: #FF9800; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; }
+        .approval-payment { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .approval-payment.cash { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .approval-payment.credit { background: rgba(255,152,0,0.15); color: #FF9800; }
+        .approval-payment.bank { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .approval-submitted-by { font-size: 13px; color: #aaa; }
+        .approval-submitted-by strong { color: #e0e0e0; }
+        .approval-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 16px; }
+        .approval-stat { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; text-align: center; }
+        .approval-stat .as-value { font-size: 20px; font-weight: 700; color: #f0a500; }
+        .approval-stat .as-label { font-size: 11px; color: #888; margin-top: 2px; }
+        .approval-stat .as-value.green { color: #4CAF50; }
+        .approval-stat .as-value.red { color: #ff4444; }
+        .approval-stat .as-value.blue { color: #2196F3; }
+        .approval-stat .as-value.orange { color: #f0a500; }
+        .approval-stat .as-value.purchasing { color: #FF9800; }
 
-        .rpt-filter-group input,
-        .rpt-filter-group select {
-            background: #0f3460;
-            border: 1px solid rgba(240,165,0,0.3);
-            color: #e0e0e0;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            outline: none;
-            min-width: 140px;
-        }
+        .approval-items-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+        .approval-items-table thead tr { background: rgba(240,165,0,0.08); }
+        .approval-items-table th { padding: 10px 12px; text-align: left; font-size: 11px; color: #f0a500; text-transform: uppercase; font-weight: 600; }
+        .approval-items-table td { padding: 9px 12px; color: #e0e0e0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .approval-items-table tr.row-critical { background: rgba(255,68,68,0.06); }
+        .approval-items-table tr.row-shortage { background: rgba(240,165,0,0.04); }
+        .approval-items-table tr.row-surplus { background: rgba(33,150,243,0.04); }
+        .approval-items-table tr.row-match { background: rgba(76,175,80,0.04); }
 
-        .rpt-filter-btn {
-            padding: 8px 18px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
+        .diff-badge { padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .diff-badge.match { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .diff-badge.surplus { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .diff-badge.shortage { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .diff-badge.critical { background: rgba(255,68,68,0.15); color: #ff4444; }
 
-        .rpt-filter-btn.apply {
-            background: #f0a500;
-            color: #1a1a2e;
-        }
+        .price-change-badge { display: inline-block; padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 700; margin-left: 4px; }
+        .price-change-badge.up { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .price-change-badge.down { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .price-change-badge.same { background: rgba(255,255,255,0.05); color: #888; }
 
-        .rpt-filter-btn.reset {
-            background: rgba(255,255,255,0.08);
-            color: #aaa;
-        }
+        .approval-notes-box { background: rgba(76,175,80,0.05); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+        .approval-notes-box label { font-size: 11px; color: #4CAF50; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 8px; }
+        .approval-notes-box textarea { width: 100%; background: #0f3460; border: 1px solid rgba(76,175,80,0.3); color: #e0e0e0; padding: 10px; border-radius: 6px; font-size: 13px; resize: vertical; min-height: 60px; outline: none; font-family: inherit; box-sizing: border-box; }
 
-        /* ISSUE TABS (Pending/Noted/Resolved) */
-        .issue-tabs {
-            display: flex;
-            gap: 4px;
-            margin-bottom: 16px;
-            background: #16213e;
-            padding: 6px;
-            border-radius: 10px;
-            border: 1px solid rgba(240,165,0,0.15);
-        }
+        .reject-notes-box { background: rgba(255,68,68,0.05); border: 1px solid rgba(255,68,68,0.2); border-radius: 8px; padding: 14px; margin-bottom: 14px; display: none; }
+        .reject-notes-box.show { display: block; }
+        .reject-notes-box label { font-size: 11px; color: #ff4444; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 8px; }
+        .reject-notes-box textarea { width: 100%; background: #0f3460; border: 1px solid rgba(255,68,68,0.3); color: #e0e0e0; padding: 10px; border-radius: 6px; font-size: 13px; resize: vertical; min-height: 60px; outline: none; font-family: inherit; box-sizing: border-box; }
 
-        .issue-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #aaa;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+        .approval-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+        .btn-approve-count { background: #4CAF50; color: white; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; }
+        .btn-approve-count:hover { background: #43A047; }
+        .btn-suspicious-approve { background: linear-gradient(135deg, #f0a500, #FF9800); color: #1a1a2e; border: none; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; }
+        .btn-suspicious-approve:hover { opacity: 0.9; }
+        .btn-reject-count { background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid #ff4444; padding: 10px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 700; }
+        .btn-reject-count:hover { background: #ff4444; color: white; }
+        .btn-show-reject { background: rgba(255,68,68,0.1); color: #ff4444; border: 1px solid rgba(255,68,68,0.3); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
 
-        .issue-tab:hover {
-            background: rgba(240,165,0,0.08);
-            color: #e0e0e0;
-        }
+        .scr-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: #16213e; padding: 6px; border-radius: 10px; border: 1px solid rgba(240,165,0,0.15); flex-wrap: wrap; }
+        .scr-tab { flex: 1; min-width: 130px; background: transparent; border: none; color: #aaa; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s; }
+        .scr-tab:hover { background: rgba(240,165,0,0.08); color: #e0e0e0; }
+        .scr-tab.active { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .scr-tab.approved-tab.active { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .scr-tab.suspicious-tab.active { background: rgba(255,152,0,0.15); color: #FF9800; }
+        .scr-tab.rejected-tab.active { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .scr-tab.issues-tab.active { background: rgba(244,67,54,0.15); color: #F44336; }
+        .scr-tab .tab-count { background: rgba(255,255,255,0.1); color: #ccc; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+        .scr-tab.active .tab-count { background: #f0a500; color: #1a1a2e; }
 
-        .issue-tab.active {
-            background: rgba(240,165,0,0.15);
-            color: #f0a500;
-        }
+        .count-result-card { background: #16213e; border-radius: 12px; padding: 18px 22px; margin-bottom: 12px; border-left: 4px solid #f0a500; }
+        .count-result-card.approved { border-left-color: #4CAF50; }
+        .count-result-card.suspicious_approved { border-left-color: #FF9800; background: linear-gradient(90deg, rgba(255,152,0,0.05), #16213e); }
+        .count-result-card.rejected { border-left-color: #ff4444; background: linear-gradient(90deg, rgba(255,68,68,0.05), #16213e); }
+        .crc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .crc-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .crc-date { background: rgba(240,165,0,0.15); color: #f0a500; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+        .crc-status-badge { padding: 4px 12px; border-radius: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .crc-status-badge.approved { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .crc-status-badge.suspicious_approved { background: rgba(255,152,0,0.2); color: #FF9800; border: 1px solid #FF9800; }
+        .crc-status-badge.rejected { background: rgba(255,68,68,0.2); color: #ff4444; border: 1px solid #ff4444; }
+        .crc-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin: 10px 0; }
+        .crc-stat { text-align: center; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; }
+        .crc-stat .crs-value { font-size: 16px; font-weight: 700; color: #f0a500; }
+        .crc-stat .crs-label { font-size: 10px; color: #888; }
+        .crc-message { padding: 12px 16px; border-radius: 8px; margin-top: 12px; font-size: 13px; }
+        .crc-message.approve { background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.2); color: #4CAF50; }
+        .crc-message.suspicious { background: rgba(255,152,0,0.08); border: 1px solid rgba(255,152,0,0.3); color: #FF9800; }
+        .crc-message.reject { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.3); color: #ff4444; }
+        .crc-message strong { display: block; margin-bottom: 4px; }
+        .crc-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; flex-wrap: wrap; }
+        .crc-btn { padding: 7px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .crc-btn.view { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .crc-btn.investigate { background: rgba(255,68,68,0.15); color: #ff4444; }
 
-        .issue-tab .tab-count {
-            background: rgba(255,255,255,0.1);
-            color: #ccc;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .issue-tab.active .tab-count {
-            background: #f0a500;
-            color: #1a1a2e;
-        }
-
-        /* ISSUE CARDS */
-        .issue-card {
-            background: #16213e;
-            border: 1px solid rgba(255,68,68,0.3);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-bottom: 12px;
-            transition: all 0.2s;
-        }
-
-        .issue-card:hover {
-            border-color: rgba(255,68,68,0.5);
-        }
-
-        .issue-card.resolved {
-            border-color: rgba(76,175,80,0.3);
-        }
-
-        .issue-card.noted {
-            border-color: rgba(33,150,243,0.3);
-        }
-
-        .issue-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .issue-card-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .issue-date {
-            background: rgba(240,165,0,0.15);
-            color: #f0a500;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .severity-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .severity-badge.minor {
-            background: rgba(240,165,0,0.2);
-            color: #f0a500;
-            border: 1px solid #f0a500;
-        }
-
-        .severity-badge.major {
-            background: rgba(255,87,34,0.2);
-            color: #FF5722;
-            border: 1px solid #FF5722;
-        }
-
-        .severity-badge.critical {
-            background: rgba(255,68,68,0.2);
-            color: #ff4444;
-            border: 1px solid #ff4444;
-            animation: critical-pulse 1.5s infinite;
-        }
-
-        @keyframes critical-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.5); }
-            50% { box-shadow: 0 0 0 6px rgba(255,68,68,0); }
-        }
-
-        .type-badge {
-            background: rgba(33,150,243,0.15);
-            color: #2196F3;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .type-badge.wastage {
-            background: rgba(255,68,68,0.15);
-            color: #ff4444;
-        }
-
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .status-badge.pending {
-            background: rgba(255,68,68,0.15);
-            color: #ff4444;
-        }
-
-        .status-badge.noted {
-            background: rgba(33,150,243,0.15);
-            color: #2196F3;
-        }
-
-        .status-badge.resolved {
-            background: rgba(76,175,80,0.15);
-            color: #4CAF50;
-        }
-
-        /* Issue details grid */
-        .issue-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin: 12px 0;
-        }
-
-        .issue-detail {
-            background: rgba(0,0,0,0.2);
-            padding: 10px 12px;
-            border-radius: 8px;
-        }
-
-        .issue-detail .id-label {
-            font-size: 10px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .issue-detail .id-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #e0e0e0;
-        }
-
+        .issue-card { background: #16213e; border: 1px solid rgba(255,68,68,0.3); border-radius: 12px; padding: 16px 20px; margin-bottom: 12px; }
+        .issue-card.resolved { border-color: rgba(76,175,80,0.3); }
+        .issue-card.noted { border-color: rgba(33,150,243,0.3); }
+        .issue-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .issue-card-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .issue-date { background: rgba(240,165,0,0.15); color: #f0a500; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+        .severity-badge { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .severity-badge.minor { background: rgba(240,165,0,0.2); color: #f0a500; }
+        .severity-badge.major { background: rgba(255,87,34,0.2); color: #FF5722; }
+        .severity-badge.critical { background: rgba(255,68,68,0.2); color: #ff4444; }
+        .status-badge { padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+        .status-badge.pending { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .status-badge.pending_approval { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .status-badge.approved { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .status-badge.rejected { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .status-badge.noted { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .status-badge.resolved { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .issue-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 12px 0; }
+        .issue-detail { background: rgba(0,0,0,0.2); padding: 10px 12px; border-radius: 8px; }
+        .issue-detail .id-label { font-size: 10px; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+        .issue-detail .id-value { font-size: 14px; font-weight: 700; color: #e0e0e0; }
         .issue-detail .id-value.red { color: #ff4444; }
         .issue-detail .id-value.orange { color: #f0a500; }
         .issue-detail .id-value.green { color: #4CAF50; }
+        .issue-reason { background: rgba(255,255,255,0.03); padding: 10px 14px; border-radius: 8px; margin: 10px 0; font-size: 13px; color: #ccc; border-left: 3px solid #f0a500; }
+        .issue-reason strong { color: #f0a500; }
+        .reported-by { font-size: 11px; color: #888; margin-top: 6px; }
+        .manager-notes-section { background: rgba(33,150,243,0.05); border: 1px solid rgba(33,150,243,0.2); border-radius: 8px; padding: 12px; margin-top: 12px; }
+        .manager-notes-section label { font-size: 11px; color: #2196F3; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; display: block; }
+        .manager-notes-section textarea, .manager-notes-section select { width: 100%; background: #0f3460; border: 1px solid rgba(33,150,243,0.3); color: #e0e0e0; padding: 8px 12px; border-radius: 6px; font-size: 13px; outline: none; box-sizing: border-box; }
+        .manager-notes-section textarea { resize: vertical; min-height: 60px; }
+        .resolved-notes { background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.2); border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 13px; color: #ccc; }
+        .resolved-notes .resolved-by { font-size: 11px; color: #4CAF50; margin-top: 6px; font-weight: 600; }
+        .issue-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; flex-wrap: wrap; }
+        .issue-action-btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .issue-action-btn.resolve { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .issue-action-btn.note { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .issue-action-btn.reopen { background: rgba(240,165,0,0.15); color: #f0a500; }
 
-        .issue-reason {
-            background: rgba(255,255,255,0.03);
-            padding: 10px 14px;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-size: 13px;
-            color: #ccc;
-            border-left: 3px solid #f0a500;
-        }
+        .issue-status-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 8px; }
+        .issue-status-tab { flex: 1; background: transparent; border: none; color: #aaa; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .issue-status-tab.active { background: rgba(240,165,0,0.15); color: #f0a500; }
 
-        .issue-reason strong {
-            color: #f0a500;
-        }
-
-        .reported-by {
-            font-size: 11px;
-            color: #888;
-            margin-top: 6px;
-        }
-
-        /* Manager notes section */
-        .manager-notes-section {
-            background: rgba(33,150,243,0.05);
-            border: 1px solid rgba(33,150,243,0.2);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 12px;
-        }
-
-        .manager-notes-section label {
-            font-size: 11px;
-            color: #2196F3;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 6px;
-            display: block;
-        }
-
-        .manager-notes-section textarea {
-            width: 100%;
-            background: #0f3460;
-            border: 1px solid rgba(33,150,243,0.3);
-            color: #e0e0e0;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            resize: vertical;
-            min-height: 60px;
-            outline: none;
-            font-family: inherit;
-        }
-
-        .manager-notes-section textarea:focus {
-            border-color: #2196F3;
-        }
-
-        .resolved-notes {
-            background: rgba(76,175,80,0.08);
-            border: 1px solid rgba(76,175,80,0.2);
-            border-radius: 8px;
-            padding: 10px 14px;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #ccc;
-        }
-
-        .resolved-notes .resolved-by {
-            font-size: 11px;
-            color: #4CAF50;
-            margin-top: 6px;
-            font-weight: 600;
-        }
-
-        /* Issue actions */
-        .issue-actions {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .issue-action-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-
-        .issue-action-btn.resolve {
-            background: rgba(76,175,80,0.15);
-            color: #4CAF50;
-            border: 1px solid rgba(76,175,80,0.3);
-        }
-
-        .issue-action-btn.resolve:hover {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .issue-action-btn.note {
-            background: rgba(33,150,243,0.15);
-            color: #2196F3;
-            border: 1px solid rgba(33,150,243,0.3);
-        }
-
-        .issue-action-btn.note:hover {
-            background: #2196F3;
-            color: white;
-        }
-
-        .issue-action-btn.reopen {
-            background: rgba(240,165,0,0.15);
-            color: #f0a500;
-            border: 1px solid rgba(240,165,0,0.3);
-        }
-
-        .issue-action-btn.reopen:hover {
-            background: #f0a500;
-            color: #1a1a2e;
-        }
-
-        /* Loading + Empty states */
-        .rpt-loading, .rpt-empty {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-            font-size: 14px;
-        }
-
-        .rpt-empty .empty-icon {
-            font-size: 50px;
-            display: block;
-            margin-bottom: 12px;
-            opacity: 0.4;
-        }
-
-        /* Day End Reports existing styles */
-        .rpt-list-container {
-            background: #16213e;
-            border: 1px solid rgba(240,165,0,0.15);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .rpt-list-header {
-            padding: 14px 20px;
-            border-bottom: 1px solid rgba(240,165,0,0.15);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .rpt-count-badge {
-            font-size: 12px;
-            color: #888;
-            background: rgba(240,165,0,0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .rpt-item {
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .rpt-item-header {
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .rpt-item-header:hover {
-            background: rgba(240,165,0,0.06);
-        }
-
-        .rpt-date-badge {
-            background: rgba(240,165,0,0.15);
-            color: #f0a500;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
+        .rpt-list-container { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 12px; overflow: hidden; }
+        .rpt-list-header { padding: 14px 20px; border-bottom: 1px solid rgba(240,165,0,0.15); display: flex; align-items: center; justify-content: space-between; }
+        .rpt-count-badge { font-size: 12px; color: #888; background: rgba(240,165,0,0.1); padding: 4px 10px; border-radius: 20px; }
+        .rpt-item { border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .rpt-item-header { padding: 14px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .rpt-item-header:hover { background: rgba(240,165,0,0.06); }
+        .rpt-date-badge { background: rgba(240,165,0,0.15); color: #f0a500; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
         .rpt-cashier-info { flex: 1; }
         .rpt-cashier-info .rci-name { font-size: 14px; font-weight: 600; color: #e0e0e0; }
         .rpt-cashier-info .rci-shift { font-size: 11px; color: #888; margin-top: 2px; }
-
         .rpt-amounts { text-align: right; }
         .rpt-amounts .ra-pos { font-size: 14px; font-weight: 700; color: #4CAF50; }
         .rpt-amounts .ra-label { font-size: 10px; color: #888; }
-
-        .se-mini {
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-        }
+        .se-mini { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
         .se-mini.perfect { background: rgba(76,175,80,0.15); color: #4CAF50; }
         .se-mini.excess { background: rgba(240,165,0,0.15); color: #f0a500; }
         .se-mini.short { background: rgba(255,68,68,0.15); color: #ff4444; }
-
-        .rpt-expand-icon {
-            color: #888;
-            font-size: 12px;
-            transition: transform 0.2s;
-        }
-
+        .rpt-expand-icon { color: #888; font-size: 12px; transition: transform 0.2s; }
         .rpt-item.expanded .rpt-expand-icon { transform: rotate(180deg); }
-
-        .rpt-item-details {
-            display: none;
-            padding: 0 20px 16px 20px;
-        }
-
+        .rpt-item-details { display: none; padding: 0 20px 16px 20px; }
         .rpt-item.expanded .rpt-item-details { display: block; }
-
-        .rpt-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 14px;
-        }
-
-        .rpt-detail-box {
-            background: rgba(255,255,255,0.04);
-            border-radius: 8px;
-            padding: 12px;
-        }
-
-        .rpt-detail-box h4 {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .rpt-d-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            padding: 3px 0;
-        }
-
+        .rpt-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 14px; }
+        .rpt-detail-box { background: rgba(255,255,255,0.04); border-radius: 8px; padding: 12px; }
+        .rpt-detail-box h4 { font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+        .rpt-d-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
         .rpt-d-row .dl { color: #aaa; }
         .rpt-d-row .dv { color: #e0e0e0; font-weight: 500; }
         .rpt-d-row .dv.green { color: #4CAF50; }
         .rpt-d-row .dv.red { color: #ff4444; }
         .rpt-d-row .dv.orange { color: #f0a500; }
-        .rpt-d-row .dv.blue { color: #2196F3; }
 
-        /* Employee */
-        .emp-stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .emp-sc {
-            background: #16213e;
-            border: 1px solid rgba(240,165,0,0.15);
-            border-radius: 10px;
-            padding: 14px;
-            text-align: center;
-        }
-
+        .emp-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .emp-sc { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 10px; padding: 14px; text-align: center; }
         .emp-sc .es-num { font-size: 28px; font-weight: 700; color: #f0a500; }
         .emp-sc .es-label { font-size: 12px; color: #888; margin-top: 4px; }
         .emp-sc.admin .es-num { color: #ff4444; }
         .emp-sc.manager .es-num { color: #2196F3; }
         .emp-sc.cashier .es-num { color: #4CAF50; }
         .emp-sc.other .es-num { color: #9C27B0; }
-
-        .emp-rpt-table {
-            background: #16213e;
-            border: 1px solid rgba(240,165,0,0.15);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
+        .emp-rpt-table { background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 12px; overflow: hidden; }
         .emp-rpt-table table { width: 100%; border-collapse: collapse; }
         .emp-rpt-table thead tr { background: rgba(240,165,0,0.1); }
         .emp-rpt-table th { padding: 12px 16px; text-align: left; font-size: 12px; color: #f0a500; text-transform: uppercase; }
         .emp-rpt-table td { padding: 12px 16px; font-size: 13px; color: #e0e0e0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
         .rpt-search-box { position: relative; margin-bottom: 16px; }
-        .rpt-search-box input {
-            width: 100%;
-            max-width: 320px;
-            background: #16213e;
-            border: 1px solid rgba(240,165,0,0.3);
-            color: #e0e0e0;
-            padding: 9px 14px 9px 36px;
-            border-radius: 8px;
-            font-size: 13px;
-            outline: none;
-        }
-        .rpt-search-box .rpt-search-icon {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
+        .rpt-search-box input { width: 100%; max-width: 320px; background: #16213e; border: 1px solid rgba(240,165,0,0.3); color: #e0e0e0; padding: 9px 14px 9px 36px; border-radius: 8px; font-size: 13px; outline: none; }
+        .rpt-search-box .rpt-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #888; }
 
-        .rpt-coming-soon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
-            text-align: center;
-        }
-
-        .rpt-coming-soon .cs-icon {
-            font-size: 56px;
-            margin-bottom: 16px;
-            opacity: 0.4;
-        }
-
-        .rpt-access-denied {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            text-align: center;
-        }
-
+        .rpt-loading, .rpt-empty { text-align: center; padding: 40px; color: #888; font-size: 14px; }
+        .rpt-empty .empty-icon { font-size: 50px; display: block; margin-bottom: 12px; opacity: 0.4; }
+        .rpt-coming-soon { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; text-align: center; }
+        .rpt-coming-soon .cs-icon { font-size: 56px; margin-bottom: 16px; opacity: 0.4; }
+        .rpt-access-denied { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center; }
         .rpt-access-denied .ad-icon { font-size: 64px; margin-bottom: 20px; }
         .rpt-access-denied h2 { font-size: 24px; color: #ff4444; margin-bottom: 10px; }
+
+        /* 🔥 EXPANDABLE PURCHASE BILL CARDS */
+        .pbill-card {
+            background: #16213e;
+            border-left: 4px solid #FF9800;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .pbill-card.approved { border-left-color: #4CAF50; }
+        .pbill-card.rejected { border-left-color: #ff4444; }
+        .pbill-card.overdue { border-left-color: #ff4444; }
+        .pbill-card.today { border-left-color: #f0a500; }
+        .pbill-card.paid { border-left-color: #4CAF50; }
+
+        .pbill-header {
+            padding: 14px 18px;
+            display: grid;
+            grid-template-columns: auto 1fr auto auto auto auto;
+            gap: 12px;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .pbill-header:hover { background: rgba(255,152,0,0.05); }
+
+        .pbill-date { font-size: 12px; color: #2196F3; background: rgba(33,150,243,0.15); padding: 4px 10px; border-radius: 8px; font-weight: 600; white-space: nowrap; }
+        .pbill-bill-num { font-size: 13px; font-weight: 700; color: #FF9800; }
+        .pbill-supplier { font-size: 13px; color: #e0e0e0; font-weight: 600; }
+        .pbill-payment { padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .pbill-payment.cash { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .pbill-payment.credit { background: rgba(255,152,0,0.15); color: #FF9800; }
+        .pbill-payment.bank { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .pbill-items { font-size: 12px; color: #888; }
+        .pbill-total { font-size: 14px; font-weight: 700; color: #FF9800; white-space: nowrap; }
+        .pbill-status { padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .pbill-status.approved { background: rgba(76,175,80,0.15); color: #4CAF50; }
+        .pbill-status.rejected { background: rgba(255,68,68,0.15); color: #ff4444; }
+        .pbill-status.pending_approval { background: rgba(240,165,0,0.15); color: #f0a500; }
+        .pbill-expand-icon { color: #888; font-size: 14px; transition: transform 0.3s; }
+        .pbill-card.expanded .pbill-expand-icon { transform: rotate(180deg); }
+
+        .pbill-details {
+            display: none;
+            padding: 0 18px 18px 18px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .pbill-card.expanded .pbill-details { display: block; }
+
+        .pbill-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 14px 0;
+        }
+        .pbill-info-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        .pbill-info-item .pi-label {
+            color: #888;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .pbill-info-item .pi-value {
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .pbill-info-item .pi-value.orange { color: #FF9800; }
+        .pbill-info-item .pi-value.green { color: #4CAF50; }
+        .pbill-info-item .pi-value.red { color: #ff4444; }
+
+        .pbill-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .pbill-items-table thead tr { background: rgba(255,152,0,0.1); }
+        .pbill-items-table th {
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 11px;
+            color: #FF9800;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .pbill-items-table td {
+            padding: 9px 12px;
+            color: #e0e0e0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .pbill-items-table tr.grand-total {
+            background: rgba(255,152,0,0.08);
+            font-weight: 700;
+        }
+        .pbill-items-table tr.grand-total td {
+            color: #FF9800;
+            font-size: 14px;
+        }
+
+        .pbill-photo {
+            text-align: center;
+            margin: 14px 0;
+        }
+        .pbill-photo img {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 8px;
+            border: 2px solid rgba(255,152,0,0.3);
+            cursor: pointer;
+        }
+        .pbill-photo .pp-label {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+        }
+
+        .pbill-meta-info {
+            font-size: 11px;
+            color: #666;
+            padding: 10px 14px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-top: 12px;
+            line-height: 1.6;
+        }
+
+        .pbill-notes-box {
+            background: rgba(255,255,255,0.03);
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #ccc;
+            border-left: 3px solid #FF9800;
+        }
+
+        .pbill-due-warning {
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .pbill-due-warning.overdue {
+            background: rgba(255,68,68,0.1);
+            border: 1px solid rgba(255,68,68,0.3);
+            color: #ff4444;
+        }
+        .pbill-due-warning.today {
+            background: rgba(240,165,0,0.1);
+            border: 1px solid rgba(240,165,0,0.3);
+            color: #f0a500;
+        }
+        .pbill-due-warning.upcoming {
+            background: rgba(33,150,243,0.1);
+            border: 1px solid rgba(33,150,243,0.3);
+            color: #2196F3;
+        }
+        .pbill-due-warning.paid {
+            background: rgba(76,175,80,0.1);
+            border: 1px solid rgba(76,175,80,0.3);
+            color: #4CAF50;
+        }
+
+        .pbill-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .pbill-btn {
+            padding: 7px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .pbill-btn.photo { background: rgba(33,150,243,0.15); color: #2196F3; }
+        .pbill-btn.markpaid { background: #4CAF50; color: white; }
+        .pbill-btn.markunpaid { background: rgba(240,165,0,0.15); color: #f0a500; }
+
+        .rpt-data-table { width: 100%; border-collapse: collapse; background: #16213e; border: 1px solid rgba(240,165,0,0.15); border-radius: 12px; overflow: hidden; }
+        .rpt-data-table thead tr { background: rgba(240,165,0,0.08); }
+        .rpt-data-table th { padding: 12px 14px; text-align: left; font-size: 11px; color: #f0a500; text-transform: uppercase; font-weight: 600; }
+        .rpt-data-table td { padding: 10px 14px; font-size: 13px; color: #e0e0e0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .rpt-data-table tr:hover { background: rgba(240,165,0,0.04); }
+
+        /* 📸 PHOTO FULLSCREEN MODAL */
+        .photo-fullscreen-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.95); z-index:10000; align-items:center; justify-content:center; padding:20px; }
+        .photo-fullscreen-modal.show { display: flex; }
+        .photo-fullscreen-modal img { max-width:95%; max-height:95vh; border-radius:8px; }
+        .photo-close-btn { position:absolute; top:20px; right:20px; background:rgba(255,68,68,0.2); color:white; border:2px solid #ff4444; width:44px; height:44px; border-radius:50%; cursor:pointer; font-size:18px; }
+
+        /* 💰 MARK PAID MODAL */
+        .mark-paid-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; }
+        .mark-paid-modal.show { display: flex; }
+        .mark-paid-content {
+            background: #16213e;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 12px;
+            padding: 24px;
+        }
 
         @media (max-width: 768px) {
             .hamburger-btn { display: block; }
@@ -914,22 +496,26 @@
             .reports-content { margin-left: 0; padding: 16px; }
             .rpt-summary-cards { grid-template-columns: repeat(2, 1fr); }
             .rpt-filters { flex-direction: column; align-items: stretch; }
-            .issue-tabs { flex-direction: column; }
+            .scr-tabs, .pending-subtabs { flex-direction: column; }
+            .scr-tab, .pending-subtab { width: 100%; min-width: 0; }
+            .approval-actions { flex-direction: column; }
+            .approval-items-table { font-size: 11px; }
+            .crc-stats { grid-template-columns: 1fr 1fr; }
+            .pbill-header {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .pbill-info-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="reports-topbar">
     <div class="reports-topbar-left">
         <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
-        <div class="reports-topbar-title">
-            📊 Reports Database
-            <span>| Management View</span>
-        </div>
+        <div class="reports-topbar-title">📊 Reports Database <span>| Management View</span></div>
     </div>
-
     <div class="reports-topbar-right">
         <div class="rpt-db-switcher">
             <button class="rpt-db-switcher-btn" id="rptSwitcherBtn">📂 Switch Database ▼</button>
@@ -947,62 +533,87 @@
 
     <!-- SIDEBAR -->
     <div class="reports-sidebar" id="reportsSidebar">
-        <div class="sidebar-hdr">
-            <p>📊 Report Sections</p>
-        </div>
+        <div class="sidebar-hdr"><p>📊 Report Sections</p></div>
         <div class="sidebar-nav">
 
-            <div class="sb-item active" id="menu-dayend" onclick="showSection('dayend')">
+            <div class="sb-item active" id="menu-pendingapprovals" onclick="showSection('pendingapprovals')">
+                <span class="sb-icon">⏳</span>
+                <span class="sb-label">Pending Approvals</span>
+                <span class="sb-pending-badge" id="sidebarPendingCount" style="display:none;">0</span>
+            </div>
+
+            <div class="sb-divider"></div>
+            <div class="sb-group-label">📋 GENERAL</div>
+
+            <div class="sb-item" id="menu-dayend" onclick="showSection('dayend')">
                 <span class="sb-icon">📋</span>
                 <span class="sb-label">Day End Reports</span>
             </div>
-
             <div class="sb-item" id="menu-employees" onclick="showSection('employees')">
                 <span class="sb-icon">👥</span>
                 <span class="sb-label">Employee Reports</span>
             </div>
 
-            <!-- 🚨 STOCK ISSUES (NEW!) -->
-            <div class="sb-item" id="menu-stockissues" onclick="showSection('stockissues')">
-                <span class="sb-icon">🚨</span>
-                <span class="sb-label">Stock Issues</span>
+            <div class="sb-divider"></div>
+            <div class="sb-group-label">🍳 KITCHEN</div>
+
+            <div class="sb-item" id="menu-stockcountreport" onclick="showSection('stockcountreport')">
+                <span class="sb-icon">📊</span>
+                <span class="sb-label">Stock Count Report</span>
                 <span class="sb-count-badge" id="sidebarIssuesCount" style="display:none;">0</span>
+            </div>
+            <div class="sb-item" id="menu-staffmealsreport" onclick="showSection('staffmealsreport')">
+                <span class="sb-icon">🍽️</span>
+                <span class="sb-label">Staff Meals Report</span>
+            </div>
+            <div class="sb-item" id="menu-wastagereport" onclick="showSection('wastagereport')">
+                <span class="sb-icon">🗑️</span>
+                <span class="sb-label">Wastage Report</span>
             </div>
 
             <div class="sb-divider"></div>
+            <div class="sb-group-label">🛒 PURCHASING</div>
+
+            <div class="sb-item" id="menu-purchaseReports" onclick="showSection('purchaseReports')">
+                <span class="sb-icon">📋</span>
+                <span class="sb-label">All Purchase Bills</span>
+            </div>
+            <div class="sb-item" id="menu-creditTracking" onclick="showSection('creditTracking')">
+                <span class="sb-icon">💳</span>
+                <span class="sb-label">Credit Tracking</span>
+                <span class="sb-credit-badge" id="sidebarCreditCount" style="display:none;">0</span>
+            </div>
+            <div class="sb-item" id="menu-supplierReports" onclick="showSection('supplierReports')">
+                <span class="sb-icon">🏪</span>
+                <span class="sb-label">Supplier Analysis</span>
+            </div>
+
+            <div class="sb-divider"></div>
+            <div class="sb-group-label">📈 FINANCIAL</div>
 
             <div class="sb-item" style="cursor:default; opacity:0.5;">
                 <span class="sb-icon">💰</span>
                 <span class="sb-label">Sales Reports</span>
                 <span class="sb-soon">Soon</span>
             </div>
-
             <div class="sb-item" style="cursor:default; opacity:0.5;">
                 <span class="sb-icon">📦</span>
                 <span class="sb-label">Inventory Reports</span>
                 <span class="sb-soon">Soon</span>
             </div>
-
-            <div class="sb-item" style="cursor:default; opacity:0.5;">
-                <span class="sb-icon">🍳</span>
-                <span class="sb-label">Kitchen Reports</span>
-                <span class="sb-soon">Soon</span>
-            </div>
-
-            <div class="sb-divider"></div>
-
             <div class="sb-item" style="cursor:default; opacity:0.5;">
                 <span class="sb-icon">📊</span>
                 <span class="sb-label">P/L Report</span>
                 <span class="sb-soon">Soon</span>
             </div>
 
+            <div class="sb-divider"></div>
+
             <div class="sb-item" style="cursor:default; opacity:0.5;">
                 <span class="sb-icon">📝</span>
                 <span class="sb-label">Audit Log</span>
                 <span class="sb-soon">Soon</span>
             </div>
-
         </div>
     </div>
 
@@ -1017,229 +628,325 @@
             <button onclick="window.location.href='access.html'" style="background:#f0a500; color:#1a1a2e; border:none; padding:10px 24px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:20px;">← Back</button>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- DAY END REPORTS SECTION                       -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div id="section-dayend" class="rpt-section">
+        <!-- ⏳ PENDING APPROVALS -->
+        <div id="section-pendingapprovals" class="rpt-section">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">⏳ Pending Approvals</div>
+                <div class="rpt-section-subtitle">All submissions waiting for manager approval</div>
+            </div>
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card orange"><div class="sc-icon">📊</div><div class="sc-value" id="scStockCountsPending">0</div><div class="sc-label">Stock Counts</div></div>
+                <div class="rpt-summary-card purchasing"><div class="sc-icon">🛒</div><div class="sc-value" id="scPurchasesPending">0</div><div class="sc-label">Purchase Bills</div></div>
+                <div class="rpt-summary-card red"><div class="sc-icon">⚠️</div><div class="sc-value" id="scPendingCritical">0</div><div class="sc-label">Critical Items</div></div>
+                <div class="rpt-summary-card yellow"><div class="sc-icon">💰</div><div class="sc-value" id="scPendingImpact">Rs. 0</div><div class="sc-label">Total Value</div></div>
+            </div>
+            <div class="pending-subtabs">
+                <button class="pending-subtab active" id="ptab-stock" onclick="showPendingTab('stock', this)">📊 Stock Counts <span class="tab-count" id="ptabStockCount">0</span></button>
+                <button class="pending-subtab purchasing-tab" id="ptab-purchase" onclick="showPendingTab('purchase', this)">🛒 Purchase Bills <span class="tab-count" id="ptabPurchaseCount">0</span></button>
+            </div>
+            <div id="pendingStockList" class="pending-content"><div class="rpt-loading">⏳ Loading...</div></div>
+            <div id="pendingPurchaseList" class="pending-content" style="display:none;"><div class="rpt-loading">⏳ Loading...</div></div>
+        </div>
+
+        <!-- 📋 DAY END REPORTS -->
+        <div id="section-dayend" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">📋 Day End Reports</div>
                 <div class="rpt-section-subtitle">All cashier day end reports</div>
             </div>
-
             <div class="rpt-summary-cards">
-                <div class="rpt-summary-card">
-                    <div class="sc-icon">📋</div>
-                    <div class="sc-value" id="scTotalReports">-</div>
-                    <div class="sc-label">Total Reports</div>
-                </div>
-                <div class="rpt-summary-card green">
-                    <div class="sc-icon">💰</div>
-                    <div class="sc-value" id="scTotalPOS">-</div>
-                    <div class="sc-label">Total POS Sales</div>
-                </div>
-                <div class="rpt-summary-card red">
-                    <div class="sc-icon">📤</div>
-                    <div class="sc-value" id="scTotalExpenses">-</div>
-                    <div class="sc-label">Total Expenses</div>
-                </div>
-                <div class="rpt-summary-card blue">
-                    <div class="sc-icon">🏦</div>
-                    <div class="sc-value" id="scTotalDeposits">-</div>
-                    <div class="sc-label">Total Deposits</div>
-                </div>
+                <div class="rpt-summary-card"><div class="sc-icon">📋</div><div class="sc-value" id="scTotalReports">-</div><div class="sc-label">Total Reports</div></div>
+                <div class="rpt-summary-card green"><div class="sc-icon">💰</div><div class="sc-value" id="scTotalPOS">-</div><div class="sc-label">Total POS Sales</div></div>
+                <div class="rpt-summary-card red"><div class="sc-icon">📤</div><div class="sc-value" id="scTotalExpenses">-</div><div class="sc-label">Total Expenses</div></div>
+                <div class="rpt-summary-card blue"><div class="sc-icon">🏦</div><div class="sc-value" id="scTotalDeposits">-</div><div class="sc-label">Total Deposits</div></div>
             </div>
-
             <div class="rpt-filters">
-                <div class="rpt-filter-group">
-                    <label>📅 From Date</label>
-                    <input type="date" id="filterFromDate">
-                </div>
-                <div class="rpt-filter-group">
-                    <label>📅 To Date</label>
-                    <input type="date" id="filterToDate">
-                </div>
-                <div class="rpt-filter-group">
-                    <label>👤 Cashier</label>
-                    <select id="filterCashier"><option value="">All</option></select>
-                </div>
-                <div class="rpt-filter-group">
-                    <label>🌅 Shift</label>
-                    <select id="filterShift">
-                        <option value="">All</option>
-                        <option value="Morning">Morning</option>
-                        <option value="Evening">Evening</option>
-                    </select>
-                </div>
+                <div class="rpt-filter-group"><label>📅 From Date</label><input type="date" id="filterFromDate"></div>
+                <div class="rpt-filter-group"><label>📅 To Date</label><input type="date" id="filterToDate"></div>
+                <div class="rpt-filter-group"><label>👤 Cashier</label><select id="filterCashier"><option value="">All</option></select></div>
+                <div class="rpt-filter-group"><label>🌅 Shift</label><select id="filterShift"><option value="">All</option><option value="Morning">Morning</option><option value="Evening">Evening</option></select></div>
                 <button class="rpt-filter-btn apply" onclick="applyFilters()">🔍 Apply</button>
                 <button class="rpt-filter-btn reset" onclick="resetFilters()">↺ Reset</button>
             </div>
-
             <div class="rpt-list-container">
-                <div class="rpt-list-header">
-                    <h3 style="font-size:15px; color:#e0e0e0;">📋 Reports</h3>
-                    <span class="rpt-count-badge" id="rptCountBadge">Loading...</span>
-                </div>
-                <div id="dayendReportsList">
-                    <div class="rpt-loading">⏳ Loading...</div>
-                </div>
+                <div class="rpt-list-header"><h3 style="font-size:15px; color:#e0e0e0;">📋 Reports</h3><span class="rpt-count-badge" id="rptCountBadge">Loading...</span></div>
+                <div id="dayendReportsList"><div class="rpt-loading">⏳ Loading...</div></div>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- EMPLOYEE REPORTS SECTION                      -->
-        <!-- ═══════════════════════════════════════════ -->
+        <!-- 👥 EMPLOYEE REPORTS -->
         <div id="section-employees" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">👥 Employee Reports</div>
-                <div class="rpt-section-subtitle">Employee summary & statistics</div>
+                <div class="rpt-section-subtitle">Employee summary</div>
             </div>
-
             <div class="emp-stats-grid">
-                <div class="emp-sc">
-                    <div class="es-num" id="esTotal">-</div>
-                    <div class="es-label">Total Employees</div>
-                </div>
-                <div class="emp-sc admin">
-                    <div class="es-num" id="esAdmin">-</div>
-                    <div class="es-label">Admin</div>
-                </div>
-                <div class="emp-sc manager">
-                    <div class="es-num" id="esManager">-</div>
-                    <div class="es-label">Manager</div>
-                </div>
-                <div class="emp-sc cashier">
-                    <div class="es-num" id="esCashier">-</div>
-                    <div class="es-label">Cashier</div>
-                </div>
-                <div class="emp-sc other">
-                    <div class="es-num" id="esOther">-</div>
-                    <div class="es-label">Other</div>
-                </div>
+                <div class="emp-sc"><div class="es-num" id="esTotal">-</div><div class="es-label">Total</div></div>
+                <div class="emp-sc admin"><div class="es-num" id="esAdmin">-</div><div class="es-label">Admin</div></div>
+                <div class="emp-sc manager"><div class="es-num" id="esManager">-</div><div class="es-label">Manager</div></div>
+                <div class="emp-sc cashier"><div class="es-num" id="esCashier">-</div><div class="es-label">Cashier</div></div>
+                <div class="emp-sc other"><div class="es-num" id="esOther">-</div><div class="es-label">Other</div></div>
             </div>
-
-            <div class="rpt-search-box">
-                <span class="rpt-search-icon">🔍</span>
-                <input type="text" id="empSearchInput" placeholder="Search..." oninput="filterEmpTable()">
-            </div>
-
+            <div class="rpt-search-box"><span class="rpt-search-icon">🔍</span><input type="text" id="empSearchInput" placeholder="Search..." oninput="filterEmpTable()"></div>
             <div class="emp-rpt-table">
                 <table>
-                    <thead><tr><th>#</th><th>Name</th><th>Nickname</th><th>Access</th><th>Databases</th></tr></thead>
+                    <thead><tr><th>#</th><th>Name</th><th>Nickname</th><th>Access</th><th>DBs</th></tr></thead>
                     <tbody id="empTableBody"><tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">⏳ Loading...</td></tr></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- 🚨 STOCK ISSUES SECTION (NEW!)               -->
-        <!-- ═══════════════════════════════════════════ -->
-        <div id="section-stockissues" class="rpt-section" style="display:none;">
+        <!-- 📊 STOCK COUNT REPORT -->
+        <div id="section-stockcountreport" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
-                <div class="rpt-section-title">🚨 Stock Issues</div>
-                <div class="rpt-section-subtitle">Stock shortages flagged from Staff Meals & Wastage - Manager review required</div>
+                <div class="rpt-section-title">📊 Stock Count Report</div>
+                <div class="rpt-section-subtitle">Approved / Suspicious / Rejected / Issues</div>
+            </div>
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card green"><div class="sc-icon">✅</div><div class="sc-value" id="scrApproved">0</div><div class="sc-label">Approved</div></div>
+                <div class="rpt-summary-card orange"><div class="sc-icon">⚠️</div><div class="sc-value" id="scrSuspicious">0</div><div class="sc-label">Suspicious</div></div>
+                <div class="rpt-summary-card red"><div class="sc-icon">❌</div><div class="sc-value" id="scrRejected">0</div><div class="sc-label">Rejected</div></div>
+                <div class="rpt-summary-card purple"><div class="sc-icon">🚨</div><div class="sc-value" id="scrIssues">0</div><div class="sc-label">Issues</div></div>
+                <div class="rpt-summary-card yellow"><div class="sc-icon">💸</div><div class="sc-value" id="scrTotalLoss">Rs. 0</div><div class="sc-label">Total Loss</div></div>
+            </div>
+            <div class="scr-tabs">
+                <button class="scr-tab approved-tab active" id="scrtab-approved" onclick="showSCRTab('approved', this)">✅ Approved <span class="tab-count" id="scrApprovedCount">0</span></button>
+                <button class="scr-tab suspicious-tab" id="scrtab-suspicious" onclick="showSCRTab('suspicious', this)">⚠️ Suspicious <span class="tab-count" id="scrSuspiciousCount">0</span></button>
+                <button class="scr-tab rejected-tab" id="scrtab-rejected" onclick="showSCRTab('rejected', this)">❌ Rejected <span class="tab-count" id="scrRejectedCount">0</span></button>
+                <button class="scr-tab issues-tab" id="scrtab-issues" onclick="showSCRTab('issues', this)">🚨 Issues <span class="tab-count" id="scrIssuesCount">0</span></button>
+            </div>
+            <div class="rpt-filters">
+                <div class="rpt-filter-group"><label>📅 From</label><input type="date" id="scrFromDate" onchange="renderSCRContent()"></div>
+                <div class="rpt-filter-group"><label>📅 To</label><input type="date" id="scrToDate" onchange="renderSCRContent()"></div>
+                <button class="rpt-filter-btn reset" onclick="resetSCRFilters()">↺ Reset</button>
+            </div>
+            <div id="scrcontent-approved" class="scr-content"><div id="approvedCountsList"><div class="rpt-loading">⏳ Loading...</div></div></div>
+            <div id="scrcontent-suspicious" class="scr-content" style="display:none;"><div id="suspiciousCountsList"><div class="rpt-loading">⏳ Loading...</div></div></div>
+            <div id="scrcontent-rejected" class="scr-content" style="display:none;"><div id="rejectedCountsList"><div class="rpt-loading">⏳ Loading...</div></div></div>
+            <div id="scrcontent-issues" class="scr-content" style="display:none;">
+                <div class="issue-status-tabs">
+                    <button class="issue-status-tab active" id="issueTab-pending" onclick="showIssueTab('pending', this)">🟡 Pending <span id="issuePendingCount">0</span></button>
+                    <button class="issue-status-tab" id="issueTab-noted" onclick="showIssueTab('noted', this)">📝 Noted <span id="issueNotedCount">0</span></button>
+                    <button class="issue-status-tab" id="issueTab-resolved" onclick="showIssueTab('resolved', this)">✅ Resolved <span id="issueResolvedCount">0</span></button>
+                </div>
+                <div id="issuesList"><div class="rpt-loading">⏳ Loading...</div></div>
+            </div>
+        </div>
+
+        <!-- 🍽️ STAFF MEALS REPORT -->
+        <div id="section-staffmealsreport" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">🍽️ Staff Meals Report</div>
+                <div class="rpt-section-subtitle">All staff meals</div>
+            </div>
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card"><div class="sc-icon">🍽️</div><div class="sc-value" id="smrTotal">0</div><div class="sc-label">Total Meals</div></div>
+                <div class="rpt-summary-card red"><div class="sc-icon">💰</div><div class="sc-value" id="smrTotalCost">Rs. 0</div><div class="sc-label">Total Cost</div></div>
+                <div class="rpt-summary-card blue"><div class="sc-icon">👥</div><div class="sc-value" id="smrAvgPerMeal">Rs. 0</div><div class="sc-label">Avg/Meal</div></div>
+                <div class="rpt-summary-card orange"><div class="sc-icon">⚠️</div><div class="sc-value" id="smrIssues">0</div><div class="sc-label">Issues</div></div>
+            </div>
+            <div class="rpt-filters">
+                <div class="rpt-filter-group"><label>📅 From</label><input type="date" id="smrFromDate" onchange="loadStaffMealsReport()"></div>
+                <div class="rpt-filter-group"><label>📅 To</label><input type="date" id="smrToDate" onchange="loadStaffMealsReport()"></div>
+                <button class="rpt-filter-btn reset" onclick="resetSmrFilters()">↺ Reset</button>
+            </div>
+            <div id="staffMealsReportList"><div class="rpt-loading">⏳ Loading...</div></div>
+        </div>
+
+        <!-- 🗑️ WASTAGE REPORT -->
+        <div id="section-wastagereport" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">🗑️ Wastage Report</div>
+                <div class="rpt-section-subtitle">All wastage records</div>
+            </div>
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card"><div class="sc-icon">🗑️</div><div class="sc-value" id="wrTotal">0</div><div class="sc-label">Total Records</div></div>
+                <div class="rpt-summary-card red"><div class="sc-icon">💸</div><div class="sc-value" id="wrTotalLoss">Rs. 0</div><div class="sc-label">Total Loss</div></div>
+                <div class="rpt-summary-card orange"><div class="sc-icon">📦</div><div class="sc-value" id="wrTopItem">-</div><div class="sc-label">Most Wasted</div></div>
+                <div class="rpt-summary-card purple"><div class="sc-icon">🏷️</div><div class="sc-value" id="wrTopReason">-</div><div class="sc-label">Top Reason</div></div>
+            </div>
+            <div class="rpt-filters">
+                <div class="rpt-filter-group"><label>📅 From</label><input type="date" id="wrFromDate" onchange="loadWastageReport()"></div>
+                <div class="rpt-filter-group"><label>📅 To</label><input type="date" id="wrToDate" onchange="loadWastageReport()"></div>
+                <div class="rpt-filter-group">
+                    <label>🏷️ Reason</label>
+                    <select id="wrReasonFilter" onchange="loadWastageReport()">
+                        <option value="">All</option>
+                        <option value="Expired">Expired</option>
+                        <option value="Damaged">Damaged</option>
+                        <option value="Spilled">Spilled</option>
+                        <option value="Burnt">Burnt</option>
+                        <option value="Theft">Theft</option>
+                        <option value="Quality">Quality</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button class="rpt-filter-btn reset" onclick="resetWrFilters()">↺ Reset</button>
+            </div>
+            <div id="wastageReportList"><div class="rpt-loading">⏳ Loading...</div></div>
+        </div>
+
+        <!-- 🛒 PURCHASE REPORTS (EXPANDABLE!) -->
+        <div id="section-purchaseReports" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">📋 All Purchase Bills</div>
+                <div class="rpt-section-subtitle">Click bill to view details</div>
+            </div>
+            <div class="rpt-summary-cards">
+                <div class="rpt-summary-card"><div class="sc-icon">📋</div><div class="sc-value" id="prTotal">0</div><div class="sc-label">Total Bills</div></div>
+                <div class="rpt-summary-card purchasing"><div class="sc-icon">💰</div><div class="sc-value" id="prTotalValue">Rs. 0</div><div class="sc-label">Total Value</div></div>
+                <div class="rpt-summary-card green"><div class="sc-icon">✅</div><div class="sc-value" id="prApproved">0</div><div class="sc-label">Approved</div></div>
+                <div class="rpt-summary-card red"><div class="sc-icon">❌</div><div class="sc-value" id="prRejected">0</div><div class="sc-label">Rejected</div></div>
+            </div>
+            <div class="rpt-filters">
+                <div class="rpt-filter-group"><label>📅 From</label><input type="date" id="prFromDate" onchange="loadPurchaseReports()"></div>
+                <div class="rpt-filter-group"><label>📅 To</label><input type="date" id="prToDate" onchange="loadPurchaseReports()"></div>
+                <div class="rpt-filter-group">
+                    <label>🏪 Supplier</label>
+                    <select id="prSupplierFilter" onchange="loadPurchaseReports()">
+                        <option value="">All Suppliers</option>
+                    </select>
+                </div>
+                <div class="rpt-filter-group">
+                    <label>💳 Payment</label>
+                    <select id="prPaymentFilter" onchange="loadPurchaseReports()">
+                        <option value="">All</option>
+                        <option value="cash">💵 Cash</option>
+                        <option value="credit">📋 Credit</option>
+                        <option value="bank">🏦 Bank</option>
+                    </select>
+                </div>
+                <button class="rpt-filter-btn reset" onclick="resetPrFilters()">↺ Reset</button>
+            </div>
+            <div id="purchaseReportsList"><div class="rpt-loading">⏳ Loading...</div></div>
+        </div>
+
+        <!-- 💳 CREDIT TRACKING (FULL BUILD!) -->
+        <div id="section-creditTracking" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">💳 Credit / Payment Tracking</div>
+                <div class="rpt-section-subtitle">Credit & Bank Transfer bills - Due date tracking</div>
             </div>
 
-            <!-- Summary Cards -->
             <div class="rpt-summary-cards">
                 <div class="rpt-summary-card red">
-                    <div class="sc-icon">🟡</div>
-                    <div class="sc-value" id="scPending">0</div>
-                    <div class="sc-label">Pending Review</div>
+                    <div class="sc-icon">🚨</div>
+                    <div class="sc-value" id="crOverdueCount">0</div>
+                    <div class="sc-label">Overdue</div>
+                </div>
+                <div class="rpt-summary-card orange">
+                    <div class="sc-icon">⏰</div>
+                    <div class="sc-value" id="crTodayCount">0</div>
+                    <div class="sc-label">Due Today</div>
                 </div>
                 <div class="rpt-summary-card blue">
-                    <div class="sc-icon">📝</div>
-                    <div class="sc-value" id="scNoted">0</div>
-                    <div class="sc-label">Noted</div>
+                    <div class="sc-icon">⏳</div>
+                    <div class="sc-value" id="crUpcomingCount">0</div>
+                    <div class="sc-label">Upcoming (7d)</div>
+                </div>
+                <div class="rpt-summary-card yellow">
+                    <div class="sc-icon">💰</div>
+                    <div class="sc-value" id="crTotalUnpaid">Rs. 0</div>
+                    <div class="sc-label">Total Unpaid</div>
                 </div>
                 <div class="rpt-summary-card green">
                     <div class="sc-icon">✅</div>
-                    <div class="sc-value" id="scResolved">0</div>
-                    <div class="sc-label">Resolved</div>
-                </div>
-                <div class="rpt-summary-card orange">
-                    <div class="sc-icon">⚡</div>
-                    <div class="sc-value" id="scCritical">0</div>
-                    <div class="sc-label">Critical Issues</div>
-                </div>
-                <div class="rpt-summary-card yellow">
-                    <div class="sc-icon">💸</div>
-                    <div class="sc-value" id="scTotalLoss">Rs. 0</div>
-                    <div class="sc-label">Total Cost Impact</div>
+                    <div class="sc-value" id="crPaidCount">0</div>
+                    <div class="sc-label">Paid</div>
                 </div>
             </div>
 
-            <!-- Status Tabs -->
-            <div class="issue-tabs">
-                <button class="issue-tab active" id="tab-pending" onclick="showIssueTab('pending', this)">
-                    🟡 Pending <span class="tab-count" id="pendingCount">0</span>
+            <div class="scr-tabs">
+                <button class="scr-tab rejected-tab active" id="crtab-overdue" onclick="showCRTab('overdue', this)">
+                    🚨 Overdue <span class="tab-count" id="crOverdueBadge">0</span>
                 </button>
-                <button class="issue-tab" id="tab-noted" onclick="showIssueTab('noted', this)">
-                    📝 Noted <span class="tab-count" id="notedCount">0</span>
+                <button class="scr-tab" id="crtab-today" onclick="showCRTab('today', this)" style="color:#f0a500;">
+                    ⏰ Due Today <span class="tab-count" id="crTodayBadge">0</span>
                 </button>
-                <button class="issue-tab" id="tab-resolved" onclick="showIssueTab('resolved', this)">
-                    ✅ Resolved <span class="tab-count" id="resolvedCount">0</span>
+                <button class="scr-tab" id="crtab-upcoming" onclick="showCRTab('upcoming', this)">
+                    ⏳ Upcoming <span class="tab-count" id="crUpcomingBadge">0</span>
+                </button>
+                <button class="scr-tab" id="crtab-all-unpaid" onclick="showCRTab('all-unpaid', this)">
+                    📋 All Unpaid <span class="tab-count" id="crAllUnpaidBadge">0</span>
+                </button>
+                <button class="scr-tab approved-tab" id="crtab-paid" onclick="showCRTab('paid', this)">
+                    ✅ Paid Bills <span class="tab-count" id="crPaidBadge">0</span>
                 </button>
             </div>
 
-            <!-- Filters -->
             <div class="rpt-filters">
                 <div class="rpt-filter-group">
-                    <label>📅 From</label>
-                    <input type="date" id="issueFromDate" onchange="filterIssues()">
-                </div>
-                <div class="rpt-filter-group">
-                    <label>📅 To</label>
-                    <input type="date" id="issueToDate" onchange="filterIssues()">
-                </div>
-                <div class="rpt-filter-group">
-                    <label>⚡ Severity</label>
-                    <select id="issueSeverity" onchange="filterIssues()">
-                        <option value="">All</option>
-                        <option value="minor">🟡 Minor</option>
-                        <option value="major">🟠 Major</option>
-                        <option value="critical">🔴 Critical</option>
+                    <label>🏪 Supplier</label>
+                    <select id="crSupplierFilter" onchange="renderCRTab()">
+                        <option value="">All Suppliers</option>
                     </select>
                 </div>
                 <div class="rpt-filter-group">
-                    <label>📂 Type</label>
-                    <select id="issueType" onchange="filterIssues()">
+                    <label>💳 Payment</label>
+                    <select id="crPaymentFilter" onchange="renderCRTab()">
                         <option value="">All</option>
-                        <option value="staffMeal">🍽️ Staff Meal</option>
-                        <option value="wastage">🗑️ Wastage</option>
+                        <option value="credit">📋 Credit</option>
+                        <option value="bank">🏦 Bank Transfer</option>
                     </select>
                 </div>
-                <button class="rpt-filter-btn reset" onclick="resetIssueFilters()">↺ Reset</button>
+                <button class="rpt-filter-btn reset" onclick="resetCRFilters()">↺ Reset</button>
             </div>
 
-            <!-- Issues List -->
-            <div id="issuesList">
-                <div class="rpt-loading">⏳ Loading issues...</div>
+            <div id="creditTrackingList"><div class="rpt-loading">⏳ Loading...</div></div>
+        </div>
+
+        <!-- 🏪 SUPPLIER ANALYSIS -->
+        <div id="section-supplierReports" class="rpt-section" style="display:none;">
+            <div class="rpt-section-header">
+                <div class="rpt-section-title">🏪 Supplier Analysis</div>
+                <div class="rpt-section-subtitle">Supplier wise purchase analysis</div>
+            </div>
+            <div class="rpt-coming-soon">
+                <div class="cs-icon">🏪</div>
+                <h3 style="color:#aaa;">Coming Soon!</h3>
+                <p style="color:#888;">Top suppliers, total spend, items frequency.</p>
             </div>
         </div>
 
-        <!-- Other coming soon sections -->
-        <div id="section-sales" class="rpt-section" style="display:none;">
-            <div class="rpt-coming-soon"><div class="cs-icon">💰</div><h3>Sales Reports</h3><p>Coming soon</p></div>
-        </div>
-        <div id="section-inventory" class="rpt-section" style="display:none;">
-            <div class="rpt-coming-soon"><div class="cs-icon">📦</div><h3>Inventory Reports</h3><p>Coming soon</p></div>
-        </div>
-        <div id="section-kitchen" class="rpt-section" style="display:none;">
-            <div class="rpt-coming-soon"><div class="cs-icon">🍳</div><h3>Kitchen Reports</h3><p>Coming soon</p></div>
-        </div>
-        <div id="section-pl" class="rpt-section" style="display:none;">
-            <div class="rpt-coming-soon"><div class="cs-icon">📊</div><h3>P/L Report</h3><p>Coming soon</p></div>
-        </div>
-        <div id="section-audit" class="rpt-section" style="display:none;">
-            <div class="rpt-coming-soon"><div class="cs-icon">📝</div><h3>Audit Log</h3><p>Coming soon</p></div>
-        </div>
+        <!-- COMING SOON -->
+        <div id="section-sales" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">💰</div><h3>Sales Reports</h3><p>Coming soon</p></div></div>
+        <div id="section-inventory" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">📦</div><h3>Inventory Reports</h3><p>Coming soon</p></div></div>
+        <div id="section-pl" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">📊</div><h3>P/L Report</h3><p>Coming soon</p></div></div>
+        <div id="section-audit" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">📝</div><h3>Audit Log</h3><p>Coming soon</p></div></div>
 
     </div>
 </div>
 
+<!-- 📸 PHOTO FULLSCREEN MODAL -->
+<div class="photo-fullscreen-modal" id="photoFullscreenModal">
+    <button class="photo-close-btn" onclick="closePhotoFullscreen()">✖</button>
+    <img id="fullscreenImg" src="">
+</div>
+
+<!-- 💰 MARK PAID MODAL -->
+<div class="mark-paid-modal" id="markPaidModal">
+    <div class="mark-paid-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(76,175,80,0.2);">
+            <h2 style="color:#4CAF50; font-size:18px;">💰 Mark as Paid</h2>
+            <button onclick="closeMarkPaidModal()" style="background:none; border:none; color:#888; font-size:24px; cursor:pointer;">✖</button>
+        </div>
+        <div id="markPaidBody"></div>
+        <div style="margin-top:14px;">
+            <label style="font-size:11px; color:#888; text-transform:uppercase;">📅 Payment Date</label>
+            <input type="date" id="paidDateInput" style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:10px; border-radius:8px; margin-top:6px;">
+        </div>
+        <div style="margin-top:14px;">
+            <label style="font-size:11px; color:#888; text-transform:uppercase;">📝 Payment Notes (Optional)</label>
+            <textarea id="paidNotesInput" rows="2" placeholder="e.g., Paid in cash / Bank transfer ref #..." style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:10px; border-radius:8px; margin-top:6px; box-sizing:border-box;"></textarea>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:18px;">
+            <button onclick="closeMarkPaidModal()" style="background:rgba(255,255,255,0.08); color:#aaa; border:1px solid rgba(255,255,255,0.1); padding:10px 20px; border-radius:8px; cursor:pointer; font-size:13px;">❌ Cancel</button>
+            <button onclick="confirmMarkPaid()" style="background:#4CAF50; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:700;">✅ Mark Paid</button>
+        </div>
+    </div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
@@ -1257,6 +964,7 @@
         { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
         { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
         { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
+        { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
         { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
     ];
 
@@ -1264,14 +972,23 @@
     let allDayEndReports = [];
     let allEmployees = [];
     let allStockIssues = [];
+    let allStockCounts = [];
+    let allStaffMeals = [];
+    let allWastage = [];
+    let allPurchases = [];
+    let allSuppliers = [];
     let filteredReports = [];
     let filteredIssues = [];
     let currentIssueStatus = 'pending';
+    let currentSCRTab = 'approved';
+    let currentPendingTab = 'stock';
+    let currentCRTab = 'overdue';
+    let expandedBillId = null;
+    let markPaidBillId = '';
 
     async function initializeApp() {
         const stored = sessionStorage.getItem('loggedInUser');
         if (!stored) { window.location.href = 'login.html'; return; }
-
         currentUser = JSON.parse(stored);
 
         try {
@@ -1286,8 +1003,7 @@
             }
         } catch (e) { console.warn(e); }
 
-        const allowed = ['Admin', 'Manager'];
-        if (!allowed.includes(currentUser.access)) {
+        if (!['Admin', 'Manager'].includes(currentUser.access)) {
             document.getElementById('rptAccessDenied').style.display = 'flex';
             document.getElementById('reportsSidebar').style.display = 'none';
             document.querySelectorAll('.rpt-section').forEach(s => s.style.display = 'none');
@@ -1296,32 +1012,60 @@
 
         document.getElementById('rptUserName').textContent = currentUser.name || currentUser.nickname;
         document.getElementById('rptUserBadge').textContent = currentUser.access;
-
         const badgeColors = { 'Admin': '#ff4444', 'Manager': '#2196F3' };
         document.getElementById('rptUserBadge').style.background = badgeColors[currentUser.access] || '#f0a500';
 
         buildSwitcher();
+
         loadDayEndReports();
-        loadStockIssues(); // Load issues for sidebar count
+        loadStockIssues();
+        loadStockCounts();
+        loadStaffMealsData();
+        loadWastageData();
+        loadPurchasesData();
+        loadSuppliersData();
 
-        // 🔗 Check URL hash for direct navigation
-        if (window.location.hash === '#stockissues') {
-            showSection('stockissues');
-        }
+        const today = new Date().toISOString().split('T')[0];
+        const thirtyAgo = new Date();
+        thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+        const thirtyAgoStr = thirtyAgo.toISOString().split('T')[0];
+
+        ['smrFromDate', 'wrFromDate', 'scrFromDate', 'prFromDate'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = thirtyAgoStr;
+        });
+        ['smrToDate', 'wrToDate', 'scrToDate', 'prToDate'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = today;
+        });
+
+        if (window.location.hash === '#pendingapprovals') showSection('pendingapprovals');
+        else if (window.location.hash === '#stockissues' || window.location.hash === '#stockcountreport') showSection('stockcountreport');
+        else if (window.location.hash === '#credittracking') showSection('creditTracking');
+        else if (window.location.hash === '#purchasereports') showSection('purchaseReports');
     }
-
     initializeApp();
+
+    function fmt(amount) {
+        if (amount === undefined || amount === null) return 'Rs. 0';
+        return 'Rs. ' + Number(amount).toLocaleString('en-LK');
+    }
+    function fmtQty(num) { if (num === null || num === undefined || isNaN(num)) return 0; return Math.round(num * 1000) / 1000; }
+    function dispQty(num) { if (num === null || num === undefined || isNaN(num)) return '0'; return (Math.round(num * 1000) / 1000).toString(); }
+    function formatTimestamp(ts) {
+        if (!ts || !ts.toDate) return 'N/A';
+        const d = ts.toDate();
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
 
     function buildSwitcher() {
         const dropdown = document.getElementById('rptSwitcherDropdown');
         const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
         dropdown.innerHTML = '';
-
         const homeLink = document.createElement('a');
         homeLink.href = 'access.html';
         homeLink.innerHTML = '🏠 Access Home';
         dropdown.appendChild(homeLink);
-
         DATABASES.forEach(d => {
             if (d.adminManagerOnly && !isAdminOrMgr) return;
             const isAdmin = currentUser.access === 'Admin';
@@ -1334,50 +1078,39 @@
             if (d.url === 'reports.html') a.classList.add('current');
             dropdown.appendChild(a);
         });
-
         document.getElementById('rptSwitcherBtn').addEventListener('click', function(e) {
             e.stopPropagation();
             dropdown.classList.toggle('show');
         });
-        document.addEventListener('click', function() {
-            dropdown.classList.remove('show');
-        });
+        document.addEventListener('click', function() { dropdown.classList.remove('show'); });
     }
 
     function showSection(name) {
         document.querySelectorAll('.rpt-section').forEach(s => s.style.display = 'none');
         document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
-
         const section = document.getElementById('section-' + name);
         if (section) section.style.display = 'block';
-
         const menu = document.getElementById('menu-' + name);
         if (menu) menu.classList.add('active');
 
         if (name === 'employees' && allEmployees.length === 0) loadEmployeeReports();
-        if (name === 'stockissues') renderIssues();
+        if (name === 'pendingapprovals') { updatePendingStats(); renderPendingTab(); }
+        if (name === 'stockcountreport') { updateSCRSummary(); renderSCRContent(); }
+        if (name === 'staffmealsreport') loadStaffMealsReport();
+        if (name === 'wastagereport') loadWastageReport();
+        if (name === 'purchaseReports') loadPurchaseReports();
+        if (name === 'creditTracking') { updateCRStats(); renderCRTab(); }
 
         closeSidebarMobile();
     }
 
-    function toggleSidebar() {
-        document.getElementById('reportsSidebar').classList.toggle('open');
-    }
-
+    function toggleSidebar() { document.getElementById('reportsSidebar').classList.toggle('open'); }
     function closeSidebarMobile() {
-        if (window.innerWidth <= 768) {
-            document.getElementById('reportsSidebar').classList.remove('open');
-        }
+        if (window.innerWidth <= 768) document.getElementById('reportsSidebar').classList.remove('open');
     }
+    function logout() { sessionStorage.removeItem('loggedInUser'); window.location.href = 'login.html'; }
 
-    function logout() {
-        sessionStorage.removeItem('loggedInUser');
-        window.location.href = 'login.html';
-    }
-
-    // ═══════════════════════════════════════
-    // DAY END REPORTS
-    // ═══════════════════════════════════════
+    // DAY END
     async function loadDayEndReports() {
         try {
             const snap = await db.collection('dayEndReports').orderBy('date', 'desc').get();
@@ -1386,82 +1119,37 @@
             buildCashierDropdown();
             filteredReports = [...allDayEndReports];
             renderDayEndReports(filteredReports);
-            updateSummary(filteredReports);
+            updateDayEndSummary(filteredReports);
         } catch (e) {
             document.getElementById('dayendReportsList').innerHTML = `<div class="rpt-empty">⚠️ Error loading.</div>`;
         }
     }
-
     function buildCashierDropdown() {
         const select = document.getElementById('filterCashier');
         const names = [...new Set(allDayEndReports.map(r => r.cashierName).filter(Boolean))].sort();
         select.innerHTML = '<option value="">All</option>';
-        names.forEach(name => {
-            select.innerHTML += `<option value="${name}">${name}</option>`;
-        });
+        names.forEach(name => { select.innerHTML += `<option value="${name}">${name}</option>`; });
     }
-
-    function updateSummary(reports) {
+    function updateDayEndSummary(reports) {
         document.getElementById('scTotalReports').textContent = reports.length;
         document.getElementById('scTotalPOS').textContent = fmt(reports.reduce((s, r) => s + (r.posSale || 0), 0));
         document.getElementById('scTotalExpenses').textContent = fmt(reports.reduce((s, r) => s + (r.totalExpenses || 0), 0));
         document.getElementById('scTotalDeposits').textContent = fmt(reports.reduce((s, r) => s + (r.totalDeposits || 0), 0));
     }
-
     function renderDayEndReports(reports) {
         const container = document.getElementById('dayendReportsList');
         document.getElementById('rptCountBadge').textContent = `${reports.length} reports`;
-
-        if (reports.length === 0) {
-            container.innerHTML = `<div class="rpt-empty">📋 No reports found.</div>`;
-            return;
-        }
-
+        if (reports.length === 0) { container.innerHTML = `<div class="rpt-empty">📋 No reports.</div>`; return; }
         let html = '';
         reports.forEach(r => {
             const se = r.shortExcess || 0;
             let seClass = 'perfect', seLabel = '✅ Perfect';
             if (se > 0) { seClass = 'excess'; seLabel = `⬆️ +${fmt(se)}`; }
             else if (se < 0) { seClass = 'short'; seLabel = `⬇️ ${fmt(se)}`; }
-
-            html += `
-                <div class="rpt-item" id="rpt-${r.id}">
-                    <div class="rpt-item-header" onclick="toggleRpt('${r.id}')">
-                        <div class="rpt-date-badge">📅 ${r.date}</div>
-                        <div class="rpt-cashier-info">
-                            <div class="rci-name">👤 ${r.cashierName}</div>
-                            <div class="rci-shift">🌅 ${r.shiftType}</div>
-                        </div>
-                        <div class="rpt-amounts">
-                            <div class="ra-pos">${fmt(r.posSale)}</div>
-                            <div class="ra-label">POS Sales</div>
-                        </div>
-                        <div class="se-mini ${seClass}">${seLabel}</div>
-                        <div class="rpt-expand-icon">▼</div>
-                    </div>
-                    <div class="rpt-item-details">
-                        <div class="rpt-details-grid">
-                            <div class="rpt-detail-box">
-                                <h4>💵 Cash Flow</h4>
-                                <div class="rpt-d-row"><span class="dl">Starting</span><span class="dv">${fmt(r.startingCash)}</span></div>
-                                <div class="rpt-d-row"><span class="dl">POS</span><span class="dv green">${fmt(r.posSale)}</span></div>
-                                <div class="rpt-d-row"><span class="dl">Service</span><span class="dv green">${fmt(r.serviceCharge)}</span></div>
-                                <div class="rpt-d-row"><span class="dl">Day End</span><span class="dv orange">${fmt(r.dayEndCash)}</span></div>
-                            </div>
-                            <div class="rpt-detail-box">
-                                <h4>Summary</h4>
-                                <div class="rpt-d-row"><span class="dl">Expected</span><span class="dv">${fmt(r.expectedCash)}</span></div>
-                                <div class="rpt-d-row"><span class="dl">Actual</span><span class="dv">${fmt(r.dayEndCash)}</span></div>
-                                <div class="rpt-d-row"><span class="dl"><strong>Short/Excess</strong></span><span class="dv ${se === 0 ? 'green' : se > 0 ? 'orange' : 'red'}"><strong>${se >= 0 ? '+' : ''}${fmt(se)}</strong></span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            html += `<div class="rpt-item" id="rpt-${r.id}"><div class="rpt-item-header" onclick="toggleRpt('${r.id}')"><div class="rpt-date-badge">📅 ${r.date}</div><div class="rpt-cashier-info"><div class="rci-name">👤 ${r.cashierName}</div><div class="rci-shift">🌅 ${r.shiftType}</div></div><div class="rpt-amounts"><div class="ra-pos">${fmt(r.posSale)}</div><div class="ra-label">POS</div></div><div class="se-mini ${seClass}">${seLabel}</div><div class="rpt-expand-icon">▼</div></div><div class="rpt-item-details"><div class="rpt-details-grid"><div class="rpt-detail-box"><h4>💵 Cash Flow</h4><div class="rpt-d-row"><span class="dl">Starting</span><span class="dv">${fmt(r.startingCash)}</span></div><div class="rpt-d-row"><span class="dl">POS</span><span class="dv green">${fmt(r.posSale)}</span></div><div class="rpt-d-row"><span class="dl">Day End</span><span class="dv orange">${fmt(r.dayEndCash)}</span></div></div><div class="rpt-detail-box"><h4>📊 Summary</h4><div class="rpt-d-row"><span class="dl">Expected</span><span class="dv">${fmt(r.expectedCash)}</span></div><div class="rpt-d-row"><span class="dl"><strong>S/E</strong></span><span class="dv ${se === 0 ? 'green' : se > 0 ? 'orange' : 'red'}"><strong>${se >= 0 ? '+' : ''}${fmt(se)}</strong></span></div></div></div></div></div>`;
         });
         container.innerHTML = html;
     }
-
     function applyFilters() {
         const fromDate = document.getElementById('filterFromDate').value;
         const toDate = document.getElementById('filterToDate').value;
@@ -1475,26 +1163,19 @@
             return true;
         });
         renderDayEndReports(filteredReports);
-        updateSummary(filteredReports);
+        updateDayEndSummary(filteredReports);
     }
-
     function resetFilters() {
-        document.getElementById('filterFromDate').value = '';
-        document.getElementById('filterToDate').value = '';
+        ['filterFromDate','filterToDate'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('filterCashier').value = '';
         document.getElementById('filterShift').value = '';
         filteredReports = [...allDayEndReports];
         renderDayEndReports(filteredReports);
-        updateSummary(filteredReports);
+        updateDayEndSummary(filteredReports);
     }
+    function toggleRpt(id) { document.getElementById('rpt-' + id).classList.toggle('expanded'); }
 
-    function toggleRpt(id) {
-        document.getElementById('rpt-' + id).classList.toggle('expanded');
-    }
-
-    // ═══════════════════════════════════════
-    // EMPLOYEE REPORTS
-    // ═══════════════════════════════════════
+    // EMPLOYEE
     async function loadEmployeeReports() {
         try {
             const snap = await db.collection('employees').get();
@@ -1504,268 +1185,1100 @@
             renderEmpTable(allEmployees);
         } catch (e) { console.error(e); }
     }
-
     function renderEmpStats() {
         const total = allEmployees.length;
-        const admins = allEmployees.filter(e => e.access === 'Admin').length;
-        const managers = allEmployees.filter(e => e.access === 'Manager').length;
-        const cashiers = allEmployees.filter(e => e.access === 'Cashier').length;
-        const others = total - admins - managers - cashiers;
         document.getElementById('esTotal').textContent = total;
-        document.getElementById('esAdmin').textContent = admins;
-        document.getElementById('esManager').textContent = managers;
-        document.getElementById('esCashier').textContent = cashiers;
+        document.getElementById('esAdmin').textContent = allEmployees.filter(e => e.access === 'Admin').length;
+        document.getElementById('esManager').textContent = allEmployees.filter(e => e.access === 'Manager').length;
+        document.getElementById('esCashier').textContent = allEmployees.filter(e => e.access === 'Cashier').length;
+        const others = total - allEmployees.filter(e => ['Admin','Manager','Cashier'].includes(e.access)).length;
         document.getElementById('esOther').textContent = others > 0 ? others : 0;
     }
-
     function renderEmpTable(employees) {
         const tbody = document.getElementById('empTableBody');
-        if (employees.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">No employees.</td></tr>`;
-            return;
-        }
-        const colors = { 'Admin': '#ff4444', 'Manager': '#2196F3', 'Cashier': '#4CAF50', 'Purchasing Officer': '#FF9800', 'Head Chef': '#9C27B0', 'Call Operator': '#00BCD4', 'Waiter': '#607D8B' };
+        if (employees.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#888;">No employees.</td></tr>`; return; }
+        const colors = { 'Admin': '#ff4444', 'Manager': '#2196F3', 'Cashier': '#4CAF50' };
         tbody.innerHTML = '';
         employees.forEach((emp, i) => {
             const color = colors[emp.access] || '#607D8B';
             const dbCount = Object.keys(emp.permissions || {}).length;
-            tbody.innerHTML += `<tr><td>${i + 1}</td><td><strong>${emp.name}</strong></td><td>${emp.nickname}</td><td><span style="background:${color}22; color:${color}; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">${emp.access}</span></td><td>${dbCount} DBs</td></tr>`;
+            tbody.innerHTML += `<tr><td>${i+1}</td><td><strong>${emp.name}</strong></td><td>${emp.nickname}</td><td><span style="background:${color}22; color:${color}; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">${emp.access}</span></td><td>${dbCount} DBs</td></tr>`;
+        });
+    }
+    function filterEmpTable() {
+        const q = document.getElementById('empSearchInput').value.toLowerCase();
+        renderEmpTable(allEmployees.filter(e => (e.name||'').toLowerCase().includes(q) || (e.nickname||'').toLowerCase().includes(q)));
+    }
+
+    // STOCK COUNTS & PURCHASES
+    function loadStockCounts() {
+        db.collection('stockCounts').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+            allStockCounts = [];
+            snap.forEach(doc => allStockCounts.push({ id: doc.id, ...doc.data() }));
+            updateSidebarBadges();
+            updatePendingStats();
+            renderPendingTab();
+            updateSCRSummary();
+            renderSCRContent();
+        });
+    }
+    function loadPurchasesData() {
+        db.collection('purchases').orderBy('createdAt', 'desc').onSnapshot((snap) => {
+            allPurchases = [];
+            snap.forEach(doc => allPurchases.push({ id: doc.id, ...doc.data() }));
+            updateSidebarBadges();
+            updatePendingStats();
+            renderPendingTab();
+            updateCRStats();
+            if (document.getElementById('section-purchaseReports').style.display === 'block') loadPurchaseReports();
+            if (document.getElementById('section-creditTracking').style.display === 'block') renderCRTab();
+        });
+    }
+    function loadSuppliersData() {
+        db.collection('suppliers').orderBy('name').onSnapshot((snap) => {
+            allSuppliers = [];
+            snap.forEach(doc => allSuppliers.push({ id: doc.id, ...doc.data() }));
+            updateSupplierFilters();
+        });
+    }
+    function updateSupplierFilters() {
+        ['prSupplierFilter', 'crSupplierFilter'].forEach(id => {
+            const sel = document.getElementById(id);
+            if (!sel) return;
+            const current = sel.value;
+            sel.innerHTML = '<option value="">All Suppliers</option>';
+            allSuppliers.forEach(s => sel.innerHTML += `<option value="${s.id}">${s.name}</option>`);
+            sel.value = current;
         });
     }
 
-    function filterEmpTable() {
-        const q = document.getElementById('empSearchInput').value.toLowerCase();
-        renderEmpTable(allEmployees.filter(e => (e.name || '').toLowerCase().includes(q) || (e.nickname || '').toLowerCase().includes(q)));
+    function updateSidebarBadges() {
+        const stockPending = allStockCounts.filter(c => c.status === 'pending_approval').length;
+        const purchasePending = allPurchases.filter(p => p.status === 'pending_approval').length;
+        const totalPending = stockPending + purchasePending;
+        const badge = document.getElementById('sidebarPendingCount');
+        if (badge) { badge.textContent = totalPending; badge.style.display = totalPending > 0 ? 'inline-block' : 'none'; }
+
+        // Credit tracking sidebar badge
+        const today = new Date().toISOString().split('T')[0];
+        const overdueCount = allPurchases.filter(p => p.status === 'approved' && p.paymentStatus === 'unpaid' && p.dueDate && p.dueDate < today).length;
+        const creditBadge = document.getElementById('sidebarCreditCount');
+        if (creditBadge) {
+            creditBadge.textContent = overdueCount;
+            creditBadge.style.display = overdueCount > 0 ? 'inline-block' : 'none';
+        }
     }
 
-    // ═══════════════════════════════════════
-    // 🚨 STOCK ISSUES - LOAD + RENDER
-    // ═══════════════════════════════════════
+    function updatePendingStats() {
+        const stockPending = allStockCounts.filter(c => c.status === 'pending_approval');
+        const purchasePending = allPurchases.filter(p => p.status === 'pending_approval');
+        const totalCritical = stockPending.reduce((s, c) => s + (c.criticalIssues || 0), 0);
+        const totalValue = stockPending.reduce((s, c) => s + Math.abs(c.totalCostImpact || 0), 0)
+                         + purchasePending.reduce((s, p) => s + (p.billTotal || 0), 0);
+        const e1 = document.getElementById('scStockCountsPending');
+        const e2 = document.getElementById('scPurchasesPending');
+        const e3 = document.getElementById('scPendingCritical');
+        const e4 = document.getElementById('scPendingImpact');
+        if (e1) e1.textContent = stockPending.length;
+        if (e2) e2.textContent = purchasePending.length;
+        if (e3) e3.textContent = totalCritical;
+        if (e4) e4.textContent = 'Rs. ' + totalValue.toLocaleString('en-LK', { maximumFractionDigits: 0 });
+        const t1 = document.getElementById('ptabStockCount');
+        const t2 = document.getElementById('ptabPurchaseCount');
+        if (t1) t1.textContent = stockPending.length;
+        if (t2) t2.textContent = purchasePending.length;
+    }
+
+    function showPendingTab(name, btnEl) {
+        currentPendingTab = name;
+        document.querySelectorAll('.pending-content').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.pending-subtab').forEach(t => t.classList.remove('active'));
+        if (name === 'stock') {
+            document.getElementById('pendingStockList').style.display = 'block';
+            renderPendingStock();
+        } else {
+            document.getElementById('pendingPurchaseList').style.display = 'block';
+            renderPendingPurchase();
+        }
+        if (btnEl) btnEl.classList.add('active');
+    }
+    function renderPendingTab() {
+        if (currentPendingTab === 'stock') renderPendingStock();
+        else renderPendingPurchase();
+    }
+
+    function renderPendingStock() {
+        const container = document.getElementById('pendingStockList');
+        if (!container) return;
+        const pending = allStockCounts.filter(c => c.status === 'pending_approval');
+        if (pending.length === 0) { container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">✅</span>No pending stock counts!</div>`; return; }
+        let html = '';
+        pending.forEach(count => {
+            const impactSign = count.totalCostImpact >= 0 ? '+' : '';
+            const impactColor = count.totalCostImpact >= 0 ? '#4CAF50' : '#ff4444';
+            const countItems = count.items || [];
+            const diffItems = countItems.filter(i => i.status !== 'match');
+            const matchItems = countItems.filter(i => i.status === 'match');
+            const sortedItems = [...diffItems, ...matchItems];
+            let itemsHtml = '';
+            sortedItems.forEach(item => {
+                const diffSign = item.difference >= 0 ? '+' : '';
+                const diffColors = { match: '#4CAF50', surplus: '#2196F3', shortage: '#f0a500', critical: '#ff4444' };
+                const statusLabels = { match: '✓ Match', surplus: '⬆️ Surplus', shortage: '⬇️ Short', critical: '⚠️ Critical' };
+                itemsHtml += `<tr class="row-${item.status}"><td><strong>${item.itemName}</strong></td><td>${dispQty(item.systemStock)} ${item.unit}</td><td>${dispQty(item.physicalCount)} ${item.unit}</td><td style="color:${diffColors[item.status]}; font-weight:700;">${diffSign}${dispQty(item.difference)} ${item.unit}</td><td><span class="diff-badge ${item.status}">${statusLabels[item.status] || item.status}</span></td><td style="color:${(item.costImpact||0) >= 0 ? '#4CAF50' : '#ff4444'}; font-size:12px;">${(item.costImpact||0) >= 0 ? '+' : ''}Rs.${Math.abs(item.costImpact||0).toFixed(2)}</td></tr>`;
+            });
+            html += `<div class="approval-card"><div class="approval-card-header"><div class="approval-card-left"><span class="approval-date">📅 ${count.date}</span><span class="approval-submitted-by">👤 By: <strong>${count.performedByName}</strong></span></div><span class="status-badge pending_approval">⏳ Pending</span></div><div class="approval-stats-grid"><div class="approval-stat"><div class="as-value">${count.itemsCounted||0}</div><div class="as-label">📦 Counted</div></div><div class="approval-stat"><div class="as-value orange">${count.differencesFound||0}</div><div class="as-label">🔄 Diffs</div></div><div class="approval-stat"><div class="as-value red">${count.criticalIssues||0}</div><div class="as-label">⚠️ Critical</div></div><div class="approval-stat"><div class="as-value" style="color:${impactColor};">${impactSign}Rs.${Math.abs(count.totalCostImpact||0).toFixed(0)}</div><div class="as-label">💰 Impact</div></div></div><div style="overflow-x:auto; margin-bottom:16px;"><table class="approval-items-table"><thead><tr><th>Item</th><th>System</th><th>Physical</th><th>Difference</th><th>Status</th><th>Cost</th></tr></thead><tbody>${itemsHtml}</tbody></table></div><div class="approval-notes-box"><label>✅ Approval Notes (Optional)</label><textarea id="approvalNotes-${count.id}" placeholder="Notes..."></textarea></div><div class="reject-notes-box" id="suspiciousBox-${count.id}" style="background:rgba(255,152,0,0.05); border-color:rgba(255,152,0,0.3);"><label style="color:#FF9800;">⚠️ Suspicious Reason (Required)</label><textarea id="suspiciousReason-${count.id}" placeholder="Investigation reason..."></textarea></div><div class="reject-notes-box" id="rejectBox-${count.id}"><label>❌ Rejection Reason (Required)</label><textarea id="rejectReason-${count.id}" placeholder="Rejection reason..."></textarea></div><div class="approval-actions"><button class="btn-show-reject" onclick="toggleBox('rejectBox-${count.id}', 'confirmRejectBtn-${count.id}', 'suspiciousBox-${count.id}', 'confirmSuspiciousBtn-${count.id}')">❌ Reject</button><button id="confirmRejectBtn-${count.id}" style="display:none;" class="btn-reject-count" onclick="rejectStockCount('${count.id}')">❌ Confirm</button><button class="btn-suspicious-approve" onclick="toggleBox('suspiciousBox-${count.id}', 'confirmSuspiciousBtn-${count.id}', 'rejectBox-${count.id}', 'confirmRejectBtn-${count.id}')">⚠️ Suspicious</button><button id="confirmSuspiciousBtn-${count.id}" style="display:none;" class="btn-suspicious-approve" onclick="suspiciousApproveStockCount('${count.id}')">⚠️ Confirm</button><button class="btn-approve-count" onclick="approveStockCount('${count.id}')">✅ Approve</button></div></div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderPendingPurchase() {
+        const container = document.getElementById('pendingPurchaseList');
+        if (!container) return;
+        const pending = allPurchases.filter(p => p.status === 'pending_approval');
+        if (pending.length === 0) { container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">✅</span>No pending purchase bills!</div>`; return; }
+        const paymentIcons = { cash: '💵 Cash', credit: '📋 Credit', bank: '🏦 Bank' };
+        let html = '';
+        pending.forEach(p => {
+            let itemsHtml = '';
+            (p.items || []).forEach(item => {
+                const prevPrice = item.previousPrice || 0;
+                const newPrice = item.pricePerUnit || 0;
+                const priceDiff = newPrice - prevPrice;
+                let priceBadge = '';
+                if (prevPrice > 0) {
+                    if (priceDiff > 0) priceBadge = `<span class="price-change-badge up">▲ Rs.${priceDiff.toFixed(2)}</span>`;
+                    else if (priceDiff < 0) priceBadge = `<span class="price-change-badge down">▼ Rs.${Math.abs(priceDiff).toFixed(2)}</span>`;
+                    else priceBadge = `<span class="price-change-badge same">═ Same</span>`;
+                } else priceBadge = `<span class="price-change-badge same">NEW</span>`;
+                itemsHtml += `<tr><td><strong>${item.itemName}</strong></td><td>${dispQty(item.quantity)} ${item.unit}</td><td style="color:#FF9800;">Rs. ${newPrice.toFixed(2)}${priceBadge}</td><td>${prevPrice > 0 ? 'Rs. ' + prevPrice.toFixed(2) : '-'}</td><td style="color:#FF9800; font-weight:700;">Rs. ${(item.totalCost||0).toLocaleString('en-LK')}</td></tr>`;
+            });
+            let dueWarning = p.dueDate ? `<div style="padding:8px 12px; background:rgba(255,152,0,0.1); border:1px solid rgba(255,152,0,0.3); border-radius:6px; margin-top:10px; font-size:12px; color:#FF9800;">⏰ Payment Due: <strong>${p.dueDate}</strong></div>` : '';
+            let photoSection = p.billPhotoUrl ? `<div style="margin-top:12px; text-align:center;"><img src="${p.billPhotoUrl}" style="max-width:200px; max-height:200px; border-radius:8px; cursor:pointer; border:2px solid rgba(255,152,0,0.3);" onclick="openPhotoFullscreen('${p.billPhotoUrl}')"><div style="font-size:11px; color:#888; margin-top:4px;">📸 Click to view full size</div></div>` : '';
+
+            html += `<div class="approval-card purchasing">
+                <div class="approval-card-header">
+                    <div class="approval-card-left">
+                        <span class="approval-bill-num">📄 ${p.billNumber}</span>
+                        <span class="approval-date">📅 ${p.date}</span>
+                        <span class="approval-payment ${p.paymentMethod}">${paymentIcons[p.paymentMethod] || p.paymentMethod}</span>
+                    </div>
+                    <span class="status-badge pending_approval">⏳ Pending</span>
+                </div>
+                <div style="font-size:15px; color:#e0e0e0; font-weight:600; margin-bottom:6px;">🏪 ${p.supplierName}${p.supplierPhone ? ` <span style="color:#888; font-size:12px;">📞 ${p.supplierPhone}</span>` : ''}</div>
+                <div style="font-size:12px; color:#888; margin-bottom:10px;">👤 Submitted by: <strong>${p.performedByName}</strong></div>
+                <div class="approval-stats-grid">
+                    <div class="approval-stat"><div class="as-value purchasing">${p.itemsCount||0}</div><div class="as-label">📦 Items</div></div>
+                    <div class="approval-stat"><div class="as-value purchasing">Rs.${(p.billTotal||0).toLocaleString('en-LK')}</div><div class="as-label">💰 Bill Total</div></div>
+                </div>
+                <div style="overflow-x:auto; margin-bottom:14px;">
+                    <table class="approval-items-table">
+                        <thead><tr><th>Item</th><th>Qty</th><th>New Price/Unit</th><th>Previous Price</th><th>Total</th></tr></thead>
+                        <tbody>${itemsHtml}</tbody>
+                    </table>
+                </div>
+                ${dueWarning}
+                ${photoSection}
+                ${p.notes ? `<div style="margin-top:10px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:6px; font-size:12px; color:#aaa;">📝 ${p.notes}</div>` : ''}
+                <div class="approval-notes-box" style="margin-top:14px;"><label>✅ Approval Notes (Optional)</label><textarea id="purApprovalNotes-${p.id}" placeholder="Notes..."></textarea></div>
+                <div class="reject-notes-box" id="purRejectBox-${p.id}"><label>❌ Rejection Reason (Required)</label><textarea id="purRejectReason-${p.id}" placeholder="Rejection reason..."></textarea></div>
+                <div class="approval-actions">
+                    <button class="btn-show-reject" onclick="togglePurBox('${p.id}')">❌ Reject</button>
+                    <button id="purConfirmRejectBtn-${p.id}" style="display:none;" class="btn-reject-count" onclick="rejectPurchase('${p.id}')">❌ Confirm Reject</button>
+                    <button class="btn-approve-count" onclick="approvePurchase('${p.id}')">✅ Approve & Add Stock</button>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function togglePurBox(id) {
+        const box = document.getElementById('purRejectBox-' + id);
+        const btn = document.getElementById('purConfirmRejectBtn-' + id);
+        if (box.classList.contains('show')) { box.classList.remove('show'); btn.style.display = 'none'; }
+        else { box.classList.add('show'); btn.style.display = 'flex'; }
+    }
+
+    // APPROVE PURCHASE
+    async function approvePurchase(billId) {
+        const p = allPurchases.find(x => x.id === billId);
+        if (!p) return;
+        const notes = document.getElementById('purApprovalNotes-' + billId)?.value.trim() || 'Approved';
+        let confirmMsg = `✅ Approve purchase bill?\n\n🏪 ${p.supplierName}\n📄 Bill #: ${p.billNumber}\n📦 Items: ${p.itemsCount}\n💰 Total: Rs. ${(p.billTotal||0).toLocaleString('en-LK')}\n\n📋 Actions:\n✅ Inventory stock IN\n✅ Unit prices update\n✅ Stock movements log`;
+        if (!confirm(confirmMsg)) return;
+        try {
+            for (const item of (p.items || [])) {
+                const itemDoc = await db.collection('inventoryItems').doc(item.itemId).get();
+                if (!itemDoc.exists) continue;
+                const itemData = itemDoc.data();
+                const currentStock = fmtQty(itemData.currentStock || 0);
+                const newStock = fmtQty(currentStock + item.quantity);
+                await db.collection('inventoryItems').doc(item.itemId).update({
+                    currentStock: newStock,
+                    pricePerUnit: fmtQty(item.pricePerUnit),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser.nickname
+                });
+                await db.collection('stockMovements').add({
+                    itemId: item.itemId, itemName: item.itemName, type: 'IN',
+                    quantity: fmtQty(item.quantity),
+                    reason: `Purchase from ${p.supplierName} (Bill #${p.billNumber})`,
+                    previousStock: currentStock, newStock: newStock,
+                    previousPrice: fmtQty(item.previousPrice || 0),
+                    newPrice: fmtQty(item.pricePerUnit),
+                    date: p.date,
+                    handledBy: currentUser.nickname,
+                    handledByName: currentUser.name,
+                    purchaseId: billId, billNumber: p.billNumber,
+                    supplierName: p.supplierName,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+            if (p.supplierId) {
+                const supDoc = await db.collection('suppliers').doc(p.supplierId).get();
+                if (supDoc.exists) {
+                    const sup = supDoc.data();
+                    await db.collection('suppliers').doc(p.supplierId).update({
+                        totalPurchases: (sup.totalPurchases || 0) + 1,
+                        totalValue: (sup.totalValue || 0) + (p.billTotal || 0),
+                        lastPurchaseDate: p.date,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+            await db.collection('purchases').doc(billId).update({
+                status: 'approved', approvalNotes: notes,
+                approvedBy: currentUser.nickname,
+                approvedByName: currentUser.name,
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                stockUpdated: true
+            });
+            alert(`✅ Purchase Approved!\n\n📦 Inventory updated.\n💰 Prices refreshed.\n📊 Stock movements logged.`);
+        } catch (e) {
+            console.error('Approve purchase error:', e);
+            alert('❌ Error: ' + e.message);
+        }
+    }
+
+    async function rejectPurchase(billId) {
+        const reason = document.getElementById('purRejectReason-' + billId)?.value.trim();
+        if (!reason) { alert('⚠️ Rejection reason!'); return; }
+        if (!confirm('❌ Reject this purchase bill?')) return;
+        try {
+            await db.collection('purchases').doc(billId).update({
+                status: 'rejected', rejectedReason: reason,
+                approvedBy: currentUser.nickname,
+                approvedByName: currentUser.name,
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('❌ Rejected!');
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    // STOCK COUNT FUNCTIONS
+    function toggleBox(showBoxId, showBtnId, hideBoxId, hideBtnId) {
+        const showBox = document.getElementById(showBoxId);
+        const showBtn = document.getElementById(showBtnId);
+        const hideBox = document.getElementById(hideBoxId);
+        const hideBtn = document.getElementById(hideBtnId);
+        if (hideBox) hideBox.classList.remove('show');
+        if (hideBtn) hideBtn.style.display = 'none';
+        if (showBox.classList.contains('show')) { showBox.classList.remove('show'); showBtn.style.display = 'none'; }
+        else { showBox.classList.add('show'); showBtn.style.display = 'flex'; }
+    }
+
+    async function approveStockCount(countId) {
+        const count = allStockCounts.find(c => c.id === countId);
+        if (!count) return;
+        const notes = document.getElementById('approvalNotes-' + countId)?.value.trim() || 'Approved';
+        if (!confirm(`✅ Approve stock count?\n📦 ${count.itemsCounted} items inventory update.`)) return;
+        try {
+            for (const item of (count.items || [])) {
+                await db.collection('inventoryItems').doc(item.itemId).update({
+                    currentStock: fmtQty(item.physicalCount),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser.nickname
+                });
+                if (item.difference !== 0) {
+                    await db.collection('stockMovements').add({
+                        itemId: item.itemId, itemName: item.itemName,
+                        type: item.difference > 0 ? 'IN' : 'OUT',
+                        quantity: fmtQty(Math.abs(item.difference)),
+                        reason: `Stock Count Approved (${count.date})`,
+                        previousStock: fmtQty(item.systemStock),
+                        newStock: fmtQty(item.physicalCount),
+                        date: count.date,
+                        handledBy: currentUser.nickname,
+                        handledByName: currentUser.name,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+            await db.collection('stockCounts').doc(countId).update({
+                status: 'approved', approvalNotes: notes,
+                approvedBy: currentUser.nickname,
+                approvedByName: currentUser.name,
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('✅ Approved!');
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    async function suspiciousApproveStockCount(countId) {
+        const count = allStockCounts.find(c => c.id === countId);
+        if (!count) return;
+        const suspiciousReason = document.getElementById('suspiciousReason-' + countId)?.value.trim();
+        if (!suspiciousReason) { alert('⚠️ Suspicious reason!'); return; }
+        const notes = document.getElementById('approvalNotes-' + countId)?.value.trim() || '';
+        if (!confirm(`⚠️ Suspicious Approve?`)) return;
+        try {
+            for (const item of (count.items || [])) {
+                await db.collection('inventoryItems').doc(item.itemId).update({
+                    currentStock: fmtQty(item.physicalCount),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser.nickname
+                });
+                if (item.difference !== 0) {
+                    await db.collection('stockMovements').add({
+                        itemId: item.itemId, itemName: item.itemName,
+                        type: item.difference > 0 ? 'IN' : 'OUT',
+                        quantity: fmtQty(Math.abs(item.difference)),
+                        reason: `Stock Count Suspicious Approve`,
+                        previousStock: fmtQty(item.systemStock),
+                        newStock: fmtQty(item.physicalCount),
+                        date: count.date,
+                        handledBy: currentUser.nickname,
+                        handledByName: currentUser.name,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                if (item.status !== 'match' && item.difference !== 0) {
+                    await db.collection('stockIssues').add({
+                        type: 'stockCount', subType: 'suspicious',
+                        relatedDocId: countId, date: count.date,
+                        itemId: item.itemId, itemName: item.itemName,
+                        requested: fmtQty(item.systemStock),
+                        available: fmtQty(item.physicalCount),
+                        shortage: fmtQty(Math.abs(item.difference)),
+                        severity: item.status === 'critical' ? 'critical' : 'major',
+                        unit: item.unit,
+                        costLoss: fmtQty(Math.abs(item.costImpact || 0)),
+                        reason: `⚠️ Suspicious: ${suspiciousReason}`,
+                        reportedBy: currentUser.nickname,
+                        reportedByName: currentUser.name,
+                        status: 'pending',
+                        resolvedBy: null, resolvedAt: null,
+                        managerNotes: '', lossCategory: '',
+                        lossAmount: fmtQty(Math.abs(item.costImpact || 0)),
+                        plDeducted: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            }
+            await db.collection('stockCounts').doc(countId).update({
+                status: 'suspicious_approved',
+                approvalNotes: notes,
+                suspiciousReason: suspiciousReason,
+                approvedBy: currentUser.nickname,
+                approvedByName: currentUser.name,
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('⚠️ Suspicious Approved!');
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    async function rejectStockCount(countId) {
+        const reason = document.getElementById('rejectReason-' + countId)?.value.trim();
+        if (!reason) { alert('⚠️ Reason!'); return; }
+        if (!confirm('❌ Reject?')) return;
+        try {
+            await db.collection('stockCounts').doc(countId).update({
+                status: 'rejected', rejectedReason: reason,
+                approvedBy: currentUser.nickname,
+                approvedByName: currentUser.name,
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('❌ Rejected!');
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    // STOCK COUNT REPORT
+    function updateSCRSummary() {
+        const approved = allStockCounts.filter(c => c.status === 'approved').length;
+        const suspicious = allStockCounts.filter(c => c.status === 'suspicious_approved').length;
+        const rejected = allStockCounts.filter(c => c.status === 'rejected').length;
+        const issuesPending = allStockIssues.filter(i => i.status === 'pending').length;
+        const totalLoss = allStockIssues.reduce((s, i) => s + (i.costLoss || 0), 0);
+        const e1 = document.getElementById('scrApproved');
+        const e2 = document.getElementById('scrSuspicious');
+        const e3 = document.getElementById('scrRejected');
+        const e4 = document.getElementById('scrIssues');
+        const e5 = document.getElementById('scrTotalLoss');
+        if (e1) e1.textContent = approved;
+        if (e2) e2.textContent = suspicious;
+        if (e3) e3.textContent = rejected;
+        if (e4) e4.textContent = issuesPending;
+        if (e5) e5.textContent = 'Rs. ' + totalLoss.toLocaleString('en-LK', { maximumFractionDigits: 0 });
+        const c1 = document.getElementById('scrApprovedCount');
+        const c2 = document.getElementById('scrSuspiciousCount');
+        const c3 = document.getElementById('scrRejectedCount');
+        const c4 = document.getElementById('scrIssuesCount');
+        if (c1) c1.textContent = approved;
+        if (c2) c2.textContent = suspicious;
+        if (c3) c3.textContent = rejected;
+        if (c4) c4.textContent = issuesPending;
+    }
+    function showSCRTab(name, btnEl) {
+        currentSCRTab = name;
+        document.querySelectorAll('.scr-content').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.scr-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('scrcontent-' + name).style.display = 'block';
+        if (btnEl) btnEl.classList.add('active');
+        renderSCRContent();
+    }
+    function renderSCRContent() {
+        if (currentSCRTab === 'approved') renderApprovedCountsList();
+        if (currentSCRTab === 'suspicious') renderSuspiciousCountsList();
+        if (currentSCRTab === 'rejected') renderRejectedCountsList();
+        if (currentSCRTab === 'issues') renderIssues();
+    }
+    function getFilteredCounts(status) {
+        const from = document.getElementById('scrFromDate')?.value;
+        const to = document.getElementById('scrToDate')?.value;
+        return allStockCounts.filter(c => {
+            if (c.status !== status) return false;
+            if (from && c.date < from) return false;
+            if (to && c.date > to) return false;
+            return true;
+        });
+    }
+    function buildCountCard(count, statusClass, badgeText, messageType, messageContent) {
+        const sign = count.totalCostImpact >= 0 ? '+' : '';
+        const color = count.totalCostImpact >= 0 ? '#4CAF50' : '#ff4444';
+        return `<div class="count-result-card ${statusClass}"><div class="crc-header"><div class="crc-left"><span class="crc-date">📅 ${count.date}</span><span class="crc-status-badge ${statusClass}">${badgeText}</span></div><span style="font-size:11px; color:#888;">By: ${count.performedByName}</span></div><div class="crc-stats"><div class="crc-stat"><div class="crs-value">${count.itemsCounted||0}</div><div class="crs-label">Counted</div></div><div class="crc-stat"><div class="crs-value">${count.differencesFound||0}</div><div class="crs-label">Diffs</div></div><div class="crc-stat"><div class="crs-value" style="color:#ff4444;">${count.criticalIssues||0}</div><div class="crs-label">Critical</div></div><div class="crc-stat"><div class="crs-value" style="color:${color};">${sign}Rs.${Math.abs(count.totalCostImpact||0).toFixed(0)}</div><div class="crs-label">Impact</div></div></div><div class="crc-message ${messageType}">${messageContent}</div></div>`;
+    }
+    function renderApprovedCountsList() {
+        const list = document.getElementById('approvedCountsList');
+        if (!list) return;
+        const approved = getFilteredCounts('approved');
+        if (approved.length === 0) { list.innerHTML = `<div class="rpt-empty"><span class="empty-icon">📭</span>No approved counts.</div>`; return; }
+        let html = '';
+        approved.forEach(count => {
+            const msg = `<strong>✅ Approved by ${count.approvedByName || 'Manager'}</strong>${count.approvalNotes ? `📝 ${count.approvalNotes}` : ''}<br>📅 ${formatTimestamp(count.approvedAt)}`;
+            html += buildCountCard(count, 'approved', '✅ Approved', 'approve', msg);
+        });
+        list.innerHTML = html;
+    }
+    function renderSuspiciousCountsList() {
+        const list = document.getElementById('suspiciousCountsList');
+        if (!list) return;
+        const suspicious = getFilteredCounts('suspicious_approved');
+        if (suspicious.length === 0) { list.innerHTML = `<div class="rpt-empty"><span class="empty-icon">📭</span>No suspicious approvals.</div>`; return; }
+        let html = '';
+        suspicious.forEach(count => {
+            const msg = `<strong>⚠️ Suspicious by ${count.approvedByName}</strong>🚨 ${count.suspiciousReason || 'N/A'}`;
+            html += buildCountCard(count, 'suspicious_approved', '⚠️ Suspicious', 'suspicious', msg);
+        });
+        list.innerHTML = html;
+    }
+    function renderRejectedCountsList() {
+        const list = document.getElementById('rejectedCountsList');
+        if (!list) return;
+        const rejected = getFilteredCounts('rejected');
+        if (rejected.length === 0) { list.innerHTML = `<div class="rpt-empty"><span class="empty-icon">📭</span>No rejected counts.</div>`; return; }
+        let html = '';
+        rejected.forEach(count => {
+            const msg = `<strong>❌ Rejected by ${count.approvedByName}</strong>📝 ${count.rejectedReason || 'No reason'}`;
+            html += buildCountCard(count, 'rejected', '❌ Rejected', 'reject', msg);
+        });
+        list.innerHTML = html;
+    }
+    function resetSCRFilters() {
+        const today = new Date().toISOString().split('T')[0];
+        const thirtyAgo = new Date();
+        thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+        document.getElementById('scrFromDate').value = thirtyAgo.toISOString().split('T')[0];
+        document.getElementById('scrToDate').value = today;
+        renderSCRContent();
+    }
+
+    // STOCK ISSUES
     function loadStockIssues() {
         db.collection('stockIssues').orderBy('createdAt', 'desc').onSnapshot((snap) => {
             allStockIssues = [];
             snap.forEach(doc => allStockIssues.push({ id: doc.id, ...doc.data() }));
             updateIssueStats();
-            updateSidebarBadge();
-            renderIssues();
-        }, (err) => {
-            console.error('Issues error:', err);
+            updateSidebarIssueBadge();
+            updateSCRSummary();
+            if (currentSCRTab === 'issues') renderIssues();
         });
     }
-
     function updateIssueStats() {
         const pending = allStockIssues.filter(i => i.status === 'pending').length;
         const noted = allStockIssues.filter(i => i.status === 'noted').length;
         const resolved = allStockIssues.filter(i => i.status === 'resolved').length;
-        const critical = allStockIssues.filter(i => i.severity === 'critical' && i.status === 'pending').length;
-        const totalLoss = allStockIssues.reduce((s, i) => s + (i.costLoss || 0), 0);
-
-        document.getElementById('scPending').textContent = pending;
-        document.getElementById('scNoted').textContent = noted;
-        document.getElementById('scResolved').textContent = resolved;
-        document.getElementById('scCritical').textContent = critical;
-        document.getElementById('scTotalLoss').textContent = 'Rs. ' + totalLoss.toLocaleString('en-LK', {maximumFractionDigits: 0});
-
-        document.getElementById('pendingCount').textContent = pending;
-        document.getElementById('notedCount').textContent = noted;
-        document.getElementById('resolvedCount').textContent = resolved;
+        const e1 = document.getElementById('issuePendingCount');
+        const e2 = document.getElementById('issueNotedCount');
+        const e3 = document.getElementById('issueResolvedCount');
+        if (e1) e1.textContent = pending;
+        if (e2) e2.textContent = noted;
+        if (e3) e3.textContent = resolved;
     }
-
-    function updateSidebarBadge() {
+    function updateSidebarIssueBadge() {
         const pending = allStockIssues.filter(i => i.status === 'pending').length;
         const badge = document.getElementById('sidebarIssuesCount');
-        if (pending > 0) {
-            badge.textContent = pending;
-            badge.style.display = 'inline-block';
-        } else {
-            badge.style.display = 'none';
-        }
+        if (!badge) return;
+        badge.textContent = pending;
+        badge.style.display = pending > 0 ? 'inline-block' : 'none';
     }
-
     function showIssueTab(status, btn) {
         currentIssueStatus = status;
-        document.querySelectorAll('.issue-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.issue-status-tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
         renderIssues();
     }
-
-    function filterIssues() {
-        renderIssues();
-    }
-
-    function resetIssueFilters() {
-        document.getElementById('issueFromDate').value = '';
-        document.getElementById('issueToDate').value = '';
-        document.getElementById('issueSeverity').value = '';
-        document.getElementById('issueType').value = '';
-        renderIssues();
-    }
-
     function renderIssues() {
         const container = document.getElementById('issuesList');
-        const fromDate = document.getElementById('issueFromDate').value;
-        const toDate = document.getElementById('issueToDate').value;
-        const severity = document.getElementById('issueSeverity').value;
-        const type = document.getElementById('issueType').value;
-
-        filteredIssues = allStockIssues.filter(i => {
-            if (i.status !== currentIssueStatus) return false;
-            if (fromDate && i.date < fromDate) return false;
-            if (toDate && i.date > toDate) return false;
-            if (severity && i.severity !== severity) return false;
-            if (type && i.type !== type) return false;
-            return true;
-        });
-
+        if (!container) return;
+        filteredIssues = allStockIssues.filter(i => i.status === currentIssueStatus);
         if (filteredIssues.length === 0) {
-            const emoji = currentIssueStatus === 'pending' ? '✅' : currentIssueStatus === 'noted' ? '📝' : '🎉';
-            const msg = currentIssueStatus === 'pending' ? 'No pending issues! All clear.' : currentIssueStatus === 'noted' ? 'No noted issues.' : 'No resolved issues yet.';
+            const msgs = { pending: ['✅','No pending issues!'], noted: ['📝','No noted.'], resolved: ['🎉','No resolved.'] };
+            const [emoji, msg] = msgs[currentIssueStatus] || ['📭','No items.'];
             container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">${emoji}</span>${msg}</div>`;
             return;
         }
-
+        const lossOpts = `<option value="">-- Select --</option><option value="lost">📦 LOST</option><option value="damaged">💔 DAMAGED</option><option value="theft">🚨 THEFT</option><option value="wastage">🔥 WASTAGE</option><option value="given">📤 GIVEN</option><option value="unknown">❓ UNKNOWN</option>`;
         let html = '';
         filteredIssues.forEach(issue => {
-            const typeIcon = issue.type === 'staffMeal' ? '🍽️' : '🗑️';
-            const typeLabel = issue.type === 'staffMeal' ? 'Staff Meal' : 'Wastage';
-            const typeClass = issue.type === 'staffMeal' ? '' : 'wastage';
-
             let actions = '';
             if (issue.status === 'pending') {
-                actions = `
-                    <div class="manager-notes-section">
-                        <label>📝 Manager Notes (required for resolve)</label>
-                        <textarea id="notes-${issue.id}" placeholder="e.g., Investigated - hidden wastage found / Stock count error corrected / Employee notified..."></textarea>
-                    </div>
-                    <div class="issue-actions">
-                        <button class="issue-action-btn note" onclick="markIssue('${issue.id}', 'noted')">📝 Mark Noted</button>
-                        <button class="issue-action-btn resolve" onclick="markIssue('${issue.id}', 'resolved')">✅ Mark Resolved</button>
-                    </div>
-                `;
+                actions = `<div class="manager-notes-section" style="margin-top:12px;"><label>🏷️ Loss Category</label><select id="losscat-${issue.id}" style="margin-bottom:10px;">${lossOpts}</select><label>📝 Notes</label><textarea id="notes-${issue.id}" placeholder="Investigation notes..."></textarea></div><div class="issue-actions"><button class="issue-action-btn note" onclick="markIssue('${issue.id}', 'noted')">📝 Noted</button><button class="issue-action-btn resolve" onclick="resolveWithPL('${issue.id}')">✅ Resolve & P/L</button></div>`;
             } else if (issue.status === 'noted') {
-                actions = `
-                    <div class="resolved-notes">
-                        📝 <strong>Note:</strong> ${issue.managerNotes || 'No notes'}
-                        <div class="resolved-by">By: ${issue.resolvedByName || 'N/A'} | ${issue.resolvedAt ? formatTimestamp(issue.resolvedAt) : 'N/A'}</div>
-                    </div>
-                    <div class="issue-actions">
-                        <button class="issue-action-btn reopen" onclick="reopenIssue('${issue.id}')">🔄 Reopen</button>
-                        <button class="issue-action-btn resolve" onclick="markIssue('${issue.id}', 'resolved')">✅ Mark Resolved</button>
-                    </div>
-                `;
+                actions = `<div class="resolved-notes">📝 ${issue.managerNotes || 'No notes'}<div class="resolved-by">By: ${issue.resolvedByName} | ${formatTimestamp(issue.resolvedAt)}</div></div><div class="issue-actions"><button class="issue-action-btn reopen" onclick="reopenIssue('${issue.id}')">🔄 Reopen</button><button class="issue-action-btn resolve" onclick="resolveWithPL('${issue.id}')">✅ Resolve & P/L</button></div>`;
             } else {
-                actions = `
-                    <div class="resolved-notes">
-                        ✅ <strong>Resolution:</strong> ${issue.managerNotes || 'No notes provided'}
-                        <div class="resolved-by">Resolved by: ${issue.resolvedByName || 'N/A'} | ${issue.resolvedAt ? formatTimestamp(issue.resolvedAt) : 'N/A'}</div>
-                    </div>
-                    <div class="issue-actions">
-                        <button class="issue-action-btn reopen" onclick="reopenIssue('${issue.id}')">🔄 Reopen</button>
-                    </div>
-                `;
+                actions = `<div class="resolved-notes">✅ ${issue.managerNotes || 'No notes'}${issue.plDeducted ? `<br>📊 P/L: Rs. ${(issue.lossAmount||0).toFixed(2)}` : ''}<div class="resolved-by">By: ${issue.resolvedByName} | ${formatTimestamp(issue.resolvedAt)}</div></div><div class="issue-actions"><button class="issue-action-btn reopen" onclick="reopenIssue('${issue.id}')">🔄 Reopen</button></div>`;
             }
-
-            const cardClass = issue.status === 'resolved' ? 'resolved' : issue.status === 'noted' ? 'noted' : '';
-
-            html += `
-                <div class="issue-card ${cardClass}">
-                    <div class="issue-card-header">
-                        <div class="issue-card-left">
-                            <span class="issue-date">📅 ${issue.date}</span>
-                            <span class="severity-badge ${issue.severity}">${issue.severity}</span>
-                            <span class="type-badge ${typeClass}">${typeIcon} ${typeLabel}</span>
-                        </div>
-                        <span class="status-badge ${issue.status}">${issue.status}</span>
-                    </div>
-
-                    <div style="font-size:16px; font-weight:700; color:#e0e0e0; margin-bottom:8px;">
-                        📦 ${issue.itemName}
-                    </div>
-
-                    <div class="issue-details-grid">
-                        <div class="issue-detail">
-                            <div class="id-label">Requested</div>
-                            <div class="id-value orange">${issue.requested} ${issue.unit}</div>
-                        </div>
-                        <div class="issue-detail">
-                            <div class="id-label">Available</div>
-                            <div class="id-value">${issue.available} ${issue.unit}</div>
-                        </div>
-                        <div class="issue-detail">
-                            <div class="id-label">Shortage</div>
-                            <div class="id-value red">${issue.shortage} ${issue.unit}</div>
-                        </div>
-                        <div class="issue-detail">
-                            <div class="id-label">Cost Impact</div>
-                            <div class="id-value red">Rs. ${(issue.costLoss || 0).toFixed(2)}</div>
-                        </div>
-                    </div>
-
-                    <div class="issue-reason">
-                        <strong>Reason:</strong> ${issue.reason}
-                    </div>
-
-                    <div class="reported-by">
-                        👤 Reported by: <strong>${issue.reportedByName || issue.reportedBy}</strong> | 🕐 ${formatTimestamp(issue.createdAt)}
-                    </div>
-
-                    ${actions}
-                </div>
-            `;
+            html += `<div class="issue-card ${issue.status}"><div class="issue-card-header"><div class="issue-card-left"><span class="issue-date">📅 ${issue.date}</span><span class="severity-badge ${issue.severity}">${issue.severity}</span></div><span class="status-badge ${issue.status}">${issue.status}</span></div><div style="font-size:16px; font-weight:700; color:#e0e0e0; margin-bottom:8px;">📦 ${issue.itemName}</div><div class="issue-details-grid"><div class="issue-detail"><div class="id-label">System</div><div class="id-value orange">${issue.requested} ${issue.unit}</div></div><div class="issue-detail"><div class="id-label">Physical</div><div class="id-value">${issue.available} ${issue.unit}</div></div><div class="issue-detail"><div class="id-label">Diff</div><div class="id-value red">${issue.shortage} ${issue.unit}</div></div><div class="issue-detail"><div class="id-label">Cost</div><div class="id-value red">Rs. ${(issue.costLoss||0).toFixed(2)}</div></div></div><div class="issue-reason"><strong>Reason:</strong> ${issue.reason}</div>${actions}</div>`;
         });
-
         container.innerHTML = html;
     }
-
     async function markIssue(issueId, newStatus) {
         const notes = document.getElementById('notes-' + issueId)?.value.trim() || '';
-        
-        if (newStatus === 'resolved' && !notes) {
-            alert('⚠️ Resolve කරන්න notes add කරන්න!');
-            return;
-        }
-
+        const lossCategory = document.getElementById('losscat-' + issueId)?.value || '';
         try {
             await db.collection('stockIssues').doc(issueId).update({
-                status: newStatus,
-                managerNotes: notes,
+                status: newStatus, managerNotes: notes, lossCategory,
                 resolvedBy: currentUser.nickname,
                 resolvedByName: currentUser.name,
                 resolvedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert(`✅ Issue marked as ${newStatus}!`);
-        } catch (e) {
-            alert('❌ ' + e.message);
-        }
+            alert(`✅ ${newStatus}!`);
+        } catch (e) { alert('❌ ' + e.message); }
     }
-
-    async function reopenIssue(issueId) {
-        if (!confirm('🔄 Reopen this issue?')) return;
+    async function resolveWithPL(issueId) {
+        const issue = allStockIssues.find(i => i.id === issueId);
+        if (!issue) return;
+        const notes = document.getElementById('notes-' + issueId)?.value.trim() || issue.managerNotes || '';
+        const lossCategory = document.getElementById('losscat-' + issueId)?.value || issue.lossCategory || '';
+        if (!notes) { alert('⚠️ Notes!'); return; }
+        if (!lossCategory) { alert('⚠️ Category!'); return; }
+        const lossAmount = issue.costLoss || 0;
+        if (!confirm(`✅ Resolve?`)) return;
         try {
             await db.collection('stockIssues').doc(issueId).update({
-                status: 'pending',
-                managerNotes: '',
-                resolvedBy: null,
-                resolvedByName: null,
-                resolvedAt: null
+                status: 'resolved', managerNotes: notes, lossCategory, lossAmount,
+                plDeducted: true,
+                resolvedBy: currentUser.nickname,
+                resolvedByName: currentUser.name,
+                resolvedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert('✅ Issue reopened!');
-        } catch (e) {
-            alert('❌ ' + e.message);
+            await db.collection('plLossRecords').add({
+                issueId, date: issue.date,
+                itemId: issue.itemId, itemName: issue.itemName,
+                lossCategory, lossAmount, unit: issue.unit,
+                shortage: issue.shortage, department: issue.department || 'Kitchen',
+                notes, recordedBy: currentUser.nickname,
+                recordedByName: currentUser.name,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert(`✅ Resolved!`);
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+    async function reopenIssue(issueId) {
+        if (!confirm('🔄 Reopen?')) return;
+        try {
+            await db.collection('stockIssues').doc(issueId).update({
+                status: 'pending', managerNotes: '', lossCategory: '',
+                resolvedBy: null, resolvedByName: null, resolvedAt: null, plDeducted: false
+            });
+            alert('✅ Reopened!');
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    // STAFF MEALS
+    function loadStaffMealsData() {
+        db.collection('staffMeals').orderBy('date', 'desc').onSnapshot((snap) => {
+            allStaffMeals = [];
+            snap.forEach(doc => allStaffMeals.push({ id: doc.id, ...doc.data() }));
+        });
+    }
+    function loadStaffMealsReport() {
+        const from = document.getElementById('smrFromDate')?.value;
+        const to = document.getElementById('smrToDate')?.value;
+        const container = document.getElementById('staffMealsReportList');
+        let filtered = allStaffMeals;
+        if (from) filtered = filtered.filter(m => m.date >= from);
+        if (to) filtered = filtered.filter(m => m.date <= to);
+        const totalCost = filtered.reduce((s, m) => s + (m.totalCost || 0), 0);
+        const avgPerMeal = filtered.length ? totalCost / filtered.length : 0;
+        const issues = filtered.filter(m => m.hasStockIssue).length;
+        document.getElementById('smrTotal').textContent = filtered.length;
+        document.getElementById('smrTotalCost').textContent = fmt(totalCost);
+        document.getElementById('smrAvgPerMeal').textContent = fmt(avgPerMeal);
+        document.getElementById('smrIssues').textContent = issues;
+        if (filtered.length === 0) { container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">🍽️</span>No staff meals.</div>`; return; }
+        let html = `<table class="rpt-data-table"><thead><tr><th>📅 Date</th><th>👥 Staff</th><th>🍽️ Menu</th><th>💰 Total</th><th>👤 Per Staff</th></tr></thead><tbody>`;
+        filtered.forEach(m => {
+            const staffNames = (m.staffNames || []).join(', ');
+            const menuItems = (m.menuItems || []).map(mi => `${mi.recipeName} ×${mi.quantity}`).join(', ') || '-';
+            const perStaff = (m.totalCost || 0) / ((m.staffIds || []).length || 1);
+            html += `<tr><td><span class="rpt-date-badge">📅 ${m.date}</span></td><td>${staffNames || 'N/A'}</td><td style="font-size:12px; color:#aaa;">${menuItems}</td><td style="color:#ff4444; font-weight:700;">Rs. ${(m.totalCost||0).toFixed(2)}</td><td style="color:#f0a500;">Rs. ${perStaff.toFixed(2)}</td></tr>`;
+        });
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    }
+    function resetSmrFilters() {
+        const today = new Date().toISOString().split('T')[0];
+        const thirtyAgo = new Date();
+        thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+        document.getElementById('smrFromDate').value = thirtyAgo.toISOString().split('T')[0];
+        document.getElementById('smrToDate').value = today;
+        loadStaffMealsReport();
+    }
+
+    // WASTAGE
+    function loadWastageData() {
+        db.collection('wastage').orderBy('date', 'desc').onSnapshot((snap) => {
+            allWastage = [];
+            snap.forEach(doc => allWastage.push({ id: doc.id, ...doc.data() }));
+        });
+    }
+    function loadWastageReport() {
+        const from = document.getElementById('wrFromDate')?.value;
+        const to = document.getElementById('wrToDate')?.value;
+        const reasonFilter = document.getElementById('wrReasonFilter')?.value;
+        const container = document.getElementById('wastageReportList');
+        let filtered = allWastage;
+        if (from) filtered = filtered.filter(w => w.date >= from);
+        if (to) filtered = filtered.filter(w => w.date <= to);
+        if (reasonFilter) filtered = filtered.filter(w => w.reason === reasonFilter);
+        const totalLoss = filtered.reduce((s, w) => s + (w.costLoss || 0), 0);
+        const itemGroups = {};
+        filtered.forEach(w => { itemGroups[w.itemName] = (itemGroups[w.itemName] || 0) + (w.costLoss || 0); });
+        const topItem = Object.keys(itemGroups).sort((a, b) => itemGroups[b] - itemGroups[a])[0] || '-';
+        const reasonGroups = {};
+        filtered.forEach(w => { reasonGroups[w.reason] = (reasonGroups[w.reason] || 0) + 1; });
+        const topReason = Object.keys(reasonGroups).sort((a, b) => reasonGroups[b] - reasonGroups[a])[0] || '-';
+        document.getElementById('wrTotal').textContent = filtered.length;
+        document.getElementById('wrTotalLoss').textContent = fmt(totalLoss);
+        document.getElementById('wrTopItem').textContent = topItem;
+        document.getElementById('wrTopReason').textContent = topReason;
+        if (filtered.length === 0) { container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">🗑️</span>No wastage.</div>`; return; }
+        let html = `<table class="rpt-data-table"><thead><tr><th>📅 Date</th><th>📦 Item</th><th>📊 Qty</th><th>🏷️ Reason</th><th>💸 Loss</th></tr></thead><tbody>`;
+        filtered.forEach(w => {
+            html += `<tr><td><span class="rpt-date-badge">📅 ${w.date}</span></td><td><strong>${w.itemName}</strong></td><td>${w.quantity} ${w.unit}</td><td>${w.reason}</td><td style="color:#ff4444; font-weight:700;">Rs. ${(w.costLoss||0).toFixed(2)}</td></tr>`;
+        });
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    }
+    function resetWrFilters() {
+        const today = new Date().toISOString().split('T')[0];
+        const thirtyAgo = new Date();
+        thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+        document.getElementById('wrFromDate').value = thirtyAgo.toISOString().split('T')[0];
+        document.getElementById('wrToDate').value = today;
+        document.getElementById('wrReasonFilter').value = '';
+        loadWastageReport();
+    }
+
+    // ═══════════════════════════════════════
+    // 🔥 PURCHASE REPORTS - EXPANDABLE!
+    // ═══════════════════════════════════════
+    function loadPurchaseReports() {
+        const from = document.getElementById('prFromDate')?.value;
+        const to = document.getElementById('prToDate')?.value;
+        const supplier = document.getElementById('prSupplierFilter')?.value;
+        const payment = document.getElementById('prPaymentFilter')?.value;
+        const container = document.getElementById('purchaseReportsList');
+
+        let filtered = allPurchases.filter(p => p.status === 'approved' || p.status === 'rejected');
+        if (from) filtered = filtered.filter(p => p.date >= from);
+        if (to) filtered = filtered.filter(p => p.date <= to);
+        if (supplier) filtered = filtered.filter(p => p.supplierId === supplier);
+        if (payment) filtered = filtered.filter(p => p.paymentMethod === payment);
+
+        const approvedFiltered = filtered.filter(p => p.status === 'approved');
+        const totalValue = approvedFiltered.reduce((s, p) => s + (p.billTotal || 0), 0);
+
+        document.getElementById('prTotal').textContent = filtered.length;
+        document.getElementById('prTotalValue').textContent = 'Rs. ' + totalValue.toLocaleString('en-LK', { maximumFractionDigits: 0 });
+        document.getElementById('prApproved').textContent = approvedFiltered.length;
+        document.getElementById('prRejected').textContent = filtered.filter(p => p.status === 'rejected').length;
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="rpt-empty"><span class="empty-icon">📋</span>No bills found.</div>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(p => {
+            html += buildExpandableBillCard(p, 'report');
+        });
+        container.innerHTML = html;
+    }
+
+    function resetPrFilters() {
+        const today = new Date().toISOString().split('T')[0];
+        const thirtyAgo = new Date();
+        thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+        document.getElementById('prFromDate').value = thirtyAgo.toISOString().split('T')[0];
+        document.getElementById('prToDate').value = today;
+        document.getElementById('prSupplierFilter').value = '';
+        document.getElementById('prPaymentFilter').value = '';
+        loadPurchaseReports();
+    }
+
+    // 🔥 EXPANDABLE BILL CARD BUILDER
+    function buildExpandableBillCard(p, cardType = 'report') {
+        const paymentIcons = { cash: '💵 Cash', credit: '📋 Credit', bank: '🏦 Bank' };
+        const today = new Date().toISOString().split('T')[0];
+        const isExpanded = expandedBillId === p.id ? 'expanded' : '';
+
+        // Status class for card
+        let statusClass = p.status;
+        if (cardType === 'credit') {
+            if (p.paymentStatus === 'paid') statusClass = 'paid';
+            else if (p.dueDate && p.dueDate < today) statusClass = 'overdue';
+            else if (p.dueDate === today) statusClass = 'today';
+            else statusClass = 'approved';
+        }
+
+        // Due label
+        let dueLabel = '', dueWarning = '';
+        if (p.dueDate && p.paymentStatus === 'unpaid' && p.status === 'approved') {
+            if (p.dueDate < today) {
+                const daysOverdue = Math.floor((new Date(today) - new Date(p.dueDate)) / (1000*60*60*24));
+                dueLabel = `🚨 OVERDUE by ${daysOverdue}d`;
+                dueWarning = `<div class="pbill-due-warning overdue">🚨 OVERDUE by ${daysOverdue} day${daysOverdue > 1 ? 's' : ''} - Due was ${p.dueDate}</div>`;
+            } else if (p.dueDate === today) {
+                dueLabel = '⏰ TODAY';
+                dueWarning = `<div class="pbill-due-warning today">⏰ DUE TODAY - ${p.dueDate}</div>`;
+            } else {
+                const daysLeft = Math.floor((new Date(p.dueDate) - new Date(today)) / (1000*60*60*24));
+                dueLabel = `⏳ ${daysLeft}d left`;
+                dueWarning = `<div class="pbill-due-warning upcoming">⏳ Due in ${daysLeft} day${daysLeft > 1 ? 's' : ''} - ${p.dueDate}</div>`;
+            }
+        }
+        if (p.paymentStatus === 'paid' && p.paidDate) {
+            dueWarning = `<div class="pbill-due-warning paid">✅ PAID on ${p.paidDate}${p.paidNotes ? `<br>📝 ${p.paidNotes}` : ''}</div>`;
+        }
+
+        // Items table
+        let itemsHtml = '';
+        (p.items || []).forEach(item => {
+            itemsHtml += `<tr><td><strong>${item.itemName}</strong></td><td>${dispQty(item.quantity)} ${item.unit}</td><td style="color:#FF9800;">Rs. ${(item.pricePerUnit||0).toFixed(2)}</td><td style="color:#FF9800; font-weight:700;">Rs. ${(item.totalCost||0).toLocaleString('en-LK')}</td></tr>`;
+        });
+        itemsHtml += `<tr class="grand-total"><td colspan="3" style="text-align:right;">GRAND TOTAL:</td><td>Rs. ${(p.billTotal||0).toLocaleString('en-LK')}</td></tr>`;
+
+        // Photo
+        let photoSection = '';
+        if (p.billPhotoUrl) {
+            photoSection = `<div class="pbill-photo"><img src="${p.billPhotoUrl}" onclick="openPhotoFullscreen('${p.billPhotoUrl}')"><div class="pp-label">📸 Click photo to view full size</div></div>`;
+        }
+
+        // Status badge
+        let statusBadge = '';
+        if (cardType === 'credit') {
+            if (p.paymentStatus === 'paid') statusBadge = '<span class="pbill-status approved">✅ PAID</span>';
+            else if (p.dueDate && p.dueDate < today) statusBadge = `<span class="pbill-status rejected">${dueLabel}</span>`;
+            else if (p.dueDate === today) statusBadge = `<span class="pbill-status" style="background:rgba(240,165,0,0.15); color:#f0a500;">${dueLabel}</span>`;
+            else statusBadge = `<span class="pbill-status" style="background:rgba(33,150,243,0.15); color:#2196F3;">${dueLabel}</span>`;
+        } else {
+            const statusLabels = { approved: '✅ Approved', rejected: '❌ Rejected', pending_approval: '⏳ Pending' };
+            statusBadge = `<span class="pbill-status ${p.status}">${statusLabels[p.status] || p.status}</span>`;
+        }
+
+        // Action buttons
+        let actions = '';
+        if (p.billPhotoUrl) actions += `<button class="pbill-btn photo" onclick="event.stopPropagation(); openPhotoFullscreen('${p.billPhotoUrl}')">📸 Full Photo</button>`;
+        if (cardType === 'credit') {
+            if (p.paymentStatus === 'unpaid') {
+                actions += `<button class="pbill-btn markpaid" onclick="event.stopPropagation(); openMarkPaidModal('${p.id}')">💰 Mark Paid</button>`;
+            } else {
+                actions += `<button class="pbill-btn markunpaid" onclick="event.stopPropagation(); markUnpaid('${p.id}')">🔄 Mark Unpaid</button>`;
+            }
+        }
+
+        // Rejection notes
+        let rejectionInfo = '';
+        if (p.status === 'rejected') {
+            rejectionInfo = `<div style="padding:10px 14px; background:rgba(255,68,68,0.08); border:1px solid rgba(255,68,68,0.3); border-radius:8px; margin-top:12px; font-size:13px; color:#ff4444;"><strong>❌ Rejection Reason:</strong> ${p.rejectedReason || 'No reason given'}</div>`;
+        }
+        if (p.status === 'approved' && p.approvalNotes) {
+            rejectionInfo = `<div style="padding:10px 14px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.3); border-radius:8px; margin-top:12px; font-size:13px; color:#4CAF50;"><strong>✅ Approval Notes:</strong> ${p.approvalNotes}</div>`;
+        }
+
+        return `<div class="pbill-card ${statusClass} ${isExpanded}" id="pbill-${p.id}">
+            <div class="pbill-header" onclick="toggleBillExpand('${p.id}')">
+                <span class="pbill-date">📅 ${p.date}</span>
+                <div>
+                    <div class="pbill-bill-num">📄 ${p.billNumber}</div>
+                    <div class="pbill-supplier">🏪 ${p.supplierName}</div>
+                </div>
+                <span class="pbill-payment ${p.paymentMethod}">${paymentIcons[p.paymentMethod] || p.paymentMethod}</span>
+                <span class="pbill-items">📦 ${p.itemsCount || 0}</span>
+                <span class="pbill-total">Rs. ${(p.billTotal||0).toLocaleString('en-LK')}</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    ${statusBadge}
+                    <span class="pbill-expand-icon">▼</span>
+                </div>
+            </div>
+
+            <div class="pbill-details">
+                <div class="pbill-info-grid">
+                    <div class="pbill-info-item">
+                        <div class="pi-label">🏪 Supplier</div>
+                        <div class="pi-value">${p.supplierName}</div>
+                    </div>
+                    <div class="pbill-info-item">
+                        <div class="pi-label">📞 Phone</div>
+                        <div class="pi-value">${p.supplierPhone || 'N/A'}</div>
+                    </div>
+                    <div class="pbill-info-item">
+                        <div class="pi-label">📄 Bill Number</div>
+                        <div class="pi-value orange">${p.billNumber}</div>
+                    </div>
+                    <div class="pbill-info-item">
+                        <div class="pi-label">💳 Payment Method</div>
+                        <div class="pi-value">${paymentIcons[p.paymentMethod] || p.paymentMethod}</div>
+                    </div>
+                    ${p.dueDate ? `<div class="pbill-info-item"><div class="pi-label">📅 Due Date</div><div class="pi-value orange">${p.dueDate}</div></div>` : ''}
+                    <div class="pbill-info-item">
+                        <div class="pi-label">📦 Total Items</div>
+                        <div class="pi-value">${p.itemsCount || 0}</div>
+                    </div>
+                    <div class="pbill-info-item">
+                        <div class="pi-label">💰 Bill Total</div>
+                        <div class="pi-value orange">Rs. ${(p.billTotal||0).toLocaleString('en-LK')}</div>
+                    </div>
+                    <div class="pbill-info-item">
+                        <div class="pi-label">📊 Stock Status</div>
+                        <div class="pi-value ${p.stockUpdated ? 'green' : 'red'}">${p.stockUpdated ? '✅ Updated' : '❌ Not Updated'}</div>
+                    </div>
+                </div>
+
+                ${dueWarning}
+
+                <h4 style="color:#FF9800; font-size:13px; margin-top:14px; margin-bottom:8px;">📦 Items:</h4>
+                <table class="pbill-items-table">
+                    <thead><tr><th>Item</th><th>Qty</th><th>Per Unit</th><th>Total</th></tr></thead>
+                    <tbody>${itemsHtml}</tbody>
+                </table>
+
+                ${photoSection}
+
+                ${p.notes ? `<div class="pbill-notes-box"><strong style="color:#FF9800;">📝 Notes:</strong> ${p.notes}</div>` : ''}
+
+                ${rejectionInfo}
+
+                <div class="pbill-meta-info">
+                    👤 <strong>Submitted by:</strong> ${p.performedByName} | 🕐 ${formatTimestamp(p.createdAt)}
+                    ${p.approvedAt ? `<br>${p.status === 'approved' ? '✅ Approved' : '❌ Rejected'} by: <strong>${p.approvedByName}</strong> | 🕐 ${formatTimestamp(p.approvedAt)}` : ''}
+                    ${p.paidAt ? `<br>💰 Marked Paid by: <strong>${p.paidByName}</strong> | 🕐 ${formatTimestamp(p.paidAt)}` : ''}
+                </div>
+
+                ${actions ? `<div class="pbill-actions">${actions}</div>` : ''}
+            </div>
+        </div>`;
+    }
+
+    function toggleBillExpand(billId) {
+        const card = document.getElementById('pbill-' + billId);
+        if (!card) return;
+        if (card.classList.contains('expanded')) {
+            card.classList.remove('expanded');
+            expandedBillId = null;
+        } else {
+            // Close all other expanded
+            document.querySelectorAll('.pbill-card.expanded').forEach(c => c.classList.remove('expanded'));
+            card.classList.add('expanded');
+            expandedBillId = billId;
         }
     }
 
-    function formatTimestamp(ts) {
-        if (!ts || !ts.toDate) return 'N/A';
-        const d = ts.toDate();
-        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    // ═══════════════════════════════════════
+    // 🔥 CREDIT TRACKING FULL BUILD
+    // ═══════════════════════════════════════
+    function getCROverdue() {
+        const today = new Date().toISOString().split('T')[0];
+        return allPurchases.filter(p => p.status === 'approved' && p.paymentStatus === 'unpaid' && p.dueDate && p.dueDate < today);
+    }
+    function getCRToday() {
+        const today = new Date().toISOString().split('T')[0];
+        return allPurchases.filter(p => p.status === 'approved' && p.paymentStatus === 'unpaid' && p.dueDate === today);
+    }
+    function getCRUpcoming() {
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        const sevenDays = new Date();
+        sevenDays.setDate(today.getDate() + 7);
+        const sevenStr = sevenDays.toISOString().split('T')[0];
+        return allPurchases.filter(p => p.status === 'approved' && p.paymentStatus === 'unpaid' && p.dueDate && p.dueDate > todayStr && p.dueDate <= sevenStr);
+    }
+    function getCRAllUnpaid() {
+        return allPurchases.filter(p => p.status === 'approved' && p.paymentStatus === 'unpaid');
+    }
+    function getCRPaid() {
+        return allPurchases.filter(p => p.status === 'approved' && p.paymentStatus === 'paid' && p.paymentMethod !== 'cash');
     }
 
-    function fmt(amount) {
-        if (amount === undefined || amount === null) return 'Rs. 0';
-        return 'Rs. ' + Number(amount).toLocaleString('en-LK');
+    function updateCRStats() {
+        const overdue = getCROverdue();
+        const today = getCRToday();
+        const upcoming = getCRUpcoming();
+        const allUnpaid = getCRAllUnpaid();
+        const paid = getCRPaid();
+        const totalUnpaid = allUnpaid.reduce((s, p) => s + (p.billTotal || 0), 0);
+
+        const e1 = document.getElementById('crOverdueCount');
+        const e2 = document.getElementById('crTodayCount');
+        const e3 = document.getElementById('crUpcomingCount');
+        const e4 = document.getElementById('crTotalUnpaid');
+        const e5 = document.getElementById('crPaidCount');
+        if (e1) e1.textContent = overdue.length;
+        if (e2) e2.textContent = today.length;
+        if (e3) e3.textContent = upcoming.length;
+        if (e4) e4.textContent = 'Rs. ' + totalUnpaid.toLocaleString('en-LK', { maximumFractionDigits: 0 });
+        if (e5) e5.textContent = paid.length;
+
+        const setBadge = (id, count) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = count;
+            el.style.display = count > 0 ? 'inline-block' : 'none';
+        };
+        setBadge('crOverdueBadge', overdue.length);
+        setBadge('crTodayBadge', today.length);
+        setBadge('crUpcomingBadge', upcoming.length);
+        setBadge('crAllUnpaidBadge', allUnpaid.length);
+        setBadge('crPaidBadge', paid.length);
     }
 
+    function showCRTab(name, btnEl) {
+        currentCRTab = name;
+        document.querySelectorAll('#section-creditTracking .scr-tab').forEach(t => t.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
+        renderCRTab();
+    }
+
+    function renderCRTab() {
+        const list = document.getElementById('creditTrackingList');
+        if (!list) return;
+        let bills = [], emptyMsg = '';
+        if (currentCRTab === 'overdue') { bills = getCROverdue(); emptyMsg = '🎉 No overdue payments!'; }
+        else if (currentCRTab === 'today') { bills = getCRToday(); emptyMsg = '✅ Nothing due today!'; }
+        else if (currentCRTab === 'upcoming') { bills = getCRUpcoming(); emptyMsg = '📭 No upcoming bills.'; }
+        else if (currentCRTab === 'all-unpaid') { bills = getCRAllUnpaid(); emptyMsg = '🎉 All paid!'; }
+        else if (currentCRTab === 'paid') { bills = getCRPaid(); emptyMsg = '📭 No paid bills.'; }
+
+        // Apply filters
+        const supplier = document.getElementById('crSupplierFilter')?.value;
+        const payment = document.getElementById('crPaymentFilter')?.value;
+        if (supplier) bills = bills.filter(p => p.supplierId === supplier);
+        if (payment) bills = bills.filter(p => p.paymentMethod === payment);
+
+        if (bills.length === 0) {
+            list.innerHTML = `<div style="text-align:center; padding:40px; color:#888;">${emptyMsg}</div>`;
+            return;
+        }
+        bills.sort((a, b) => (a.dueDate || '').localeCompare(b.dueDate || ''));
+
+        let html = '';
+        bills.forEach(p => {
+            html += buildExpandableBillCard(p, 'credit');
+        });
+        list.innerHTML = html;
+    }
+
+    function resetCRFilters() {
+        document.getElementById('crSupplierFilter').value = '';
+        document.getElementById('crPaymentFilter').value = '';
+        renderCRTab();
+    }
+
+    // 💰 MARK PAID
+    function openMarkPaidModal(billId) {
+        const p = allPurchases.find(x => x.id === billId);
+        if (!p) return;
+        markPaidBillId = billId;
+        document.getElementById('markPaidBody').innerHTML = `
+            <div style="background:#0f3460; padding:14px; border-radius:8px;">
+                <div style="font-size:14px; color:#FF9800; font-weight:700; margin-bottom:8px;">🏪 ${p.supplierName}</div>
+                <div style="font-size:13px; color:#aaa;">📄 ${p.billNumber}</div>
+                <div style="font-size:18px; color:#4CAF50; font-weight:700; margin-top:8px;">💰 Rs. ${(p.billTotal||0).toLocaleString('en-LK')}</div>
+            </div>
+        `;
+        document.getElementById('paidDateInput').value = new Date().toISOString().split('T')[0];
+        document.getElementById('paidNotesInput').value = '';
+        document.getElementById('markPaidModal').classList.add('show');
+    }
+
+    function closeMarkPaidModal() {
+        document.getElementById('markPaidModal').classList.remove('show');
+    }
+
+    async function confirmMarkPaid() {
+        const paidDate = document.getElementById('paidDateInput').value;
+        const paidNotes = document.getElementById('paidNotesInput').value.trim();
+        if (!paidDate) { alert('⚠️ Payment date!'); return; }
+        try {
+            await db.collection('purchases').doc(markPaidBillId).update({
+                paymentStatus: 'paid', paidDate, paidNotes,
+                paidBy: currentUser.nickname,
+                paidByName: currentUser.name,
+                paidAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('✅ Marked as Paid!');
+            closeMarkPaidModal();
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    async function markUnpaid(billId) {
+        if (!confirm('🔄 Mark as UNPAID?')) return;
+        try {
+            await db.collection('purchases').doc(billId).update({
+                paymentStatus: 'unpaid',
+                paidDate: null, paidNotes: '',
+                paidBy: null, paidByName: null, paidAt: null
+            });
+            alert('✅ Marked as Unpaid!');
+        } catch (e) { alert('❌ ' + e.message); }
+    }
+
+    // 📸 PHOTO FULLSCREEN
+    function openPhotoFullscreen(src) {
+        if (!src) return;
+        document.getElementById('fullscreenImg').src = src;
+        document.getElementById('photoFullscreenModal').classList.add('show');
+    }
+    function closePhotoFullscreen() {
+        document.getElementById('photoFullscreenModal').classList.remove('show');
+    }
+
+    window.onclick = function(event) {
+        if (event.target.id === 'photoFullscreenModal') closePhotoFullscreen();
+        if (event.target.id === 'markPaidModal') closeMarkPaidModal();
+    };
 </script>
 </body>
 </html>
