@@ -1,17 +1,12 @@
 // ═══════════════════════════════════════════════════════════
 // 💰 BUONO - DAY END REPORTS DATABASE
 // File: cashier-script.js
-// Version: 9.7 - Global Firebase Config!
+// Version: 10.1 - Architecture Migration!
+// ⭐ Uses global DATABASES from firebase-config.js
 // ═══════════════════════════════════════════════════════════
 
-const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
+// ❌ NO DATABASES array here! Uses global from firebase-config.js
+// ❌ NO firebaseConfig! Uses global db from firebase-config.js
 
 let currentUser = null;
 let myPerms = null;
@@ -20,7 +15,7 @@ let expenseRowCount = 1;
 let depositRowCount = 1;
 
 async function initializeApp() {
-    // ✅ Global getCurrentUser() use කරනවා
+    // ✅ Global checkAuth() use කරනවා
     const userData = getCurrentUser();
     if (!userData) { window.location.href = "login.html"; return; }
 
@@ -58,18 +53,22 @@ async function initializeApp() {
     document.getElementById('cashierNameCard').textContent = userData.name;
     document.getElementById('reportCashier').value = userData.name;
 
-    buildDatabaseSwitcher();
+    buildDBSwitcherDropdown();
     setupUI();
     loadReportCount();
 }
 
 initializeApp();
 
-function buildDatabaseSwitcher() {
+// ⭐ NEW: Uses global DATABASES array!
+function buildDBSwitcherDropdown() {
     const list = document.getElementById('dbDropdownList');
+    if (!list) return;
+    
     const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
     let html = '';
 
+    // ✅ Uses GLOBAL DATABASES from firebase-config.js
     DATABASES.forEach(database => {
         if (database.adminManagerOnly && !isAdminOrMgr) return;
 
@@ -93,10 +92,12 @@ function buildDatabaseSwitcher() {
     list.innerHTML = html;
 
     const switcher = document.getElementById('dbSwitcher');
-    switcher.addEventListener('click', function(e) {
-        e.stopPropagation();
-        document.getElementById('dbDropdown').classList.toggle('show');
-    });
+    if (switcher) {
+        switcher.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('dbDropdown').classList.toggle('show');
+        });
+    }
 
     document.addEventListener('click', function(e) {
         const dropdown = document.getElementById('dbDropdown');
