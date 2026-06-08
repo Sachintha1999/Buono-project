@@ -7,19 +7,10 @@
 // 📦 Available globals: db, getCurrentUser(), logout(), formatDate()
 // ═══════════════════════════════════════════════════════════
 
-
 // ═══════════════════════════════════════════
-// 📂 DATABASES LIST (For Switcher) - 7 DBs!
+// 📂 DATABASES - Global from firebase-config.js!
 // ═══════════════════════════════════════════
-const DATABASES = [
-    { id: 'employeeDB',     name: 'Employee Database',  icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports',    icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB',    name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB',      name: 'Kitchen Database',   icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB',   name: 'Purchasing Database',icon: '🛒', url: 'purchasing.html' },
-    { id: 'callCenterDB',   name: 'Call Center',        icon: '📞', url: 'callcenter.html' },
-    { id: 'reportsDB',      name: 'Reports Database',   icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
+// No local array - uses global DATABASES
 
 
 // ═══════════════════════════════════════════
