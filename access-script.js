@@ -1,9 +1,10 @@
 // ============================================
 // 🏠 ACCESS PAGE - SCRIPT
 // File: access-script.js
-// 
+//
 // 🔥 Firebase: Loaded from firebase-config.js
-// 📦 Available globals: db, getCurrentUser(), logout()
+// 📦 Available globals: db, getCurrentUser(), logout(), DATABASES,
+//                       checkDBAccess(), getAccessibleDatabases()
 // ============================================
 
 let currentUser = null;
@@ -54,190 +55,52 @@ function setupUI() {
     };
 
     const badge = document.getElementById('userBadge');
-    badge.textContent = currentUser.access || 'User';
-    badge.style.background = badgeColors[currentUser.access] || '#607D8B';
+    if (badge) {
+        badge.textContent = currentUser.access || 'User';
+        badge.style.background = badgeColors[currentUser.access] || '#607D8B';
+    }
 
     const hour = new Date().getHours();
-    let greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
-    document.getElementById('welcomeGreeting').textContent =
-        `${greeting}, ${currentUser.name || currentUser.nickname}! 👋`;
+    const greeting = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
 
-    document.getElementById('statUser').textContent = currentUser.name || currentUser.nickname;
-    document.getElementById('statAccess').textContent = currentUser.access || 'N/A';
+    const welcomeGreeting = document.getElementById('welcomeGreeting');
+    if (welcomeGreeting) {
+        welcomeGreeting.textContent = `${greeting}, ${currentUser.name || currentUser.nickname}! 👋`;
+    }
+
+    const statUser = document.getElementById('statUser');
+    if (statUser) {
+        statUser.textContent = currentUser.name || currentUser.nickname;
+    }
+
+    const statAccess = document.getElementById('statAccess');
+    if (statAccess) {
+        statAccess.textContent = currentUser.access || 'N/A';
+    }
 
     const now = new Date();
-    document.getElementById('statDate').textContent =
-        now.toLocaleDateString('en-LK', { year:'numeric', month:'short', day:'numeric' });
+    const statDate = document.getElementById('statDate');
+    if (statDate) {
+        statDate.textContent = now.toLocaleDateString('en-LK', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+    }
 }
 
 // ===================================
-// 🏗️ BUILD DATABASE CARDS
+// 🏗️ BUILD DATABASE CARDS (AUTO!)
 // ===================================
 function buildDatabaseCards() {
-    const permissions  = currentUser.permissions || {};
-    const access       = currentUser.access || '';
-    const isAdmin      = access === 'Admin';
-    const isAdminOrMgr = ['Admin', 'Manager'].includes(access);
-    const grid         = document.getElementById('dbCardsGrid');
-    grid.innerHTML     = '';
-    let cardCount      = 0;
+    const grid = document.getElementById('dbCardsGrid');
+    if (!grid) return;
 
-    // ── 1. EMPLOYEE DATABASE ──
-    const empPerm = permissions.employeeDB || {};
-    const empAccess = isAdmin || empPerm.add || empPerm.view || empPerm.selfView || empPerm.edit;
-    if (empAccess) {
-        const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : empPerm);
-        grid.innerHTML += `
-            <a class="db-card" href="index.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">👥</div>
-                    <span class="db-card-badge badge-entry">Data Entry</span>
-                </div>
-                <div class="db-card-title">Employee Database</div>
-                <div class="db-card-desc">Employee profiles, permissions සහ access management.</div>
-                <div class="perm-badges">${permBadges}</div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
+    const accessibleDatabases = getAccessibleDatabases(currentUser);
 
-    // ── 2. DAY END REPORT DATABASE ──
-    const dayPerm = permissions.dayEndReportDB || {};
-    const dayAccess = isAdmin || dayPerm.add || dayPerm.view || dayPerm.selfView;
-    if (dayAccess) {
-        const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : dayPerm);
-        grid.innerHTML += `
-            <a class="db-card" href="cashier.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">💰</div>
-                    <span class="db-card-badge badge-entry">Data Entry</span>
-                </div>
-                <div class="db-card-title">Day End Report Database</div>
-                <div class="db-card-desc">Daily cashier reports, cash flow සහ bank deposits.</div>
-                <div class="perm-badges">${permBadges}</div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
+    document.getElementById('statDBCount').textContent = accessibleDatabases.length;
 
-    // ── 3. INVENTORY DATABASE ──
-    const invPerm = permissions.inventoryDB || {};
-    const invAccess = isAdmin || invPerm.add || invPerm.view || invPerm.selfView || invPerm.edit;
-    if (invAccess) {
-        const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : invPerm);
-        grid.innerHTML += `
-            <a class="db-card" href="inventory.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">📦</div>
-                    <span class="db-card-badge badge-entry">Data Entry</span>
-                </div>
-                <div class="db-card-title">Inventory Database</div>
-                <div class="db-card-desc">Stock management, items, categories සහ low stock alerts.</div>
-                <div class="perm-badges">${permBadges}</div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
-
-    // ── 4. KITCHEN DATABASE ──
-    const kitPerm = permissions.kitchenDB || {};
-    const kitAccess = isAdmin || kitPerm.add || kitPerm.view || kitPerm.selfView || kitPerm.edit;
-    if (kitAccess) {
-        const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : kitPerm);
-        grid.innerHTML += `
-            <a class="db-card" href="kitchen.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">🍳</div>
-                    <span class="db-card-badge badge-kitchen">Kitchen</span>
-                </div>
-                <div class="db-card-title">Kitchen Database</div>
-                <div class="db-card-desc">Recipes, staff meals, wastage tracking සහ stock count.</div>
-                <div class="perm-badges">${permBadges}</div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
-
-    // ── 5. PURCHASING DATABASE ──
-    const purPerm = permissions.purchasingDB || {};
-    const purAccess = isAdmin || purPerm.add || purPerm.view || purPerm.selfView || purPerm.edit;
-    if (purAccess) {
-        const permBadges = buildPermBadges(isAdmin ? {add:true,view:true,selfView:true,edit:true,delete:true} : purPerm);
-        grid.innerHTML += `
-            <a class="db-card purchasing-card" href="purchasing.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">🛒</div>
-                    <span class="db-card-badge badge-purchasing">Purchasing</span>
-                </div>
-                <div class="db-card-title">Purchasing Database</div>
-                <div class="db-card-desc">Supplier bills, purchase orders, payment tracking සහ stock IN.</div>
-                <div class="perm-badges">${permBadges}</div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
-
-    // ── 6. CALL CENTER DATABASE ── ⭐ NEW!
-    const callPerm = permissions.callCenterDB || {};
-    const isCallOperator = access === 'Call Operator';
-    const callAccess = isAdmin || isAdminOrMgr || isCallOperator ||
-                       callPerm.add || callPerm.view || callPerm.edit;
-    if (callAccess) {
-        const permBadges = (isAdmin || isAdminOrMgr)
-            ? buildPermBadges({add:true, view:true, edit:true, delete:true})
-            : isCallOperator
-                ? `<span class="perm-badge perm-add">➕ Add</span>
-                   <span class="perm-badge perm-view">👁️ View</span>
-                   <span class="perm-badge perm-edit">✏️ Edit</span>`
-                : buildPermBadges(callPerm);
-
-        grid.innerHTML += `
-            <a class="db-card callcenter-card" href="callcenter.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">📞</div>
-                    <span class="db-card-badge badge-callcenter">Call Center</span>
-                </div>
-                <div class="db-card-title">Call Center</div>
-                <div class="db-card-desc">Academy lead management, call logs, follow-ups සහ enrollment tracking.</div>
-                <div class="perm-badges">${permBadges}</div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
-
-    // ── 7. REPORTS DATABASE (Admin/Manager only) ──
-    if (isAdminOrMgr) {
-        grid.innerHTML += `
-            <a class="db-card reports-card" href="reports.html">
-                <div class="db-card-header">
-                    <div class="db-card-icon">📊</div>
-                    <span class="db-card-badge badge-management">Management</span>
-                </div>
-                <div class="db-card-title">Reports Database</div>
-                <div class="db-card-desc">
-                    Business reports, analytics සහ management insights.
-                    Day End, Employee, Stock Count, Purchasing සහ P/L reports.
-                </div>
-                <div class="perm-badges">
-                    <span class="perm-badge perm-reports">📊 View Reports</span>
-                    <span class="perm-badge perm-reports">⏳ Approvals</span>
-                    <span class="perm-badge perm-reports">📋 All Data</span>
-                </div>
-                <div class="db-card-arrow">→</div>
-            </a>
-        `;
-        cardCount++;
-    }
-
-    document.getElementById('statDBCount').textContent = cardCount;
-
-    if (cardCount === 0) {
+    if (accessibleDatabases.length === 0) {
         grid.innerHTML = `
             <div class="no-access-msg">
                 <div class="na-icon">🔒</div>
@@ -245,20 +108,89 @@ function buildDatabaseCards() {
                 <p>ඔයාට databases access කිරීමට permission නෑ.<br>Admin ට contact කරන්න.</p>
             </div>
         `;
+        return;
     }
+
+    grid.innerHTML = accessibleDatabases.map(database => buildDatabaseCard(database)).join('');
+}
+
+function buildDatabaseCard(database) {
+    const cardClass = database.cardClass ? ` ${database.cardClass}` : '';
+    const permission = (currentUser.permissions && currentUser.permissions[database.id]) || {};
+    const permBadges = getPermissionBadgesHTML(database, permission);
+
+    return `
+        <a class="db-card${cardClass}" href="${database.url}">
+            <div class="db-card-header">
+                <div class="db-card-icon">${database.icon}</div>
+                <span class="db-card-badge ${database.badgeClass || 'badge-entry'}">
+                    ${database.badgeLabel || 'Database'}
+                </span>
+            </div>
+            <div class="db-card-title">${database.name}</div>
+            <div class="db-card-desc">${database.accessDescription || database.description || ''}</div>
+            <div class="perm-badges">${permBadges}</div>
+            <div class="db-card-arrow">→</div>
+        </a>
+    `;
 }
 
 // ===================================
-// 🏷️ BUILD PERMISSION BADGES
+// 🏷️ DATABASE-SPECIFIC PERMISSION BADGES
+// ===================================
+function getPermissionBadgesHTML(database, permission) {
+    const role = currentUser.access || '';
+
+    // Custom badges (example: Reports DB)
+    if (Array.isArray(database.customPermBadges) && database.customPermBadges.length > 0) {
+        return buildCustomPermBadges(database.customPermBadges);
+    }
+
+    // Special role badges (example: Call Operator → Call Center)
+    if (database.specialRoleBadges && database.specialRoleBadges[role]) {
+        return buildCustomPermBadges(database.specialRoleBadges[role]);
+    }
+
+    // Privileged role custom permission set (example: Admin/Manager → Call Center)
+    if (
+        Array.isArray(database.privilegedRoles) &&
+        database.privilegedRoles.includes(role) &&
+        database.privilegedRolePerms
+    ) {
+        return buildPermBadges(database.privilegedRolePerms);
+    }
+
+    // Default Admin full access badges
+    if (role === 'Admin') {
+        return buildPermBadges({
+            add: true,
+            view: true,
+            selfView: true,
+            edit: true,
+            delete: true
+        });
+    }
+
+    // Normal permission badges from employee permissions
+    return buildPermBadges(permission);
+}
+
+function buildCustomPermBadges(badges) {
+    return badges.map(badge => {
+        return `<span class="perm-badge ${badge.cssClass || ''}">${badge.label || ''}</span>`;
+    }).join('');
+}
+
+// ===================================
+// 🏷️ BUILD STANDARD PERMISSION BADGES
 // ===================================
 function buildPermBadges(perm) {
     let html = '';
-    if (perm.add)      html += `<span class="perm-badge perm-add">➕ Add</span>`;
-    if (perm.view)     html += `<span class="perm-badge perm-view">👁️ View All</span>`;
-    if (perm.selfView && !perm.view)
-                       html += `<span class="perm-badge perm-self">👤 Self View</span>`;
-    if (perm.edit)     html += `<span class="perm-badge perm-edit">✏️ Edit</span>`;
-    if (perm.delete)   html += `<span class="perm-badge perm-delete">🗑️ Delete</span>`;
+    if (perm.add) html += `<span class="perm-badge perm-add">➕ Add</span>`;
+    if (perm.view) html += `<span class="perm-badge perm-view">👁️ View All</span>`;
+    if (perm.selfView && !perm.view) html += `<span class="perm-badge perm-self">👤 Self View</span>`;
+    if (perm.edit) html += `<span class="perm-badge perm-edit">✏️ Edit</span>`;
+    if (perm.delete) html += `<span class="perm-badge perm-delete">🗑️ Delete</span>`;
     return html;
 }
 

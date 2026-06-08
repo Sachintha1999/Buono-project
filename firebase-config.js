@@ -1,7 +1,7 @@
 // ============================================
 // 🔥 FIREBASE GLOBAL CONFIG - MASTER FILE!
 // File: firebase-config.js
-// Version: 10.1 (Architecture Migration!)
+// Version: 10.3 (Phase 10 - Auto Permissions Ready!)
 // Used by ALL pages!
 // ============================================
 
@@ -42,7 +42,12 @@ const DATABASES = [
         permPrefix: 'emp',
         color: '#2196F3',
         description: 'Manage employees, roles & permissions',
-        adminManagerOnly: false
+        accessDescription: 'Employee profiles, permissions සහ access management.',
+        badgeLabel: 'Data Entry',
+        badgeClass: 'badge-entry',
+        cardClass: '',
+        adminManagerOnly: false,
+        accessChecks: ['add', 'view', 'selfView', 'edit']
     },
     {
         id: 'dayEndReportDB',
@@ -53,7 +58,12 @@ const DATABASES = [
         permPrefix: 'der',
         color: '#4CAF50',
         description: 'Daily sales & cash reports',
-        adminManagerOnly: false
+        accessDescription: 'Daily cashier reports, cash flow සහ bank deposits.',
+        badgeLabel: 'Data Entry',
+        badgeClass: 'badge-entry',
+        cardClass: '',
+        adminManagerOnly: false,
+        accessChecks: ['add', 'view', 'selfView']
     },
     {
         id: 'inventoryDB',
@@ -64,7 +74,12 @@ const DATABASES = [
         permPrefix: 'inv',
         color: '#FF9800',
         description: 'Stock management & tracking',
-        adminManagerOnly: false
+        accessDescription: 'Stock management, items, categories සහ low stock alerts.',
+        badgeLabel: 'Data Entry',
+        badgeClass: 'badge-entry',
+        cardClass: '',
+        adminManagerOnly: false,
+        accessChecks: ['add', 'view', 'selfView', 'edit']
     },
     {
         id: 'kitchenDB',
@@ -75,7 +90,12 @@ const DATABASES = [
         permPrefix: 'kit',
         color: '#f0a500',
         description: 'Recipes, meals & wastage',
-        adminManagerOnly: false
+        accessDescription: 'Recipes, staff meals, wastage tracking සහ stock count.',
+        badgeLabel: 'Kitchen',
+        badgeClass: 'badge-kitchen',
+        cardClass: '',
+        adminManagerOnly: false,
+        accessChecks: ['add', 'view', 'selfView', 'edit']
     },
     {
         id: 'purchasingDB',
@@ -86,7 +106,14 @@ const DATABASES = [
         permPrefix: 'pur',
         color: '#9C27B0',
         description: 'Suppliers & purchase orders',
-        adminManagerOnly: false
+        accessDescription: 'Supplier bills, purchase orders, payment tracking සහ stock IN.',
+        badgeLabel: 'Purchasing',
+        badgeClass: 'badge-purchasing',
+        cardClass: 'purchasing-card',
+        adminManagerOnly: false,
+        accessChecks: ['add', 'view', 'selfView', 'edit'],
+        permBorderColor: '#FF9800',
+        permTitleColor: '#FF9800'
     },
     {
         id: 'callCenterDB',
@@ -97,7 +124,33 @@ const DATABASES = [
         permPrefix: 'cc',
         color: '#00BCD4',
         description: 'Leads, courses & campaigns',
-        adminManagerOnly: false
+        accessDescription: 'Academy lead management, call logs, follow-ups සහ enrollment tracking.',
+        badgeLabel: 'Call Center',
+        badgeClass: 'badge-callcenter',
+        cardClass: 'callcenter-card',
+        adminManagerOnly: false,
+        accessChecks: ['add', 'view', 'edit'],
+        autoAccessRoles: ['Manager', 'Call Operator'],
+        privilegedRoles: ['Admin', 'Manager'],
+        privilegedRolePerms: {
+            add: true,
+            view: true,
+            edit: true,
+            delete: true
+        },
+        specialRoleBadges: {
+            'Call Operator': [
+                { cssClass: 'perm-add', label: '➕ Add' },
+                { cssClass: 'perm-view', label: '👁️ View' },
+                { cssClass: 'perm-edit', label: '✏️ Edit' }
+            ]
+        },
+        permBorderColor: '#00BCD4',
+        permTitleColor: '#00BCD4',
+        permSubtitle: '(Call Operators)',
+        defaultPermsForRole: {
+            'Call Operator': { add: true, view: true, selfView: true, edit: true }
+        }
     },
     {
         id: 'reportsDB',
@@ -108,7 +161,21 @@ const DATABASES = [
         permPrefix: 'rep',
         color: '#ff4444',
         description: 'Analytics & P/L reports',
-        adminManagerOnly: true
+        accessDescription: 'Business reports, analytics සහ management insights. Day End, Employee, Stock Count, Purchasing සහ P/L reports.',
+        badgeLabel: 'Management',
+        badgeClass: 'badge-management',
+        cardClass: 'reports-card',
+        adminManagerOnly: true,
+        accessChecks: [],
+        customPermBadges: [
+            { cssClass: 'perm-reports', label: '📊 View Reports' },
+            { cssClass: 'perm-reports', label: '⏳ Approvals' },
+            { cssClass: 'perm-reports', label: '📋 All Data' }
+        ],
+        permBorderColor: '#2196F3',
+        permTitleColor: '#2196F3',
+        permSubtitle: '(Admin/Manager only)',
+        permEditLabel: '✏️ Edit / Approve'
     }
 ];
 
@@ -167,24 +234,40 @@ function getDatabaseById(dbId) {
     return DATABASES.find(db => db.id === dbId);
 }
 
-function checkDBAccess(dbId) {
-    const user = getCurrentUser();
+function checkDBAccess(dbId, userOverride = null) {
+    const user = userOverride || getCurrentUser();
     if (!user) return false;
-    if (user.access === 'Admin') return true;
-    
+
     const database = getDatabaseById(dbId);
     if (!database) return false;
-    
+
+    // Admin can access everything
+    if (user.access === 'Admin') return true;
+
     // Admin/Manager only DBs
     if (database.adminManagerOnly) {
-        return user.access === 'Admin' || user.access === 'Manager';
+        return user.access === 'Manager';
     }
-    
-    return hasPermission(dbId);
+
+    // Role-based auto access (example: Call Operator → Call Center)
+    if (database.autoAccessRoles && database.autoAccessRoles.includes(user.access)) {
+        return true;
+    }
+
+    // Permission-based access
+    const permissions = user.permissions || {};
+    const dbPerm = permissions[dbId] || {};
+    const accessChecks = Array.isArray(database.accessChecks) && database.accessChecks.length
+        ? database.accessChecks
+        : ['view'];
+
+    return accessChecks.some(key => dbPerm[key] === true);
 }
 
-function getAccessibleDatabases() {
-    return DATABASES.filter(db => checkDBAccess(db.id));
+function getAccessibleDatabases(userOverride = null) {
+    const user = userOverride || getCurrentUser();
+    if (!user) return [];
+    return DATABASES.filter(db => checkDBAccess(db.id, user));
 }
 
 // ===================================
@@ -194,15 +277,15 @@ function getAccessibleDatabases() {
 function buildTopbar(currentDbId, options = {}) {
     const user = getCurrentUser();
     if (!user) return '';
-    
+
     const currentDb = getDatabaseById(currentDbId);
     const dbIcon = currentDb ? currentDb.icon : '🍴';
     const dbName = currentDb ? currentDb.name : 'Buono';
-    
+
     const customTitle = options.title || dbName;
     const showHomeBtn = options.showHomeBtn !== false;
     const extraButtons = options.extraButtons || '';
-    
+
     return `
         <div class="topbar">
             <div class="topbar-left">
@@ -229,10 +312,10 @@ function buildTopbar(currentDbId, options = {}) {
 
 function buildDatabaseSwitcher(currentDbId) {
     const accessibleDbs = getAccessibleDatabases();
-    
+
     // If only 1 or no accessible DB, don't show switcher
     if (accessibleDbs.length <= 1) return '';
-    
+
     let optionsHTML = '';
     accessibleDbs.forEach(database => {
         if (database.id === currentDbId) return; // skip current
@@ -243,9 +326,9 @@ function buildDatabaseSwitcher(currentDbId) {
             </a>
         `;
     });
-    
+
     if (!optionsHTML) return '';
-    
+
     return `
         <div class="db-switcher">
             <button class="btn-db-switch" onclick="toggleDBSwitcher(event)">
@@ -287,21 +370,21 @@ function initPage(dbId, allowedAccess) {
     // Step 1: Check auth
     const user = checkAuth();
     if (!user) return null;
-    
+
     // Step 2: Check access level
     if (allowedAccess && !allowedAccess.includes(user.access)) {
         alert('⛔ You do not have permission to access this page!');
         window.location.href = 'access.html';
         return null;
     }
-    
+
     // Step 3: Check DB permission
     if (dbId && !checkDBAccess(dbId)) {
         alert('⛔ You do not have permission for this database!');
         window.location.href = 'access.html';
         return null;
     }
-    
+
     // Step 4: Build topbar (if container exists)
     if (dbId) {
         const topbarContainer = document.getElementById('topbarContainer');
@@ -309,7 +392,7 @@ function initPage(dbId, allowedAccess) {
             topbarContainer.innerHTML = buildTopbar(dbId);
         }
     }
-    
+
     return user;
 }
 
@@ -384,5 +467,5 @@ function showTableEmpty(tbodyId, cols = 5, message = 'No data found') {
 // ===================================
 // ✅ Firebase Ready!
 // ===================================
-console.log('🔥 Firebase initialized successfully! (v10.1 Master)');
+console.log('🔥 Firebase initialized successfully! (v10.3 Master)');
 console.log('📊 Databases loaded:', DATABASES.length);

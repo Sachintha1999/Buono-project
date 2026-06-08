@@ -1,17 +1,11 @@
 // ═══════════════════════════════════════════════════════════
 // 🍴 BUONO - EMPLOYEE DATABASE (HR Module)
 // File: index-script.js
-// Version: 9.9 - Call Center DB Added!
+// Version: 10.2 - Phase 10 AUTO PERMISSIONS!
 //
 // 🔥 Firebase: Loaded from firebase-config.js
-// 📦 Available globals: db, getCurrentUser(), logout(), formatDate()
+// 📦 Globals: db, getCurrentUser(), logout(), DATABASES
 // ═══════════════════════════════════════════════════════════
-
-// ═══════════════════════════════════════════
-// 📂 DATABASES - Global from firebase-config.js!
-// ═══════════════════════════════════════════
-// No local array - uses global DATABASES
-
 
 // ═══════════════════════════════════════════
 // 🌐 GLOBAL VARIABLES
@@ -20,6 +14,9 @@ let allEmployees = [];
 let deleteDocId = '';
 let currentUser = null;
 let myPerms = null;
+
+// Standard permission keys for every DB
+const PERM_KEYS = ['add', 'view', 'selfView', 'edit', 'delete'];
 
 
 // ═══════════════════════════════════════════
@@ -66,11 +63,11 @@ async function initializeApp() {
     document.getElementById('myAccess').textContent = userData.access;
 
     buildDatabaseSwitcher();
+    buildPermissionsUI();   // ⭐ Phase 10: Auto-build permission blocks!
     setupActionButtons();
     startEmployeeListener();
 }
 
-// Start the app
 initializeApp();
 
 
@@ -79,21 +76,10 @@ initializeApp();
 // ═══════════════════════════════════════════
 function buildDatabaseSwitcher() {
     const list = document.getElementById('dbDropdownList');
-    const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
+    const accessible = getAccessibleDatabases(currentUser);
     let html = '';
 
-    DATABASES.forEach(d => {
-        if (d.adminManagerOnly && !isAdminOrMgr) return;
-        const isAdmin = currentUser.access === 'Admin';
-        const dp = currentUser.permissions?.[d.id] || {};
-        const hasAccess = isAdmin || dp.add || dp.view || dp.selfView || dp.edit || dp.delete;
-        if (!d.adminManagerOnly && !hasAccess) return;
-
-        // Call Center - Call Operator also gets access
-        if (d.id === 'callCenterDB' && currentUser.access === 'Call Operator') {
-            // Allow
-        } else if (!d.adminManagerOnly && !hasAccess) return;
-
+    accessible.forEach(d => {
         const isCurrent = d.id === 'employeeDB';
         html += `
             <a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}">
@@ -114,6 +100,58 @@ function buildDatabaseSwitcher() {
         const dd = document.getElementById('dbDropdown');
         if (dd && !dd.contains(e.target) && !e.target.closest('#dbSwitcher')) dd.classList.remove('show');
     });
+}
+
+
+// ═══════════════════════════════════════════
+// ⭐ BUILD PERMISSIONS UI (AUTO from DATABASES!)
+// ═══════════════════════════════════════════
+function buildPermissionsUI() {
+    const container = document.getElementById('permissionsContainer');
+    if (!container) return;
+
+    container.innerHTML = DATABASES.map(d => buildPermissionBlock(d)).join('');
+}
+
+function buildPermissionBlock(database) {
+    const prefix = database.permPrefix;
+    const borderStyle = database.permBorderColor
+        ? ` style="border: 2px solid ${database.permBorderColor};"` : '';
+    const titleStyle = database.permTitleColor
+        ? ` style="color: ${database.permTitleColor};"` : '';
+    const subtitle = database.permSubtitle
+        ? ` <span style="font-size: 11px; color: #888; font-weight: normal;">${database.permSubtitle}</span>` : '';
+    const editLabel = database.permEditLabel || '✏️ Edit';
+
+    return `
+        <div class="permission-block"${borderStyle}>
+            <div class="permission-block-title"${titleStyle}>
+                ${database.icon} ${database.name}${subtitle}
+            </div>
+            <div class="permission-checkboxes">
+                <label class="perm-checkbox">
+                    <input type="checkbox" id="${prefix}_add" onchange="autoCheckSelfView('${prefix}')">
+                    <span>➕ Add Data</span>
+                </label>
+                <label class="perm-checkbox">
+                    <input type="checkbox" id="${prefix}_view" onchange="autoCheckSelfView('${prefix}')">
+                    <span>👁️ View All</span>
+                </label>
+                <label class="perm-checkbox">
+                    <input type="checkbox" id="${prefix}_selfView">
+                    <span>👤 Self View</span>
+                </label>
+                <label class="perm-checkbox">
+                    <input type="checkbox" id="${prefix}_edit">
+                    <span>${editLabel}</span>
+                </label>
+                <label class="perm-checkbox">
+                    <input type="checkbox" id="${prefix}_delete">
+                    <span>🗑️ Delete</span>
+                </label>
+            </div>
+        </div>
+    `;
 }
 
 
@@ -249,7 +287,7 @@ function searchEmployees() {
 
 
 // ═══════════════════════════════════════════
-// ✅ PERMISSION HELPERS
+// ✅ PERMISSION HELPERS (AUTO!)
 // ═══════════════════════════════════════════
 function autoCheckSelfView(prefix) {
     const addCheck = document.getElementById(prefix + '_add');
@@ -268,52 +306,32 @@ function handleAccessChange() {
         checkAllPermissions(true);
         permissionsSection.style.opacity = '0.6';
         permissionsSection.style.pointerEvents = 'none';
-    } else if (access === 'Call Operator') {
-        // Call Operator defaults - only callCenterDB access
-        checkAllPermissions(false);
-        setCallCenterDefaults();
-        permissionsSection.style.opacity = '1';
-        permissionsSection.style.pointerEvents = 'auto';
-    } else {
-        permissionsSection.style.opacity = '1';
-        permissionsSection.style.pointerEvents = 'auto';
+        return;
     }
+
+    // Reset all first
+    checkAllPermissions(false);
+    permissionsSection.style.opacity = '1';
+    permissionsSection.style.pointerEvents = 'auto';
+
+    // ⭐ Auto-apply role defaults (from DATABASES config)
+    DATABASES.forEach(d => {
+        const roleDefaults = d.defaultPermsForRole && d.defaultPermsForRole[access];
+        if (roleDefaults) {
+            PERM_KEYS.forEach(key => {
+                if (roleDefaults[key]) setChecked(`${d.permPrefix}_${key}`, true);
+            });
+        }
+    });
 }
 
-// Call Operator default permissions
-function setCallCenterDefaults() {
-    // Only callCenterDB checked by default
-    const cc_add = document.getElementById('cc_add');
-    const cc_view = document.getElementById('cc_view');
-    const cc_selfView = document.getElementById('cc_selfView');
-    const cc_edit = document.getElementById('cc_edit');
-    if (cc_add)     cc_add.checked = true;
-    if (cc_view)    cc_view.checked = true;
-    if (cc_selfView) cc_selfView.checked = true;
-    if (cc_edit)    cc_edit.checked = true;
-}
-
-// ⭐ All 7 databases included! (+ callCenterDB)
+// ⭐ AUTO - all DBs from DATABASES array!
 function checkAllPermissions(checked) {
-    const ids = [
-        // Employee DB
-        'emp_add', 'emp_view', 'emp_selfView', 'emp_edit', 'emp_delete',
-        // Day End Report DB
-        'der_add', 'der_view', 'der_selfView', 'der_edit', 'der_delete',
-        // Inventory DB
-        'inv_add', 'inv_view', 'inv_selfView', 'inv_edit', 'inv_delete',
-        // Kitchen DB
-        'kit_add', 'kit_view', 'kit_selfView', 'kit_edit', 'kit_delete',
-        // Purchasing DB
-        'pur_add', 'pur_view', 'pur_selfView', 'pur_edit', 'pur_delete',
-        // ⭐ Call Center DB - NEW!
-        'cc_add', 'cc_view', 'cc_selfView', 'cc_edit', 'cc_delete',
-        // Reports DB
-        'rep_add', 'rep_view', 'rep_selfView', 'rep_edit', 'rep_delete'
-    ];
-    ids.forEach(id => {
-        const cb = document.getElementById(id);
-        if (cb) cb.checked = checked;
+    DATABASES.forEach(d => {
+        PERM_KEYS.forEach(key => {
+            const cb = document.getElementById(`${d.permPrefix}_${key}`);
+            if (cb) cb.checked = checked;
+        });
     });
 }
 
@@ -337,7 +355,7 @@ function openAddModal() {
 
 
 // ═══════════════════════════════════════════
-// ✏️ EDIT EMPLOYEE - All 7 DBs!
+// ✏️ EDIT EMPLOYEE - AUTO LOAD ALL DBs!
 // ═══════════════════════════════════════════
 function editEmployee(docId) {
     const emp = allEmployees.find(e => e.id === docId);
@@ -356,66 +374,19 @@ function editEmployee(docId) {
     document.getElementById('empAccess').value = emp.access || '';
     document.getElementById('editDocId').value = docId;
 
-    // Reset all checkboxes
+    // Reset all
     checkAllPermissions(false);
 
+    // ⭐ AUTO - load all DBs from DATABASES array!
     if (emp.permissions) {
-        // Employee DB
-        if (emp.permissions.employeeDB) {
-            setChecked('emp_add',      emp.permissions.employeeDB.add);
-            setChecked('emp_view',     emp.permissions.employeeDB.view);
-            setChecked('emp_selfView', emp.permissions.employeeDB.selfView);
-            setChecked('emp_edit',     emp.permissions.employeeDB.edit);
-            setChecked('emp_delete',   emp.permissions.employeeDB.delete);
-        }
-        // Day End Report DB
-        if (emp.permissions.dayEndReportDB) {
-            setChecked('der_add',      emp.permissions.dayEndReportDB.add);
-            setChecked('der_view',     emp.permissions.dayEndReportDB.view);
-            setChecked('der_selfView', emp.permissions.dayEndReportDB.selfView);
-            setChecked('der_edit',     emp.permissions.dayEndReportDB.edit);
-            setChecked('der_delete',   emp.permissions.dayEndReportDB.delete);
-        }
-        // Inventory DB
-        if (emp.permissions.inventoryDB) {
-            setChecked('inv_add',      emp.permissions.inventoryDB.add);
-            setChecked('inv_view',     emp.permissions.inventoryDB.view);
-            setChecked('inv_selfView', emp.permissions.inventoryDB.selfView);
-            setChecked('inv_edit',     emp.permissions.inventoryDB.edit);
-            setChecked('inv_delete',   emp.permissions.inventoryDB.delete);
-        }
-        // Kitchen DB
-        if (emp.permissions.kitchenDB) {
-            setChecked('kit_add',      emp.permissions.kitchenDB.add);
-            setChecked('kit_view',     emp.permissions.kitchenDB.view);
-            setChecked('kit_selfView', emp.permissions.kitchenDB.selfView);
-            setChecked('kit_edit',     emp.permissions.kitchenDB.edit);
-            setChecked('kit_delete',   emp.permissions.kitchenDB.delete);
-        }
-        // Purchasing DB
-        if (emp.permissions.purchasingDB) {
-            setChecked('pur_add',      emp.permissions.purchasingDB.add);
-            setChecked('pur_view',     emp.permissions.purchasingDB.view);
-            setChecked('pur_selfView', emp.permissions.purchasingDB.selfView);
-            setChecked('pur_edit',     emp.permissions.purchasingDB.edit);
-            setChecked('pur_delete',   emp.permissions.purchasingDB.delete);
-        }
-        // ⭐ Call Center DB - NEW!
-        if (emp.permissions.callCenterDB) {
-            setChecked('cc_add',       emp.permissions.callCenterDB.add);
-            setChecked('cc_view',      emp.permissions.callCenterDB.view);
-            setChecked('cc_selfView',  emp.permissions.callCenterDB.selfView);
-            setChecked('cc_edit',      emp.permissions.callCenterDB.edit);
-            setChecked('cc_delete',    emp.permissions.callCenterDB.delete);
-        }
-        // Reports DB
-        if (emp.permissions.reportsDB) {
-            setChecked('rep_add',      emp.permissions.reportsDB.add);
-            setChecked('rep_view',     emp.permissions.reportsDB.view);
-            setChecked('rep_selfView', emp.permissions.reportsDB.selfView);
-            setChecked('rep_edit',     emp.permissions.reportsDB.edit);
-            setChecked('rep_delete',   emp.permissions.reportsDB.delete);
-        }
+        DATABASES.forEach(d => {
+            const dbPerms = emp.permissions[d.id];
+            if (dbPerms) {
+                PERM_KEYS.forEach(key => {
+                    setChecked(`${d.permPrefix}_${key}`, dbPerms[key]);
+                });
+            }
+        });
     }
 
     handleAccessChange();
@@ -431,7 +402,6 @@ function editEmployee(docId) {
     document.getElementById('employeeModal').style.display = 'flex';
 }
 
-// Helper - safely set checkbox
 function setChecked(id, value) {
     const el = document.getElementById(id);
     if (el) el.checked = value || false;
@@ -448,7 +418,7 @@ function closeModal() {
 
 
 // ═══════════════════════════════════════════
-// 💾 SAVE EMPLOYEE - All 7 DBs!
+// 💾 SAVE EMPLOYEE - AUTO COLLECT ALL DBs!
 // ═══════════════════════════════════════════
 async function saveEmployee() {
     const name      = document.getElementById('empName').value.trim();
@@ -462,59 +432,15 @@ async function saveEmployee() {
         return;
     }
 
-    // ⭐ All 7 databases permissions!
-    const permissions = {
-        employeeDB: {
-            add:      getChecked('emp_add'),
-            view:     getChecked('emp_view'),
-            selfView: getChecked('emp_selfView'),
-            edit:     getChecked('emp_edit'),
-            delete:   getChecked('emp_delete')
-        },
-        dayEndReportDB: {
-            add:      getChecked('der_add'),
-            view:     getChecked('der_view'),
-            selfView: getChecked('der_selfView'),
-            edit:     getChecked('der_edit'),
-            delete:   getChecked('der_delete')
-        },
-        inventoryDB: {
-            add:      getChecked('inv_add'),
-            view:     getChecked('inv_view'),
-            selfView: getChecked('inv_selfView'),
-            edit:     getChecked('inv_edit'),
-            delete:   getChecked('inv_delete')
-        },
-        kitchenDB: {
-            add:      getChecked('kit_add'),
-            view:     getChecked('kit_view'),
-            selfView: getChecked('kit_selfView'),
-            edit:     getChecked('kit_edit'),
-            delete:   getChecked('kit_delete')
-        },
-        purchasingDB: {
-            add:      getChecked('pur_add'),
-            view:     getChecked('pur_view'),
-            selfView: getChecked('pur_selfView'),
-            edit:     getChecked('pur_edit'),
-            delete:   getChecked('pur_delete')
-        },
-        // ⭐ Call Center DB - NEW!
-        callCenterDB: {
-            add:      getChecked('cc_add'),
-            view:     getChecked('cc_view'),
-            selfView: getChecked('cc_selfView'),
-            edit:     getChecked('cc_edit'),
-            delete:   getChecked('cc_delete')
-        },
-        reportsDB: {
-            add:      getChecked('rep_add'),
-            view:     getChecked('rep_view'),
-            selfView: getChecked('rep_selfView'),
-            edit:     getChecked('rep_edit'),
-            delete:   getChecked('rep_delete')
-        }
-    };
+    // ⭐ AUTO - build permissions object from DATABASES array!
+    const permissions = {};
+    DATABASES.forEach(d => {
+        const dbPerms = {};
+        PERM_KEYS.forEach(key => {
+            dbPerms[key] = getChecked(`${d.permPrefix}_${key}`);
+        });
+        permissions[d.id] = dbPerms;
+    });
 
     // Admin = all permissions true
     if (access === 'Admin') {
@@ -552,7 +478,6 @@ async function saveEmployee() {
     }
 }
 
-// Helper - safely get checkbox value
 function getChecked(id) {
     const el = document.getElementById(id);
     return el ? el.checked : false;
