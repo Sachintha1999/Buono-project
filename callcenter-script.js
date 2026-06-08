@@ -1,8 +1,9 @@
 // ═══════════════════════════════════════════════════════
-// CALL CENTER SCRIPT - Buono Project v9.9
+// CALL CENTER SCRIPT - Buono Project v10.1
 // File: callcenter-script.js
-// ❌ NO firebaseConfig here - uses globals from firebase-config.js
-// ✅ Uses: db, getCurrentUser(), logout()
+// ❌ NO firebaseConfig - uses global from firebase-config.js
+// ❌ NO DATABASES array - uses global from firebase-config.js
+// ✅ Uses globals: db, getCurrentUser(), DATABASES
 // ═══════════════════════════════════════════════════════
 
 // ── GLOBAL STATE ──
@@ -18,16 +19,8 @@ let deleteLeadId = null;
 let allCourses = [];
 let allEvents = [];
 
-// ── 7 DATABASES (Rule #4) ──
-const DATABASES = [
-    { id: 'employeeDB',     name: 'Employee Database',  icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports',    icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB',    name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB',      name: 'Kitchen Database',   icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB',   name: 'Purchasing Database',icon: '🛒', url: 'purchasing.html' },
-    { id: 'callCenterDB',   name: 'Call Center',        icon: '📞', url: 'callcenter.html' },
-    { id: 'reportsDB',      name: 'Reports Database',   icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
+// ── DATABASES from firebase-config.js (global!) ──
+// No local array needed - uses global DATABASES
 
 // ── STATUS CONFIG ──
 const STATUSES = [
