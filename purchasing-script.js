@@ -1,23 +1,15 @@
 // ════════════════════════════════════════════════════════════
 // 🛒 PURCHASING DATABASE - COMPLETE JAVASCRIPT
 // 📁 File: public/purchasing-script.js
-// 📅 Updated: 2026-06-08 (v9.8 - Payment Proof!)
-// ✅ Includes: Returns + Credit + Reports + Payment Proof
-// ════════════════════════════════════════════════════════════
+// 📅 Version: 10.1 - Architecture Migration!
+// ⭐ Uses global DATABASES from firebase-config.js
+// ════════════════════════════════════════════════════════════/
 
-// ❌ REMOVED: firebaseConfig (now in firebase-config.js!)
-// ✅ Using globals: db, getCurrentUser(), logout()
+// ❌ NO firebaseConfig - uses global from firebase-config.js!
+// ❌ NO DATABASES array - uses global from firebase-config.js!
+// ✅ Using globals: db, getCurrentUser(), DATABASES
 
 const storage = firebase.storage();
-
-const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
 
 let currentUser = null;
 let myPerms = null;
