@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════
 // 🍴 BUONO - EMPLOYEE DATABASE (HR Module)
 // File: index-script.js
-// Version: 9.7 - Global Firebase Config!
+// Version: 9.9 - Call Center DB Added!
 //
 // 🔥 Firebase: Loaded from firebase-config.js
 // 📦 Available globals: db, getCurrentUser(), logout(), formatDate()
@@ -9,15 +9,16 @@
 
 
 // ═══════════════════════════════════════════
-// 📂 DATABASES LIST (For Switcher)
+// 📂 DATABASES LIST (For Switcher) - 7 DBs!
 // ═══════════════════════════════════════════
 const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+    { id: 'employeeDB',     name: 'Employee Database',  icon: '👥', url: 'index.html' },
+    { id: 'dayEndReportDB', name: 'Day End Reports',    icon: '💰', url: 'cashier.html' },
+    { id: 'inventoryDB',    name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
+    { id: 'kitchenDB',      name: 'Kitchen Database',   icon: '🍳', url: 'kitchen.html' },
+    { id: 'purchasingDB',   name: 'Purchasing Database',icon: '🛒', url: 'purchasing.html' },
+    { id: 'callCenterDB',   name: 'Call Center',        icon: '📞', url: 'callcenter.html' },
+    { id: 'reportsDB',      name: 'Reports Database',   icon: '📊', url: 'reports.html', adminManagerOnly: true }
 ];
 
 
@@ -35,9 +36,9 @@ let myPerms = null;
 // ═══════════════════════════════════════════
 async function initializeApp() {
     const user = sessionStorage.getItem('loggedInUser');
-    if (!user) { 
-        window.location.href = "login.html"; 
-        return; 
+    if (!user) {
+        window.location.href = "login.html";
+        return;
     }
     const userData = JSON.parse(user);
 
@@ -52,8 +53,8 @@ async function initializeApp() {
             userData.nickname = d.nickname;
             sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
         }
-    } catch (e) { 
-        console.error(e); 
+    } catch (e) {
+        console.error(e);
     }
 
     // Check access
@@ -96,8 +97,20 @@ function buildDatabaseSwitcher() {
         const dp = currentUser.permissions?.[d.id] || {};
         const hasAccess = isAdmin || dp.add || dp.view || dp.selfView || dp.edit || dp.delete;
         if (!d.adminManagerOnly && !hasAccess) return;
+
+        // Call Center - Call Operator also gets access
+        if (d.id === 'callCenterDB' && currentUser.access === 'Call Operator') {
+            // Allow
+        } else if (!d.adminManagerOnly && !hasAccess) return;
+
         const isCurrent = d.id === 'employeeDB';
-        html += `<a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}"><span>${d.icon}</span><span>${d.name}</span>${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}</a>`;
+        html += `
+            <a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}">
+                <span>${d.icon}</span>
+                <span>${d.name}</span>
+                ${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}
+            </a>
+        `;
     });
 
     list.innerHTML = html;
@@ -122,7 +135,7 @@ function updateDateTime() {
     const dateEl = document.getElementById('todayDate');
     if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', options);
     const timeEl = document.getElementById('currentTime');
-    if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 updateDateTime();
 setInterval(updateDateTime, 1000);
@@ -132,15 +145,15 @@ setInterval(updateDateTime, 1000);
 // 🎨 BADGE & PERMISSION HELPERS
 // ═══════════════════════════════════════════
 function getBadgeClass(access) {
-    switch(access) {
-        case 'Admin': return 'badge-admin';
-        case 'Manager': return 'badge-manager';
-        case 'Cashier': return 'badge-cashier';
+    switch (access) {
+        case 'Admin':              return 'badge-admin';
+        case 'Manager':            return 'badge-manager';
+        case 'Cashier':            return 'badge-cashier';
         case 'Purchasing Officer': return 'badge-purchasing';
-        case 'Head Chef': return 'badge-chef';
-        case 'Call Operator': return 'badge-operator';
-        case 'Waiter': return 'badge-waiter';
-        default: return 'badge-default';
+        case 'Head Chef':          return 'badge-chef';
+        case 'Call Operator':      return 'badge-operator';
+        case 'Waiter':             return 'badge-waiter';
+        default:                   return 'badge-default';
     }
 }
 
@@ -235,7 +248,7 @@ function renderEmployees(employees) {
 function searchEmployees() {
     const searchText = document.getElementById('searchEmployee').value.toLowerCase();
     let visible = myPerms.view ? allEmployees : allEmployees.filter(e => e.id === currentUser.id);
-    const filtered = visible.filter(emp => 
+    const filtered = visible.filter(emp =>
         emp.name.toLowerCase().includes(searchText) ||
         emp.nickname.toLowerCase().includes(searchText) ||
         emp.access.toLowerCase().includes(searchText)
@@ -251,37 +264,61 @@ function autoCheckSelfView(prefix) {
     const addCheck = document.getElementById(prefix + '_add');
     const viewCheck = document.getElementById(prefix + '_view');
     const selfViewCheck = document.getElementById(prefix + '_selfView');
-    if (addCheck.checked || viewCheck.checked) selfViewCheck.checked = true;
+    if (addCheck && viewCheck && selfViewCheck) {
+        if (addCheck.checked || viewCheck.checked) selfViewCheck.checked = true;
+    }
 }
 
 function handleAccessChange() {
     const access = document.getElementById('empAccess').value;
     const permissionsSection = document.getElementById('permissionsSection');
+
     if (access === 'Admin') {
         checkAllPermissions(true);
         permissionsSection.style.opacity = '0.6';
         permissionsSection.style.pointerEvents = 'none';
+    } else if (access === 'Call Operator') {
+        // Call Operator defaults - only callCenterDB access
+        checkAllPermissions(false);
+        setCallCenterDefaults();
+        permissionsSection.style.opacity = '1';
+        permissionsSection.style.pointerEvents = 'auto';
     } else {
         permissionsSection.style.opacity = '1';
         permissionsSection.style.pointerEvents = 'auto';
     }
 }
 
-// ⭐ All 6 databases included!
+// Call Operator default permissions
+function setCallCenterDefaults() {
+    // Only callCenterDB checked by default
+    const cc_add = document.getElementById('cc_add');
+    const cc_view = document.getElementById('cc_view');
+    const cc_selfView = document.getElementById('cc_selfView');
+    const cc_edit = document.getElementById('cc_edit');
+    if (cc_add)     cc_add.checked = true;
+    if (cc_view)    cc_view.checked = true;
+    if (cc_selfView) cc_selfView.checked = true;
+    if (cc_edit)    cc_edit.checked = true;
+}
+
+// ⭐ All 7 databases included! (+ callCenterDB)
 function checkAllPermissions(checked) {
     const ids = [
         // Employee DB
-        'emp_add','emp_view','emp_selfView','emp_edit','emp_delete',
+        'emp_add', 'emp_view', 'emp_selfView', 'emp_edit', 'emp_delete',
         // Day End Report DB
-        'der_add','der_view','der_selfView','der_edit','der_delete',
+        'der_add', 'der_view', 'der_selfView', 'der_edit', 'der_delete',
         // Inventory DB
-        'inv_add','inv_view','inv_selfView','inv_edit','inv_delete',
+        'inv_add', 'inv_view', 'inv_selfView', 'inv_edit', 'inv_delete',
         // Kitchen DB
-        'kit_add','kit_view','kit_selfView','kit_edit','kit_delete',
+        'kit_add', 'kit_view', 'kit_selfView', 'kit_edit', 'kit_delete',
         // Purchasing DB
-        'pur_add','pur_view','pur_selfView','pur_edit','pur_delete',
+        'pur_add', 'pur_view', 'pur_selfView', 'pur_edit', 'pur_delete',
+        // ⭐ Call Center DB - NEW!
+        'cc_add', 'cc_view', 'cc_selfView', 'cc_edit', 'cc_delete',
         // Reports DB
-        'rep_add','rep_view','rep_selfView','rep_edit','rep_delete'
+        'rep_add', 'rep_view', 'rep_selfView', 'rep_edit', 'rep_delete'
     ];
     ids.forEach(id => {
         const cb = document.getElementById(id);
@@ -309,7 +346,7 @@ function openAddModal() {
 
 
 // ═══════════════════════════════════════════
-// ✏️ EDIT EMPLOYEE - All 6 DBs!
+// ✏️ EDIT EMPLOYEE - All 7 DBs!
 // ═══════════════════════════════════════════
 function editEmployee(docId) {
     const emp = allEmployees.find(e => e.id === docId);
@@ -328,56 +365,65 @@ function editEmployee(docId) {
     document.getElementById('empAccess').value = emp.access || '';
     document.getElementById('editDocId').value = docId;
 
+    // Reset all checkboxes
     checkAllPermissions(false);
 
     if (emp.permissions) {
         // Employee DB
         if (emp.permissions.employeeDB) {
-            document.getElementById('emp_add').checked = emp.permissions.employeeDB.add || false;
-            document.getElementById('emp_view').checked = emp.permissions.employeeDB.view || false;
-            document.getElementById('emp_selfView').checked = emp.permissions.employeeDB.selfView || false;
-            document.getElementById('emp_edit').checked = emp.permissions.employeeDB.edit || false;
-            document.getElementById('emp_delete').checked = emp.permissions.employeeDB.delete || false;
+            setChecked('emp_add',      emp.permissions.employeeDB.add);
+            setChecked('emp_view',     emp.permissions.employeeDB.view);
+            setChecked('emp_selfView', emp.permissions.employeeDB.selfView);
+            setChecked('emp_edit',     emp.permissions.employeeDB.edit);
+            setChecked('emp_delete',   emp.permissions.employeeDB.delete);
         }
         // Day End Report DB
         if (emp.permissions.dayEndReportDB) {
-            document.getElementById('der_add').checked = emp.permissions.dayEndReportDB.add || false;
-            document.getElementById('der_view').checked = emp.permissions.dayEndReportDB.view || false;
-            document.getElementById('der_selfView').checked = emp.permissions.dayEndReportDB.selfView || false;
-            document.getElementById('der_edit').checked = emp.permissions.dayEndReportDB.edit || false;
-            document.getElementById('der_delete').checked = emp.permissions.dayEndReportDB.delete || false;
+            setChecked('der_add',      emp.permissions.dayEndReportDB.add);
+            setChecked('der_view',     emp.permissions.dayEndReportDB.view);
+            setChecked('der_selfView', emp.permissions.dayEndReportDB.selfView);
+            setChecked('der_edit',     emp.permissions.dayEndReportDB.edit);
+            setChecked('der_delete',   emp.permissions.dayEndReportDB.delete);
         }
         // Inventory DB
         if (emp.permissions.inventoryDB) {
-            document.getElementById('inv_add').checked = emp.permissions.inventoryDB.add || false;
-            document.getElementById('inv_view').checked = emp.permissions.inventoryDB.view || false;
-            document.getElementById('inv_selfView').checked = emp.permissions.inventoryDB.selfView || false;
-            document.getElementById('inv_edit').checked = emp.permissions.inventoryDB.edit || false;
-            document.getElementById('inv_delete').checked = emp.permissions.inventoryDB.delete || false;
+            setChecked('inv_add',      emp.permissions.inventoryDB.add);
+            setChecked('inv_view',     emp.permissions.inventoryDB.view);
+            setChecked('inv_selfView', emp.permissions.inventoryDB.selfView);
+            setChecked('inv_edit',     emp.permissions.inventoryDB.edit);
+            setChecked('inv_delete',   emp.permissions.inventoryDB.delete);
         }
         // Kitchen DB
         if (emp.permissions.kitchenDB) {
-            document.getElementById('kit_add').checked = emp.permissions.kitchenDB.add || false;
-            document.getElementById('kit_view').checked = emp.permissions.kitchenDB.view || false;
-            document.getElementById('kit_selfView').checked = emp.permissions.kitchenDB.selfView || false;
-            document.getElementById('kit_edit').checked = emp.permissions.kitchenDB.edit || false;
-            document.getElementById('kit_delete').checked = emp.permissions.kitchenDB.delete || false;
+            setChecked('kit_add',      emp.permissions.kitchenDB.add);
+            setChecked('kit_view',     emp.permissions.kitchenDB.view);
+            setChecked('kit_selfView', emp.permissions.kitchenDB.selfView);
+            setChecked('kit_edit',     emp.permissions.kitchenDB.edit);
+            setChecked('kit_delete',   emp.permissions.kitchenDB.delete);
         }
         // Purchasing DB
         if (emp.permissions.purchasingDB) {
-            document.getElementById('pur_add').checked = emp.permissions.purchasingDB.add || false;
-            document.getElementById('pur_view').checked = emp.permissions.purchasingDB.view || false;
-            document.getElementById('pur_selfView').checked = emp.permissions.purchasingDB.selfView || false;
-            document.getElementById('pur_edit').checked = emp.permissions.purchasingDB.edit || false;
-            document.getElementById('pur_delete').checked = emp.permissions.purchasingDB.delete || false;
+            setChecked('pur_add',      emp.permissions.purchasingDB.add);
+            setChecked('pur_view',     emp.permissions.purchasingDB.view);
+            setChecked('pur_selfView', emp.permissions.purchasingDB.selfView);
+            setChecked('pur_edit',     emp.permissions.purchasingDB.edit);
+            setChecked('pur_delete',   emp.permissions.purchasingDB.delete);
+        }
+        // ⭐ Call Center DB - NEW!
+        if (emp.permissions.callCenterDB) {
+            setChecked('cc_add',       emp.permissions.callCenterDB.add);
+            setChecked('cc_view',      emp.permissions.callCenterDB.view);
+            setChecked('cc_selfView',  emp.permissions.callCenterDB.selfView);
+            setChecked('cc_edit',      emp.permissions.callCenterDB.edit);
+            setChecked('cc_delete',    emp.permissions.callCenterDB.delete);
         }
         // Reports DB
         if (emp.permissions.reportsDB) {
-            document.getElementById('rep_add').checked = emp.permissions.reportsDB.add || false;
-            document.getElementById('rep_view').checked = emp.permissions.reportsDB.view || false;
-            document.getElementById('rep_selfView').checked = emp.permissions.reportsDB.selfView || false;
-            document.getElementById('rep_edit').checked = emp.permissions.reportsDB.edit || false;
-            document.getElementById('rep_delete').checked = emp.permissions.reportsDB.delete || false;
+            setChecked('rep_add',      emp.permissions.reportsDB.add);
+            setChecked('rep_view',     emp.permissions.reportsDB.view);
+            setChecked('rep_selfView', emp.permissions.reportsDB.selfView);
+            setChecked('rep_edit',     emp.permissions.reportsDB.edit);
+            setChecked('rep_delete',   emp.permissions.reportsDB.delete);
         }
     }
 
@@ -394,6 +440,12 @@ function editEmployee(docId) {
     document.getElementById('employeeModal').style.display = 'flex';
 }
 
+// Helper - safely set checkbox
+function setChecked(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.checked = value || false;
+}
+
 
 // ═══════════════════════════════════════════
 // ❌ CLOSE MODAL
@@ -405,13 +457,13 @@ function closeModal() {
 
 
 // ═══════════════════════════════════════════
-// 💾 SAVE EMPLOYEE - All 6 DBs!
+// 💾 SAVE EMPLOYEE - All 7 DBs!
 // ═══════════════════════════════════════════
 async function saveEmployee() {
-    const name = document.getElementById('empName').value.trim();
-    const nickname = document.getElementById('empNickname').value.trim();
-    const password = document.getElementById('empPassword').value.trim();
-    const access = document.getElementById('empAccess').value;
+    const name      = document.getElementById('empName').value.trim();
+    const nickname  = document.getElementById('empNickname').value.trim();
+    const password  = document.getElementById('empPassword').value.trim();
+    const access    = document.getElementById('empAccess').value;
     const editDocId = document.getElementById('editDocId').value;
 
     if (!name || !nickname || !password || !access) {
@@ -419,52 +471,61 @@ async function saveEmployee() {
         return;
     }
 
-    // ⭐ All 6 databases permissions!
+    // ⭐ All 7 databases permissions!
     const permissions = {
         employeeDB: {
-            add: document.getElementById('emp_add').checked,
-            view: document.getElementById('emp_view').checked,
-            selfView: document.getElementById('emp_selfView').checked,
-            edit: document.getElementById('emp_edit').checked,
-            delete: document.getElementById('emp_delete').checked
+            add:      getChecked('emp_add'),
+            view:     getChecked('emp_view'),
+            selfView: getChecked('emp_selfView'),
+            edit:     getChecked('emp_edit'),
+            delete:   getChecked('emp_delete')
         },
         dayEndReportDB: {
-            add: document.getElementById('der_add').checked,
-            view: document.getElementById('der_view').checked,
-            selfView: document.getElementById('der_selfView').checked,
-            edit: document.getElementById('der_edit').checked,
-            delete: document.getElementById('der_delete').checked
+            add:      getChecked('der_add'),
+            view:     getChecked('der_view'),
+            selfView: getChecked('der_selfView'),
+            edit:     getChecked('der_edit'),
+            delete:   getChecked('der_delete')
         },
         inventoryDB: {
-            add: document.getElementById('inv_add').checked,
-            view: document.getElementById('inv_view').checked,
-            selfView: document.getElementById('inv_selfView').checked,
-            edit: document.getElementById('inv_edit').checked,
-            delete: document.getElementById('inv_delete').checked
+            add:      getChecked('inv_add'),
+            view:     getChecked('inv_view'),
+            selfView: getChecked('inv_selfView'),
+            edit:     getChecked('inv_edit'),
+            delete:   getChecked('inv_delete')
         },
         kitchenDB: {
-            add: document.getElementById('kit_add').checked,
-            view: document.getElementById('kit_view').checked,
-            selfView: document.getElementById('kit_selfView').checked,
-            edit: document.getElementById('kit_edit').checked,
-            delete: document.getElementById('kit_delete').checked
+            add:      getChecked('kit_add'),
+            view:     getChecked('kit_view'),
+            selfView: getChecked('kit_selfView'),
+            edit:     getChecked('kit_edit'),
+            delete:   getChecked('kit_delete')
         },
         purchasingDB: {
-            add: document.getElementById('pur_add').checked,
-            view: document.getElementById('pur_view').checked,
-            selfView: document.getElementById('pur_selfView').checked,
-            edit: document.getElementById('pur_edit').checked,
-            delete: document.getElementById('pur_delete').checked
+            add:      getChecked('pur_add'),
+            view:     getChecked('pur_view'),
+            selfView: getChecked('pur_selfView'),
+            edit:     getChecked('pur_edit'),
+            delete:   getChecked('pur_delete')
+        },
+        // ⭐ Call Center DB - NEW!
+        callCenterDB: {
+            add:      getChecked('cc_add'),
+            view:     getChecked('cc_view'),
+            selfView: getChecked('cc_selfView'),
+            edit:     getChecked('cc_edit'),
+            delete:   getChecked('cc_delete')
         },
         reportsDB: {
-            add: document.getElementById('rep_add').checked,
-            view: document.getElementById('rep_view').checked,
-            selfView: document.getElementById('rep_selfView').checked,
-            edit: document.getElementById('rep_edit').checked,
-            delete: document.getElementById('rep_delete').checked
+            add:      getChecked('rep_add'),
+            view:     getChecked('rep_view'),
+            selfView: getChecked('rep_selfView'),
+            edit:     getChecked('rep_edit'),
+            delete:   getChecked('rep_delete')
         }
     };
 
+    // Admin = all permissions true
     if (access === 'Admin') {
         Object.keys(permissions).forEach(dbKey => {
             Object.keys(permissions[dbKey]).forEach(permKey => {
@@ -483,9 +544,9 @@ async function saveEmployee() {
             alert('✅ Employee updated!');
         } else {
             const existCheck = await db.collection('employees').where('nickname', '==', nickname).get();
-            if (!existCheck.empty) { 
-                alert('⚠️ Nickname already exists!'); 
-                return; 
+            if (!existCheck.empty) {
+                alert('⚠️ Nickname already exists!');
+                return;
             }
             await db.collection('employees').add({
                 name, nickname, password, access, permissions,
@@ -498,6 +559,12 @@ async function saveEmployee() {
         console.error("Save error:", error);
         alert('❌ Error: ' + error.message);
     }
+}
+
+// Helper - safely get checkbox value
+function getChecked(id) {
+    const el = document.getElementById(id);
+    return el ? el.checked : false;
 }
 
 
@@ -536,4 +603,4 @@ async function confirmDelete() {
 // ═══════════════════════════════════════════
 window.onclick = function(event) {
     if (event.target.classList.contains('modal')) event.target.style.display = 'none';
-}
+};

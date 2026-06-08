@@ -182,7 +182,36 @@ function buildDatabaseCards() {
         cardCount++;
     }
 
-    // ── 6. REPORTS DATABASE (Admin/Manager only) ──
+    // ── 6. CALL CENTER DATABASE ── ⭐ NEW!
+    const callPerm = permissions.callCenterDB || {};
+    const isCallOperator = access === 'Call Operator';
+    const callAccess = isAdmin || isAdminOrMgr || isCallOperator ||
+                       callPerm.add || callPerm.view || callPerm.edit;
+    if (callAccess) {
+        const permBadges = (isAdmin || isAdminOrMgr)
+            ? buildPermBadges({add:true, view:true, edit:true, delete:true})
+            : isCallOperator
+                ? `<span class="perm-badge perm-add">➕ Add</span>
+                   <span class="perm-badge perm-view">👁️ View</span>
+                   <span class="perm-badge perm-edit">✏️ Edit</span>`
+                : buildPermBadges(callPerm);
+
+        grid.innerHTML += `
+            <a class="db-card callcenter-card" href="callcenter.html">
+                <div class="db-card-header">
+                    <div class="db-card-icon">📞</div>
+                    <span class="db-card-badge badge-callcenter">Call Center</span>
+                </div>
+                <div class="db-card-title">Call Center</div>
+                <div class="db-card-desc">Academy lead management, call logs, follow-ups සහ enrollment tracking.</div>
+                <div class="perm-badges">${permBadges}</div>
+                <div class="db-card-arrow">→</div>
+            </a>
+        `;
+        cardCount++;
+    }
+
+    // ── 7. REPORTS DATABASE (Admin/Manager only) ──
     if (isAdminOrMgr) {
         grid.innerHTML += `
             <a class="db-card reports-card" href="reports.html">

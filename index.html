@@ -78,12 +78,17 @@
         </div>
 
         <div class="search-bar" id="searchBar">
-            <input type="text" id="searchEmployee" placeholder="🔍 Search employee name, nickname or access..." onkeyup="searchEmployees()">
+            <input type="text" id="searchEmployee" 
+                placeholder="🔍 Search employee name, nickname or access..." 
+                onkeyup="searchEmployees()">
         </div>
 
         <div class="section-header">
             <h2 id="empListTitle">👥 All Employees</h2>
-            <button class="btn-primary" id="addBtn" onclick="openAddModal()" style="display:none;">➕ Add New Employee</button>
+            <button class="btn-primary" id="addBtn" 
+                onclick="openAddModal()" style="display:none;">
+                ➕ Add New Employee
+            </button>
         </div>
 
         <div class="table-container">
@@ -109,7 +114,9 @@
         </div>
     </div>
 
+    <!-- ═══════════════════════════════════════ -->
     <!-- ADD / EDIT EMPLOYEE MODAL -->
+    <!-- ═══════════════════════════════════════ -->
     <div id="employeeModal" class="modal" style="display: none;">
         <div class="modal-content" style="width: 600px;">
             <div class="modal-header">
@@ -118,14 +125,18 @@
             </div>
 
             <form id="employeeForm" onsubmit="return false;">
+
                 <label>👤 Full Name:</label>
-                <input type="text" id="empName" placeholder="Enter full name" required>
+                <input type="text" id="empName" 
+                    placeholder="Enter full name" required>
 
                 <label>🏷️ Nickname (for login):</label>
-                <input type="text" id="empNickname" placeholder="Enter unique nickname" required>
+                <input type="text" id="empNickname" 
+                    placeholder="Enter unique nickname" required>
 
                 <label>🔒 Password:</label>
-                <input type="text" id="empPassword" placeholder="Enter password" required>
+                <input type="text" id="empPassword" 
+                    placeholder="Enter password" required>
 
                 <label>🔑 Access Type:</label>
                 <select id="empAccess" required onchange="handleAccessChange()">
@@ -141,105 +152,266 @@
 
                 <input type="hidden" id="editDocId" value="">
 
+                <!-- ═══════════════════════════════════════ -->
+                <!-- PERMISSIONS SECTION - 7 DATABASES!     -->
+                <!-- ═══════════════════════════════════════ -->
                 <div id="permissionsSection" style="margin-top: 25px;">
-                    <div style="background: #0f3460; padding: 12px 18px; border-radius: 10px; margin-bottom: 15px;">
-                        <h3 style="color: #f0a500; font-size: 16px; margin: 0;">🔐 Database Permissions (6 Databases)</h3>
+
+                    <div style="background: #0f3460; padding: 12px 18px; 
+                        border-radius: 10px; margin-bottom: 15px;">
+                        <h3 style="color: #f0a500; font-size: 16px; margin: 0;">
+                            🔐 Database Permissions (7 Databases)
+                        </h3>
                         <p style="color: #8892b0; font-size: 12px; margin-top: 4px;">
                             💡 Admin selected කරොත් සියලු permissions auto enable වෙනවා
                         </p>
                     </div>
 
-                    <!-- 1. 👥 Employee Database -->
+                    <!-- 1. 👥 EMPLOYEE DATABASE -->
                     <div class="permission-block">
                         <div class="permission-block-title">👥 Employee Database (HR)</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox"><input type="checkbox" id="emp_add" onchange="autoCheckSelfView('emp')"><span>➕ Add Data</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="emp_view" onchange="autoCheckSelfView('emp')"><span>👁️ View All</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="emp_selfView"><span>👤 Self View</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="emp_edit"><span>✏️ Edit</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="emp_delete"><span>🗑️ Delete</span></label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="emp_add" 
+                                    onchange="autoCheckSelfView('emp')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="emp_view" 
+                                    onchange="autoCheckSelfView('emp')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="emp_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="emp_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="emp_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- 2. 💰 Day End Report Database -->
+                    <!-- 2. 💰 DAY END REPORT DATABASE -->
                     <div class="permission-block">
                         <div class="permission-block-title">💰 Day End Report Database</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox"><input type="checkbox" id="der_add" onchange="autoCheckSelfView('der')"><span>➕ Add Data</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="der_view" onchange="autoCheckSelfView('der')"><span>👁️ View All</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="der_selfView"><span>👤 Self View</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="der_edit"><span>✏️ Edit</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="der_delete"><span>🗑️ Delete</span></label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="der_add" 
+                                    onchange="autoCheckSelfView('der')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="der_view" 
+                                    onchange="autoCheckSelfView('der')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="der_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="der_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="der_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- 3. 📦 Inventory Database -->
+                    <!-- 3. 📦 INVENTORY DATABASE -->
                     <div class="permission-block">
                         <div class="permission-block-title">📦 Inventory Database</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox"><input type="checkbox" id="inv_add" onchange="autoCheckSelfView('inv')"><span>➕ Add Data</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="inv_view" onchange="autoCheckSelfView('inv')"><span>👁️ View All</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="inv_selfView"><span>👤 Self View</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="inv_edit"><span>✏️ Edit</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="inv_delete"><span>🗑️ Delete</span></label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_add" 
+                                    onchange="autoCheckSelfView('inv')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_view" 
+                                    onchange="autoCheckSelfView('inv')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="inv_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- 4. 🍳 Kitchen Database -->
+                    <!-- 4. 🍳 KITCHEN DATABASE -->
                     <div class="permission-block">
                         <div class="permission-block-title">🍳 Kitchen Database</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox"><input type="checkbox" id="kit_add" onchange="autoCheckSelfView('kit')"><span>➕ Add Data</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="kit_view" onchange="autoCheckSelfView('kit')"><span>👁️ View All</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="kit_selfView"><span>👤 Self View</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="kit_edit"><span>✏️ Edit</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="kit_delete"><span>🗑️ Delete</span></label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_add" 
+                                    onchange="autoCheckSelfView('kit')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_view" 
+                                    onchange="autoCheckSelfView('kit')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="kit_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- 5. 🛒 Purchasing Database -->
+                    <!-- 5. 🛒 PURCHASING DATABASE -->
                     <div class="permission-block" style="border: 2px solid #FF9800;">
-                        <div class="permission-block-title" style="color: #FF9800;">🛒 Purchasing Database</div>
+                        <div class="permission-block-title" style="color: #FF9800;">
+                            🛒 Purchasing Database
+                        </div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox"><input type="checkbox" id="pur_add" onchange="autoCheckSelfView('pur')"><span>➕ Add Data</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="pur_view" onchange="autoCheckSelfView('pur')"><span>👁️ View All</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="pur_selfView"><span>👤 Self View</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="pur_edit"><span>✏️ Edit</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="pur_delete"><span>🗑️ Delete</span></label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="pur_add" 
+                                    onchange="autoCheckSelfView('pur')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="pur_view" 
+                                    onchange="autoCheckSelfView('pur')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="pur_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="pur_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="pur_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- 6. 📊 Reports Database -->
+                    <!-- 6. 📞 CALL CENTER DATABASE ⭐ NEW! -->
+                    <div class="permission-block" style="border: 2px solid #00BCD4;">
+                        <div class="permission-block-title" style="color: #00BCD4;">
+                            📞 Call Center Database
+                            <span style="font-size: 11px; color: #888; font-weight: normal;">
+                                (Call Operators)
+                            </span>
+                        </div>
+                        <div class="permission-checkboxes">
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="cc_add" 
+                                    onchange="autoCheckSelfView('cc')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="cc_view" 
+                                    onchange="autoCheckSelfView('cc')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="cc_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="cc_edit">
+                                <span>✏️ Edit</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="cc_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 7. 📊 REPORTS DATABASE -->
                     <div class="permission-block" style="border: 2px solid #2196F3;">
                         <div class="permission-block-title" style="color: #2196F3;">
-                            📊 Reports Database 
-                            <span style="font-size: 11px; color: #888; font-weight: normal;">(Admin/Manager only)</span>
+                            📊 Reports Database
+                            <span style="font-size: 11px; color: #888; font-weight: normal;">
+                                (Admin/Manager only)
+                            </span>
                         </div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox"><input type="checkbox" id="rep_add" onchange="autoCheckSelfView('rep')"><span>➕ Add Data</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="rep_view" onchange="autoCheckSelfView('rep')"><span>👁️ View All</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="rep_selfView"><span>👤 Self View</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="rep_edit"><span>✏️ Edit / Approve</span></label>
-                            <label class="perm-checkbox"><input type="checkbox" id="rep_delete"><span>🗑️ Delete</span></label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="rep_add" 
+                                    onchange="autoCheckSelfView('rep')">
+                                <span>➕ Add Data</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="rep_view" 
+                                    onchange="autoCheckSelfView('rep')">
+                                <span>👁️ View All</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="rep_selfView">
+                                <span>👤 Self View</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="rep_edit">
+                                <span>✏️ Edit / Approve</span>
+                            </label>
+                            <label class="perm-checkbox">
+                                <input type="checkbox" id="rep_delete">
+                                <span>🗑️ Delete</span>
+                            </label>
                         </div>
                     </div>
 
-                    <div style="background: #1a1a2e; padding: 12px 15px; border-radius: 8px; margin-top: 12px; border: 1px dashed #4CAF50;">
-                        <p style="color: #4CAF50; font-size: 12px; text-align: center; margin: 0;">
-                            ✅ All 6 Databases included! Custom permissions ready!
+                    <!-- FOOTER NOTE -->
+                    <div style="background: #1a1a2e; padding: 12px 15px; 
+                        border-radius: 8px; margin-top: 12px; 
+                        border: 1px dashed #4CAF50;">
+                        <p style="color: #4CAF50; font-size: 12px; 
+                            text-align: center; margin: 0;">
+                            ✅ All 7 Databases included! Custom permissions ready!
                         </p>
                     </div>
-                </div>
+
+                </div><!-- /permissionsSection -->
 
                 <div class="modal-buttons">
-                    <button type="button" class="btn-primary" id="saveBtn" onclick="saveEmployee()">💾 Save</button>
-                    <button type="button" class="btn-secondary" onclick="closeModal()">❌ Cancel</button>
+                    <button type="button" class="btn-primary" 
+                        id="saveBtn" onclick="saveEmployee()">
+                        💾 Save
+                    </button>
+                    <button type="button" class="btn-secondary" 
+                        onclick="closeModal()">
+                        ❌ Cancel
+                    </button>
                 </div>
+
             </form>
         </div>
     </div>
 
-    <!-- Delete Confirm Modal -->
+    <!-- ═══════════════════════════════════════ -->
+    <!-- DELETE CONFIRM MODAL -->
+    <!-- ═══════════════════════════════════════ -->
     <div id="deleteModal" class="modal" style="display: none;">
         <div class="modal-content modal-small">
             <div class="modal-header">
@@ -247,31 +419,28 @@
                 <button class="modal-close" onclick="closeDeleteModal()">✖</button>
             </div>
             <p style="text-align: center; font-size: 16px; margin: 20px 0;">
-                Are you sure you want to delete <strong id="deleteEmpName">this employee</strong>?
+                Are you sure you want to delete 
+                <strong id="deleteEmpName">this employee</strong>?
             </p>
             <p style="text-align: center; color: #ff4444; font-size: 14px;">
                 ⚠️ This action cannot be undone!
             </p>
             <div class="modal-buttons">
-                <button class="btn-danger" onclick="confirmDelete()">🗑️ Yes, Delete</button>
-                <button class="btn-secondary" onclick="closeDeleteModal()">❌ Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">
+                    🗑️ Yes, Delete
+                </button>
+                <button class="btn-secondary" onclick="closeDeleteModal()">
+                    ❌ Cancel
+                </button>
             </div>
         </div>
     </div>
 
     <!-- ===== SCRIPTS (CORRECT ORDER!) ===== -->
-
-    <!-- 1. Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-    <!-- 2. Global Firebase Config (Once only!) -->
     <script src="firebase-config.js"></script>
-
-    <!-- 3. Page Script -->
     <script src="index-script.js"></script>
-
-    <!-- 4. Mobile Script -->
     <script src="mobile-script.js"></script>
 
 </body>

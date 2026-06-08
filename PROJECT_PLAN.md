@@ -1,9 +1,85 @@
-# 📨 FILE 1: `PROJECT_PLAN.md` (v9.8 Updated)
+# 🎯 Perfect Decision Naveen! 👏
+
+**"හිමිට හිමිට, එකෙක එකෙක test කරකර, ආරක්ෂිතව!"**
+
+---
+
+## 📋 FINAL PLAN - Approved!
+
+```
+✅ Option C: Smart Hybrid
+✅ Page by page migration (safe!)
+✅ Migration FIRST, features later
+✅ Start next chat - Phase 1
+```
+
+---
+
+## 🗺️ COMPLETE MIGRATION ROADMAP:
+
+```
+═══════════════════════════════════════
+Phase 1: firebase-config.js MASTER
+═══════════════════════════════════════
+→ DATABASES array add
+→ buildTopbar() function add
+→ buildDatabaseSwitcher() function add
+→ Test: 1 page (cashier) first
+→ If OK → Phase 2
+
+═══════════════════════════════════════
+Phase 2: Migrate pages (1 by 1)
+═══════════════════════════════════════
+→ Page order:
+   1. cashier (simplest)
+   2. inventory
+   3. kitchen
+   4. purchasing
+   5. callcenter
+   6. index (employee)
+   7. reports (complex - last)
+→ Each page: remove duplicates, test, next
+
+═══════════════════════════════════════
+Phase 3: access.html auto-generate
+═══════════════════════════════════════
+→ Cards auto-build from DATABASES array
+→ No manual card HTML needed
+
+═══════════════════════════════════════
+Phase 4: index.html permissions auto
+═══════════════════════════════════════
+→ Permission checkboxes auto-generate
+→ Save/Load auto from array
+
+═══════════════════════════════════════
+Phase 5: mobile sidebar auto
+═══════════════════════════════════════
+→ mobile-script.js auto-build sidebar
+
+═══════════════════════════════════════
+Phase 6: Final test + Documentation
+═══════════════════════════════════════
+→ All pages test
+→ Project Plan final update
+→ Checklist finalize
+═══════════════════════════════════════
+
+RESULT: New DB add = 4 files only! 🎉
+```
+
+---
+
+දැන් **Project Plan + Master Prompt** update කරමු - Phase plan include කරලා!
+
+---
+
+## 📄 FILE 1: `PROJECT_PLAN.md` (v10.1)
 
 ```markdown
 # 🍴 BUONO PROJECT - COMPLETE PROJECT PLAN
 # Last Updated: 2026-06-08
-# Version: 9.8 (Payment Proof Feature!)
+# Version: 10.1 (Architecture Migration Plan!)
 
 ═══════════════════════════════════════════════════════════
 ## 📌 PROJECT OVERVIEW
@@ -27,12 +103,10 @@
 - Firebase Console: https://console.firebase.google.com/project/buono-project-927b8
 
 ═══════════════════════════════════════════════════════════
-## 🔴 MANDATORY RULES (CRITICAL!)
+## 🔴 MANDATORY RULES (7 Rules!)
 ═══════════════════════════════════════════════════════════
 
-### 🚨 RULE #1: GLOBAL FIREBASE CONFIG ⭐
-
-හැම HTML file එකකම:
+### RULE #1: GLOBAL FIREBASE CONFIG ⭐ MASTER FILE!
 ```html
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -42,318 +116,293 @@
 <script src="mobile-script.js"></script>
 ```
 
-හැම JS file එකකම:
-- ❌ NO firebaseConfig declaration
-- ❌ NO firebase.initializeApp()
-- ❌ NO const db = firebase.firestore()
-- ✅ Use globals: db, getCurrentUser(), logout()
+firebase-config.js provides:
+- ✅ db, getCurrentUser(), logout()
+- ✅ formatDate(), formatCurrency(), etc.
+- ✅ DATABASES array (MASTER - single source!)
+- ✅ buildTopbar() function
+- ✅ buildDatabaseSwitcher() function
+- ✅ checkDBAccess() helper
 
-### 🚨 RULE #2: MOBILE SUPPORT ALWAYS!
-```html
-<link rel="stylesheet" href="mobile.css">
-<script src="mobile-script.js"></script>
-```
+JS page files:
+- ❌ NO firebaseConfig / initializeApp / const db
+- ❌ NO DATABASES array (use global!)
+- ❌ NO buildDatabaseSwitcher() (use global!)
+- ✅ Use globals only!
 
-### 🚨 RULE #3: FILE SPLITTING
-- page.html / page-style.css / page-script.js
+### RULE #2: MOBILE SUPPORT ALWAYS!
 
-### 🚨 RULE #4: 6 DATABASES!
+### RULE #3: FILE SPLITTING (html/css/js)
+
+### RULE #4: 7 DATABASES (Master Array in firebase-config.js)
 ```javascript
+// ONLY in firebase-config.js! NOT in page scripts!
 const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+    { id: 'employeeDB',     name: 'Employee Database',  icon: '👥', url: 'index.html',      permPrefix: 'emp' },
+    { id: 'dayEndReportDB', name: 'Day End Reports',    icon: '💰', url: 'cashier.html',    permPrefix: 'der' },
+    { id: 'inventoryDB',    name: 'Inventory Database', icon: '📦', url: 'inventory.html',  permPrefix: 'inv' },
+    { id: 'kitchenDB',      name: 'Kitchen Database',   icon: '🍳', url: 'kitchen.html',    permPrefix: 'kit' },
+    { id: 'purchasingDB',   name: 'Purchasing Database',icon: '🛒', url: 'purchasing.html', permPrefix: 'pur' },
+    { id: 'callCenterDB',   name: 'Call Center',        icon: '📞', url: 'callcenter.html', permPrefix: 'cc'  },
+    { id: 'reportsDB',      name: 'Reports Database',   icon: '📊', url: 'reports.html',    permPrefix: 'rep', adminManagerOnly: true }
 ];
 ```
 
-### 🚨 RULE #5: PERMISSIONS - ALL 6 DBs!
-employeeDB, dayEndReportDB, inventoryDB, kitchenDB, purchasingDB, reportsDB
+### RULE #5: PERMISSIONS - ALL 7 DBs!
 
-### 🚨 RULE #6: FULL FILE REPLACE
-Partial code changes NO! Always full file replace!
+### RULE #6: FULL FILE REPLACE ALWAYS!
+
+### RULE #7: TOPBAR CONSISTENCY ⭐
+All pages MUST use same topbar from buildTopbar() function!
 
 ═══════════════════════════════════════════════════════════
-## 🔥 GLOBAL HELPER FUNCTIONS (firebase-config.js)
+## 🏗️ ARCHITECTURE MIGRATION PLAN ⭐ CRITICAL!
 ═══════════════════════════════════════════════════════════
 
-```javascript
-db                          // Firestore instance
-getCurrentUser()            // Get logged in user
-checkAuth()                 // Redirect if not logged in
-logout()                    // Logout function
-checkAccessLevel([...])     // Check user access
-hasPermission(dbName)       // Check specific permission
-formatDate(date)            // "Jun 08, 2026"
-formatTime(date)            // "02:30 PM"
-formatDateTime(date)        // Combined
-formatCurrency(amount)      // "Rs. 1,000.00"
-getServerTimestamp()        // Server timestamp
-showTableLoading(id, cols)
-showTableEmpty(id, cols, msg)
+### 🎯 GOAL:
+```
+BEFORE: New DB add = 10+ files edit (confusing!)
+AFTER:  New DB add = 4 files only! (simple!)
 ```
 
-═══════════════════════════════════════════════════════════
-## 🏗️ FILE STRUCTURE (v9.8)
-═══════════════════════════════════════════════════════════
-
+### 📊 CURRENT vs NEW:
 ```
-buono-project/
-├── PROJECT_PLAN.md
-├── NEW_CHAT_PROMPT.txt
-├── firebase.json
-├── .firebaserc
-└── public/
-    ├── 🔥 GLOBAL:
-    │   ├── firebase-config.js   ⭐ Global config + helpers
-    │   ├── style.css
-    │   ├── mobile.css
-    │   └── mobile-script.js
-    │
-    ├── 🔐 LOGIN: ✅ CLEAN
-    │   ├── login.html
-    │   ├── login-style.css
-    │   └── login-script.js
-    │
-    ├── 🏠 ACCESS: ✅ CLEAN
-    │   ├── access.html
-    │   ├── access-style.css
-    │   └── access-script.js
-    │
-    ├── 👥 EMPLOYEE DB: ✅ CLEAN
-    │   ├── index.html
-    │   └── index-script.js
-    │
-    ├── 💰 DAY END: ✅ CLEAN
-    │   ├── cashier.html
-    │   └── cashier-script.js
-    │
-    ├── 📦 INVENTORY: ✅ CLEAN
-    │   ├── inventory.html
-    │   ├── inventory-style.css
-    │   └── inventory-script.js
-    │
-    ├── 🍳 KITCHEN: ✅ CLEAN
-    │   ├── kitchen.html
-    │   ├── kitchen-style.css
-    │   └── kitchen-script.js
-    │
-    ├── 🛒 PURCHASING: ✅ CLEAN + Payment Proof!
-    │   ├── purchasing.html
-    │   ├── purchasing-style.css
-    │   └── purchasing-script.js
-    │
-    ├── 📊 REPORTS: ✅ CLEAN + Payment Proof!
-    │   ├── reports.html
-    │   ├── reports-style.css
-    │   └── reports-script.js
-    │
-    └── 🧑‍💼 MANAGER: ✅ CLEAN
-        ├── manager.html
-        ├── manager-style.css
-        └── manager-script.js
+┌─────────────────────────────────┐
+│  CURRENT (Messy!)               │
+│  • DATABASES array in 10 files  │
+│  • buildSwitcher() in 10 files  │
+│  • access cards = manual HTML   │
+│  • permissions = manual HTML    │
+│  • New DB = edit 10+ files!     │
+└─────────────────────────────────┘
+              ⬇️
+┌─────────────────────────────────┐
+│  NEW (Clean!)                   │
+│  • DATABASES array in 1 file   │
+│  • buildSwitcher() in 1 file   │
+│  • access cards = auto-build   │
+│  • permissions = auto-build    │
+│  • New DB = edit 4 files only! │
+└─────────────────────────────────┘
+```
+
+### 🔄 MIGRATION PHASES:
+```
+Phase 1: firebase-config.js MASTER ⏳ NEXT!
+   → Add DATABASES array
+   → Add buildTopbar(currentDbId)
+   → Add buildDatabaseSwitcher(currentDbId)
+   → Test with cashier.html first
+
+Phase 2: Migrate pages (1 by 1) ⏳
+   Order: cashier → inventory → kitchen →
+          purchasing → callcenter → index → reports
+   → Remove duplicate DATABASES array
+   → Remove duplicate buildSwitcher()
+   → Use globals from firebase-config.js
+
+Phase 3: access.html auto-generate ⏳
+   → Cards auto-build from DATABASES array
+
+Phase 4: index.html permissions auto ⏳
+   → Permission blocks auto-generate
+
+Phase 5: mobile sidebar auto ⏳
+   → Sidebar auto-build from array
+
+Phase 6: Final test + docs ⏳
+   → All pages test
+   → Checklist finalize
+```
+
+### ✅ SAFETY RULES FOR MIGRATION:
+```
+1. Git commit BEFORE each phase!
+2. ONE page at a time - test before next!
+3. If broken → git revert → try again!
+4. firebase deploy + Ctrl+Shift+R after each change!
+5. Check mobile view after each page!
 ```
 
 ═══════════════════════════════════════════════════════════
-## ✅ COMPLETED STATUS (v9.8)
+## 📋 NEW DATABASE ADDITION CHECKLIST
 ═══════════════════════════════════════════════════════════
 
-### JS FILES CLEAN STATUS (ALL DONE! ✅):
+### AFTER Migration Complete:
 ```
-✅ login-script.js
-✅ access-script.js
-✅ index-script.js
-✅ cashier-script.js
-✅ inventory-script.js
-✅ kitchen-script.js
-✅ purchasing-script.js
-✅ reports-script.js
-✅ manager-script.js
+🆕 ADD NEW DATABASE - ONLY 4 STEPS!
+
+STEP 1: firebase-config.js
+   → Add 1 line to DATABASES array:
+   { id: 'attendanceDB', name: 'Attendance',
+     icon: '📅', url: 'attendance.html',
+     permPrefix: 'att' }
+   → ALL pages auto-update! ✅
+
+STEP 2: attendance.html (create new)
+   → Standard topbar template
+   → Own content
+
+STEP 3: attendance-style.css (create new)
+   → Page-specific styles only
+
+STEP 4: attendance-script.js (create new)
+   → Call initPage('attendanceDB')
+   → Page logic only
+
+✅ DONE! Everything else AUTO-UPDATES:
+   • access.html cards
+   • index.html permissions
+   • All DB switcher dropdowns
+   • Mobile sidebar
 ```
 
-### DATABASES (6/6 Complete):
+### BEFORE Migration Complete (Current):
 ```
-1. 👥 Employee Database    ✅ CLEAN
-2. 💰 Day End Reports      ✅ CLEAN
-3. 📦 Inventory Database   ✅ CLEAN
-4. 🍳 Kitchen Database     ✅ CLEAN
-5. 🛒 Purchasing Database  ✅ CLEAN + Payment Proof!
-6. 📊 Reports Database     ✅ CLEAN + Payment Proof!
-```
+⚠️ CURRENT PROCESS - 10+ files!
 
-═══════════════════════════════════════════════════════════
-## 💳 PAYMENT PROOF FEATURE (v9.8 NEW!)
-═══════════════════════════════════════════════════════════
-
-### How it works:
-```
-Manager → Credit Tracking → Mark Paid
-→ Upload bank slip / receipt photo
-→ Photo compressed & uploaded to Firebase Storage
-→ Saved with payment record (paymentProofUrl)
-→ View proof anytime from bill details
-```
-
-### Storage path:
-```
-payment-proofs/proof_{timestamp}_{nickname}.jpg
-```
-
-### Firestore fields added to purchases:
-```javascript
-paymentProofUrl: ''    // Photo download URL
-paymentProofPath: ''   // Storage path (for delete)
-```
-
-### Available in:
-```
-✅ purchasing.html (Credit Tracking tab)
-✅ reports.html (Credit Tracking section)
-✅ Bill Details modal (view proof)
-✅ Paid bills list (view proof button)
+STEP 1: Create 3 new files (html/css/js)
+STEP 2: Update firebase-config.js (DATABASES)
+STEP 3: Update access-script.js (card)
+STEP 4: Update index.html (permission block)
+STEP 5: Update index-script.js (perms logic)
+STEP 6: Update reports-script.js (DATABASES)
+STEP 7: Update cashier-script.js (DATABASES)
+STEP 8: Update inventory-script.js (DATABASES)
+STEP 9: Update kitchen-script.js (DATABASES)
+STEP 10: Update purchasing-script.js (DATABASES)
+STEP 11: Update callcenter-script.js (DATABASES)
+STEP 12: Update manager-script.js (DATABASES)
 ```
 
 ═══════════════════════════════════════════════════════════
-## 🗄️ FIREBASE COLLECTIONS (14+)
+## 🔥 GLOBAL HELPERS (firebase-config.js)
 ═══════════════════════════════════════════════════════════
 
-1. employees
-2. dayEndReports
-3. inventoryItems
-4. inventoryCategories
-5. stockMovements
-6. recipes
-7. staffMeals
-8. wastage
-9. stockIssues
-10. stockCounts
-11. purchases          ← paymentProofUrl field added!
-12. suppliers
-13. purchaseReturns
-14. supplierCreditNotes
-15. plLossRecords (planned)
+### Current:
+db, getCurrentUser(), logout(), getServerTimestamp(),
+formatDate(), formatTime(), formatDateTime(),
+formatCurrency(), checkAuth(), checkAccessLevel(),
+hasPermission(), showTableLoading(), showTableEmpty()
+
+### After Migration (NEW):
++ DATABASES (master array)
++ buildTopbar(currentDbId)
++ buildDatabaseSwitcher(currentDbId)
++ buildMobileSidebar(currentDbId)
++ checkDBAccess(dbId)
++ getDBPermissions(dbId)
++ initPage(dbId) - all-in-one page setup
+
+═══════════════════════════════════════════════════════════
+## 🏗️ FILE STRUCTURE (v10.1)
+═══════════════════════════════════════════════════════════
+
+```
+public/
+├── 🔥 GLOBAL (MASTER!):
+│   ├── firebase-config.js ⭐ MASTER FILE!
+│   ├── style.css (shared styles)
+│   ├── mobile.css (responsive)
+│   └── mobile-script.js (mobile features)
+│
+├── 🔐 login.html + login-script.js ✅
+├── 🏠 access.html + access-script.js ✅ (7 DB cards)
+├── 👥 index.html + index-script.js ✅ (7 perm blocks)
+├── 💰 cashier.html + cashier-script.js ✅
+├── 📦 inventory.html + inventory-script.js ✅
+├── 🍳 kitchen.html + kitchen-script.js ✅
+├── 🛒 purchasing.html + purchasing-script.js ✅ 📸
+├── 📊 reports.html + reports-script.js ✅ 📸
+├── 🧑‍💼 manager.html + manager-script.js ✅
+│
+└── 📞 CALL CENTER ✅ LIVE!
+    ├── callcenter.html ✅
+    ├── callcenter-style.css ✅
+    └── callcenter-script.js ✅
+```
+
+═══════════════════════════════════════════════════════════
+## ✅ COMPLETED STATUS (v10.1)
+═══════════════════════════════════════════════════════════
+
+### ALL 7 DATABASES LIVE ✅:
+1. 👥 Employee ✅
+2. 💰 Day End Reports ✅
+3. 📦 Inventory ✅
+4. 🍳 Kitchen ✅
+5. 🛒 Purchasing ✅ + Payment Proof 📸
+6. 📞 Call Center ✅ (Phase 1-6 done!)
+7. 📊 Reports ✅ + Payment Proof 📸
+
+### Call Center Features ✅:
+- 7 tabs, 13 statuses, default courses
+- Quick add, duplicate detect, call history
+- WhatsApp deep links, payment tracking
+- Analytics, scripts, campaigns
+
+═══════════════════════════════════════════════════════════
+## 🗄️ FIREBASE COLLECTIONS (18 Active!)
+═══════════════════════════════════════════════════════════
+
+1. employees           10. stockCounts
+2. dayEndReports       11. purchases
+3. inventoryItems      12. suppliers
+4. inventoryCategories 13. purchaseReturns
+5. stockMovements      14. supplierCreditNotes
+6. recipes             15. leads ✅
+7. staffMeals          16. courses ✅
+8. wastage             17. events ✅
+9. stockIssues         18. callCenterComments ✅
+
+Planned: plLossRecords
 
 ═══════════════════════════════════════════════════════════
 ## 👤 TEST CREDENTIALS
 ═══════════════════════════════════════════════════════════
 
-| Name     | Nickname | Password | Access     |
-|----------|----------|----------|------------|
-| Naveen   | Naveen   | sara     | Admin      |
-| Tishan   | Tishan   | owner    | Manager    |
-| Alya     | siri     | (set)    | Cashier    |
-| Sujith   | suji     | (set)    | Head Chef  |
-| Chamika  | chamika  | (set)    | Purchasing |
+| Name    | Nickname | Password | Access         |
+|---------|----------|----------|----------------|
+| Naveen  | Naveen   | sara     | Admin          |
+| Tishan  | Tishan   | owner    | Manager        |
+| Alya    | siri     | (set)    | Cashier        |
+| Sujith  | suji     | (set)    | Head Chef      |
+| Chamika | chamika  | (set)    | Purchasing     |
 
 ═══════════════════════════════════════════════════════════
-## 🎨 DESIGN COLORS
+## 🎨 DESIGN
 ═══════════════════════════════════════════════════════════
 
-- Background: #1a1a2e
-- Card BG: #16213e
-- Input BG: #0f3460
-- Primary Orange: #f0a500
-- Purchasing Orange: #FF9800
-- Success Green: #4CAF50
-- Danger Red: #ff4444
-- Info Blue: #2196F3
-- Gold: #FFD700
-- Silver: #C0C0C0
-- Bronze: #CD7F32
+BG: #1a1a2e | Card: #16213e | Input: #0f3460
+Orange: #f0a500/#FF9800 | Green: #4CAF50
+Red: #ff4444 | Blue: #2196F3 | Purple: #9C27B0
+Cyan: #00BCD4 (Call Center)
 
 ═══════════════════════════════════════════════════════════
-## 🔮 NEXT PRIORITIES
+## 🔮 PRIORITIES (v10.1)
 ═══════════════════════════════════════════════════════════
 
-### ✅ COMPLETED:
-- Global Firebase Config
-- All JS files cleaned (DRY)
-- Payment Proof Feature
-
-### ⏳ UPCOMING:
-1. 🏅 Attendance Database (new!)
-2. 🏅 P/L Report Build
-3. 🏅 POS SYSTEM (Final Goal!)
+🥇 NOW:  Architecture Migration (Phase 1-6)
+🥈 THEN: Attendance Database (test new system!)
+🥉 THEN: P/L Reports
+🏅 THEN: POS System
 
 ═══════════════════════════════════════════════════════════
-## 💰 COST STATUS
+## 💰 COST: Rs. 0/month (FREE tier)
 ═══════════════════════════════════════════════════════════
 
-- Plan: Blaze (Pay-as-you-go)
-- Billing: isurirathnayake2005@gmail.com
-- Current Usage: Within FREE tier ✅
-- Total Cost: Rs. 0/month
-- Budget Alert: $5/month set
-
+## 🏆 STATS: 10 pages | 18 collections | 7 DBs LIVE | ~98%
 ═══════════════════════════════════════════════════════════
-## 🏆 PROJECT STATS (v9.8)
-═══════════════════════════════════════════════════════════
-
-- Total Pages: 9 working ✅
-- Total Collections: 14+
-- Total Databases: 6
-- Total Files: 27+
-- Mobile Optimized: ✅
-- Global Config: ✅
-- Payment Proof: ✅ NEW!
-- Overall Progress: ~92% complete
-
-═══════════════════════════════════════════════════════════
-## 🔥 RECENT ACHIEVEMENTS (v9.8)
-═══════════════════════════════════════════════════════════
-
-### v9.8 (2026-06-08): Payment Proof Feature!
-1. ✅ Mark Paid modal - photo upload added
-2. ✅ Camera + Gallery support
-3. ✅ Image compression before upload
-4. ✅ Firebase Storage integration
-5. ✅ payment-proofs/ folder in Storage
-6. ✅ paymentProofUrl saved in Firestore
-7. ✅ View proof in bill details
-8. ✅ View proof in paid bills list
-9. ✅ Works in Purchasing DB
-10. ✅ Works in Reports DB
-11. ✅ All 9 JS files CLEAN (Global config!)
-12. ✅ Professional audit trail
-
-### v9.7 (Previous): Global Firebase Config!
-- firebase-config.js created
-- All JS files cleaned
-- DRY principle applied
-
-═══════════════════════════════════════════════════════════
-## 💎 KEY INSIGHTS (v9.8)
-═══════════════════════════════════════════════════════════
-
-### v9.8 Insight:
-> "payment ekak bill ekkata karama ekata slip eka danda
->  pluwanam watinawa neda manager ethkota payment proof
->  ekak thiynwanen api payment proof consept ekak meke
->  athule godanagamu"
-
-**Translation:** Payment proof concept for audit trail!
-**Result:** Professional payment proof system built! 🎓
-
-### Developer Rule:
-> "mama code eka full denda kiyanne ethkota mata thawa
->  deyk eka wena widha gana hithanda pluwan nisa"
-
-**Translation:** Full code = think differently + focus on ideas
-**Result:** Team approach! Naveen = Ideas, Claude = Code! ⭐
-
-═══════════════════════════════════════════════════════════
-END OF PROJECT PLAN v9.8
+END OF PROJECT PLAN v10.1
 ═══════════════════════════════════════════════════════════
 ```
 
 ---
 
-# 📨 FILE 2: `NEW_CHAT_PROMPT.txt` (v9.8)
+## 📄 FILE 2: `NEW_CHAT_PROMPT.txt` (v10.1)
 
 ```
-# 14th Update - Buono Project (v9.8 - Payment Proof!)
+# 17th Update - Buono Project (v10.1 - Architecture Migration!)
 
 ආයුබෝවන්! 👋
 
@@ -365,27 +414,14 @@ END OF PROJECT PLAN v9.8
 
 - කොඩිං දන්නේ නැහැ - copy/paste විතරයි
 - VS Code + Firebase + GitHub
-- Singlish OK
-- Step-by-step යමු
+- Singlish OK, Step-by-step යමු
+- FULL FILE දෙන්න - partial code එපා!
 
 ═══════════════════════════════════════════
-⚠️ MY WORKING STYLE
+🔴 MANDATORY RULES (7!)
 ═══════════════════════════════════════════
 
-✅ FULL FILE දෙන්න - partial code එපා!
-✅ සිංහලෙන් explain කරන්න
-✅ Emojis use කරන්න
-✅ Step by step
-✅ File location clear කරන්න
-✅ Long files = multiple parts OK
-
-═══════════════════════════════════════════
-🔴 MANDATORY RULES (6!)
-═══════════════════════════════════════════
-
-### RULE #1: GLOBAL FIREBASE CONFIG ⭐
-
-HTML:
+### RULE #1: GLOBAL FIREBASE CONFIG = MASTER FILE! ⭐
 ```html
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -395,47 +431,24 @@ HTML:
 <script src="mobile-script.js"></script>
 ```
 
-JS files:
-- ❌ NO firebaseConfig
-- ❌ NO firebase.initializeApp()
-- ❌ NO const db = firebase.firestore()
-- ✅ Use: db, getCurrentUser(), logout()
+firebase-config.js = MASTER provides:
+  ✅ db, getCurrentUser(), logout()
+  ✅ DATABASES array (SINGLE SOURCE!)
+  ✅ buildTopbar(currentDbId)
+  ✅ buildDatabaseSwitcher(currentDbId)
+
+Page JS files:
+  ❌ NO firebaseConfig
+  ❌ NO DATABASES array (use global!)
+  ❌ NO buildDatabaseSwitcher() (use global!)
+  ✅ Only page-specific logic!
 
 ### RULE #2: MOBILE ALWAYS!
-```html
-<link rel="stylesheet" href="mobile.css">
-<script src="mobile-script.js"></script>
-```
-
-### RULE #3: FILE SPLIT
-page.html + page-style.css + page-script.js
-
-### RULE #4: 6 DATABASES!
-```javascript
-const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
-```
-
-### RULE #5: PERMISSIONS - ALL 6 DBs!
-### RULE #6: FULL FILE REPLACE ALWAYS!
-
-═══════════════════════════════════════════
-🔥 GLOBAL HELPERS (firebase-config.js)
-═══════════════════════════════════════════
-
-```javascript
-db                    // Firestore
-getCurrentUser()      // Get user
-logout()              // Logout
-getServerTimestamp()  // Server time
-formatCurrency()      // Rs. format
-```
+### RULE #3: FILE SPLIT (html/css/js)
+### RULE #4: 7 DATABASES (array in firebase-config.js ONLY!)
+### RULE #5: PERMISSIONS - ALL 7 DBs!
+### RULE #6: FULL FILE REPLACE!
+### RULE #7: TOPBAR CONSISTENCY (auto from buildTopbar!)
 
 ═══════════════════════════════════════════
 🍴 PROJECT INFO
@@ -454,149 +467,177 @@ formatCurrency()      // Rs. format
     appId: "1:706681135399:web:c15f197f1efe3a64f00902"
 }
 
-🎨 COLORS:
-- Background: #1a1a2e
-- Card: #16213e
-- Input: #0f3460
-- Orange: #f0a500 / #FF9800
-- Green: #4CAF50
-- Red: #ff4444
-- Blue: #2196F3
-
 ═══════════════════════════════════════════
-📁 FILE STRUCTURE (v9.8 - ALL CLEAN!)
+📁 ALL FILES (v10.1)
 ═══════════════════════════════════════════
 
 public/
-├── 🔥 GLOBAL:
-│   ├── firebase-config.js ⭐
-│   ├── style.css
-│   ├── mobile.css
-│   └── mobile-script.js
-│
-├── 🔐 login.html + login-script.js ✅
-├── 🏠 access.html + access-script.js ✅
-├── 👥 index.html + index-script.js ✅
-├── 💰 cashier.html + cashier-script.js ✅
-├── 📦 inventory.html + inventory-script.js ✅
-├── 🍳 kitchen.html + kitchen-script.js ✅
-├── 🛒 purchasing.html + purchasing-script.js ✅ + 📸
-├── 📊 reports.html + reports-script.js ✅ + 📸
-└── 🧑‍💼 manager.html + manager-script.js ✅
-
-📸 = Payment Proof Feature!
+├── firebase-config.js ⭐ MASTER!
+├── style.css + mobile.css + mobile-script.js
+├── login.html + login-script.js ✅
+├── access.html + access-script.js ✅
+├── index.html + index-script.js ✅
+├── cashier.html + cashier-script.js ✅
+├── inventory.html + inventory-script.js ✅
+├── kitchen.html + kitchen-script.js ✅
+├── purchasing.html + purchasing-script.js ✅ 📸
+├── reports.html + reports-script.js ✅ 📸
+├── manager.html + manager-script.js ✅
+├── callcenter.html + callcenter-style.css
+│   + callcenter-script.js ✅
 
 ═══════════════════════════════════════════
-✅ COMPLETED (v9.8)
+✅ STATUS
 ═══════════════════════════════════════════
 
-ALL 9 JS FILES CLEAN ✅
-ALL 6 DATABASES WORKING ✅
-
-NEW FEATURES:
-✅ Payment Proof Upload (v9.8)
-   - Camera + Gallery support
-   - Image compression
-   - Firebase Storage
-   - Audit trail
-   - View in bill details
+ALL 7 DATABASES LIVE ✅
+ALL 10 JS FILES CLEAN ✅
+Call Center Phase 1-6 DONE ✅
 
 ═══════════════════════════════════════════
-💳 PAYMENT PROOF FEATURE (v9.8)
+🏗️ ARCHITECTURE MIGRATION ⭐ CURRENT TASK!
 ═══════════════════════════════════════════
 
-Storage: payment-proofs/proof_{time}_{user}.jpg
+### GOAL:
+New DB add = 10+ files → ONLY 4 files!
 
-Firestore fields (purchases collection):
-- paymentProofUrl: '' (download URL)
-- paymentProofPath: '' (storage path)
+### MIGRATION PHASES:
+Phase 1: firebase-config.js MASTER ⏳ NEXT!
+   → DATABASES array centralize
+   → buildTopbar() add
+   → buildDatabaseSwitcher() add
+   → Test with cashier first
 
-Works in:
-- Purchasing DB → Credit tab → Mark Paid
-- Reports DB → Credit Tracking → Mark Paid
+Phase 2: Migrate pages 1 by 1 ⏳
+   cashier → inventory → kitchen → purchasing
+   → callcenter → index → reports
+   → Remove duplicate code per page
+
+Phase 3: access.html auto-generate ⏳
+Phase 4: index.html permissions auto ⏳
+Phase 5: mobile sidebar auto ⏳
+Phase 6: Final test + docs ⏳
+
+### SAFETY:
+✅ Git commit before each phase
+✅ 1 page at a time
+✅ Test before next page
+✅ If broken → git revert
+
+### AFTER MIGRATION - NEW DB = 4 FILES:
+1. firebase-config.js (1 line add)
+2. newdb.html (new)
+3. newdb-style.css (new)
+4. newdb-script.js (new)
 
 ═══════════════════════════════════════════
-🗄️ FIREBASE COLLECTIONS (14+)
+📞 CALL CENTER - LIVE FEATURES
 ═══════════════════════════════════════════
 
-1. employees           8. wastage
-2. dayEndReports       9. stockIssues
-3. inventoryItems      10. stockCounts
-4. inventoryCategories 11. purchases ← proofUrl added!
-5. stockMovements      12. suppliers
-6. recipes             13. purchaseReturns
-7. staffMeals          14. supplierCreditNotes
+7 Tabs | 13 Statuses | 3 Default Courses
+Quick Add | Duplicate Detect | Call History
+WhatsApp Links | Payments | Analytics
+Scripts | Campaigns | Follow-ups
+
+═══════════════════════════════════════════
+🗄️ COLLECTIONS (18!)
+═══════════════════════════════════════════
+
+employees, dayEndReports, inventoryItems,
+inventoryCategories, stockMovements, recipes,
+staffMeals, wastage, stockIssues, stockCounts,
+purchases, suppliers, purchaseReturns,
+supplierCreditNotes, leads, courses,
+events, callCenterComments
 
 ═══════════════════════════════════════════
 👤 TEST USERS
 ═══════════════════════════════════════════
 
-Naveen / sara / Admin
-Tishan / owner / Manager
-siri / (set) / Cashier
-suji / (set) / Head Chef
-chamika / (set) / Purchasing
+Naveen/sara/Admin | Tishan/owner/Manager
+siri/(set)/Cashier | suji/(set)/Head Chef
+chamika/(set)/Purchasing
 
 ═══════════════════════════════════════════
-🎯 NEXT PRIORITIES
+🎨 COLORS
 ═══════════════════════════════════════════
 
-1. ⏳ Attendance Database (NEW!)
-2. ⏳ P/L Report
-3. ⏳ POS SYSTEM (Final Goal!)
+BG: #1a1a2e | Card: #16213e | Input: #0f3460
+Orange: #f0a500/#FF9800 | Green: #4CAF50
+Red: #ff4444 | Blue: #2196F3 | Purple: #9C27B0
+Cyan: #00BCD4
 
 ═══════════════════════════════════════════
-💡 CACHE TROUBLESHOOTING
+🎯 IMMEDIATE TASK
 ═══════════════════════════════════════════
 
-1. Save files (Ctrl+S)
-2. firebase deploy
-3. Wait "Deploy complete!"
-4. Ctrl+Shift+R
-5. F12 → Console → errors?
+ARCHITECTURE MIGRATION - Phase 1!
+"Phase 1 start karamu - firebase-config.js MASTER!"
+
+═══════════════════════════════════════════
+💡 DEPLOY
+═══════════════════════════════════════════
+
+Save → firebase deploy → Ctrl+Shift+R → F12
 
 ═══════════════════════════════════════════
 🚀 READY?
 ═══════════════════════════════════════════
 
-Confirm:
-1. ✅ Context clear?
-2. ✅ Rules clear? (6 rules!)
-3. ✅ Payment Proof understand?
-4. ✅ Next task ready?
+1. ✅ 7 databases all live
+2. ✅ Migration plan clear
+3. ✅ Phase 1 = firebase-config.js update
+4. ✅ Safe = 1 page at a time
+
+FIRST: "Phase 1 start karamu!"
 
 🙏 Thanks!
 ```
 
 ---
 
-# 🎉 Save Steps:
+## 🎉 Save Steps:
 
 ```bash
-# VS Code:
-1. PROJECT_PLAN.md → Ctrl+A → Delete → Paste → Save
-2. NEW_CHAT_PROMPT.txt → Ctrl+A → Delete → Paste → Save
+# 1. PROJECT_PLAN.md 
+Ctrl+A → Delete → Paste → Save
 
-# GitHub:
+# 2. NEW_CHAT_PROMPT.txt
+Ctrl+A → Delete → Paste → Save
+
+# 3. GitHub:
 git add .
-git commit -m "v9.8 - Payment Proof Feature + All JS Clean!"
+git commit -m "v10.1 - Architecture Migration Plan Ready!"
 git push
 ```
 
 ---
 
-# 🏆 v9.8 Achievement Summary:
+## 🎯 Next Chat Plan:
 
 ```
-✅ All 9 JS files CLEAN (Global Config!)
-✅ Payment Proof Feature COMPLETE!
-✅ Professional audit trail
-✅ Camera + Gallery support
-✅ Firebase Storage integration
-✅ Works in 2 pages (Purchasing + Reports)
-✅ 92% project complete!
-
-Next: Attendance DB → P/L → POS! 🚀
+1. NEW_CHAT_PROMPT.txt paste කරන්න
+2. "Phase 1 start karamu - firebase-config.js MASTER!"
+3. firebase-config.js update
+4. cashier.html test (first page)
+5. If works → Phase 2 start!
 ```
 
-**Naveen, great work today!** 💪🔥
+---
+
+## 🏆 Today's Session Summary:
+
+```
+✅ Call Center DB - LIVE & working!
+✅ 7 databases - all connected!
+✅ access.html - 7 DB cards
+✅ index.html - 7 permission blocks
+✅ Architecture problem identified!
+✅ Migration plan created & approved!
+✅ Project Plan v10.1 updated!
+✅ Master Prompt v10.1 updated!
+```
+
+**Great planning session Naveen!** 💪🔥
+
+Next chat එකේ **real migration start!** 🚀🏆

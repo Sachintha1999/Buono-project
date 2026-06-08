@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📞 Call Center - Buono Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="callcenter-style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════ -->
+<!-- TOPBAR (Same as other pages)  -->
+<!-- ═══════════════════════════════ -->
+<div class="topbar">
+    <div class="topbar-left">
+        <span class="topbar-icon">🍴</span>
+        <h2 style="margin-right:15px;">Buono</h2>
+
+        <div class="db-switcher" id="dbSwitcher">
+            <span class="db-switcher-icon">📂</span>
+            <span class="db-switcher-name">Call Center</span>
+            <span class="db-switcher-arrow">▼</span>
+
+            <div class="db-switcher-dropdown" id="dbDropdown">
+                <div class="db-dropdown-title">📂 Switch to:</div>
+                <div id="dbDropdownList"></div>
+                <div class="db-dropdown-divider"></div>
+                <a href="access.html" class="db-dropdown-item">
+                    <span>🏠</span>
+                    <span>Access Home</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="topbar-right">
+        <span id="userBadge">👋 Welcome</span>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════ -->
+<!-- MAIN CONTENT                   -->
+<!-- ═══════════════════════════════ -->
+<div class="dashboard-container">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1 class="page-title">📞 Call Center Database</h1>
+        <p class="page-subtitle">Academy Lead Management System</p>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statTotal">0</div>
+                <div class="stat-label">Total Leads</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🟢</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statEnrolled">0</div>
+                <div class="stat-label">Enrolled</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔵</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statMightJoin">0</div>
+                <div class="stat-label">Might Join</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📱</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statNeedCall">0</div>
+                <div class="stat-label">Need Call</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🔄</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statFollowUp">0</div>
+                <div class="stat-label">Follow-ups</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-container">
+        <div class="tabs-scroll">
+            <button class="tab-btn active" onclick="switchTab('quickAdd')" id="tab-quickAdd">📱 Quick Add</button>
+            <button class="tab-btn" onclick="switchTab('callLog')" id="tab-callLog">📞 Call Log</button>
+            <button class="tab-btn" onclick="switchTab('enrolled')" id="tab-enrolled">✅ Enrolled</button>
+            <button class="tab-btn" onclick="switchTab('followups')" id="tab-followups">🔄 Follow-ups</button>
+            <button class="tab-btn" onclick="switchTab('payments')" id="tab-payments">💰 Payments</button>
+            <button class="tab-btn" onclick="switchTab('ccReports')" id="tab-ccReports">📊 Reports</button>
+            <button class="tab-btn" onclick="switchTab('settings')" id="tab-settings">⚙️ Settings</button>
+        </div>
+    </div>
+
+    <!-- TAB 1: QUICK ADD -->
+    <div class="tab-content active" id="content-quickAdd">
+        <div class="section-card">
+            <h2 class="section-title">⚡ Quick Add Lead</h2>
+            <p class="section-desc">WhatsApp number enter කරලා instantly lead add කරන්න</p>
+
+            <div class="quick-add-box">
+                <div class="quick-add-row">
+                    <div class="phone-input-wrap">
+                        <span class="phone-prefix">+94</span>
+                        <input type="tel" id="quickPhone" placeholder="7X XXX XXXX" maxlength="9"
+                            class="quick-phone-input" oninput="formatPhoneInput(this)"
+                            onkeypress="if(event.key==='Enter') quickAddLead()">
+                    </div>
+                    <input type="text" id="quickName" placeholder="Name (Optional)"
+                        class="quick-name-input" onkeypress="if(event.key==='Enter') quickAddLead()">
+                    <button class="btn-quick-add" onclick="quickAddLead()">➕ Add Lead</button>
+                </div>
+                <div class="quick-add-hint">
+                    💡 Number enter කරලා Enter press කරන්න | Duplicate automatically detect වෙනවා
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">📋 Recent Leads</h2>
+                <div class="header-actions">
+                    <input type="text" id="searchLeads" placeholder="🔍 Search leads..." class="search-input" oninput="searchLeads()">
+                    <select id="filterStatus" class="filter-select" onchange="filterByStatus()">
+                        <option value="">All Status</option>
+                        <option value="Need Call">📱 Need Call</option>
+                        <option value="Enrolled">🟢 Enrolled</option>
+                        <option value="Might Join">🔵 Might Join</option>
+                        <option value="Not Responding">⚫ Not Responding</option>
+                        <option value="Unable to join">🔴 Unable to join</option>
+                        <option value="Switch off">⚪ Switch off</option>
+                        <option value="Will join the next intake">🟡 Will join next intake</option>
+                        <option value="Call back later">📞 Call back later</option>
+                        <option value="Not in use">❌ Not in use</option>
+                        <option value="Will decide and get back to us">🤔 Will decide</option>
+                        <option value="User busy">📵 User busy</option>
+                        <option value="Hold">⏸️ Hold</option>
+                        <option value="Need Attention">⚠️ Need Attention</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table" id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Course Interest</th>
+                            <th>Source</th>
+                            <th>Added</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTableBody">
+                        <tr><td colspan="8" class="table-loading"><div class="loading-spinner"></div>Loading leads...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: CALL LOG -->
+    <div class="tab-content" id="content-callLog">
+        <div class="calllog-layout">
+            <div class="calllog-form-panel">
+                <div class="section-card">
+                    <h2 class="section-title">📞 Log a Call</h2>
+
+                    <div class="form-group">
+                        <label>🔍 Find Lead (Phone / Name)</label>
+                        <div class="lead-search-wrap">
+                            <input type="text" id="logSearchInput" placeholder="Search..." class="form-input" oninput="searchForLog()">
+                            <div class="lead-search-results" id="logSearchResults"></div>
+                        </div>
+                    </div>
+
+                    <div class="selected-lead-info" id="selectedLeadInfo" style="display:none">
+                        <div class="selected-lead-header">
+                            <span class="selected-lead-name" id="selLeadName">-</span>
+                            <span class="selected-lead-phone" id="selLeadPhone">-</span>
+                        </div>
+                        <div class="selected-lead-status" id="selLeadStatus">-</div>
+                    </div>
+
+                    <div id="callLogForm" style="display:none">
+                        <div class="form-group">
+                            <label>👤 Name *</label>
+                            <input type="text" id="logName" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>📱 Phone *</label>
+                            <input type="tel" id="logPhone" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>📊 Status *</label>
+                            <select id="logStatus" class="form-select">
+                                <option value="Need Call">📱 Need Call</option>
+                                <option value="Enrolled">🟢 Enrolled</option>
+                                <option value="Might Join">🔵 Might Join</option>
+                                <option value="Not Responding">⚫ Not Responding</option>
+                                <option value="Unable to join">🔴 Unable to join</option>
+                                <option value="Switch off">⚪ Switch off</option>
+                                <option value="Will join the next intake">🟡 Will join next intake</option>
+                                <option value="Call back later">📞 Call back later</option>
+                                <option value="Not in use">❌ Not in use</option>
+                                <option value="Will decide and get back to us">🤔 Will decide</option>
+                                <option value="User busy">📵 User busy</option>
+                                <option value="Hold">⏸️ Hold</option>
+                                <option value="Need Attention">⚠️ Need Attention</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>🎓 Course Interest</label>
+                            <select id="logCourse" class="form-select">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📅 Follow-up Date</label>
+                            <input type="datetime-local" id="logFollowUp" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Call Notes *</label>
+                            <textarea id="logNotes" class="form-textarea" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>📡 Lead Source</label>
+                            <select id="logSource" class="form-select">
+                                <option value="Walk In">Walk In</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Website">Website</option>
+                                <option value="Event">Event</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📢 Campaign / Event</label>
+                            <select id="logEvent" class="form-select">
+                                <option value="">-- No Campaign --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="saveCallLog()">💾 Save Call Log</button>
+                            <button class="btn-secondary" onclick="clearCallLogForm()">🔄 Clear</button>
+                        </div>
+
+                        <div class="wa-actions" id="waActions">
+                            <div class="wa-title">📲 WhatsApp</div>
+                            <button class="btn-wa" onclick="sendWACourseDetails()">📚 Send Course Details</button>
+                            <button class="btn-wa" onclick="sendWAPaymentDetails()">💳 Send Payment Details</button>
+                            <button class="btn-wa" onclick="sendWAConfirmation()">✅ Send Confirmation</button>
+                        </div>
+                    </div>
+
+                    <div class="no-lead-msg" id="noLeadMsg">
+                        <div class="no-lead-icon">🔍</div>
+                        <p>Lead search කරන්න හෝ Quick Add tab එකෙන් new lead add කරන්න</p>
+                        <button class="btn-secondary" onclick="switchTab('quickAdd')">➕ Quick Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calllog-history-panel">
+                <div class="section-card">
+                    <h2 class="section-title">📜 Call History</h2>
+                    <div class="call-history-list" id="callHistoryList">
+                        <div class="no-history"><div>📞</div><p>Lead select කරන්න</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: ENROLLED -->
+    <div class="tab-content" id="content-enrolled">
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">✅ Enrolled Students</h2>
+                <span class="count-badge" id="enrolledCount">0</span>
+            </div>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th><th>Name</th><th>Phone</th><th>Course</th><th>Enrolled</th><th>Payment</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enrolledTableBody">
+                        <tr><td colspan="7" class="table-empty">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: FOLLOW-UPS -->
+    <div class="tab-content" id="content-followups">
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">🔄 Scheduled Follow-ups</h2>
+                <button class="btn-secondary" onclick="loadFollowUps()">🔄 Refresh</button>
+            </div>
+
+            <div class="followup-section">
+                <div class="followup-group-title">⚡ Today's Follow-ups</div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Name</th><th>Phone</th><th>Status</th><th>Course</th><th>Scheduled</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="todayFollowUps">
+                            <tr><td colspan="6" class="table-empty">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="followup-section">
+                <div class="followup-group-title">📅 Upcoming Follow-ups</div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Name</th><th>Phone</th><th>Status</th><th>Course</th><th>Scheduled</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="upcomingFollowUps">
+                            <tr><td colspan="6" class="table-empty">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: PAYMENTS -->
+    <div class="tab-content" id="content-payments">
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">💰 Payment Tracking</h2>
+                <span class="count-badge" id="paymentCount">0</span>
+            </div>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th><th>Phone</th><th>Course</th><th>Total</th>
+                            <th>Down</th><th>Install 1</th><th>Install 2</th><th>Balance</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTableBody">
+                        <tr><td colspan="9" class="table-empty">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: CC REPORTS -->
+    <div class="tab-content" id="content-ccReports">
+        <div class="section-card">
+            <h2 class="section-title">📊 Call Center Analytics</h2>
+
+            <div class="report-filters">
+                <select id="reportPeriod" class="filter-select" onchange="loadCCReports()">
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month" selected>This Month</option>
+                    <option value="all">All Time</option>
+                </select>
+            </div>
+
+            <div class="report-stats-grid">
+                <div class="report-stat-card">
+                    <div class="rs-icon">👥</div>
+                    <div class="rs-number" id="rsTotalLeads">0</div>
+                    <div class="rs-label">Total Leads</div>
+                </div>
+                <div class="report-stat-card success">
+                    <div class="rs-icon">🟢</div>
+                    <div class="rs-number" id="rsEnrolled">0</div>
+                    <div class="rs-label">Enrolled</div>
+                </div>
+                <div class="report-stat-card info">
+                    <div class="rs-icon">🔵</div>
+                    <div class="rs-number" id="rsMightJoin">0</div>
+                    <div class="rs-label">Might Join</div>
+                </div>
+                <div class="report-stat-card warning">
+                    <div class="rs-icon">💰</div>
+                    <div class="rs-number" id="rsRevenue">Rs. 0</div>
+                    <div class="rs-label">Expected Revenue</div>
+                </div>
+                <div class="report-stat-card purple">
+                    <div class="rs-icon">📈</div>
+                    <div class="rs-number" id="rsConversion">0%</div>
+                    <div class="rs-label">Conversion Rate</div>
+                </div>
+            </div>
+
+            <div class="status-breakdown">
+                <h3>📊 Status Breakdown</h3>
+                <div class="status-bars" id="statusBars">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 7: SETTINGS -->
+    <div class="tab-content" id="content-settings">
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">🎓 Course Management</h2>
+                <button class="btn-primary" onclick="openCourseModal()">➕ Add Course</button>
+            </div>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Course</th><th>Academy</th><th>Total Fee</th><th>Down</th><th>Installments</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="coursesTableBody">
+                        <tr><td colspan="6" class="table-empty">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">📢 Campaigns / Events</h2>
+                <button class="btn-primary" onclick="openEventModal()">➕ Add Campaign</button>
+            </div>
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Campaign</th><th>Platform</th><th>Start</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                        <tr><td colspan="5" class="table-empty">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-header-row">
+                <h2 class="section-title">📋 Operator Scripts</h2>
+                <button class="btn-primary" onclick="openScriptModal()">➕ Add Script</button>
+            </div>
+            <div class="scripts-list" id="scriptsList">
+                <div class="table-empty">Loading scripts...</div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /dashboard-container -->
+
+<!-- ═══════════════════════════════ -->
+<!-- MODALS                         -->
+<!-- ═══════════════════════════════ -->
+
+<!-- LEAD MODAL -->
+<div class="modal-overlay" id="leadModal">
+    <div class="modal-box modal-lg">
+        <div class="modal-header">
+            <h3 id="leadModalTitle">➕ Add New Lead</h3>
+            <button class="modal-close" onclick="closeModal('leadModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>👤 Full Name *</label>
+                    <input type="text" id="mlName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>📱 Phone *</label>
+                    <div class="phone-input-wrap">
+                        <span class="phone-prefix">+94</span>
+                        <input type="tel" id="mlPhone" class="form-input" placeholder="7X XXX XXXX" maxlength="9" oninput="formatPhoneInput(this)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>📊 Status</label>
+                    <select id="mlStatus" class="form-select">
+                        <option value="Need Call">📱 Need Call</option>
+                        <option value="Enrolled">🟢 Enrolled</option>
+                        <option value="Might Join">🔵 Might Join</option>
+                        <option value="Not Responding">⚫ Not Responding</option>
+                        <option value="Unable to join">🔴 Unable to join</option>
+                        <option value="Switch off">⚪ Switch off</option>
+                        <option value="Will join the next intake">🟡 Will join next intake</option>
+                        <option value="Call back later">📞 Call back later</option>
+                        <option value="Not in use">❌ Not in use</option>
+                        <option value="Will decide and get back to us">🤔 Will decide</option>
+                        <option value="User busy">📵 User busy</option>
+                        <option value="Hold">⏸️ Hold</option>
+                        <option value="Need Attention">⚠️ Need Attention</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>🎓 Course Interest</label>
+                    <select id="mlCourse" class="form-select"><option value="">-- Select --</option></select>
+                </div>
+                <div class="form-group">
+                    <label>📡 Lead Source</label>
+                    <select id="mlSource" class="form-select">
+                        <option value="Walk In">Walk In</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="WhatsApp">WhatsApp</option>
+                        <option value="Referral">Referral</option>
+                        <option value="Website">Website</option>
+                        <option value="Event">Event</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>📢 Campaign</label>
+                    <select id="mlEvent" class="form-select"><option value="">-- No Campaign --</option></select>
+                </div>
+                <div class="form-group full-width">
+                    <label>📝 Notes</label>
+                    <textarea id="mlNotes" class="form-textarea" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="saveLead()">💾 Save</button>
+            <button class="btn-secondary" onclick="closeModal('leadModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- COURSE MODAL -->
+<div class="modal-overlay" id="courseModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="courseModalTitle">🎓 Add Course</h3>
+            <button class="modal-close" onclick="closeModal('courseModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Course Name *</label>
+                <input type="text" id="cName" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Academy / Category</label>
+                <input type="text" id="cAcademy" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Total Fee (Rs.) *</label>
+                <input type="number" id="cFee" class="form-input" oninput="calcCourseInstallments()">
+            </div>
+            <div class="form-group">
+                <label>Down Payment (Rs.) *</label>
+                <input type="number" id="cDown" class="form-input" oninput="calcCourseInstallments()">
+            </div>
+            <div class="form-group">
+                <label>📊 Installment Preview</label>
+                <div class="installment-preview" id="installmentPreview">Enter fee & down payment</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="saveCourse()">💾 Save</button>
+            <button class="btn-secondary" onclick="closeModal('courseModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- EVENT MODAL -->
+<div class="modal-overlay" id="eventModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="eventModalTitle">📢 Add Campaign</h3>
+            <button class="modal-close" onclick="closeModal('eventModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Campaign Name *</label>
+                <input type="text" id="evName" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Platform</label>
+                <select id="evPlatform" class="form-select">
+                    <option value="Facebook">Facebook</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Google">Google Ads</option>
+                    <option value="Event">Live Event</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" id="evStart" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="evStatus" class="form-select">
+                    <option value="Active">🟢 Active</option>
+                    <option value="Paused">⏸️ Paused</option>
+                    <option value="Ended">🔴 Ended</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="saveEvent()">💾 Save</button>
+            <button class="btn-secondary" onclick="closeModal('eventModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPT MODAL -->
+<div class="modal-overlay" id="scriptModal">
+    <div class="modal-box modal-lg">
+        <div class="modal-header">
+            <h3>📋 Add Operator Script</h3>
+            <button class="modal-close" onclick="closeModal('scriptModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Title *</label>
+                <input type="text" id="scTitle" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="scCategory" class="form-select">
+                    <option value="Initial">Initial Call</option>
+                    <option value="Follow-up">Follow-up</option>
+                    <option value="Enrollment">Enrollment</option>
+                    <option value="Payment">Payment</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Content *</label>
+                <textarea id="scContent" class="form-textarea" rows="6"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="saveScript()">💾 Save</button>
+            <button class="btn-secondary" onclick="closeModal('scriptModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- VIEW LEAD MODAL -->
+<div class="modal-overlay" id="viewLeadModal">
+    <div class="modal-box modal-lg">
+        <div class="modal-header">
+            <h3>👤 Lead Details</h3>
+            <button class="modal-close" onclick="closeModal('viewLeadModal')">✕</button>
+        </div>
+        <div class="modal-body" id="viewLeadBody">Loading...</div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="editFromView()">✏️ Edit</button>
+            <button class="btn-secondary" onclick="closeModal('viewLeadModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="deleteModal">
+    <div class="modal-box modal-sm">
+        <div class="modal-header">
+            <h3>⚠️ Delete Lead?</h3>
+            <button class="modal-close" onclick="closeModal('deleteModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p style="text-align:center;color:#ccc;">
+                <strong id="deleteLeadName"></strong> delete කරන්නද?<br>
+                <small>Call history ද delete වෙනවා!</small>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-danger" onclick="confirmDelete()">🗑️ Delete</button>
+            <button class="btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════════════════════════ -->
+<!-- SCRIPTS (CORRECT ORDER!)       -->
+<!-- ═══════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script src="firebase-config.js"></script>
+<script src="callcenter-script.js"></script>
+<script src="mobile-script.js"></script>
+
+</body>
+</html>

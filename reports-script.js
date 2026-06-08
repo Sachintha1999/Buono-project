@@ -7,14 +7,15 @@
 // ❌ REMOVED: firebaseConfig block (now in firebase-config.js!)
 // ✅ Using globals: db, getCurrentUser(), logout()
 
-// 📂 DATABASES LIST
-const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
+// 📂 DATABASES LIST - 7 DBs! ⭐ v9.9
+    const DATABASES = [
+    { id: 'employeeDB',     name: 'Employee Database',  icon: '👥', url: 'index.html' },
+    { id: 'dayEndReportDB', name: 'Day End Reports',    icon: '💰', url: 'cashier.html' },
+    { id: 'inventoryDB',    name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
+    { id: 'kitchenDB',      name: 'Kitchen Database',   icon: '🍳', url: 'kitchen.html' },
+    { id: 'purchasingDB',   name: 'Purchasing Database',icon: '🛒', url: 'purchasing.html' },
+    { id: 'callCenterDB',   name: 'Call Center',        icon: '📞', url: 'callcenter.html' },
+    { id: 'reportsDB',      name: 'Reports Database',   icon: '📊', url: 'reports.html', adminManagerOnly: true }
 ];
 
 // 🌐 GLOBAL VARIABLES
