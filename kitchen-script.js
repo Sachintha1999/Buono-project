@@ -1,26 +1,11 @@
 // ═══════════════════════════════════════════════════════════
 // 🍳 BUONO - KITCHEN DATABASE
 // File: kitchen-script.js
-// Version: 9.7 - Global Firebase Config!
-//
-// 🔥 Firebase: Loaded from firebase-config.js
-// 📦 Available globals: db, getCurrentUser(), logout(),
-//                       getServerTimestamp()
+// Version: 10.1 - Architecture Migration!
+// ⭐ Uses global DATABASES from firebase-config.js
 // ═══════════════════════════════════════════════════════════
 
-
-// ═══════════════════════════════════════
-// 📂 DATABASES MASTER LIST (6 Databases!)
-// ═══════════════════════════════════════
-const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
-
+// ❌ NO DATABASES array! Uses global from firebase-config.js
 
 // ═══════════════════════════════════════
 // 🌐 GLOBALS
@@ -66,9 +51,8 @@ function isManagerUser() { return ['Admin', 'Manager'].includes(currentUser?.acc
 // 🚀 INITIALIZE APP
 // ═══════════════════════════════════════
 async function initializeApp() {
-    const user = sessionStorage.getItem('loggedInUser');
-    if (!user) { window.location.href = "login.html"; return; }
-    const userData = JSON.parse(user);
+    const userData = getCurrentUser();
+    if (!userData) { window.location.href = "login.html"; return; }
 
     try {
         const userDoc = await db.collection('employees').doc(userData.id).get();
@@ -94,7 +78,7 @@ async function initializeApp() {
     const seen = localStorage.getItem('seenRejectedIds_' + userData.id);
     if (seen) seenRejectedIds = new Set(JSON.parse(seen));
 
-    buildDatabaseSwitcher();
+    buildDBSwitcherDropdown();
     setupUI();
     setDefaultDates();
 
@@ -137,10 +121,15 @@ function showSection(name, btnEl) {
     if (name === 'kitchenreports') generateKitchenReports();
 }
 
-function buildDatabaseSwitcher() {
+// ⭐ NEW: Uses global DATABASES array!
+function buildDBSwitcherDropdown() {
     const list = document.getElementById('dbDropdownList');
+    if (!list) return;
+    
     const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
     let html = '';
+    
+    // ✅ Uses GLOBAL DATABASES from firebase-config.js
     DATABASES.forEach(d => {
         if (d.adminManagerOnly && !isAdminOrMgr) return;
         const isAdmin = currentUser.access === 'Admin';
@@ -151,10 +140,14 @@ function buildDatabaseSwitcher() {
         html += `<a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}"><span>${d.icon}</span><span>${d.name}</span>${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}</a>`;
     });
     list.innerHTML = html;
-    document.getElementById('dbSwitcher').addEventListener('click', function(e) {
-        e.stopPropagation();
-        document.getElementById('dbDropdown').classList.toggle('show');
-    });
+    
+    const switcher = document.getElementById('dbSwitcher');
+    if (switcher) {
+        switcher.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('dbDropdown').classList.toggle('show');
+        });
+    }
     document.addEventListener('click', function(e) {
         const dd = document.getElementById('dbDropdown');
         if (dd && !dd.contains(e.target) && !e.target.closest('#dbSwitcher')) dd.classList.remove('show');
@@ -366,6 +359,7 @@ function renderRecipes(recipes) {
     });
     grid.innerHTML = html;
 }
+
 function addIngredientRow(data) {
     const container = document.getElementById('ingredientsList');
     const rowId = 'ing-row-' + ingredientRowCount;
@@ -509,7 +503,6 @@ async function confirmDeleteRecipe() {
     try { await db.collection('recipes').doc(deleteRecipeId).delete(); alert('✅ Deleted!'); closeDeleteRecipeModal(); }
     catch (e) { alert('❌ ' + e.message); }
 }
-
 
 // ═══════ TAB 2: STAFF MEALS ═══════
 function loadStaffMeals() {
@@ -845,7 +838,10 @@ function closeDeleteWasteModal() { document.getElementById('deleteWasteModal').s
 async function confirmDeleteWaste() {
     try { await db.collection('wastage').doc(deleteWasteId).delete(); alert('✅ Deleted!'); closeDeleteWasteModal(); }
     catch (e) { alert('❌ ' + e.message); }
-}// ═══════ TAB 4: STOCK COUNT ═══════
+}
+
+
+// ═══════ TAB 4: STOCK COUNT ═══════
 function initStockCountTab() {
     document.getElementById('countDate').value = new Date().toISOString().split('T')[0];
     document.getElementById('countNotes').value = '';
