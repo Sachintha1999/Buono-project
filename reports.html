@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Reports Database</title>
-    <!-- 🎨 Global Styles -->
     <link rel="stylesheet" href="style.css">
-    <!-- 🎨 Reports DB Specific Styles -->
     <link rel="stylesheet" href="reports-style.css">
+    <link rel="stylesheet" href="mobile.css">
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- 📌 TOPBAR (උඩ තීරුව)                                    -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══════ TOPBAR ═══════ -->
 <div class="reports-topbar">
     <div class="reports-topbar-left">
         <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
@@ -32,19 +29,14 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- 📐 MAIN LAYOUT (Sidebar + Content)                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ═══════ MAIN LAYOUT ═══════ -->
 <div class="reports-layout">
 
-    <!-- ─────────────────────────────────────────────────── -->
-    <!-- 🗂️ SIDEBAR (වම් පැත්ත)                              -->
-    <!-- ─────────────────────────────────────────────────── -->
+    <!-- SIDEBAR -->
     <div class="reports-sidebar" id="reportsSidebar">
         <div class="sidebar-hdr"><p>📊 Report Sections</p></div>
         <div class="sidebar-nav">
 
-            <!-- ⏳ Pending Approvals (Default active) -->
             <div class="sb-item active" id="menu-pendingapprovals" onclick="showSection('pendingapprovals')">
                 <span class="sb-icon">⏳</span>
                 <span class="sb-label">Pending Approvals</span>
@@ -126,12 +118,10 @@
         </div>
     </div>
 
-    <!-- ─────────────────────────────────────────────────── -->
-    <!-- 📄 CONTENT AREA (දකුණු පැත්ත)                       -->
-    <!-- ─────────────────────────────────────────────────── -->
+    <!-- CONTENT AREA -->
     <div class="reports-content">
 
-        <!-- 🔒 Access Denied Message -->
+        <!-- Access Denied -->
         <div class="rpt-access-denied" id="rptAccessDenied" style="display:none;">
             <div class="ad-icon">🔒</div>
             <h2>Access Denied</h2>
@@ -139,27 +129,69 @@
             <button onclick="window.location.href='access.html'" style="background:#f0a500; color:#1a1a2e; border:none; padding:10px 24px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:20px;">← Back</button>
         </div>
 
-        <!-- ⏳ SECTION: PENDING APPROVALS -->
+        <!-- ═══════════════════════════════════════════
+             ⏳ SECTION: PENDING APPROVALS ⭐ UPDATED!
+             ═══════════════════════════════════════════ -->
         <div id="section-pendingapprovals" class="rpt-section">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">⏳ Pending Approvals</div>
                 <div class="rpt-section-subtitle">All submissions waiting for manager approval</div>
             </div>
+
+            <!-- Summary Cards (5 now!) -->
             <div class="rpt-summary-cards">
-                <div class="rpt-summary-card orange"><div class="sc-icon">📊</div><div class="sc-value" id="scStockCountsPending">0</div><div class="sc-label">Stock Counts</div></div>
-                <div class="rpt-summary-card purchasing"><div class="sc-icon">🛒</div><div class="sc-value" id="scPurchasesPending">0</div><div class="sc-label">Purchase Bills</div></div>
-                <div class="rpt-summary-card red"><div class="sc-icon">⚠️</div><div class="sc-value" id="scPendingCritical">0</div><div class="sc-label">Critical Items</div></div>
-                <div class="rpt-summary-card yellow"><div class="sc-icon">💰</div><div class="sc-value" id="scPendingImpact">Rs. 0</div><div class="sc-label">Total Value</div></div>
+                <div class="rpt-summary-card orange">
+                    <div class="sc-icon">📊</div>
+                    <div class="sc-value" id="scStockCountsPending">0</div>
+                    <div class="sc-label">Stock Counts</div>
+                </div>
+                <div class="rpt-summary-card purchasing">
+                    <div class="sc-icon">🛒</div>
+                    <div class="sc-value" id="scPurchasesPending">0</div>
+                    <div class="sc-label">Purchase Bills</div>
+                </div>
+                <div class="rpt-summary-card purple">
+                    <div class="sc-icon">🔄</div>
+                    <div class="sc-value" id="scReturnsPending">0</div>
+                    <div class="sc-label">Returns</div>
+                </div>
+                <div class="rpt-summary-card red">
+                    <div class="sc-icon">⚠️</div>
+                    <div class="sc-value" id="scPendingCritical">0</div>
+                    <div class="sc-label">Critical Items</div>
+                </div>
+                <div class="rpt-summary-card yellow">
+                    <div class="sc-icon">💰</div>
+                    <div class="sc-value" id="scPendingImpact">Rs. 0</div>
+                    <div class="sc-label">Total Value</div>
+                </div>
             </div>
+
+            <!-- Sub Tabs (3 now!) -->
             <div class="pending-subtabs">
-                <button class="pending-subtab active" id="ptab-stock" onclick="showPendingTab('stock', this)">📊 Stock Counts <span class="tab-count" id="ptabStockCount">0</span></button>
-                <button class="pending-subtab purchasing-tab" id="ptab-purchase" onclick="showPendingTab('purchase', this)">🛒 Purchase Bills <span class="tab-count" id="ptabPurchaseCount">0</span></button>
+                <button class="pending-subtab active" id="ptab-stock" onclick="showPendingTab('stock', this)">
+                    📊 Stock Counts <span class="tab-count" id="ptabStockCount">0</span>
+                </button>
+                <button class="pending-subtab purchasing-tab" id="ptab-purchase" onclick="showPendingTab('purchase', this)">
+                    🛒 Purchase Bills <span class="tab-count" id="ptabPurchaseCount">0</span>
+                </button>
+                <button class="pending-subtab returns-tab" id="ptab-returns" onclick="showPendingTab('returns', this)" style="color:#9C27B0;">
+                    🔄 Returns <span class="tab-count" id="ptabReturnsCount">0</span>
+                </button>
             </div>
-            <div id="pendingStockList" class="pending-content"><div class="rpt-loading">⏳ Loading...</div></div>
-            <div id="pendingPurchaseList" class="pending-content" style="display:none;"><div class="rpt-loading">⏳ Loading...</div></div>
+
+            <div id="pendingStockList" class="pending-content">
+                <div class="rpt-loading">⏳ Loading...</div>
+            </div>
+            <div id="pendingPurchaseList" class="pending-content" style="display:none;">
+                <div class="rpt-loading">⏳ Loading...</div>
+            </div>
+            <div id="pendingReturnsList" class="pending-content" style="display:none;">
+                <div class="rpt-loading">⏳ Loading...</div>
+            </div>
         </div>
 
-        <!-- 📋 SECTION: DAY END REPORTS -->
+        <!-- ═══════ DAY END REPORTS ═══════ -->
         <div id="section-dayend" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">📋 Day End Reports</div>
@@ -185,7 +217,7 @@
             </div>
         </div>
 
-        <!-- 👥 SECTION: EMPLOYEE REPORTS -->
+        <!-- ═══════ EMPLOYEE REPORTS ═══════ -->
         <div id="section-employees" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">👥 Employee Reports</div>
@@ -207,7 +239,7 @@
             </div>
         </div>
 
-        <!-- 📊 SECTION: STOCK COUNT REPORT -->
+        <!-- ═══════ STOCK COUNT REPORT ═══════ -->
         <div id="section-stockcountreport" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">📊 Stock Count Report</div>
@@ -244,7 +276,7 @@
             </div>
         </div>
 
-        <!-- 🍽️ SECTION: STAFF MEALS REPORT -->
+        <!-- ═══════ STAFF MEALS REPORT ═══════ -->
         <div id="section-staffmealsreport" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">🍽️ Staff Meals Report</div>
@@ -264,7 +296,7 @@
             <div id="staffMealsReportList"><div class="rpt-loading">⏳ Loading...</div></div>
         </div>
 
-        <!-- 🗑️ SECTION: WASTAGE REPORT -->
+        <!-- ═══════ WASTAGE REPORT ═══════ -->
         <div id="section-wastagereport" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">🗑️ Wastage Report</div>
@@ -297,7 +329,7 @@
             <div id="wastageReportList"><div class="rpt-loading">⏳ Loading...</div></div>
         </div>
 
-        <!-- 🛒 SECTION: PURCHASE REPORTS (EXPANDABLE!) -->
+        <!-- ═══════ PURCHASE REPORTS ═══════ -->
         <div id="section-purchaseReports" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">📋 All Purchase Bills</div>
@@ -332,155 +364,66 @@
             <div id="purchaseReportsList"><div class="rpt-loading">⏳ Loading...</div></div>
         </div>
 
-        <!-- 💳 SECTION: CREDIT TRACKING -->
+        <!-- ═══════ CREDIT TRACKING ═══════ -->
         <div id="section-creditTracking" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">💳 Credit / Payment Tracking</div>
                 <div class="rpt-section-subtitle">Credit & Bank Transfer bills - Due date tracking</div>
             </div>
-
             <div class="rpt-summary-cards">
-                <div class="rpt-summary-card red">
-                    <div class="sc-icon">🚨</div>
-                    <div class="sc-value" id="crOverdueCount">0</div>
-                    <div class="sc-label">Overdue</div>
-                </div>
-                <div class="rpt-summary-card orange">
-                    <div class="sc-icon">⏰</div>
-                    <div class="sc-value" id="crTodayCount">0</div>
-                    <div class="sc-label">Due Today</div>
-                </div>
-                <div class="rpt-summary-card blue">
-                    <div class="sc-icon">⏳</div>
-                    <div class="sc-value" id="crUpcomingCount">0</div>
-                    <div class="sc-label">Upcoming (7d)</div>
-                </div>
-                <div class="rpt-summary-card yellow">
-                    <div class="sc-icon">💰</div>
-                    <div class="sc-value" id="crTotalUnpaid">Rs. 0</div>
-                    <div class="sc-label">Total Unpaid</div>
-                </div>
-                <div class="rpt-summary-card green">
-                    <div class="sc-icon">✅</div>
-                    <div class="sc-value" id="crPaidCount">0</div>
-                    <div class="sc-label">Paid</div>
-                </div>
+                <div class="rpt-summary-card red"><div class="sc-icon">🚨</div><div class="sc-value" id="crOverdueCount">0</div><div class="sc-label">Overdue</div></div>
+                <div class="rpt-summary-card orange"><div class="sc-icon">⏰</div><div class="sc-value" id="crTodayCount">0</div><div class="sc-label">Due Today</div></div>
+                <div class="rpt-summary-card blue"><div class="sc-icon">⏳</div><div class="sc-value" id="crUpcomingCount">0</div><div class="sc-label">Upcoming (7d)</div></div>
+                <div class="rpt-summary-card yellow"><div class="sc-icon">💰</div><div class="sc-value" id="crTotalUnpaid">Rs. 0</div><div class="sc-label">Total Unpaid</div></div>
+                <div class="rpt-summary-card green"><div class="sc-icon">✅</div><div class="sc-value" id="crPaidCount">0</div><div class="sc-label">Paid</div></div>
             </div>
-
             <div class="scr-tabs">
-                <button class="scr-tab rejected-tab active" id="crtab-overdue" onclick="showCRTab('overdue', this)">
-                    🚨 Overdue <span class="tab-count" id="crOverdueBadge">0</span>
-                </button>
-                <button class="scr-tab" id="crtab-today" onclick="showCRTab('today', this)" style="color:#f0a500;">
-                    ⏰ Due Today <span class="tab-count" id="crTodayBadge">0</span>
-                </button>
-                <button class="scr-tab" id="crtab-upcoming" onclick="showCRTab('upcoming', this)">
-                    ⏳ Upcoming <span class="tab-count" id="crUpcomingBadge">0</span>
-                </button>
-                <button class="scr-tab" id="crtab-all-unpaid" onclick="showCRTab('all-unpaid', this)">
-                    📋 All Unpaid <span class="tab-count" id="crAllUnpaidBadge">0</span>
-                </button>
-                <button class="scr-tab approved-tab" id="crtab-paid" onclick="showCRTab('paid', this)">
-                    ✅ Paid Bills <span class="tab-count" id="crPaidBadge">0</span>
-                </button>
+                <button class="scr-tab rejected-tab active" id="crtab-overdue" onclick="showCRTab('overdue', this)">🚨 Overdue <span class="tab-count" id="crOverdueBadge">0</span></button>
+                <button class="scr-tab" id="crtab-today" onclick="showCRTab('today', this)" style="color:#f0a500;">⏰ Due Today <span class="tab-count" id="crTodayBadge">0</span></button>
+                <button class="scr-tab" id="crtab-upcoming" onclick="showCRTab('upcoming', this)">⏳ Upcoming <span class="tab-count" id="crUpcomingBadge">0</span></button>
+                <button class="scr-tab" id="crtab-all-unpaid" onclick="showCRTab('all-unpaid', this)">📋 All Unpaid <span class="tab-count" id="crAllUnpaidBadge">0</span></button>
+                <button class="scr-tab approved-tab" id="crtab-paid" onclick="showCRTab('paid', this)">✅ Paid Bills <span class="tab-count" id="crPaidBadge">0</span></button>
             </div>
-
             <div class="rpt-filters">
-                <div class="rpt-filter-group">
-                    <label>🏪 Supplier</label>
-                    <select id="crSupplierFilter" onchange="renderCRTab()">
-                        <option value="">All Suppliers</option>
-                    </select>
-                </div>
-                <div class="rpt-filter-group">
-                    <label>💳 Payment</label>
-                    <select id="crPaymentFilter" onchange="renderCRTab()">
-                        <option value="">All</option>
-                        <option value="credit">📋 Credit</option>
-                        <option value="bank">🏦 Bank Transfer</option>
-                    </select>
-                </div>
+                <div class="rpt-filter-group"><label>🏪 Supplier</label><select id="crSupplierFilter" onchange="renderCRTab()"><option value="">All Suppliers</option></select></div>
+                <div class="rpt-filter-group"><label>💳 Payment</label><select id="crPaymentFilter" onchange="renderCRTab()"><option value="">All</option><option value="credit">📋 Credit</option><option value="bank">🏦 Bank Transfer</option></select></div>
                 <button class="rpt-filter-btn reset" onclick="resetCRFilters()">↺ Reset</button>
             </div>
-
             <div id="creditTrackingList"><div class="rpt-loading">⏳ Loading...</div></div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════ -->
-        <!-- 🏪 SECTION: SUPPLIER ANALYSIS (NEW FULL BUILD! 🎉) -->
-        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- ═══════ SUPPLIER ANALYSIS ═══════ -->
         <div id="section-supplierReports" class="rpt-section" style="display:none;">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">🏪 Supplier Analysis</div>
                 <div class="rpt-section-subtitle">Supplier-wise purchase analysis & insights</div>
             </div>
-
-            <!-- 📊 Top Summary Cards (4 cards) -->
             <div class="rpt-summary-cards">
-                <div class="rpt-summary-card purchasing">
-                    <div class="sc-icon">🏪</div>
-                    <div class="sc-value" id="saTotalSuppliers">0</div>
-                    <div class="sc-label">Total Suppliers</div>
-                </div>
-                <div class="rpt-summary-card green">
-                    <div class="sc-icon">✅</div>
-                    <div class="sc-value" id="saActiveSuppliers">0</div>
-                    <div class="sc-label">Active (30d)</div>
-                </div>
-                <div class="rpt-summary-card yellow">
-                    <div class="sc-icon">💰</div>
-                    <div class="sc-value" id="saTotalSpend">Rs. 0</div>
-                    <div class="sc-label">Total Spend</div>
-                </div>
-                <div class="rpt-summary-card orange">
-                    <div class="sc-icon">🏆</div>
-                    <div class="sc-value" id="saTopSupplier" style="font-size:14px;">-</div>
-                    <div class="sc-label">Top Supplier</div>
-                </div>
+                <div class="rpt-summary-card purchasing"><div class="sc-icon">🏪</div><div class="sc-value" id="saTotalSuppliers">0</div><div class="sc-label">Total Suppliers</div></div>
+                <div class="rpt-summary-card green"><div class="sc-icon">✅</div><div class="sc-value" id="saActiveSuppliers">0</div><div class="sc-label">Active (30d)</div></div>
+                <div class="rpt-summary-card yellow"><div class="sc-icon">💰</div><div class="sc-value" id="saTotalSpend">Rs. 0</div><div class="sc-label">Total Spend</div></div>
+                <div class="rpt-summary-card orange"><div class="sc-icon">🏆</div><div class="sc-value" id="saTopSupplier" style="font-size:14px;">-</div><div class="sc-label">Top Supplier</div></div>
             </div>
-
-            <!-- 🔍 Filters -->
             <div class="rpt-filters">
-                <div class="rpt-filter-group">
-                    <label>📅 From Date</label>
-                    <input type="date" id="saFromDate" onchange="loadSupplierAnalysis()">
-                </div>
-                <div class="rpt-filter-group">
-                    <label>📅 To Date</label>
-                    <input type="date" id="saToDate" onchange="loadSupplierAnalysis()">
-                </div>
-                <div class="rpt-filter-group">
-                    <label>🔄 Sort By</label>
-                    <select id="saSortBy" onchange="loadSupplierAnalysis()">
-                        <option value="spend">💰 Total Spend</option>
-                        <option value="bills">📋 Number of Bills</option>
-                        <option value="recent">📅 Most Recent</option>
-                    </select>
-                </div>
+                <div class="rpt-filter-group"><label>📅 From Date</label><input type="date" id="saFromDate" onchange="loadSupplierAnalysis()"></div>
+                <div class="rpt-filter-group"><label>📅 To Date</label><input type="date" id="saToDate" onchange="loadSupplierAnalysis()"></div>
+                <div class="rpt-filter-group"><label>🔄 Sort By</label><select id="saSortBy" onchange="loadSupplierAnalysis()"><option value="spend">💰 Total Spend</option><option value="bills">📋 Number of Bills</option><option value="recent">📅 Most Recent</option></select></div>
                 <button class="rpt-filter-btn reset" onclick="resetSAFilters()">↺ Reset</button>
             </div>
-
-            <!-- 🏆 TOP 5 SUPPLIERS (Medal Cards) -->
             <div class="top-suppliers-section">
                 <div class="top-suppliers-title">🏆 Top 5 Suppliers (by Total Spend)</div>
-                <div class="top-suppliers-grid" id="topSuppliersList">
-                    <div class="rpt-loading">⏳ Loading top suppliers...</div>
-                </div>
+                <div class="top-suppliers-grid" id="topSuppliersList"><div class="rpt-loading">⏳ Loading top suppliers...</div></div>
             </div>
-
-            <!-- 📋 ALL SUPPLIERS GRID -->
             <div class="all-suppliers-section">
                 <div class="all-suppliers-header">
                     <div class="all-suppliers-title">📋 All Suppliers</div>
                     <span class="all-suppliers-count" id="allSuppliersCount">Loading...</span>
                 </div>
-                <div class="suppliers-grid" id="allSuppliersList">
-                    <div class="rpt-loading">⏳ Loading suppliers...</div>
-                </div>
+                <div class="suppliers-grid" id="allSuppliersList"><div class="rpt-loading">⏳ Loading suppliers...</div></div>
             </div>
         </div>
 
-        <!-- COMING SOON SECTIONS -->
+        <!-- COMING SOON -->
         <div id="section-sales" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">💰</div><h3>Sales Reports</h3><p>Coming soon</p></div></div>
         <div id="section-inventory" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">📦</div><h3>Inventory Reports</h3><p>Coming soon</p></div></div>
         <div id="section-pl" class="rpt-section" style="display:none;"><div class="rpt-coming-soon"><div class="cs-icon">📊</div><h3>P/L Report</h3><p>Coming soon</p></div></div>
@@ -489,28 +432,71 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- 📸 PHOTO FULLSCREEN MODAL                                -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- Photo Fullscreen Modal -->
 <div class="photo-fullscreen-modal" id="photoFullscreenModal">
     <button class="photo-close-btn" onclick="closePhotoFullscreen()">✖</button>
     <img id="fullscreenImg" src="">
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- 💰 MARK PAID MODAL                                       -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ⭐ UPDATED: Mark Paid Modal with Payment Proof! -->
 <div class="mark-paid-modal" id="markPaidModal">
-    <div class="mark-paid-content">
+    <div class="mark-paid-content" style="max-height:90vh; overflow-y:auto;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(76,175,80,0.2);">
             <h2 style="color:#4CAF50; font-size:18px;">💰 Mark as Paid</h2>
             <button onclick="closeMarkPaidModal()" style="background:none; border:none; color:#888; font-size:24px; cursor:pointer;">✖</button>
         </div>
         <div id="markPaidBody"></div>
         <div style="margin-top:14px;">
-            <label style="font-size:11px; color:#888; text-transform:uppercase;">📅 Payment Date</label>
+            <label style="font-size:11px; color:#888; text-transform:uppercase;">📅 Payment Date *</label>
             <input type="date" id="paidDateInput" style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:10px; border-radius:8px; margin-top:6px;">
         </div>
+
+        <!-- ⭐ NEW: Payment Proof Upload Section -->
+        <div style="margin-top:14px;">
+            <label style="font-size:11px; color:#4CAF50; text-transform:uppercase; font-weight:600;">📸 Payment Proof (Bank Slip / Receipt)</label>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+                <button onclick="document.getElementById('rptPaymentProofCamera').click()" style="flex:1; padding:10px; font-size:13px; background:rgba(255,255,255,0.08); color:#e0e0e0; border:1px solid rgba(76,175,80,0.3); border-radius:8px; cursor:pointer;">
+                    📷 Camera
+                </button>
+                <button onclick="document.getElementById('rptPaymentProofGallery').click()" style="flex:1; padding:10px; font-size:13px; background:rgba(255,255,255,0.08); color:#e0e0e0; border:1px solid rgba(76,175,80,0.3); border-radius:8px; cursor:pointer;">
+                    🖼️ Gallery
+                </button>
+            </div>
+            <input type="file" id="rptPaymentProofCamera" accept="image/*" capture="environment" style="display:none" onchange="handleRptPaymentProofFile(this)">
+            <input type="file" id="rptPaymentProofGallery" accept="image/*" style="display:none" onchange="handleRptPaymentProofFile(this)">
+
+            <!-- Upload Progress -->
+            <div id="rptPaymentProofProgress" style="display:none; margin-top:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:4px;">
+                    <span>📤 Uploading...</span>
+                    <span id="rptPaymentProofPercent">0%</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.1); border-radius:4px; height:6px; overflow:hidden;">
+                    <div id="rptPaymentProofBar" style="background:#4CAF50; height:100%; width:0%; transition:width 0.3s;"></div>
+                </div>
+                <div id="rptPaymentProofStatus" style="font-size:11px; color:#888; margin-top:4px;"></div>
+            </div>
+
+            <!-- Photo Preview -->
+            <div id="rptPaymentProofPreview" style="display:none; margin-top:10px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.3); border-radius:8px; padding:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="color:#4CAF50; font-size:13px; font-weight:600;">✅ Proof Ready!</span>
+                    <div style="display:flex; gap:6px;">
+                        <button onclick="openPhotoFullscreen(document.getElementById('rptPaymentProofImg').src)" style="background:rgba(33,150,243,0.15); color:#2196F3; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🔍 View</button>
+                        <button onclick="removeRptPaymentProof()" style="background:rgba(255,68,68,0.15); color:#ff4444; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:12px;">🗑️ Remove</button>
+                    </div>
+                </div>
+                <img id="rptPaymentProofImg" src="" style="width:100%; max-height:200px; object-fit:contain; border-radius:6px; cursor:pointer;" onclick="openPhotoFullscreen(this.src)">
+            </div>
+
+            <!-- Or paste URL -->
+            <div style="margin-top:8px;">
+                <label style="font-size:11px; color:#666;">🔗 Or paste proof URL:</label>
+                <input type="url" id="rptPaymentProofUrl" placeholder="https://..." style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:8px; border-radius:8px; margin-top:4px; font-size:12px; box-sizing:border-box;" oninput="previewRptPaymentProofUrl()">
+            </div>
+        </div>
+        <!-- END: Payment Proof Section -->
+
         <div style="margin-top:14px;">
             <label style="font-size:11px; color:#888; text-transform:uppercase;">📝 Payment Notes (Optional)</label>
             <textarea id="paidNotesInput" rows="2" placeholder="e.g., Paid in cash / Bank transfer ref #..." style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:10px; border-radius:8px; margin-top:6px; box-sizing:border-box;"></textarea>
@@ -522,16 +508,13 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- 🔥 FIREBASE SDK                                          -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 🔥 FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- ⚙️ REPORTS DB JAVASCRIPT                                  -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script src="firebase-config.js"></script>
 <script src="reports-script.js"></script>
+<script src="mobile-script.js"></script>
 
 </body>
 </html>

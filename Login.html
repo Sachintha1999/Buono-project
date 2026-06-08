@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Login</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login-style.css">
+    <link rel="stylesheet" href="mobile.css">
 </head>
 <body class="login-body">
 
@@ -22,7 +24,7 @@
             <button type="button" id="loginBtn" onclick="loginUser()">🔐 Login</button>
         </form>
 
-        <p id="loginError" style="color: #ff4444; text-align: center; margin-top: 10px; display: none;">
+        <p id="loginError">
             ❌ Nickname or Password wrong!
         </p>
     </div>
@@ -30,93 +32,13 @@
     <!-- ===== FIREBASE SDK ===== -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
 
-    <script>
-        // ═══════════════════════════════════════
-        // 🔥 Firebase Config
-        // ═══════════════════════════════════════
-        const firebaseConfig = {
-            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
-            authDomain: "buono-project-927b8.firebaseapp.com",
-            projectId: "buono-project-927b8",
-            storageBucket: "buono-project-927b8.firebasestorage.app",
-            messagingSenderId: "706681135399",
-            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
-        };
+    <!-- ===== LOGIN SCRIPT ===== -->
+    <script src="login-script.js"></script>
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // ═══════════════════════════════════════
-        // 🔐 LOGIN FUNCTION
-        // ═══════════════════════════════════════
-        async function loginUser() {
-            const nickname = document.getElementById('loginNickname').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            const errorEl = document.getElementById('loginError');
-
-            if (!nickname || !password) {
-                errorEl.textContent = "⚠️ Please enter Nickname and Password!";
-                errorEl.style.display = "block";
-                return;
-            }
-
-            try {
-                const snapshot = await db.collection('employees')
-                    .where('nickname', '==', nickname)
-                    .get();
-
-                if (snapshot.empty) {
-                    errorEl.textContent = "❌ Nickname not found!";
-                    errorEl.style.display = "block";
-                    return;
-                }
-
-                const userDoc = snapshot.docs[0];
-                const userData = userDoc.data();
-
-                if (userData.password !== password) {
-                    errorEl.textContent = "❌ Wrong Password!";
-                    errorEl.style.display = "block";
-                    return;
-                }
-
-                // ═══════════════════════════════
-                // ✅ LOGIN SUCCESS - Session save
-                // ═══════════════════════════════
-                const userInfo = {
-                    id: userDoc.id,
-                    name: userData.name,
-                    nickname: userData.nickname,
-                    access: userData.access,
-                    permissions: userData.permissions || {}
-                };
-
-                sessionStorage.setItem('loggedInUser', JSON.stringify(userInfo));
-
-                // 🚀 සියලුම users access.html ට යනවා
-                window.location.href = 'access.html';
-
-            } catch (error) {
-                console.error("Login error:", error);
-                errorEl.textContent = "❌ Connection error! Try again.";
-                errorEl.style.display = "block";
-            }
-        }
-
-        // ENTER key press
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loginUser();
-            }
-        });
-
-        // දැනටමත් login වෙලා නම් access.html ට යවනවා
-        const existingUser = sessionStorage.getItem('loggedInUser');
-        if (existingUser) {
-            window.location.href = 'access.html';
-        }
-    </script>
+    <!-- ===== MOBILE SCRIPT ===== -->
+    <script src="mobile-script.js"></script>
 
 </body>
-</html> 
+</html>

@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Employee Database</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════ -->
-    <!-- TOP NAVIGATION BAR                            -->
-    <!-- ═══════════════════════════════════════════ -->
     <div class="topbar">
         <div class="topbar-left">
             <span class="topbar-icon">🍴</span>
@@ -39,7 +37,6 @@
         </div>
     </div>
 
-    <!-- ===== MAIN CONTAINER ===== -->
     <div class="dashboard-container">
 
         <div class="stats-row">
@@ -112,9 +109,7 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════ -->
-    <!-- ADD / EDIT EMPLOYEE MODAL                    -->
-    <!-- ═══════════════════════════════════════════ -->
+    <!-- ADD / EDIT EMPLOYEE MODAL -->
     <div id="employeeModal" class="modal" style="display: none;">
         <div class="modal-content" style="width: 600px;">
             <div class="modal-header">
@@ -146,126 +141,92 @@
 
                 <input type="hidden" id="editDocId" value="">
 
-                <!-- 🔐 PERMISSIONS SECTION -->
                 <div id="permissionsSection" style="margin-top: 25px;">
                     <div style="background: #0f3460; padding: 12px 18px; border-radius: 10px; margin-bottom: 15px;">
-                        <h3 style="color: #f0a500; font-size: 16px; margin: 0;">🔐 Database Permissions</h3>
+                        <h3 style="color: #f0a500; font-size: 16px; margin: 0;">🔐 Database Permissions (6 Databases)</h3>
                         <p style="color: #8892b0; font-size: 12px; margin-top: 4px;">
                             💡 Admin selected කරොත් සියලු permissions auto enable වෙනවා
                         </p>
                     </div>
 
-                    <!-- 📂 Employee Database -->
+                    <!-- 1. 👥 Employee Database -->
                     <div class="permission-block">
-                        <div class="permission-block-title">📂 Employee Database (HR)</div>
+                        <div class="permission-block-title">👥 Employee Database (HR)</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="emp_add" onchange="autoCheckSelfView('emp')">
-                                <span>➕ Add Data</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="emp_view" onchange="autoCheckSelfView('emp')">
-                                <span>👁️ View All</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="emp_selfView">
-                                <span>👤 Self View</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="emp_edit">
-                                <span>✏️ Edit</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="emp_delete">
-                                <span>🗑️ Delete</span>
-                            </label>
+                            <label class="perm-checkbox"><input type="checkbox" id="emp_add" onchange="autoCheckSelfView('emp')"><span>➕ Add Data</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="emp_view" onchange="autoCheckSelfView('emp')"><span>👁️ View All</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="emp_selfView"><span>👤 Self View</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="emp_edit"><span>✏️ Edit</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="emp_delete"><span>🗑️ Delete</span></label>
                         </div>
                     </div>
 
-                    <!-- 💰 Day End Report Database -->
+                    <!-- 2. 💰 Day End Report Database -->
                     <div class="permission-block">
                         <div class="permission-block-title">💰 Day End Report Database</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="der_add" onchange="autoCheckSelfView('der')">
-                                <span>➕ Add Data</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="der_view" onchange="autoCheckSelfView('der')">
-                                <span>👁️ View All</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="der_selfView">
-                                <span>👤 Self View</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="der_edit">
-                                <span>✏️ Edit</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="der_delete">
-                                <span>🗑️ Delete</span>
-                            </label>
+                            <label class="perm-checkbox"><input type="checkbox" id="der_add" onchange="autoCheckSelfView('der')"><span>➕ Add Data</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="der_view" onchange="autoCheckSelfView('der')"><span>👁️ View All</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="der_selfView"><span>👤 Self View</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="der_edit"><span>✏️ Edit</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="der_delete"><span>🗑️ Delete</span></label>
                         </div>
                     </div>
 
-                    <!-- 📦 Inventory Database -->
+                    <!-- 3. 📦 Inventory Database -->
                     <div class="permission-block">
                         <div class="permission-block-title">📦 Inventory Database</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="inv_add" onchange="autoCheckSelfView('inv')">
-                                <span>➕ Add Data</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="inv_view" onchange="autoCheckSelfView('inv')">
-                                <span>👁️ View All</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="inv_selfView">
-                                <span>👤 Self View</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="inv_edit">
-                                <span>✏️ Edit</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="inv_delete">
-                                <span>🗑️ Delete</span>
-                            </label>
+                            <label class="perm-checkbox"><input type="checkbox" id="inv_add" onchange="autoCheckSelfView('inv')"><span>➕ Add Data</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="inv_view" onchange="autoCheckSelfView('inv')"><span>👁️ View All</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="inv_selfView"><span>👤 Self View</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="inv_edit"><span>✏️ Edit</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="inv_delete"><span>🗑️ Delete</span></label>
                         </div>
                     </div>
 
-                    <!-- 🍳 Kitchen Database -->
+                    <!-- 4. 🍳 Kitchen Database -->
                     <div class="permission-block">
                         <div class="permission-block-title">🍳 Kitchen Database</div>
                         <div class="permission-checkboxes">
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="kit_add" onchange="autoCheckSelfView('kit')">
-                                <span>➕ Add Data</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="kit_view" onchange="autoCheckSelfView('kit')">
-                                <span>👁️ View All</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="kit_selfView">
-                                <span>👤 Self View</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="kit_edit">
-                                <span>✏️ Edit</span>
-                            </label>
-                            <label class="perm-checkbox">
-                                <input type="checkbox" id="kit_delete">
-                                <span>🗑️ Delete</span>
-                            </label>
+                            <label class="perm-checkbox"><input type="checkbox" id="kit_add" onchange="autoCheckSelfView('kit')"><span>➕ Add Data</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="kit_view" onchange="autoCheckSelfView('kit')"><span>👁️ View All</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="kit_selfView"><span>👤 Self View</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="kit_edit"><span>✏️ Edit</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="kit_delete"><span>🗑️ Delete</span></label>
                         </div>
                     </div>
 
-                    <div style="background: #1a1a2e; padding: 12px 15px; border-radius: 8px; margin-top: 12px; border: 1px dashed #2a2a4a;">
-                        <p style="color: #555; font-size: 12px; text-align: center; margin: 0;">
-                            🔜 More databases coming soon (Purchasing, Sales...)
+                    <!-- 5. 🛒 Purchasing Database -->
+                    <div class="permission-block" style="border: 2px solid #FF9800;">
+                        <div class="permission-block-title" style="color: #FF9800;">🛒 Purchasing Database</div>
+                        <div class="permission-checkboxes">
+                            <label class="perm-checkbox"><input type="checkbox" id="pur_add" onchange="autoCheckSelfView('pur')"><span>➕ Add Data</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="pur_view" onchange="autoCheckSelfView('pur')"><span>👁️ View All</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="pur_selfView"><span>👤 Self View</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="pur_edit"><span>✏️ Edit</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="pur_delete"><span>🗑️ Delete</span></label>
+                        </div>
+                    </div>
+
+                    <!-- 6. 📊 Reports Database -->
+                    <div class="permission-block" style="border: 2px solid #2196F3;">
+                        <div class="permission-block-title" style="color: #2196F3;">
+                            📊 Reports Database 
+                            <span style="font-size: 11px; color: #888; font-weight: normal;">(Admin/Manager only)</span>
+                        </div>
+                        <div class="permission-checkboxes">
+                            <label class="perm-checkbox"><input type="checkbox" id="rep_add" onchange="autoCheckSelfView('rep')"><span>➕ Add Data</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="rep_view" onchange="autoCheckSelfView('rep')"><span>👁️ View All</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="rep_selfView"><span>👤 Self View</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="rep_edit"><span>✏️ Edit / Approve</span></label>
+                            <label class="perm-checkbox"><input type="checkbox" id="rep_delete"><span>🗑️ Delete</span></label>
+                        </div>
+                    </div>
+
+                    <div style="background: #1a1a2e; padding: 12px 15px; border-radius: 8px; margin-top: 12px; border: 1px dashed #4CAF50;">
+                        <p style="color: #4CAF50; font-size: 12px; text-align: center; margin: 0;">
+                            ✅ All 6 Databases included! Custom permissions ready!
                         </p>
                     </div>
                 </div>
@@ -298,434 +259,20 @@
         </div>
     </div>
 
-    <!-- ===== FIREBASE SDK ===== -->
+    <!-- ===== SCRIPTS (CORRECT ORDER!) ===== -->
+
+    <!-- 1. Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
-            authDomain: "buono-project-927b8.firebaseapp.com",
-            projectId: "buono-project-927b8",
-            storageBucket: "buono-project-927b8.firebasestorage.app",
-            messagingSenderId: "706681135399",
-            appId: "1:706681135399:web:c15f197f1efe3a64f00902"
-        };
+    <!-- 2. Global Firebase Config (Once only!) -->
+    <script src="firebase-config.js"></script>
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+    <!-- 3. Page Script -->
+    <script src="index-script.js"></script>
 
-        const DATABASES = [
-    { id: 'employeeDB', name: 'Employee Database', icon: '👥', url: 'index.html' },
-    { id: 'dayEndReportDB', name: 'Day End Reports', icon: '💰', url: 'cashier.html' },
-    { id: 'inventoryDB', name: 'Inventory Database', icon: '📦', url: 'inventory.html' },
-    { id: 'kitchenDB', name: 'Kitchen Database', icon: '🍳', url: 'kitchen.html' },
-    { id: 'purchasingDB', name: 'Purchasing Database', icon: '🛒', url: 'purchasing.html' },
-    { id: 'reportsDB', name: 'Reports Database', icon: '📊', url: 'reports.html', adminManagerOnly: true }
-];
-
-        let allEmployees = [];
-        let deleteDocId = '';
-        let currentUser = null;
-        let myPerms = null;
-
-        async function initializeApp() {
-            const user = sessionStorage.getItem('loggedInUser');
-            if (!user) { window.location.href = "login.html"; return; }
-            const userData = JSON.parse(user);
-
-            try {
-                const userDoc = await db.collection('employees').doc(userData.id).get();
-                if (userDoc.exists) {
-                    const d = userDoc.data();
-                    userData.access = d.access;
-                    userData.permissions = d.permissions || {};
-                    userData.name = d.name;
-                    userData.nickname = d.nickname;
-                    sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
-                }
-            } catch (e) { console.error(e); }
-
-            const isAdmin = userData.access === 'Admin';
-            const perms = userData.permissions?.employeeDB || {};
-            const hasAccess = isAdmin || perms.add || perms.view || perms.selfView || perms.edit || perms.delete;
-
-            if (!hasAccess) {
-                alert('⛔ ඔයාට Employee Database එකට access නැහැ!');
-                window.location.href = "access.html";
-                return;
-            }
-
-            myPerms = isAdmin ? { add: true, view: true, selfView: true, edit: true, delete: true } : perms;
-            currentUser = userData;
-
-            document.getElementById('welcomeUser').textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
-            document.getElementById('myAccess').textContent = userData.access;
-
-            buildDatabaseSwitcher();
-            setupActionButtons();
-            startEmployeeListener();
-        }
-
-        initializeApp();
-
-        function buildDatabaseSwitcher() {
-            const list = document.getElementById('dbDropdownList');
-            const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
-            let html = '';
-
-            DATABASES.forEach(d => {
-                if (d.adminManagerOnly && !isAdminOrMgr) return;
-                const isAdmin = currentUser.access === 'Admin';
-                const dp = currentUser.permissions?.[d.id] || {};
-                const hasAccess = isAdmin || dp.add || dp.view || dp.selfView || dp.edit || dp.delete;
-                if (!d.adminManagerOnly && !hasAccess) return;
-                const isCurrent = d.id === 'employeeDB';
-                html += `<a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}"><span>${d.icon}</span><span>${d.name}</span>${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}</a>`;
-            });
-
-            list.innerHTML = html;
-
-            document.getElementById('dbSwitcher').addEventListener('click', function(e) {
-                e.stopPropagation();
-                document.getElementById('dbDropdown').classList.toggle('show');
-            });
-            document.addEventListener('click', function(e) {
-                const dd = document.getElementById('dbDropdown');
-                if (dd && !dd.contains(e.target) && !e.target.closest('#dbSwitcher')) dd.classList.remove('show');
-            });
-        }
-
-        function logout() {
-            sessionStorage.removeItem('loggedInUser');
-            window.location.href = "login.html";
-        }
-
-        function updateDateTime() {
-            const now = new Date();
-            const options = { year: 'numeric', month: 'short', day: '2-digit' };
-            const dateEl = document.getElementById('todayDate');
-            if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', options);
-            const timeEl = document.getElementById('currentTime');
-            if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-
-        function getBadgeClass(access) {
-            switch(access) {
-                case 'Admin': return 'badge-admin';
-                case 'Manager': return 'badge-manager';
-                case 'Cashier': return 'badge-cashier';
-                case 'Purchasing Officer': return 'badge-purchasing';
-                case 'Head Chef': return 'badge-chef';
-                case 'Call Operator': return 'badge-operator';
-                case 'Waiter': return 'badge-waiter';
-                default: return 'badge-default';
-            }
-        }
-
-        function getPermissionCount(permissions) {
-            if (!permissions) return 0;
-            let count = 0;
-            Object.keys(permissions).forEach(dbKey => {
-                Object.keys(permissions[dbKey]).forEach(perm => {
-                    if (permissions[dbKey][perm] === true) count++;
-                });
-            });
-            return count;
-        }
-
-        function setupActionButtons() {
-            if (myPerms.add) document.getElementById('addBtn').style.display = 'inline-block';
-
-            if (myPerms.view) {
-                document.getElementById('empListTitle').textContent = '👥 All Employees';
-            } else if (myPerms.selfView) {
-                document.getElementById('empListTitle').textContent = '👤 My Profile';
-                document.getElementById('searchBar').style.display = 'none';
-            }
-        }
-
-        function startEmployeeListener() {
-            db.collection('employees').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-                allEmployees = [];
-                snapshot.forEach((doc) => {
-                    allEmployees.push({ id: doc.id, ...doc.data() });
-                });
-
-                let visibleEmployees = [];
-                if (myPerms.view) visibleEmployees = allEmployees;
-                else if (myPerms.selfView) visibleEmployees = allEmployees.filter(emp => emp.id === currentUser.id);
-
-                document.getElementById('totalEmployees').textContent = visibleEmployees.length;
-                renderEmployees(visibleEmployees);
-            });
-        }
-
-        function renderEmployees(employees) {
-            const tbody = document.getElementById('employeeTableBody');
-            tbody.innerHTML = '';
-
-            if (employees.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#888;">📭 No employees to display.</td></tr>`;
-                return;
-            }
-
-            let count = 0;
-            employees.forEach((emp) => {
-                count++;
-                const badgeClass = getBadgeClass(emp.access);
-                const permCount = getPermissionCount(emp.permissions);
-                const permColor = emp.access === 'Admin' ? '#4CAF50' : (permCount > 0 ? '#f0a500' : '#888');
-                const permText = emp.access === 'Admin' ? '🌟 ALL (Admin)' : `🔐 ${permCount} permissions`;
-
-                let actionsHtml = '';
-                if (myPerms.edit) actionsHtml += `<button class="btn-edit" onclick="editEmployee('${emp.id}')">✏️ Edit</button>`;
-                if (myPerms.delete && myPerms.view) actionsHtml += `<button class="btn-delete" onclick="openDeleteModal('${emp.id}', '${emp.name}')">🗑️ Delete</button>`;
-                if (!actionsHtml) actionsHtml = '<span style="color:#666; font-size:12px;">View only</span>';
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${count}</td>
-                        <td>${emp.name}</td>
-                        <td>${emp.nickname}</td>
-                        <td><span class="badge ${badgeClass}">${emp.access}</span></td>
-                        <td style="color: ${permColor}; font-size: 13px; font-weight: 600;">${permText}</td>
-                        <td class="action-buttons">${actionsHtml}</td>
-                    </tr>`;
-            });
-        }
-
-        function searchEmployees() {
-            const searchText = document.getElementById('searchEmployee').value.toLowerCase();
-            let visible = myPerms.view ? allEmployees : allEmployees.filter(e => e.id === currentUser.id);
-            const filtered = visible.filter(emp => 
-                emp.name.toLowerCase().includes(searchText) ||
-                emp.nickname.toLowerCase().includes(searchText) ||
-                emp.access.toLowerCase().includes(searchText)
-            );
-            renderEmployees(filtered);
-        }
-
-        function autoCheckSelfView(prefix) {
-            const addCheck = document.getElementById(prefix + '_add');
-            const viewCheck = document.getElementById(prefix + '_view');
-            const selfViewCheck = document.getElementById(prefix + '_selfView');
-            if (addCheck.checked || viewCheck.checked) selfViewCheck.checked = true;
-        }
-
-        function handleAccessChange() {
-            const access = document.getElementById('empAccess').value;
-            const permissionsSection = document.getElementById('permissionsSection');
-            if (access === 'Admin') {
-                checkAllPermissions(true);
-                permissionsSection.style.opacity = '0.6';
-                permissionsSection.style.pointerEvents = 'none';
-            } else {
-                permissionsSection.style.opacity = '1';
-                permissionsSection.style.pointerEvents = 'auto';
-            }
-        }
-
-        function checkAllPermissions(checked) {
-            const ids = ['emp_add','emp_view','emp_selfView','emp_edit','emp_delete',
-                         'der_add','der_view','der_selfView','der_edit','der_delete',
-                         'inv_add','inv_view','inv_selfView','inv_edit','inv_delete',
-                         'kit_add','kit_view','kit_selfView','kit_edit','kit_delete'];
-            ids.forEach(id => {
-                const cb = document.getElementById(id);
-                if (cb) cb.checked = checked;
-            });
-        }
-
-        function openAddModal() {
-            document.getElementById('modalTitle').textContent = '➕ Add New Employee';
-            document.getElementById('saveBtn').textContent = '💾 Save';
-            document.getElementById('empName').value = '';
-            document.getElementById('empNickname').value = '';
-            document.getElementById('empPassword').value = '';
-            document.getElementById('empAccess').value = '';
-            document.getElementById('editDocId').value = '';
-            checkAllPermissions(false);
-            document.getElementById('permissionsSection').style.opacity = '1';
-            document.getElementById('permissionsSection').style.pointerEvents = 'auto';
-            document.getElementById('employeeModal').style.display = 'flex';
-        }
-
-        function editEmployee(docId) {
-            const emp = allEmployees.find(e => e.id === docId);
-            if (!emp) return;
-
-            if (!myPerms.view && emp.id !== currentUser.id) {
-                alert('⛔ ඔයාට මේ profile එක edit කරන්න permission නැහැ!');
-                return;
-            }
-
-            document.getElementById('modalTitle').textContent = '✏️ Edit Employee';
-            document.getElementById('saveBtn').textContent = '💾 Update';
-            document.getElementById('empName').value = emp.name || '';
-            document.getElementById('empNickname').value = emp.nickname || '';
-            document.getElementById('empPassword').value = emp.password || '';
-            document.getElementById('empAccess').value = emp.access || '';
-            document.getElementById('editDocId').value = docId;
-
-            checkAllPermissions(false);
-
-            if (emp.permissions) {
-                if (emp.permissions.employeeDB) {
-                    document.getElementById('emp_add').checked = emp.permissions.employeeDB.add || false;
-                    document.getElementById('emp_view').checked = emp.permissions.employeeDB.view || false;
-                    document.getElementById('emp_selfView').checked = emp.permissions.employeeDB.selfView || false;
-                    document.getElementById('emp_edit').checked = emp.permissions.employeeDB.edit || false;
-                    document.getElementById('emp_delete').checked = emp.permissions.employeeDB.delete || false;
-                }
-                if (emp.permissions.dayEndReportDB) {
-                    document.getElementById('der_add').checked = emp.permissions.dayEndReportDB.add || false;
-                    document.getElementById('der_view').checked = emp.permissions.dayEndReportDB.view || false;
-                    document.getElementById('der_selfView').checked = emp.permissions.dayEndReportDB.selfView || false;
-                    document.getElementById('der_edit').checked = emp.permissions.dayEndReportDB.edit || false;
-                    document.getElementById('der_delete').checked = emp.permissions.dayEndReportDB.delete || false;
-                }
-                if (emp.permissions.inventoryDB) {
-                    document.getElementById('inv_add').checked = emp.permissions.inventoryDB.add || false;
-                    document.getElementById('inv_view').checked = emp.permissions.inventoryDB.view || false;
-                    document.getElementById('inv_selfView').checked = emp.permissions.inventoryDB.selfView || false;
-                    document.getElementById('inv_edit').checked = emp.permissions.inventoryDB.edit || false;
-                    document.getElementById('inv_delete').checked = emp.permissions.inventoryDB.delete || false;
-                }
-                if (emp.permissions.kitchenDB) {
-                    document.getElementById('kit_add').checked = emp.permissions.kitchenDB.add || false;
-                    document.getElementById('kit_view').checked = emp.permissions.kitchenDB.view || false;
-                    document.getElementById('kit_selfView').checked = emp.permissions.kitchenDB.selfView || false;
-                    document.getElementById('kit_edit').checked = emp.permissions.kitchenDB.edit || false;
-                    document.getElementById('kit_delete').checked = emp.permissions.kitchenDB.delete || false;
-                }
-            }
-
-            handleAccessChange();
-
-            if (currentUser.access !== 'Admin' && currentUser.access !== 'Manager') {
-                document.getElementById('empAccess').disabled = true;
-                document.getElementById('permissionsSection').style.opacity = '0.5';
-                document.getElementById('permissionsSection').style.pointerEvents = 'none';
-            } else {
-                document.getElementById('empAccess').disabled = false;
-            }
-
-            document.getElementById('employeeModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('employeeModal').style.display = 'none';
-            document.getElementById('empAccess').disabled = false;
-        }
-
-        async function saveEmployee() {
-            const name = document.getElementById('empName').value.trim();
-            const nickname = document.getElementById('empNickname').value.trim();
-            const password = document.getElementById('empPassword').value.trim();
-            const access = document.getElementById('empAccess').value;
-            const editDocId = document.getElementById('editDocId').value;
-
-            if (!name || !nickname || !password || !access) {
-                alert('⚠️ Please fill all fields!');
-                return;
-            }
-
-            const permissions = {
-                employeeDB: {
-                    add: document.getElementById('emp_add').checked,
-                    view: document.getElementById('emp_view').checked,
-                    selfView: document.getElementById('emp_selfView').checked,
-                    edit: document.getElementById('emp_edit').checked,
-                    delete: document.getElementById('emp_delete').checked
-                },
-                dayEndReportDB: {
-                    add: document.getElementById('der_add').checked,
-                    view: document.getElementById('der_view').checked,
-                    selfView: document.getElementById('der_selfView').checked,
-                    edit: document.getElementById('der_edit').checked,
-                    delete: document.getElementById('der_delete').checked
-                },
-                inventoryDB: {
-                    add: document.getElementById('inv_add').checked,
-                    view: document.getElementById('inv_view').checked,
-                    selfView: document.getElementById('inv_selfView').checked,
-                    edit: document.getElementById('inv_edit').checked,
-                    delete: document.getElementById('inv_delete').checked
-                },
-                kitchenDB: {
-                    add: document.getElementById('kit_add').checked,
-                    view: document.getElementById('kit_view').checked,
-                    selfView: document.getElementById('kit_selfView').checked,
-                    edit: document.getElementById('kit_edit').checked,
-                    delete: document.getElementById('kit_delete').checked
-                }
-            };
-
-            if (access === 'Admin') {
-                Object.keys(permissions).forEach(dbKey => {
-                    Object.keys(permissions[dbKey]).forEach(permKey => {
-                        permissions[dbKey][permKey] = true;
-                    });
-                });
-            }
-
-            try {
-                if (editDocId) {
-                    if (currentUser.access !== 'Admin' && currentUser.access !== 'Manager') {
-                        await db.collection('employees').doc(editDocId).update({ name, nickname, password });
-                    } else {
-                        await db.collection('employees').doc(editDocId).update({ name, nickname, password, access, permissions });
-                    }
-                    alert('✅ Employee updated!');
-                } else {
-                    const existCheck = await db.collection('employees').where('nickname', '==', nickname).get();
-                    if (!existCheck.empty) { alert('⚠️ Nickname already exists!'); return; }
-                    await db.collection('employees').add({
-                        name, nickname, password, access, permissions,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    alert('✅ Employee added!');
-                }
-                closeModal();
-            } catch (error) {
-                console.error("Save error:", error);
-                alert('❌ Error: ' + error.message);
-            }
-        }
-
-        function openDeleteModal(docId, name) {
-            if (docId === currentUser.id) {
-                alert('⛔ ඔයාගේ ම profile එක delete කරන්න බෑ!');
-                return;
-            }
-            deleteDocId = docId;
-            document.getElementById('deleteEmpName').textContent = name;
-            document.getElementById('deleteModal').style.display = 'flex';
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').style.display = 'none';
-            deleteDocId = '';
-        }
-
-        async function confirmDelete() {
-            if (!deleteDocId) return;
-            try {
-                await db.collection('employees').doc(deleteDocId).delete();
-                alert('✅ Deleted!');
-                closeDeleteModal();
-            } catch (error) {
-                alert('❌ Error: ' + error.message);
-            }
-        }
-
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) event.target.style.display = 'none';
-        }
-    </script>
+    <!-- 4. Mobile Script -->
+    <script src="mobile-script.js"></script>
 
 </body>
 </html>

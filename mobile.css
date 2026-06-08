@@ -1,0 +1,745 @@
+/* ═══════════════════════════════════════════════════════════ */
+/* 📱 BUONO PROJECT - MOBILE STYLES (Universal)                */
+/* Last Updated: 2026-06-07 | v1.0                             */
+/* Apply to ALL pages: index, cashier, inventory, kitchen,     */
+/*                    purchasing, reports, access, login       */
+/* ═══════════════════════════════════════════════════════════ */
+
+/* 🎯 Mobile breakpoint: 768px and below */
+@media (max-width: 768px) {
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🌍 GLOBAL MOBILE FOUNDATIONS                            */
+    /* ─────────────────────────────────────────────────────── */
+    body {
+        font-size: 14px;
+        -webkit-text-size-adjust: 100%; /* iOS font scaling fix */
+    }
+
+    /* Touch-friendly minimum sizes */
+    button, .btn, input[type="button"], input[type="submit"] {
+        min-height: 44px;
+        font-size: 14px;
+    }
+
+    input, select, textarea {
+        font-size: 16px !important; /* iOS zoom prevention */
+        min-height: 44px;
+    }
+
+    /* Prevent horizontal scrolling */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 📌 TOPBAR FIX (CRITICAL!)                                */
+    /* Reports DB Topbar mobile fix                            */
+    /* ═══════════════════════════════════════════════════════ */
+    .reports-topbar {
+        padding: 8px 12px !important;
+        height: auto !important;
+        min-height: 56px;
+        flex-wrap: nowrap;
+    }
+
+    .reports-topbar-left {
+        gap: 8px !important;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .reports-topbar-title {
+        font-size: 14px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .reports-topbar-title span {
+        display: none !important; /* Hide "| Management View" subtitle */
+    }
+
+    .reports-topbar-right {
+        gap: 6px !important;
+        flex-shrink: 0;
+    }
+
+    .rpt-db-switcher-btn {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+    }
+
+    /* Hide text, show only icon for "Switch Database" */
+    .rpt-db-switcher-btn {
+        font-size: 0 !important;
+    }
+    .rpt-db-switcher-btn::before {
+        content: "📂";
+        font-size: 18px;
+    }
+
+    /* User info - hide name, show badge only */
+    .rpt-user-info {
+        gap: 4px !important;
+        font-size: 11px !important;
+    }
+    .rpt-user-info #rptUserName {
+        display: none; /* Hide name on mobile */
+    }
+
+    .rpt-user-badge {
+        padding: 3px 8px !important;
+        font-size: 10px !important;
+    }
+
+    .rpt-logout-btn {
+        padding: 5px 10px !important;
+        font-size: 11px !important;
+        min-height: 36px;
+    }
+
+    /* Hamburger button visible & nice */
+    .hamburger-btn {
+        display: block !important;
+        font-size: 20px !important;
+        padding: 6px 10px !important;
+        min-height: 40px;
+        background: rgba(240,165,0,0.1) !important;
+        border-radius: 6px;
+    }
+
+    /* ═══════════════════════════════════════════════════════ */
+    /* 📌 OTHER PAGES TOPBARS (Inventory, Kitchen, Purchasing) */
+    /* ═══════════════════════════════════════════════════════ */
+    .inventory-topbar,
+    .kitchen-topbar,
+    .purchasing-topbar {
+        padding: 8px 12px !important;
+        height: auto !important;
+        min-height: 56px;
+    }
+
+    .inv-topbar-title,
+    .kit-topbar-title,
+    .pur-topbar-title {
+        font-size: 14px !important;
+    }
+
+    .inv-topbar-title span,
+    .kit-topbar-title span,
+    .pur-topbar-title span {
+        display: none !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 📊 TABLES → CARD STYLE (Critical for Mobile!)            */
+    /* ─────────────────────────────────────────────────────── */
+
+    /* Generic mobile table - hide and show as cards */
+    table.mobile-card-table {
+        display: block;
+    }
+    table.mobile-card-table thead {
+        display: none;
+    }
+    table.mobile-card-table tbody {
+        display: block;
+    }
+    table.mobile-card-table tr {
+        display: block;
+        background: #16213e;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        padding: 12px;
+        border-left: 4px solid #f0a500;
+    }
+    table.mobile-card-table td {
+        display: block;
+        padding: 6px 0 !important;
+        border: none !important;
+        text-align: left !important;
+    }
+    table.mobile-card-table td::before {
+        content: attr(data-label) ": ";
+        font-weight: 700;
+        color: #f0a500;
+        display: inline-block;
+        min-width: 100px;
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 📊 EMPLOYEE TABLE (index.html) - Special Fix             */
+    /* ─────────────────────────────────────────────────────── */
+    .employee-table-container,
+    .emp-rpt-table {
+        overflow-x: visible !important;
+    }
+
+    .employee-table,
+    .emp-rpt-table table {
+        display: block;
+    }
+    .employee-table thead,
+    .emp-rpt-table thead {
+        display: none;
+    }
+    .employee-table tbody,
+    .emp-rpt-table tbody {
+        display: block;
+    }
+    .employee-table tr,
+    .emp-rpt-table tbody tr {
+        display: block;
+        background: #16213e;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        padding: 14px;
+        border-left: 4px solid #f0a500;
+        border-bottom: none;
+    }
+    .employee-table td,
+    .emp-rpt-table td {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0 !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+        text-align: left !important;
+        font-size: 13px;
+    }
+    .employee-table td:last-child,
+    .emp-rpt-table td:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Card-style data label */
+    .employee-table td::before,
+    .emp-rpt-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #f0a500;
+        font-size: 11px;
+        text-transform: uppercase;
+        margin-right: 10px;
+    }
+
+    /* Action buttons on mobile - bigger & side by side */
+    .employee-table .action-buttons,
+    .employee-table td:last-child {
+        flex-direction: row !important;
+        gap: 8px !important;
+        padding-top: 12px !important;
+    }
+    .employee-table .btn-edit,
+    .employee-table .btn-delete {
+        flex: 1;
+        min-height: 40px;
+        font-size: 13px !important;
+        padding: 8px 12px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🔒 LOGIN PAGE                                            */
+    /* ─────────────────────────────────────────────────────── */
+    .login-container {
+        padding: 20px !important;
+    }
+    .login-card {
+        padding: 24px 20px !important;
+        max-width: 100% !important;
+    }
+    .login-title {
+        font-size: 20px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🏠 ACCESS PAGE (Database Cards)                          */
+    /* ─────────────────────────────────────────────────────── */
+    .access-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        padding: 0 4px;
+    }
+    .access-card {
+        padding: 20px !important;
+    }
+    .access-card-icon {
+        font-size: 36px !important;
+    }
+    .access-card h3 {
+        font-size: 16px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 💰 CASHIER PAGE                                          */
+    /* ─────────────────────────────────────────────────────── */
+    .cashier-form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    .cashier-section {
+        padding: 16px !important;
+    }
+    .cashier-input-row {
+        flex-direction: column !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 📦 INVENTORY PAGE                                        */
+    /* ─────────────────────────────────────────────────────── */
+    .inventory-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    .inventory-item-card {
+        padding: 14px !important;
+    }
+    .inv-action-buttons {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .inv-action-buttons button {
+        flex: 1;
+        min-width: 80px;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🍳 KITCHEN PAGE                                          */
+    /* ─────────────────────────────────────────────────────── */
+    .kitchen-tabs {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+    .kitchen-tab {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 0 !important;
+        font-size: 12px !important;
+        padding: 8px 4px !important;
+    }
+    .recipe-card,
+    .meal-card,
+    .wastage-card {
+        padding: 14px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🛒 PURCHASING PAGE                                       */
+    /* ─────────────────────────────────────────────────────── */
+    .pur-form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    .pur-tabs {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+    .pur-tab {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 0 !important;
+        font-size: 11px !important;
+        padding: 8px 4px !important;
+    }
+    .pur-item-row {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    .pur-item-row input,
+    .pur-item-row select {
+        width: 100% !important;
+    }
+
+    /* Bill items table on mobile */
+    .pur-bill-items {
+        font-size: 12px !important;
+    }
+    .pur-bill-items th,
+    .pur-bill-items td {
+        padding: 6px 4px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 📊 REPORTS PAGE - Enhanced Mobile                        */
+    /* ─────────────────────────────────────────────────────── */
+
+    /* Sidebar improvements */
+    .reports-sidebar {
+        width: 280px !important;
+        z-index: 1500 !important;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    }
+
+    .reports-content {
+        padding: 12px !important;
+    }
+
+    .rpt-section-title {
+        font-size: 18px !important;
+    }
+
+    .rpt-section-subtitle {
+        font-size: 12px !important;
+    }
+
+    /* Summary cards smaller on mobile */
+    .rpt-summary-cards {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+    .rpt-summary-card {
+        padding: 12px 8px !important;
+    }
+    .rpt-summary-card .sc-icon {
+        font-size: 22px !important;
+        margin-bottom: 4px !important;
+    }
+    .rpt-summary-card .sc-value {
+        font-size: 18px !important;
+    }
+    .rpt-summary-card .sc-label {
+        font-size: 10px !important;
+    }
+
+    /* Filters stack vertically */
+    .rpt-filters {
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 12px !important;
+    }
+    .rpt-filter-group {
+        width: 100% !important;
+    }
+    .rpt-filter-group input,
+    .rpt-filter-group select {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    .rpt-filter-btn {
+        width: 100% !important;
+    }
+
+    /* Expandable bill cards mobile */
+    .pbill-header {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        padding: 12px !important;
+    }
+    .pbill-info-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Supplier cards mobile */
+    .top-suppliers-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .suppliers-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .supplier-card-stats {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    .payment-breakdown {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    .recent-bill-item {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+    }
+
+    /* Tabs in reports */
+    .scr-tabs,
+    .pending-subtabs {
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+    .scr-tab,
+    .pending-subtab {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 10px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🪟 MODALS - Full screen on mobile                        */
+    /* ─────────────────────────────────────────────────────── */
+    .modal,
+    .mark-paid-modal,
+    .photo-fullscreen-modal {
+        padding: 10px !important;
+    }
+    .modal-content,
+    .mark-paid-content {
+        width: 95% !important;
+        max-width: 95% !important;
+        max-height: 90vh !important;
+        overflow-y: auto !important;
+        padding: 18px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🔘 BUTTONS - Touch-friendly                              */
+    /* ─────────────────────────────────────────────────────── */
+    .btn,
+    button:not(.hamburger-btn):not(.pbill-expand-icon):not(.supplier-expand-icon) {
+        min-height: 40px;
+        padding: 10px 14px !important;
+        font-size: 13px !important;
+    }
+
+    .btn-edit,
+    .btn-delete {
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 📋 FORMS - Better mobile experience                      */
+    /* ─────────────────────────────────────────────────────── */
+    .form-row {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    .form-group {
+        width: 100% !important;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 12px !important;
+    }
+    label {
+        font-size: 12px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🎯 APPROVAL CARDS                                        */
+    /* ─────────────────────────────────────────────────────── */
+    .approval-card {
+        padding: 14px !important;
+    }
+    .approval-card-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+    .approval-stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+    }
+    .approval-items-table {
+        font-size: 11px !important;
+    }
+    .approval-items-table th,
+    .approval-items-table td {
+        padding: 6px 4px !important;
+    }
+    .approval-actions {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    .approval-actions button {
+        width: 100% !important;
+        padding: 12px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🏪 SUPPLIER (in Purchasing) Cards                        */
+    /* ─────────────────────────────────────────────────────── */
+    .supplier-grid,
+    .suppliers-list-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 📸 PHOTO PREVIEW                                         */
+    /* ─────────────────────────────────────────────────────── */
+    .photo-preview img,
+    .pbill-photo img {
+        max-width: 100% !important;
+        max-height: 200px !important;
+    }
+
+    /* ─────────────────────────────────────────────────────── */
+    /* 🚫 HIDE on Mobile                                        */
+    /* ─────────────────────────────────────────────────────── */
+    .hide-mobile,
+    .desktop-only {
+        display: none !important;
+    }
+
+    .show-mobile,
+    .mobile-only {
+        display: block !important;
+    }
+
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 📱 SMALL MOBILE (≤ 480px) - Extra small phones              */
+/* ═══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+    /* Even smaller summary cards */
+    .rpt-summary-cards {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+    }
+    .rpt-summary-card {
+        padding: 10px 6px !important;
+    }
+    .rpt-summary-card .sc-value {
+        font-size: 16px !important;
+    }
+    .rpt-summary-card .sc-label {
+        font-size: 9px !important;
+    }
+
+    /* Smaller topbar title */
+    .reports-topbar-title,
+    .inv-topbar-title,
+    .kit-topbar-title,
+    .pur-topbar-title {
+        font-size: 12px !important;
+    }
+
+    /* User info even more compact */
+    .rpt-user-badge {
+        padding: 2px 6px !important;
+        font-size: 9px !important;
+    }
+    .rpt-logout-btn {
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+    }
+
+    /* Tighter tables */
+    .employee-table td,
+    .emp-rpt-table td {
+        font-size: 12px !important;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🍎 iOS SPECIFIC FIXES                                       */
+/* ═══════════════════════════════════════════════════════════ */
+@supports (-webkit-touch-callout: none) {
+    /* Prevent iOS button styling */
+    button, input[type="button"], input[type="submit"] {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    /* Better tap highlight */
+    button, a {
+        -webkit-tap-highlight-color: rgba(240,165,0,0.2);
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🖐️ TOUCH DEVICE OPTIMIZATIONS                              */
+/* ═══════════════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+    /* Disable hover effects on touch devices */
+    *:hover {
+        transform: none !important;
+    }
+
+    /* Make all clickable elements larger */
+    .sb-item,
+    .access-card,
+    .rpt-item-header,
+    .pbill-header,
+    .supplier-card-header {
+        min-height: 48px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* 🪟 SIDEBAR OVERLAY (Mobile Smooth UX!)                      */
+/* Click outside to close sidebar/menus                        */
+/* ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    
+    /* Dark overlay behind sidebar */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1400;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        animation: fadeIn 0.25s ease;
+    }
+    
+    /* Show overlay when sidebar open */
+    .sidebar-overlay.active {
+        display: block;
+    }
+    
+    /* Fade in animation */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Smoother sidebar slide */
+    .reports-sidebar,
+    .kitchen-sidebar,
+    .inventory-sidebar,
+    .purchasing-sidebar {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        z-index: 1500 !important;
+    }
+    
+    /* Dropdown smooth animation */
+    .rpt-db-dropdown,
+    .pur-db-dropdown,
+    .inv-db-dropdown,
+    .kit-db-dropdown {
+        animation: dropDown 0.2s ease;
+        transform-origin: top right;
+    }
+    
+    @keyframes dropDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    /* Smooth modal animations */
+    .modal,
+    .mark-paid-modal,
+    .photo-fullscreen-modal {
+        animation: fadeIn 0.25s ease;
+    }
+    
+    .modal-content,
+    .mark-paid-content {
+        animation: modalSlideUp 0.3s ease;
+    }
+    
+    @keyframes modalSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}

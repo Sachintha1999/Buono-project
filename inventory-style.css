@@ -1,0 +1,252 @@
+/* ════════════════════════════════════════════════
+   📦 INVENTORY DATABASE STYLES
+   📁 File: public/inventory-style.css
+   📅 Created: 2026-06-08 (v9.5 - File Split!)
+   ════════════════════════════════════════════════ */
+
+/* ═══════ STAT CARDS COLORS ═══════ */
+.stat-card.warning { border-color: #f0a500; }
+.stat-card.warning h3 { color: #f0a500; }
+.stat-card.danger { border-color: #ff4444; }
+.stat-card.danger h3 { color: #ff4444; }
+.stat-card.success { border-color: #4CAF50; }
+.stat-card.success h3 { color: #4CAF50; }
+
+/* ═══════ STOCK STATUS COLORS ═══════ */
+.stock-good { color: #4CAF50; font-weight: 700; }
+.stock-low { color: #f0a500; font-weight: 700; }
+.stock-out { color: #ff4444; font-weight: 700; }
+
+.stock-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.stock-badge.good { background: rgba(76,175,80,0.15); color: #4CAF50; }
+.stock-badge.low { background: rgba(240,165,0,0.15); color: #f0a500; }
+.stock-badge.out { background: rgba(255,68,68,0.15); color: #ff4444; }
+
+/* ═══════ QUICK STOCK BUTTONS ═══════ */
+.qty-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-stock-in, .btn-stock-out {
+    background: rgba(76,175,80,0.15);
+    color: #4CAF50;
+    border: 1px solid rgba(76,175,80,0.3);
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+.btn-stock-in:hover {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-stock-out {
+    background: rgba(255,68,68,0.15);
+    color: #ff4444;
+    border-color: rgba(255,68,68,0.3);
+}
+
+.btn-stock-out:hover {
+    background: #ff4444;
+    color: white;
+}
+
+/* ═══════ CATEGORY CARD ═══════ */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.category-card {
+    background: #16213e;
+    border: 1px solid rgba(240,165,0,0.2);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.category-card:hover {
+    border-color: #f0a500;
+    transform: translateY(-2px);
+}
+
+.category-card .cat-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.category-card .cat-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin-bottom: 4px;
+}
+
+.category-card .cat-desc {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.category-card .cat-count {
+    font-size: 13px;
+    color: #f0a500;
+    font-weight: 600;
+}
+
+.category-card .cat-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    gap: 4px;
+}
+
+.cat-btn {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.cat-btn.edit { color: #2196F3; }
+.cat-btn.edit:hover { background: rgba(33,150,243,0.2); }
+.cat-btn.delete { color: #ff4444; }
+.cat-btn.delete:hover { background: rgba(255,68,68,0.2); }
+
+/* ═══════ FILTER BAR ═══════ */
+.inv-filter-bar {
+    background: #16213e;
+    border: 1px solid rgba(240,165,0,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.inv-filter-bar input,
+.inv-filter-bar select {
+    background: #0f3460;
+    border: 1px solid rgba(240,165,0,0.3);
+    color: #e0e0e0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+.inv-filter-bar input:focus,
+.inv-filter-bar select:focus {
+    border-color: #f0a500;
+}
+
+.inv-filter-bar input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* ═══════ EMOJI PICKER ═══════ */
+.emoji-picker {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+    background: #0f3460;
+    border: 1px solid rgba(240,165,0,0.2);
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.emoji-option {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    padding: 8px 4px;
+    font-size: 22px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+}
+
+.emoji-option:hover {
+    background: rgba(240,165,0,0.15);
+}
+
+.emoji-option.selected {
+    border-color: #f0a500;
+    background: rgba(240,165,0,0.2);
+}
+
+/* ═══════ STOCK UPDATE MODAL ═══════ */
+.stock-update-info {
+    background: #0f3460;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+.stock-update-info h3 {
+    color: #f0a500;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.stock-update-info p {
+    color: #aaa;
+    font-size: 13px;
+}
+
+.current-stock-display {
+    font-size: 28px;
+    font-weight: 700;
+    color: #e0e0e0;
+    margin: 10px 0;
+}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media (max-width: 768px) {
+    .category-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .inv-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .inv-filter-bar input,
+    .inv-filter-bar select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+}

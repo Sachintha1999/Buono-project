@@ -1,0 +1,130 @@
+/* ============================================
+   LOGIN PAGE - STYLES
+   File: login-style.css
+   ============================================ */
+
+/* ===== LOGIN BODY ===== */
+.login-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #1a1a2e;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* ===== LOGIN CONTAINER ===== */
+.login-container {
+    background: #16213e;
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid rgba(240, 165, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== LOGIN HEADER ===== */
+.login-header {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.login-icon {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.login-header h1 {
+    color: #f0a500;
+    font-size: 32px;
+    margin: 0 0 8px 0;
+    letter-spacing: 2px;
+}
+
+.login-header p {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ===== FORM INPUTS ===== */
+#loginForm input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #0f3460;
+    border: 1px solid rgba(240, 165, 0, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-size: 15px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+#loginForm input:focus {
+    outline: none;
+    border-color: #f0a500;
+    box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.1);
+}
+
+#loginForm input::placeholder {
+    color: #666;
+}
+
+/* ===== LOGIN BUTTON ===== */
+#loginBtn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #f0a500, #e09400);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+}
+
+#loginBtn:hover {
+    background: linear-gradient(135deg, #e09400, #c07800);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(240, 165, 0, 0.3);
+}
+
+#loginBtn:active {
+    transform: translateY(0);
+}
+
+/* ===== ERROR MESSAGE ===== */
+#loginError {
+    color: #ff4444;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    display: none;
+    padding: 10px;
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 36px 24px;
+    }
+
+    .login-header h1 {
+        font-size: 28px;
+    }
+
+    .login-icon {
+        font-size: 44px;
+    }
+}
