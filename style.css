@@ -1491,3 +1491,96 @@ tr:last-child td {
         right: 0;
     }
 }
+/* ============================================
+   🔄 DATABASE SWITCHER (v10.1 Migration)
+   ============================================ */
+
+.db-switcher {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-db-switch {
+    background: linear-gradient(135deg, #00BCD4, #0097A7);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 188, 212, 0.3);
+}
+
+.btn-db-switch:hover {
+    background: linear-gradient(135deg, #0097A7, #00838F);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.5);
+}
+
+.db-switch-menu {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: #16213e;
+    border: 2px solid #00BCD4;
+    border-radius: 10px;
+    min-width: 220px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+    overflow: hidden;
+}
+
+.db-switch-menu.show {
+    display: block;
+    animation: dbMenuFade 0.2s ease;
+}
+
+@keyframes dbMenuFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.db-switch-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.db-switch-item:last-child {
+    border-bottom: none;
+}
+
+.db-switch-item:hover {
+    background: #0f3460;
+    padding-left: 22px;
+}
+
+.db-switch-icon {
+    font-size: 22px;
+}
+
+.db-switch-name {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .db-switch-menu {
+        right: -10px;
+        min-width: 200px;
+    }
+    
+    .btn-db-switch {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+}
