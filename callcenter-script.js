@@ -1,9 +1,11 @@
 // ═══════════════════════════════════════════════════════
-// CALL CENTER SCRIPT - Buono Project v10.1
+// CALL CENTER SCRIPT - Buono Project v10.5 (Phase 1)
 // File: callcenter-script.js
-// ❌ NO firebaseConfig - uses global from firebase-config.js
-// ❌ NO DATABASES array - uses global from firebase-config.js
-// ✅ Uses globals: db, getCurrentUser(), DATABASES
+// ✅ Country Selector (Foreign Numbers)
+// ✅ Call Attempts Tracking
+// ✅ Auto Move to Hold Warning
+// ✅ WhatsApp Preview Modal
+// ✅ Multi-template WhatsApp
 // ═══════════════════════════════════════════════════════
 
 // ── GLOBAL STATE ──
@@ -16,11 +18,13 @@ let editLeadId = null;
 let editCourseId = null;
 let editEventId = null;
 let deleteLeadId = null;
+let holdLeadId = null;
 let allCourses = [];
 let allEvents = [];
-
-// ── DATABASES from firebase-config.js (global!) ──
-// No local array needed - uses global DATABASES
+let pendingTodayLeads = [];
+let pendingOlderLeads = [];
+let maxCallAttempts = 4;
+let currentWAType = '';
 
 // ── STATUS CONFIG ──
 const STATUSES = [
@@ -43,16 +47,14 @@ const STATUSES = [
 // INIT
 // ════════════════════════════════════════
 async function initializeApp() {
-    console.log('🚀 Initializing Call Center...');
+    console.log('🚀 Initializing Call Center v10.5 (Phase 1)...');
 
-    // Check auth using global helper
     const userData = getCurrentUser();
     if (!userData) {
         window.location.href = 'login.html';
         return;
     }
 
-    // Refresh from Firebase
     try {
         const userDoc = await db.collection('employees').doc(userData.id).get();
         if (userDoc.exists) {
@@ -67,7 +69,6 @@ async function initializeApp() {
         console.warn('Could not refresh user:', e);
     }
 
-    // Access check - Admin, Manager, Call Operator, or has callCenterDB perms
     const isAdmin = userData.access === 'Admin';
     const isManager = userData.access === 'Manager';
     const isOperator = userData.access === 'Call Operator';
@@ -86,6 +87,7 @@ async function initializeApp() {
 
     initUserUI();
     buildDatabaseSwitcher();
+    loadSettings_MaxAttempts();
     loadLeads();
     loadCourses();
     loadEvents();
@@ -93,8 +95,49 @@ async function initializeApp() {
     loadCCReports();
 }
 
-// Start the app
 initializeApp();
+
+// ════════════════════════════════════════
+// MAX ATTEMPTS SETTING
+// ════════════════════════════════════════
+function loadSettings_MaxAttempts() {
+    db.collection('settings').doc('callCenter').get()
+        .then(function(doc) {
+            if (doc.exists) {
+                const data = doc.data();
+                maxCallAttempts = data.maxAttempts || 4;
+            }
+            const input = document.getElementById('maxAttempts');
+            if (input) input.value = maxCallAttempts;
+        })
+        .catch(function(e) {
+            console.warn('Settings not loaded:', e);
+        });
+}
+
+function saveMaxAttempts() {
+    const input = document.getElementById('maxAttempts');
+    const value = parseInt(input.value) || 4;
+    
+    if (value < 1 || value > 20) {
+        showToast('⚠️ 1-20 අතර number එකක් enter කරන්න!', 'warning');
+        return;
+    }
+
+    db.collection('settings').doc('callCenter').set({
+        maxAttempts: value,
+        updatedAt: getServerTimestamp(),
+        updatedBy: currentUser.nickname || currentUser.name
+    }, { merge: true })
+    .then(function() {
+        maxCallAttempts = value;
+        showToast('✅ Max attempts set to ' + value, 'success');
+    })
+    .catch(function(e) {
+        console.error('Save settings error:', e);
+        showToast('❌ Save failed!', 'error');
+    });
+}
 
 // ════════════════════════════════════════
 // USER UI
@@ -107,7 +150,7 @@ function initUserUI() {
 }
 
 // ════════════════════════════════════════
-// DATABASE SWITCHER (Like other pages)
+// DATABASE SWITCHER
 // ════════════════════════════════════════
 function buildDatabaseSwitcher() {
     const list = document.getElementById('dbDropdownList');
@@ -123,7 +166,6 @@ function buildDatabaseSwitcher() {
         const dp = currentUser.permissions?.[d.id] || {};
         let hasAccess = isAdmin || dp.add || dp.view || dp.selfView || dp.edit || dp.delete;
 
-        // Call Operator special access for Call Center
         if (d.id === 'callCenterDB' && currentUser.access === 'Call Operator') {
             hasAccess = true;
         }
@@ -142,7 +184,6 @@ function buildDatabaseSwitcher() {
 
     list.innerHTML = html;
 
-    // Click handler
     const switcher = document.getElementById('dbSwitcher');
     if (switcher) {
         switcher.addEventListener('click', function(e) {
@@ -152,7 +193,6 @@ function buildDatabaseSwitcher() {
         });
     }
 
-    // Close on outside click
     document.addEventListener('click', function(e) {
         const dropdown = document.getElementById('dbDropdown');
         if (dropdown && !dropdown.contains(e.target) && !e.target.closest('#dbSwitcher')) {
@@ -177,12 +217,51 @@ function switchTab(tabId) {
     if (content) content.classList.add('active');
     if (btn) btn.classList.add('active');
 
-    // Tab-specific loads
     if (tabId === 'enrolled')   loadEnrolled();
     if (tabId === 'payments')   loadPayments();
     if (tabId === 'ccReports')  loadCCReports();
     if (tabId === 'settings')   loadSettings();
     if (tabId === 'followups')  loadFollowUps();
+    if (tabId === 'callLog')    loadPendingQueue();
+}
+
+// ════════════════════════════════════════
+// ⭐ PHONE FORMAT (Country-aware!)
+// ════════════════════════════════════════
+function updatePhonePlaceholder() {
+    const country = document.getElementById('quickCountry').value;
+    const phoneInput = document.getElementById('quickPhone');
+    
+    const placeholders = {
+        '+94': '7X XXX XXXX',
+        '+91': '9XXXX XXXXX',
+        '+971': '5X XXX XXXX',
+        '+966': '5X XXX XXXX',
+        '+974': 'XXXX XXXX',
+        '+965': 'XXXX XXXX',
+        '+973': 'XXXX XXXX',
+        '+968': 'XXXX XXXX',
+        '+1': '(XXX) XXX-XXXX',
+        '+44': '7XXX XXXXXX',
+        '+61': '4XX XXX XXX',
+        '+65': 'XXXX XXXX',
+        '+60': 'XX XXX XXXX',
+        '+0': 'Custom number'
+    };
+    
+    phoneInput.placeholder = placeholders[country] || 'Phone number';
+    phoneInput.value = '';
+    phoneInput.focus();
+}
+
+function formatPhoneInput(input) {
+    let v = input.value.replace(/\D/g, '');
+    input.value = v.substring(0, 15);
+}
+
+function formatPhoneInputModal(input) {
+    let v = input.value.replace(/\D/g, '');
+    input.value = v.substring(0, 15);
 }
 
 // ════════════════════════════════════════
@@ -205,6 +284,7 @@ function loadLeads() {
             renderLeadsTable(filteredLeads);
             updateStats();
             loadFollowUps();
+            loadPendingQueue();
         }, function(error) {
             console.error('Leads load error:', error);
             if (tbody) {
@@ -228,6 +308,8 @@ function renderLeadsTable(leads) {
         const dateStr = lead.createdAt
             ? formatDate(lead.createdAt.toDate ? lead.createdAt.toDate() : new Date(lead.createdAt))
             : '-';
+        const attempts = lead.callAttempts || 0;
+        const attemptsBadge = getAttemptsBadge(attempts, lead.status);
 
         html += `
             <tr>
@@ -245,8 +327,8 @@ function renderLeadsTable(leads) {
                         ${statusInfo.label}
                     </span>
                 </td>
+                <td>${attemptsBadge}</td>
                 <td>${escapeHtml(lead.courseInterest || '-')}</td>
-                <td>${escapeHtml(lead.source || '-')}</td>
                 <td>${dateStr}</td>
                 <td>
                     <div class="action-btns">
@@ -263,23 +345,188 @@ function renderLeadsTable(leads) {
     tbody.innerHTML = html;
 }
 
+function getAttemptsBadge(attempts, status) {
+    if (status === 'Enrolled') {
+        return '<span class="attempts-badge attempts-enrolled">✅ Enrolled</span>';
+    }
+    if (attempts === 0) {
+        return '<span class="attempts-badge attempts-new">📋 New</span>';
+    }
+    const isNearMax = attempts >= maxCallAttempts - 1;
+    const isAtMax = attempts >= maxCallAttempts;
+    
+    let cssClass = 'attempts-normal';
+    if (isAtMax) cssClass = 'attempts-max';
+    else if (isNearMax) cssClass = 'attempts-warning';
+    
+    return `<span class="attempts-badge ${cssClass}">📞 ${attempts}/${maxCallAttempts}</span>`;
+}
+
 // ════════════════════════════════════════
-// QUICK ADD
+// PENDING QUEUE SYSTEM
+// ════════════════════════════════════════
+function loadPendingQueue() {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const allPending = allLeads.filter(function(lead) {
+        return lead.status === 'Need Call';
+    });
+
+    pendingTodayLeads = [];
+    pendingOlderLeads = [];
+
+    allPending.forEach(function(lead) {
+        if (!lead.createdAt) {
+            pendingOlderLeads.push(lead);
+            return;
+        }
+
+        const leadDate = lead.createdAt.toDate
+            ? lead.createdAt.toDate()
+            : new Date(lead.createdAt);
+
+        if (leadDate >= todayStart) {
+            pendingTodayLeads.push(lead);
+        } else {
+            pendingOlderLeads.push(lead);
+        }
+    });
+
+    pendingTodayLeads.sort(function(a, b) {
+        const aTime = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : new Date(a.createdAt).getTime();
+        const bTime = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : new Date(b.createdAt).getTime();
+        return aTime - bTime;
+    });
+
+    pendingOlderLeads.sort(function(a, b) {
+        const aTime = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : new Date(a.createdAt).getTime();
+        const bTime = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : new Date(b.createdAt).getTime();
+        return aTime - bTime;
+    });
+
+    renderPendingQueue();
+    updatePendingStats();
+}
+
+function renderPendingQueue() {
+    renderPendingSection('todayPendingList', pendingTodayLeads, true);
+    setEl('todayPendingCount', pendingTodayLeads.length);
+
+    renderPendingSection('olderPendingList', pendingOlderLeads, false);
+    setEl('olderPendingCount', pendingOlderLeads.length);
+}
+
+function renderPendingSection(containerId, leads, isToday) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (leads.length === 0) {
+        container.innerHTML = `
+            <div class="pending-empty">
+                <div class="pending-empty-icon">${isToday ? '🎉' : '✅'}</div>
+                <p>${isToday ? 'අද add කරපු leads නෑ' : 'පරණ pending leads නෑ'}</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    leads.forEach(function(lead) {
+        const timeAgo = getTimeAgo(lead.createdAt);
+        const phoneDisplay = lead.phone || 'No phone';
+        const isSelected = selectedLeadId === lead.id;
+        const attempts = lead.callAttempts || 0;
+        const attemptsBadge = attempts > 0 ? 
+            `<span class="pending-attempts">📞 ${attempts}/${maxCallAttempts}</span>` : '';
+
+        html += `
+            <div class="pending-item ${isSelected ? 'selected' : ''}" 
+                 onclick="selectLeadForLog('${lead.id}')">
+                <div class="pending-item-header">
+                    <span class="pending-item-name">👤 ${escapeHtml(lead.name || 'Unknown')}</span>
+                    <span class="pending-item-time">${timeAgo}</span>
+                </div>
+                <div class="pending-item-phone">
+                    📱 ${escapeHtml(phoneDisplay)}
+                    ${attemptsBadge}
+                </div>
+                <div class="pending-item-actions">
+                    <button class="btn-call-now" onclick="event.stopPropagation(); selectLeadForLog('${lead.id}')">
+                        📞 Call Now
+                    </button>
+                    <button class="btn-wa-quick" onclick="event.stopPropagation(); openWhatsApp('${lead.phone}')">
+                        💬
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function updatePendingStats() {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayAdded = allLeads.filter(function(lead) {
+        if (!lead.createdAt) return false;
+        const d = lead.createdAt.toDate ? lead.createdAt.toDate() : new Date(lead.createdAt);
+        return d >= todayStart;
+    }).length;
+
+    const todayRemaining = pendingTodayLeads.length;
+    const todayCalled = todayAdded - todayRemaining;
+    const olderPending = pendingOlderLeads.length;
+
+    setEl('psTodayAdded', todayAdded);
+    setEl('psTodayCalled', todayCalled);
+    setEl('psTodayRemaining', todayRemaining);
+    setEl('psOlderPending', olderPending);
+}
+
+function getTimeAgo(timestamp) {
+    if (!timestamp) return 'N/A';
+
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+    if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+    if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
+
+    return formatDate(date);
+}
+
+// ════════════════════════════════════════
+// ⭐ QUICK ADD (with Country Selector!)
 // ════════════════════════════════════════
 function quickAddLead() {
+    const countrySelect = document.getElementById('quickCountry');
     const phoneInput = document.getElementById('quickPhone');
     const nameInput = document.getElementById('quickName');
 
-    const phone = phoneInput.value.trim();
+    const countryCode = countrySelect.value;
+    const phone = phoneInput.value.trim().replace(/\D/g, '');
     const name = nameInput.value.trim();
 
-    if (!phone || phone.length < 9) {
-        showToast('📱 Valid phone number enter කරන්න (9 digits)', 'warning');
+    if (!phone || phone.length < 6) {
+        showToast('📱 Valid phone number enter කරන්න!', 'warning');
         phoneInput.focus();
         return;
     }
 
-    const fullPhone = '+94' + phone;
+    // Build full phone number
+    let fullPhone;
+    if (countryCode === '+0') {
+        // Custom - use as-is with + prefix
+        fullPhone = '+' + phone;
+    } else {
+        fullPhone = countryCode + phone;
+    }
 
     // Check duplicate
     const duplicate = allLeads.find(function(l) {
@@ -294,11 +541,14 @@ function quickAddLead() {
     const leadData = {
         name: name || 'Unknown',
         phone: fullPhone,
+        countryCode: countryCode,
         status: 'Need Call',
+        callAttempts: 0,
         courseInterest: '',
         source: 'Walk In',
         notes: '',
         callHistory: [],
+        whatsappHistory: [],
         createdAt: getServerTimestamp(),
         createdBy: currentUser.nickname || currentUser.name,
         updatedAt: getServerTimestamp()
@@ -315,16 +565,6 @@ function quickAddLead() {
             console.error('Quick add error:', error);
             showToast('❌ Add failed!', 'error');
         });
-}
-
-// ════════════════════════════════════════
-// PHONE FORMAT
-// ════════════════════════════════════════
-function formatPhoneInput(input) {
-    let v = input.value.replace(/\D/g, '');
-    if (v.startsWith('0')) v = v.substring(1);
-    if (v.startsWith('94')) v = v.substring(2);
-    input.value = v.substring(0, 9);
 }
 
 // ════════════════════════════════════════
@@ -357,13 +597,14 @@ function applyFilters(query, statusFilter) {
 }
 
 // ════════════════════════════════════════
-// LEAD MODAL (Add/Edit)
+// LEAD MODAL (Add/Edit with Country!)
 // ════════════════════════════════════════
 function openLeadModal() {
     editLeadId = null;
     document.getElementById('leadModalTitle').textContent = '➕ Add New Lead';
     document.getElementById('mlName').value = '';
     document.getElementById('mlPhone').value = '';
+    document.getElementById('mlCountry').value = '+94';
     document.getElementById('mlStatus').value = 'Need Call';
     document.getElementById('mlCourse').value = '';
     document.getElementById('mlSource').value = 'Walk In';
@@ -380,10 +621,15 @@ function openEditLead(leadId) {
     document.getElementById('leadModalTitle').textContent = '✏️ Edit Lead';
     document.getElementById('mlName').value = lead.name || '';
 
+    // Detect country code from phone
+    const country = lead.countryCode || '+94';
+    document.getElementById('mlCountry').value = country;
+    
     let phoneNum = lead.phone || '';
-    if (phoneNum.startsWith('+94')) phoneNum = phoneNum.substring(3);
+    if (phoneNum.startsWith(country)) phoneNum = phoneNum.substring(country.length);
+    else if (phoneNum.startsWith('+')) phoneNum = phoneNum.substring(1);
+    
     document.getElementById('mlPhone').value = phoneNum;
-
     document.getElementById('mlStatus').value = lead.status || 'Need Call';
     document.getElementById('mlCourse').value = lead.courseInterest || '';
     document.getElementById('mlSource').value = lead.source || 'Walk In';
@@ -395,7 +641,8 @@ function openEditLead(leadId) {
 
 function saveLead() {
     const name = document.getElementById('mlName').value.trim();
-    const phoneRaw = document.getElementById('mlPhone').value.trim();
+    const country = document.getElementById('mlCountry').value;
+    const phoneRaw = document.getElementById('mlPhone').value.trim().replace(/\D/g, '');
     const status = document.getElementById('mlStatus').value;
     const courseInterest = document.getElementById('mlCourse').value;
     const source = document.getElementById('mlSource').value;
@@ -406,12 +653,12 @@ function saveLead() {
         showToast('👤 Name required!', 'warning');
         return;
     }
-    if (!phoneRaw || phoneRaw.length < 9) {
+    if (!phoneRaw || phoneRaw.length < 6) {
         showToast('📱 Valid phone required!', 'warning');
         return;
     }
 
-    const phone = '+94' + phoneRaw;
+    const phone = country === '+0' ? '+' + phoneRaw : country + phoneRaw;
 
     const duplicate = allLeads.find(function(l) {
         return l.phone === phone && l.id !== editLeadId;
@@ -425,6 +672,7 @@ function saveLead() {
     const data = {
         name: name,
         phone: phone,
+        countryCode: country,
         status: status,
         courseInterest: courseInterest,
         source: source,
@@ -441,6 +689,8 @@ function saveLead() {
         data.createdAt = getServerTimestamp();
         data.createdBy = currentUser.nickname || currentUser.name;
         data.callHistory = [];
+        data.whatsappHistory = [];
+        data.callAttempts = 0;
         promise = db.collection('leads').add(data);
     }
 
@@ -468,6 +718,8 @@ function viewLead(leadId) {
     const dateStr = lead.createdAt
         ? formatDate(lead.createdAt.toDate ? lead.createdAt.toDate() : new Date(lead.createdAt))
         : '-';
+    
+    const attempts = lead.callAttempts || 0;
 
     let historyHtml = '';
     if (lead.callHistory && lead.callHistory.length > 0) {
@@ -490,6 +742,22 @@ function viewLead(leadId) {
         historyHtml = '<div style="color:#888;text-align:center;padding:16px;">No call history</div>';
     }
 
+    // WhatsApp history
+    let waHtml = '';
+    if (lead.whatsappHistory && lead.whatsappHistory.length > 0) {
+        lead.whatsappHistory.slice(-5).reverse().forEach(function(w) {
+            waHtml += `
+                <div style="background:#0f3460;padding:8px 12px;border-radius:6px;margin-bottom:6px;">
+                    <div style="display:flex;justify-content:space-between;">
+                        <span style="color:#25D366;">✅✅✅ ${escapeHtml(w.type)}</span>
+                        <span style="color:#888;font-size:0.75rem;">${w.dateStr || '-'}</span>
+                    </div>
+                    <div style="color:#888;font-size:0.8rem;margin-top:3px;">${escapeHtml(w.preview || '')}</div>
+                </div>
+            `;
+        });
+    }
+
     document.getElementById('viewLeadBody').innerHTML = `
         <div class="lead-detail-grid">
             <div class="lead-detail-item">
@@ -503,6 +771,10 @@ function viewLead(leadId) {
             <div class="lead-detail-item">
                 <label>📊 Status</label>
                 <span class="status-badge ${statusInfo.cssClass}">${statusInfo.label}</span>
+            </div>
+            <div class="lead-detail-item">
+                <label>📞 Call Attempts</label>
+                <span>${getAttemptsBadge(attempts, lead.status)}</span>
             </div>
             <div class="lead-detail-item">
                 <label>🎓 Course</label>
@@ -521,6 +793,12 @@ function viewLead(leadId) {
             <label style="font-size:0.75rem;color:#888;display:block;margin-bottom:4px;">📝 Notes</label>
             <span style="color:#ccc;font-size:0.9rem;">${escapeHtml(lead.notes)}</span>
         </div>` : ''}
+        
+        ${waHtml ? `<div style="margin-bottom:16px;">
+            <div style="font-weight:600;color:#25D366;margin-bottom:10px;">📲 WhatsApp Sent History</div>
+            ${waHtml}
+        </div>` : ''}
+        
         <div>
             <div style="font-weight:600;color:#f0a500;margin-bottom:10px;">📜 Call History</div>
             ${historyHtml}
@@ -634,6 +912,9 @@ function selectLeadForLog(leadId) {
     setEl('selLeadName', escapeHtml(lead.name || 'Unknown'));
     setEl('selLeadPhone', lead.phone || '-');
 
+    const attempts = lead.callAttempts || 0;
+    setEl('selLeadAttempts', '📞 Attempts: ' + attempts + '/' + maxCallAttempts);
+
     const statusInfo = getStatusInfo(lead.status || 'Need Call');
     const selStatus = document.getElementById('selLeadStatus');
     if (selStatus) {
@@ -649,8 +930,16 @@ function selectLeadForLog(leadId) {
     hideEl('noLeadMsg');
     showEl('waActions');
 
+    const historySection = document.getElementById('callHistorySection');
+    if (historySection) historySection.style.display = 'block';
+
     loadCallHistory(lead);
     switchTab('callLog');
+    renderPendingQueue();
+
+    if (window.innerWidth < 768) {
+        document.querySelector('.calllog-form-panel')?.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
 function loadCallHistory(lead) {
@@ -716,32 +1005,94 @@ function saveCallLog() {
         timestamp: now.getTime()
     };
 
-    db.collection('leads').doc(selectedLeadId).update({
+    // ⭐ ATTEMPT COUNTER LOGIC
+    let newAttempts = selectedLeadData.callAttempts || 0;
+    
+    // Only count if status is "Need Call" (before status change)
+    if (selectedLeadData.status === 'Need Call') {
+        newAttempts += 1;
+    }
+
+    const updateData = {
         name: name,
         status: status,
         courseInterest: course,
         source: source,
         eventId: eventId,
         followUpDate: followUp || null,
+        callAttempts: newAttempts,
         callHistory: firebase.firestore.FieldValue.arrayUnion(historyEntry),
         updatedAt: getServerTimestamp(),
         updatedBy: currentUser.nickname || currentUser.name
-    })
+    };
+
+    db.collection('leads').doc(selectedLeadId).update(updateData)
     .then(function() {
         showToast('✅ Call logged!', 'success');
-        clearCallLogForm();
 
-        const updated = allLeads.find(function(l) { return l.id === selectedLeadId; });
-        if (updated) {
-            if (!updated.callHistory) updated.callHistory = [];
-            updated.callHistory.push(historyEntry);
-            loadCallHistory(updated);
+        // ⭐ Check if attempts reached max AND still "Need Call"
+        if (status === 'Need Call' && newAttempts >= maxCallAttempts) {
+            // Show hold warning modal
+            showHoldWarning(selectedLeadId, name, newAttempts);
+        } else {
+            // Auto-next lead
+            autoLoadNextLead();
         }
     })
     .catch(function(error) {
         console.error('Save call log error:', error);
         showToast('❌ Save failed!', 'error');
     });
+}
+
+// ⭐ HOLD WARNING SYSTEM
+function showHoldWarning(leadId, leadName, attempts) {
+    holdLeadId = leadId;
+    setEl('holdLeadName', leadName);
+    setEl('holdAttempts', attempts);
+    openModal('holdWarningModal');
+}
+
+function confirmMoveToHold() {
+    if (!holdLeadId) return;
+
+    db.collection('leads').doc(holdLeadId).update({
+        status: 'Hold',
+        updatedAt: getServerTimestamp(),
+        updatedBy: currentUser.nickname || currentUser.name,
+        movedToHoldAt: getServerTimestamp(),
+        movedToHoldReason: 'Max attempts reached'
+    })
+    .then(function() {
+        showToast('⏸️ Moved to Hold!', 'success');
+        closeModal('holdWarningModal');
+        holdLeadId = null;
+        autoLoadNextLead();
+    })
+    .catch(function(e) {
+        showToast('❌ Update failed!', 'error');
+    });
+}
+
+function autoLoadNextLead() {
+    setTimeout(function() {
+        loadPendingQueue();
+
+        let nextLead = null;
+        if (pendingTodayLeads.length > 0) {
+            nextLead = pendingTodayLeads[0];
+        } else if (pendingOlderLeads.length > 0) {
+            nextLead = pendingOlderLeads[0];
+        }
+
+        if (nextLead && nextLead.id !== selectedLeadId) {
+            showToast('⚡ Next lead loaded: ' + (nextLead.name || 'Unknown'), 'info');
+            selectLeadForLog(nextLead.id);
+        } else {
+            showToast('🎉 All pending calls done!', 'success');
+            clearCallLogForm();
+        }
+    }, 500);
 }
 
 function clearCallLogForm() {
@@ -756,6 +1107,9 @@ function clearCallLogForm() {
     hideEl('waActions');
     showEl('noLeadMsg');
 
+    const historySection = document.getElementById('callHistorySection');
+    if (historySection) historySection.style.display = 'none';
+
     const historyEl = document.getElementById('callHistoryList');
     if (historyEl) {
         historyEl.innerHTML = '<div class="no-history"><div>📞</div><p>Lead select කරන්න</p></div>';
@@ -763,6 +1117,158 @@ function clearCallLogForm() {
 
     if (document.getElementById('logNotes')) document.getElementById('logNotes').value = '';
     if (document.getElementById('logFollowUp')) document.getElementById('logFollowUp').value = '';
+
+    renderPendingQueue();
+}
+
+// ════════════════════════════════════════
+// ⭐ WHATSAPP PREVIEW SYSTEM (NEW!)
+// ════════════════════════════════════════
+
+function openWAPreview(type) {
+    if (!selectedLeadData) {
+        showToast('⚠️ Lead select කරන්න!', 'warning');
+        return;
+    }
+
+    currentWAType = type;
+
+    // Set phone and name preview
+    setEl('waPreviewPhone', selectedLeadData.phone || '-');
+    setEl('waPreviewName', selectedLeadData.name || '-');
+
+    // Show/hide multi-select section
+    const multiSelect = document.getElementById('waMultiSelect');
+    if (type === 'multi') {
+        multiSelect.style.display = 'block';
+        // Reset checkboxes to default
+        document.getElementById('waInclude_course').checked = true;
+        document.getElementById('waInclude_payment').checked = false;
+        document.getElementById('waInclude_notes').checked = false;
+        document.getElementById('waInclude_confirmation').checked = false;
+        document.getElementById('waInclude_followup').checked = false;
+    } else {
+        multiSelect.style.display = 'none';
+    }
+
+    // Build message
+    rebuildWAMessage();
+
+    openModal('waPreviewModal');
+}
+
+function rebuildWAMessage() {
+    if (!selectedLeadData) return;
+
+    const lead = selectedLeadData;
+    const name = lead.name || 'there';
+    const phone = lead.phone || '';
+    const course = lead.courseInterest || '';
+    const notes = document.getElementById('logNotes')?.value?.trim() || '';
+
+    let msg = `Hi ${name}! 👋\n\n`;
+
+    if (currentWAType === 'course') {
+        msg += buildCourseSection(course);
+    } else if (currentWAType === 'payment') {
+        msg += buildPaymentSection();
+    } else if (currentWAType === 'confirmation') {
+        msg += buildConfirmationSection();
+    } else if (currentWAType === 'multi') {
+        // Multi-template - check selected
+        if (document.getElementById('waInclude_course')?.checked) {
+            msg += buildCourseSection(course) + '\n';
+        }
+        if (document.getElementById('waInclude_payment')?.checked) {
+            msg += buildPaymentSection() + '\n';
+        }
+        if (document.getElementById('waInclude_notes')?.checked && notes) {
+            msg += `📝 *Our Discussion:*\n${notes}\n\n`;
+        }
+        if (document.getElementById('waInclude_confirmation')?.checked) {
+            msg += buildConfirmationSection() + '\n';
+        }
+        if (document.getElementById('waInclude_followup')?.checked) {
+            msg += `📅 We will follow up with you soon.\n\n`;
+        }
+    }
+
+    msg += `\n🏫 Buono Academy - SCA Certified\n☕ Thank you!`;
+
+    document.getElementById('waPreviewText').value = msg;
+}
+
+function buildCourseSection(courseName) {
+    if (!courseName) {
+        return `Thank you for your interest in Buono Academy! 🎓\n\nPlease let us know which course you're interested in.\n\n`;
+    }
+    
+    const c = allCourses.find(function(c) { return c.name === courseName; });
+    let section = `Thank you for your interest in Buono Academy! 🎓\n\n`;
+    section += `📚 *${courseName}*\n`;
+    
+    if (c) {
+        const balance = c.fee - c.downPayment;
+        const install = Math.round(balance / 2);
+        section += `💰 Course Fee: Rs. ${c.fee.toLocaleString()}\n`;
+        section += `⬇️ Down Payment: Rs. ${c.downPayment.toLocaleString()}\n`;
+        section += `📅 Installment 1: Rs. ${install.toLocaleString()}\n`;
+        section += `📅 Installment 2: Rs. ${install.toLocaleString()}\n`;
+    }
+    
+    return section + '\n';
+}
+
+function buildPaymentSection() {
+    let section = `💳 *Payment Details*\n\n`;
+    section += `🏦 Bank: Commercial Bank\n`;
+    section += `👤 Account Name: Buono Cafe\n`;
+    section += `🔢 Account No: [Your Account Number]\n`;
+    section += `🏛️ Branch: [Branch Name]\n\n`;
+    section += `📸 Please send the payment slip after transfer.\n`;
+    return section + '\n';
+}
+
+function buildConfirmationSection() {
+    return `✅ *Enrollment Confirmed!*\n\nWelcome to Buono Academy! We are excited to have you join us. 🎓\n\n📅 We will contact you with course start details soon.\n\n`;
+}
+
+function sendWAFromPreview() {
+    if (!selectedLeadData) return;
+    
+    const phone = (selectedLeadData.phone || '').replace(/\D/g, '');
+    const msg = document.getElementById('waPreviewText').value;
+    
+    if (!msg.trim()) {
+        showToast('⚠️ Message empty!', 'warning');
+        return;
+    }
+
+    // Open WhatsApp
+    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
+
+    // Track sent message in lead
+    const now = new Date();
+    const waEntry = {
+        type: currentWAType,
+        sentBy: currentUser.nickname || currentUser.name,
+        dateStr: formatDateTime(now),
+        timestamp: now.getTime(),
+        preview: msg.substring(0, 100) + (msg.length > 100 ? '...' : '')
+    };
+
+    db.collection('leads').doc(selectedLeadId).update({
+        whatsappHistory: firebase.firestore.FieldValue.arrayUnion(waEntry),
+        lastWhatsAppSent: getServerTimestamp(),
+        updatedAt: getServerTimestamp()
+    })
+    .then(function() {
+        showToast('✅✅✅ WhatsApp sent & tracked!', 'success');
+        closeModal('waPreviewModal');
+    })
+    .catch(function(e) {
+        console.error('WA track error:', e);
+    });
 }
 
 // ════════════════════════════════════════
@@ -776,7 +1282,7 @@ function loadEnrolled() {
     setEl('enrolledCount', enrolled.length);
 
     if (enrolled.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="table-empty">📭 No enrolled students yet</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="table-empty">📭 No enrolled students yet</td></tr>';
         return;
     }
 
@@ -786,6 +1292,10 @@ function loadEnrolled() {
             ? formatDate(lead.updatedAt.toDate ? lead.updatedAt.toDate() : new Date(lead.updatedAt))
             : '-';
         const pStatus = getPaymentStatus(lead);
+        const waCount = (lead.whatsappHistory || []).length;
+        const waBadge = waCount > 0 ? 
+            `<span style="color:#25D366;">✅✅✅ ${waCount}</span>` : 
+            `<span style="color:#888;">-</span>`;
 
         html += `
             <tr>
@@ -795,6 +1305,7 @@ function loadEnrolled() {
                 <td>${escapeHtml(lead.courseInterest || '-')}</td>
                 <td>${dateStr}</td>
                 <td><span class="payment-status ${pStatus.css}">${pStatus.label}</span></td>
+                <td>${waBadge}</td>
                 <td>
                     <div class="action-btns">
                         <button class="btn-icon view" onclick="viewLead('${lead.id}')">👁</button>
@@ -1496,10 +2007,11 @@ function loadSettings() {
     loadCourses();
     loadEvents();
     loadScripts();
+    loadSettings_MaxAttempts();
 }
 
 // ════════════════════════════════════════
-// WHATSAPP
+// WHATSAPP UTILITIES
 // ════════════════════════════════════════
 function openWhatsApp(phone) {
     if (!phone) return;
@@ -1507,67 +2019,12 @@ function openWhatsApp(phone) {
     window.open('https://wa.me/' + number, '_blank');
 }
 
-function sendWACourseDetails() {
-    if (!selectedLeadData) return;
-    const phone = (selectedLeadData.phone || '').replace(/\D/g, '');
-    const name  = selectedLeadData.name || 'there';
-    const course = selectedLeadData.courseInterest || 'our course';
-    const c = allCourses.find(function(c) { return c.name === course; });
-
-    let msg = `Hi ${name}! 👋\n\n`;
-    msg += `Thank you for your interest in Buono Academy! 🎓\n\n`;
-    msg += `📚 *${course}*\n`;
-
-    if (c) {
-        const balance = c.fee - c.downPayment;
-        const install = Math.round(balance / 2);
-        msg += `💰 Course Fee: Rs. ${c.fee.toLocaleString()}\n`;
-        msg += `⬇️ Down Payment: Rs. ${c.downPayment.toLocaleString()}\n`;
-        msg += `📅 Installment 1: Rs. ${install.toLocaleString()}\n`;
-        msg += `📅 Installment 2: Rs. ${install.toLocaleString()}\n`;
-    }
-
-    msg += `\n🏫 Buono Academy - SCA Certified\n`;
-    msg += `📞 Contact us for more details!`;
-
-    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
-}
-
-function sendWAPaymentDetails() {
-    if (!selectedLeadData) return;
-    const phone = (selectedLeadData.phone || '').replace(/\D/g, '');
-    const name  = selectedLeadData.name || 'there';
-
-    let msg = `Hi ${name}! 👋\n\n`;
-    msg += `💳 *Payment Details - Buono Academy*\n\n`;
-    msg += `🏦 Bank: [Bank Name]\n`;
-    msg += `👤 Account: [Account Name]\n`;
-    msg += `🔢 Account No: [Account Number]\n\n`;
-    msg += `Please send the payment slip after transfer. Thank you! 🙏`;
-
-    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
-}
-
-function sendWAConfirmation() {
-    if (!selectedLeadData) return;
-    const phone = (selectedLeadData.phone || '').replace(/\D/g, '');
-    const name  = selectedLeadData.name || 'there';
-
-    let msg = `Hi ${name}! 👋\n\n`;
-    msg += `✅ *Enrollment Confirmed!*\n\n`;
-    msg += `🎓 Welcome to Buono Academy!\n`;
-    msg += `We're excited to have you join us.\n\n`;
-    msg += `📅 We'll contact you with course start details soon.\n`;
-    msg += `Thank you! 🙏☕`;
-
-    window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank');
-}
-
 function sendWAPaymentDetailsFor(leadId) {
     const lead = allLeads.find(function(l) { return l.id === leadId; });
     if (!lead) return;
     selectedLeadData = lead;
-    sendWAPaymentDetails();
+    selectedLeadId = leadId;
+    openWAPreview('payment');
 }
 
 // ════════════════════════════════════════
@@ -1583,7 +2040,6 @@ function closeModal(modalId) {
     if (modal) modal.classList.remove('show');
 }
 
-// Close modal on overlay click
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal-overlay')) {
         e.target.classList.remove('show');
@@ -1652,5 +2108,5 @@ function escapeHtml(text) {
 }
 
 // ════════════════════════════════════════
-// END OF callcenter-script.js
+// END OF callcenter-script.js v10.5 (Phase 1)
 // ════════════════════════════════════════

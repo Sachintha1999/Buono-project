@@ -11,7 +11,7 @@
 <body>
 
 <!-- ═══════════════════════════════ -->
-<!-- TOPBAR (Same as other pages)  -->
+<!-- TOPBAR                         -->
 <!-- ═══════════════════════════════ -->
 <div class="topbar">
     <div class="topbar-left">
@@ -104,26 +104,43 @@
         </div>
     </div>
 
-    <!-- TAB 1: QUICK ADD -->
+    <!-- TAB 1: QUICK ADD (UPDATED with Country Selector!) -->
     <div class="tab-content active" id="content-quickAdd">
         <div class="section-card">
             <h2 class="section-title">⚡ Quick Add Lead</h2>
-            <p class="section-desc">WhatsApp number enter කරලා instantly lead add කරන්න</p>
+            <p class="section-desc">Number enter කරලා Enter press කරන්න | Foreign numbers සඳහා country select කරන්න</p>
 
             <div class="quick-add-box">
                 <div class="quick-add-row">
-                    <div class="phone-input-wrap">
-                        <span class="phone-prefix">+94</span>
-                        <input type="tel" id="quickPhone" placeholder="7X XXX XXXX" maxlength="9"
-                            class="quick-phone-input" oninput="formatPhoneInput(this)"
-                            onkeypress="if(event.key==='Enter') quickAddLead()">
-                    </div>
+                    <!-- COUNTRY SELECTOR (NEW!) -->
+                    <select id="quickCountry" class="country-selector" onchange="updatePhonePlaceholder()">
+                        <option value="+94" data-flag="🇱🇰" data-length="9" selected>🇱🇰 +94 (Sri Lanka)</option>
+                        <option value="+91" data-flag="🇮🇳" data-length="10">🇮🇳 +91 (India)</option>
+                        <option value="+971" data-flag="🇦🇪" data-length="9">🇦🇪 +971 (UAE)</option>
+                        <option value="+966" data-flag="🇸🇦" data-length="9">🇸🇦 +966 (Saudi Arabia)</option>
+                        <option value="+974" data-flag="🇶🇦" data-length="8">🇶🇦 +974 (Qatar)</option>
+                        <option value="+965" data-flag="🇰🇼" data-length="8">🇰🇼 +965 (Kuwait)</option>
+                        <option value="+973" data-flag="🇧🇭" data-length="8">🇧🇭 +973 (Bahrain)</option>
+                        <option value="+968" data-flag="🇴🇲" data-length="8">🇴🇲 +968 (Oman)</option>
+                        <option value="+1" data-flag="🇺🇸" data-length="10">🇺🇸 +1 (USA/Canada)</option>
+                        <option value="+44" data-flag="🇬🇧" data-length="10">🇬🇧 +44 (UK)</option>
+                        <option value="+61" data-flag="🇦🇺" data-length="9">🇦🇺 +61 (Australia)</option>
+                        <option value="+65" data-flag="🇸🇬" data-length="8">🇸🇬 +65 (Singapore)</option>
+                        <option value="+60" data-flag="🇲🇾" data-length="9">🇲🇾 +60 (Malaysia)</option>
+                        <option value="+0" data-flag="🌍" data-length="15">🌍 Other (Custom)</option>
+                    </select>
+
+                    <input type="tel" id="quickPhone" placeholder="7X XXX XXXX" maxlength="15"
+                        class="quick-phone-input" oninput="formatPhoneInput(this)"
+                        onkeypress="if(event.key==='Enter') quickAddLead()">
+                    
                     <input type="text" id="quickName" placeholder="Name (Optional)"
                         class="quick-name-input" onkeypress="if(event.key==='Enter') quickAddLead()">
+                    
                     <button class="btn-quick-add" onclick="quickAddLead()">➕ Add Lead</button>
                 </div>
                 <div class="quick-add-hint">
-                    💡 Number enter කරලා Enter press කරන්න | Duplicate automatically detect වෙනවා
+                    💡 Country select කරලා number enter කරන්න | Enter press = Add button | Duplicate auto-detect
                 </div>
             </div>
         </div>
@@ -160,8 +177,8 @@
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Status</th>
+                            <th>Attempts</th>
                             <th>Course Interest</th>
-                            <th>Source</th>
                             <th>Added</th>
                             <th>Actions</th>
                         </tr>
@@ -174,9 +191,35 @@
         </div>
     </div>
 
-    <!-- TAB 2: CALL LOG -->
+    <!-- TAB 2: CALL LOG (with Pending Queue) -->
     <div class="tab-content" id="content-callLog">
+
+        <!-- PENDING STATS BAR -->
+        <div class="pending-stats-bar" id="pendingStatsBar">
+            <div class="ps-item">
+                <span class="ps-label">📅 Today Added:</span>
+                <span class="ps-value" id="psTodayAdded">0</span>
+            </div>
+            <div class="ps-divider">|</div>
+            <div class="ps-item">
+                <span class="ps-label">✅ Called:</span>
+                <span class="ps-value ps-success" id="psTodayCalled">0</span>
+            </div>
+            <div class="ps-divider">|</div>
+            <div class="ps-item">
+                <span class="ps-label">⏳ Remaining:</span>
+                <span class="ps-value ps-warning" id="psTodayRemaining">0</span>
+            </div>
+            <div class="ps-divider">|</div>
+            <div class="ps-item">
+                <span class="ps-label">⏰ Older Pending:</span>
+                <span class="ps-value ps-info" id="psOlderPending">0</span>
+            </div>
+        </div>
+
         <div class="calllog-layout">
+
+            <!-- LEFT: Log a Call Form -->
             <div class="calllog-form-panel">
                 <div class="section-card">
                     <h2 class="section-title">📞 Log a Call</h2>
@@ -195,6 +238,7 @@
                             <span class="selected-lead-phone" id="selLeadPhone">-</span>
                         </div>
                         <div class="selected-lead-status" id="selLeadStatus">-</div>
+                        <div class="selected-lead-attempts" id="selLeadAttempts">📞 Attempts: 0</div>
                     </div>
 
                     <div id="callLogForm" style="display:none">
@@ -236,7 +280,7 @@
                         </div>
                         <div class="form-group">
                             <label>📝 Call Notes *</label>
-                            <textarea id="logNotes" class="form-textarea" rows="3"></textarea>
+                            <textarea id="logNotes" class="form-textarea" rows="3" placeholder="Discussion notes... (WhatsApp message එකේ use වෙනවා)"></textarea>
                         </div>
                         <div class="form-group">
                             <label>📡 Lead Source</label>
@@ -259,33 +303,60 @@
                         </div>
 
                         <div class="form-actions">
-                            <button class="btn-primary" onclick="saveCallLog()">💾 Save Call Log</button>
+                            <button class="btn-primary" onclick="saveCallLog()">💾 Save & Next ⚡</button>
                             <button class="btn-secondary" onclick="clearCallLogForm()">🔄 Clear</button>
                         </div>
 
                         <div class="wa-actions" id="waActions">
-                            <div class="wa-title">📲 WhatsApp</div>
-                            <button class="btn-wa" onclick="sendWACourseDetails()">📚 Send Course Details</button>
-                            <button class="btn-wa" onclick="sendWAPaymentDetails()">💳 Send Payment Details</button>
-                            <button class="btn-wa" onclick="sendWAConfirmation()">✅ Send Confirmation</button>
+                            <div class="wa-title">📲 WhatsApp Messages</div>
+                            <button class="btn-wa" onclick="openWAPreview('course')">📚 Course Details</button>
+                            <button class="btn-wa" onclick="openWAPreview('payment')">💳 Payment Details</button>
+                            <button class="btn-wa" onclick="openWAPreview('confirmation')">✅ Confirmation</button>
+                            <button class="btn-wa" onclick="openWAPreview('multi')">📦 Multi-Select</button>
                         </div>
                     </div>
 
                     <div class="no-lead-msg" id="noLeadMsg">
                         <div class="no-lead-icon">🔍</div>
-                        <p>Lead search කරන්න හෝ Quick Add tab එකෙන් new lead add කරන්න</p>
+                        <p>දකුණු පැත්තේ Pending Calls Queue එකෙන් lead එකක් select කරන්න!</p>
                         <button class="btn-secondary" onclick="switchTab('quickAdd')">➕ Quick Add</button>
                     </div>
                 </div>
             </div>
 
+            <!-- RIGHT: Pending Calls Queue -->
             <div class="calllog-history-panel">
-                <div class="section-card">
+
+                <!-- TODAY'S NEW LEADS -->
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">📅 Today's New Leads</h2>
+                        <span class="pending-count" id="todayPendingCount">0</span>
+                    </div>
+                    <div class="pending-list" id="todayPendingList">
+                        <div class="no-history"><div>📞</div><p>Loading...</p></div>
+                    </div>
+                </div>
+
+                <!-- OLDER PENDING -->
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">⏰ Older Pending Calls</h2>
+                        <span class="pending-count older" id="olderPendingCount">0</span>
+                    </div>
+                    <div class="pending-list" id="olderPendingList">
+                        <div class="no-history"><div>⏰</div><p>Loading...</p></div>
+                    </div>
+                </div>
+
+                <!-- CALL HISTORY (When lead selected) -->
+                <div class="section-card" id="callHistorySection" style="display:none;">
                     <h2 class="section-title">📜 Call History</h2>
                     <div class="call-history-list" id="callHistoryList">
                         <div class="no-history"><div>📞</div><p>Lead select කරන්න</p></div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -301,11 +372,11 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>#</th><th>Name</th><th>Phone</th><th>Course</th><th>Enrolled</th><th>Payment</th><th>Actions</th>
+                            <th>#</th><th>Name</th><th>Phone</th><th>Course</th><th>Enrolled</th><th>Payment</th><th>WA Sent</th><th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="enrolledTableBody">
-                        <tr><td colspan="7" class="table-empty">Loading...</td></tr>
+                        <tr><td colspan="8" class="table-empty">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -424,6 +495,20 @@
 
     <!-- TAB 7: SETTINGS -->
     <div class="tab-content" id="content-settings">
+        
+        <!-- CALL ATTEMPTS SETTING -->
+        <div class="section-card">
+            <h2 class="section-title">⚙️ Call Attempts Settings</h2>
+            <div class="form-group">
+                <label>📞 Max Call Attempts (Auto-move to Hold after this)</label>
+                <input type="number" id="maxAttempts" class="form-input" value="4" min="1" max="20" style="max-width:200px;">
+                <button class="btn-primary" onclick="saveMaxAttempts()" style="margin-left:10px;">💾 Save</button>
+            </div>
+            <p style="color:#888;font-size:0.85rem;">
+                💡 Need Call status එකේ leads කී වතාවක් call කරාද කියලා track කරනවා. මේ limit එකට ආවට පස්සේ warning එනවා "Move to Hold?"
+            </p>
+        </div>
+
         <div class="section-card">
             <div class="section-header-row">
                 <h2 class="section-title">🎓 Course Management</h2>
@@ -475,7 +560,7 @@
 <!-- MODALS                         -->
 <!-- ═══════════════════════════════ -->
 
-<!-- LEAD MODAL -->
+<!-- LEAD MODAL (with Country Selector!) -->
 <div class="modal-overlay" id="leadModal">
     <div class="modal-box modal-lg">
         <div class="modal-header">
@@ -490,9 +575,20 @@
                 </div>
                 <div class="form-group">
                     <label>📱 Phone *</label>
-                    <div class="phone-input-wrap">
-                        <span class="phone-prefix">+94</span>
-                        <input type="tel" id="mlPhone" class="form-input" placeholder="7X XXX XXXX" maxlength="9" oninput="formatPhoneInput(this)">
+                    <div style="display:flex;gap:5px;">
+                        <select id="mlCountry" class="form-select" style="max-width:120px;">
+                            <option value="+94" selected>🇱🇰 +94</option>
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+966">🇸🇦 +966</option>
+                            <option value="+974">🇶🇦 +974</option>
+                            <option value="+965">🇰🇼 +965</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+0">🌍 Other</option>
+                        </select>
+                        <input type="tel" id="mlPhone" class="form-input" placeholder="Phone number" maxlength="15" oninput="formatPhoneInputModal(this)">
                     </div>
                 </div>
                 <div class="form-group">
@@ -695,12 +791,84 @@
     </div>
 </div>
 
+<!-- ⭐ NEW: HOLD WARNING MODAL -->
+<div class="modal-overlay" id="holdWarningModal">
+    <div class="modal-box modal-sm">
+        <div class="modal-header">
+            <h3>⚠️ Max Attempts Reached!</h3>
+            <button class="modal-close" onclick="closeModal('holdWarningModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p style="text-align:center;color:#ccc;">
+                <strong id="holdLeadName"></strong> දැන් <strong id="holdAttempts">4</strong> times call කරලා තියෙනවා!<br><br>
+                මේ lead එක <strong style="color:#FF9800;">⏸️ Hold</strong> status එකට move කරන්නද?
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="confirmMoveToHold()">⏸️ Yes, Move to Hold</button>
+            <button class="btn-secondary" onclick="closeModal('holdWarningModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ⭐ NEW: WHATSAPP PREVIEW MODAL -->
+<div class="modal-overlay" id="waPreviewModal">
+    <div class="modal-box modal-lg">
+        <div class="modal-header">
+            <h3>📲 WhatsApp Message Preview</h3>
+            <button class="modal-close" onclick="closeModal('waPreviewModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <!-- Multi-template selector (shown when type=multi) -->
+            <div id="waMultiSelect" style="display:none;margin-bottom:15px;">
+                <label style="color:#f0a500;font-weight:600;display:block;margin-bottom:10px;">📦 Select Templates to Include:</label>
+                <div class="wa-checkboxes">
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="waInclude_course" checked onchange="rebuildWAMessage()">
+                        <span>📚 Course Details</span>
+                    </label>
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="waInclude_payment" onchange="rebuildWAMessage()">
+                        <span>💳 Payment Details</span>
+                    </label>
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="waInclude_notes" onchange="rebuildWAMessage()">
+                        <span>📝 Discussion Notes</span>
+                    </label>
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="waInclude_confirmation" onchange="rebuildWAMessage()">
+                        <span>✅ Confirmation Message</span>
+                    </label>
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="waInclude_followup" onchange="rebuildWAMessage()">
+                        <span>📅 Follow-up Reminder</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>📲 Message Preview (Edit කරන්න පුළුවන්):</label>
+                <textarea id="waPreviewText" class="form-textarea" rows="12" style="font-family:monospace;"></textarea>
+            </div>
+            
+            <div style="background:#0f3460;padding:10px;border-radius:8px;margin-top:10px;">
+                <small style="color:#888;">
+                    📱 To: <strong id="waPreviewPhone" style="color:#2196F3;">-</strong><br>
+                    👤 Name: <strong id="waPreviewName" style="color:#fff;">-</strong>
+                </small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="sendWAFromPreview()">📲 Send on WhatsApp</button>
+            <button class="btn-secondary" onclick="closeModal('waPreviewModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- ═══════════════════════════════ -->
-<!-- SCRIPTS (CORRECT ORDER!)       -->
-<!-- ═══════════════════════════════ -->
+<!-- SCRIPTS -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>

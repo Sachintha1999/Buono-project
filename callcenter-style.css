@@ -1080,3 +1080,604 @@
         flex-wrap: wrap;
     }
 }
+
+/* ═══════════════════════════════════════════
+   PENDING QUEUE SYSTEM (v10.4)
+   Added: 2026-06-10
+   ═══════════════════════════════════════════ */
+
+/* ─── PENDING STATS BAR (Top of Call Log) ─── */
+.pending-stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background: linear-gradient(135deg, #1a2842, #16213e);
+    border: 2px solid #2a4a7c;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ps-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.ps-label {
+    color: #8892b0;
+    font-weight: 500;
+}
+
+.ps-value {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 2px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    min-width: 30px;
+    text-align: center;
+}
+
+.ps-value.ps-success {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.ps-value.ps-warning {
+    color: #FF9800;
+    background: rgba(255, 152, 0, 0.15);
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.ps-value.ps-info {
+    color: #2196F3;
+    background: rgba(33, 150, 243, 0.15);
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.ps-divider {
+    color: #444;
+    font-size: 1.5rem;
+}
+
+/* ─── PENDING SECTIONS ─── */
+.pending-section {
+    margin-bottom: 15px !important;
+}
+
+.pending-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #2a4a7c;
+}
+
+.pending-header .section-title {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.pending-count {
+    background: linear-gradient(135deg, #f0a500, #ff6b35);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 30px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(240, 165, 0, 0.4);
+}
+
+.pending-count.older {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.4);
+}
+
+/* ─── PENDING LIST ─── */
+.pending-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Scrollbar styling */
+.pending-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.pending-list::-webkit-scrollbar-track {
+    background: #0a0a1e;
+    border-radius: 3px;
+}
+
+.pending-list::-webkit-scrollbar-thumb {
+    background: #2a4a7c;
+    border-radius: 3px;
+}
+
+.pending-list::-webkit-scrollbar-thumb:hover {
+    background: #3a5a8c;
+}
+
+/* ─── PENDING ITEM CARD ─── */
+.pending-item {
+    background: #0f3460;
+    border: 2px solid #2a4a7c;
+    border-radius: 10px;
+    padding: 12px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.pending-item:hover {
+    background: #1a4a7c;
+    border-color: #f0a500;
+    transform: translateX(3px);
+    box-shadow: -3px 3px 12px rgba(240, 165, 0, 0.2);
+}
+
+.pending-item.selected {
+    background: linear-gradient(135deg, #1a4a7c, #0f3460);
+    border-color: #f0a500;
+    border-left: 4px solid #f0a500;
+    box-shadow: 0 0 15px rgba(240, 165, 0, 0.3);
+}
+
+.pending-item.selected::before {
+    content: '▶';
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #f0a500;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.pending-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.pending-item-name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 70%;
+}
+
+.pending-item-time {
+    color: #8892b0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.pending-item-phone {
+    color: #2196F3;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    font-family: 'Courier New', monospace;
+}
+
+.pending-item-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* ─── CALL NOW BUTTON ─── */
+.btn-call-now {
+    flex: 1;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-call-now:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    transform: scale(1.02);
+    box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4);
+}
+
+.btn-wa-quick {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #fff;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-wa-quick:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 10px rgba(37, 211, 102, 0.4);
+}
+
+/* ─── PENDING EMPTY STATE ─── */
+.pending-empty {
+    text-align: center;
+    padding: 30px 20px;
+    color: #8892b0;
+}
+
+.pending-empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    opacity: 0.6;
+}
+
+.pending-empty p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ─── RESPONSIVE (MOBILE) ─── */
+@media (max-width: 768px) {
+    .pending-stats-bar {
+        padding: 12px;
+        gap: 10px;
+        font-size: 0.85rem;
+    }
+
+    .ps-item {
+        font-size: 0.85rem;
+    }
+
+    .ps-value {
+        font-size: 1rem;
+        padding: 2px 8px;
+    }
+
+    .ps-divider {
+        display: none;
+    }
+
+    .pending-list {
+        max-height: 350px;
+    }
+
+    .pending-item {
+        padding: 10px 12px;
+    }
+
+    .pending-item-name {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pending-stats-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .ps-item {
+        justify-content: space-between;
+        padding: 5px 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 6px;
+    }
+
+    .btn-call-now {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+    
+/* ═══════════════════════════════════════════
+   PHASE 1 - NEW STYLES (v10.5)
+   Added: 2026-06-10
+   ═══════════════════════════════════════════ */
+
+/* ─── COUNTRY SELECTOR ─── */
+.country-selector {
+    background: #0f3460;
+    color: white;
+    border: 2px solid #2a4a7c;
+    padding: 12px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 180px;
+    max-width: 200px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.country-selector:hover {
+    border-color: #f0a500;
+    background: #1a4a7c;
+}
+
+.country-selector:focus {
+    outline: none;
+    border-color: #f0a500;
+    box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.2);
+}
+
+.country-selector option {
+    background: #1a1a2e;
+    color: white;
+    padding: 8px;
+}
+
+/* ─── CALL ATTEMPTS BADGES ─── */
+.attempts-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.attempts-badge.attempts-new {
+    background: rgba(108, 117, 125, 0.2);
+    color: #adb5bd;
+    border: 1px solid rgba(108, 117, 125, 0.4);
+}
+
+.attempts-badge.attempts-normal {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196F3;
+    border: 1px solid rgba(33, 150, 243, 0.4);
+}
+
+.attempts-badge.attempts-warning {
+    background: rgba(255, 152, 0, 0.2);
+    color: #FF9800;
+    border: 1px solid rgba(255, 152, 0, 0.4);
+    animation: pulse-warning 2s infinite;
+}
+
+.attempts-badge.attempts-max {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.4);
+    animation: pulse-danger 1s infinite;
+}
+
+.attempts-badge.attempts-enrolled {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+@keyframes pulse-warning {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes pulse-danger {
+    0%, 100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+    }
+    50% { 
+        transform: scale(1.05); 
+        box-shadow: 0 0 0 8px rgba(244, 67, 54, 0);
+    }
+}
+
+/* ─── SELECTED LEAD ATTEMPTS DISPLAY ─── */
+.selected-lead-attempts {
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: rgba(240, 165, 0, 0.1);
+    border: 1px solid rgba(240, 165, 0, 0.3);
+    border-radius: 6px;
+    color: #f0a500;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ─── PENDING ATTEMPTS BADGE (in queue) ─── */
+.pending-attempts {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    background: rgba(255, 152, 0, 0.2);
+    color: #FF9800;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+/* ─── WHATSAPP PREVIEW MODAL ─── */
+.wa-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #0f3460;
+    border-radius: 8px;
+    border: 1px solid #2a4a7c;
+}
+
+.wa-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #16213e;
+    border: 1px solid #2a4a7c;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.wa-checkbox-label:hover {
+    background: #1a2842;
+    border-color: #25D366;
+    color: #fff;
+}
+
+.wa-checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #25D366;
+    cursor: pointer;
+}
+
+.wa-checkbox-label input[type="checkbox"]:checked + span {
+    color: #25D366;
+    font-weight: 600;
+}
+
+/* ─── WHATSAPP PREVIEW TEXTAREA ─── */
+#waPreviewText {
+    background: #0a1929;
+    color: #e8e8e8;
+    border: 2px solid #25D366;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 15px;
+    resize: vertical;
+    min-height: 200px;
+}
+
+#waPreviewText:focus {
+    outline: none;
+    border-color: #128C7E;
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.2);
+}
+
+/* ─── HOLD WARNING MODAL ─── */
+#holdWarningModal .modal-box {
+    border: 2px solid #FF9800;
+}
+
+#holdWarningModal .modal-header {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(244, 67, 54, 0.15));
+}
+
+#holdWarningModal .modal-header h3 {
+    color: #FF9800;
+}
+
+/* ─── MULTI BUTTON (NEW WA TYPE) ─── */
+.btn-wa[onclick*="multi"] {
+    background: linear-gradient(135deg, #9C27B0, #673AB7);
+}
+
+.btn-wa[onclick*="multi"]:hover {
+    background: linear-gradient(135deg, #7B1FA2, #512DA8);
+    box-shadow: 0 3px 10px rgba(156, 39, 176, 0.4);
+}
+
+/* ─── QUICK ADD ROW (Updated for Country) ─── */
+.quick-add-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.quick-add-row .country-selector {
+    flex: 0 0 auto;
+}
+
+.quick-add-row .quick-phone-input {
+    flex: 1 1 200px;
+    min-width: 150px;
+}
+
+.quick-add-row .quick-name-input {
+    flex: 2 1 250px;
+    min-width: 200px;
+}
+
+.quick-add-row .btn-quick-add {
+    flex: 0 0 auto;
+}
+
+/* ─── RESPONSIVE (MOBILE) ─── */
+@media (max-width: 768px) {
+    .quick-add-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .country-selector {
+        width: 100%;
+        max-width: none;
+    }
+
+    .quick-add-row .quick-phone-input,
+    .quick-add-row .quick-name-input,
+    .quick-add-row .btn-quick-add {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .wa-checkboxes {
+        grid-template-columns: 1fr;
+    }
+
+    .attempts-badge {
+        font-size: 0.7rem;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    #waPreviewText {
+        font-size: 0.8rem;
+        min-height: 150px;
+    }
+
+    .wa-checkbox-label {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   END OF PHASE 1 STYLES
+   ═══════════════════════════════════════════ */
