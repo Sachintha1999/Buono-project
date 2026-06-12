@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono Academy - My Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="student-portal-style.css">
+    <link rel="stylesheet" href="mobile.css">
+</head>
+<body class="portal-body">
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- 🎓 PORTAL TOPBAR -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="portal-topbar">
+        <div class="portal-topbar-left">
+            <span class="portal-logo">🎓</span>
+            <div class="portal-title-wrap">
+                <div class="portal-title">Buono Academy</div>
+                <div class="portal-subtitle">Student Portal</div>
+            </div>
+        </div>
+        <div class="portal-topbar-right">
+            <div class="portal-user-info">
+                <span class="portal-greeting">Hello, <strong id="topbarStudentName">Student</strong>! 👋</span>
+                <span class="portal-student-id" id="topbarStudentId">-</span>
+            </div>
+            <button class="portal-logout-btn" onclick="studentLogout()">
+                🚪 Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- 🎨 MAIN PORTAL CONTAINER -->
+    <!-- ═══════════════════════════════════════ -->
+    <div class="portal-container">
+
+        <!-- Loading State -->
+        <div class="portal-loading" id="portalLoading">
+            <div class="loading-spinner">⏳</div>
+            <div class="loading-text">Loading your profile...</div>
+        </div>
+
+        <!-- Main Content (Hidden until loaded) -->
+        <div class="portal-content" id="portalContent" style="display:none;">
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- 👋 WELCOME BANNER -->
+            <!-- ═══════════════════════════════════ -->
+            <div class="welcome-banner">
+                <div class="welcome-icon">🎓</div>
+                <div class="welcome-text">
+                    <h1>Welcome back, <span id="welcomeName">Student</span>!</h1>
+                    <p>Your academy journey at <strong id="welcomeAcademy">SAC</strong></p>
+                </div>
+                <div class="welcome-badge" id="welcomeBadge">
+                    Active
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- 📊 QUICK STATS -->
+            <!-- ═══════════════════════════════════ -->
+            <div class="quick-stats-grid">
+                <div class="stat-box stat-paid">
+                    <div class="stat-box-icon">💰</div>
+                    <div class="stat-box-content">
+                        <div class="stat-box-value" id="statPaid">Rs. 0</div>
+                        <div class="stat-box-label">Total Paid</div>
+                    </div>
+                </div>
+                <div class="stat-box stat-balance">
+                    <div class="stat-box-icon">💸</div>
+                    <div class="stat-box-content">
+                        <div class="stat-box-value" id="statBalance">Rs. 0</div>
+                        <div class="stat-box-label">Remaining</div>
+                    </div>
+                </div>
+                <div class="stat-box stat-progress">
+                    <div class="stat-box-icon">📊</div>
+                    <div class="stat-box-content">
+                        <div class="stat-box-value" id="statProgress">0%</div>
+                        <div class="stat-box-label">Payment Progress</div>
+                    </div>
+                </div>
+                <div class="stat-box stat-status">
+                    <div class="stat-box-icon">✅</div>
+                    <div class="stat-box-content">
+                        <div class="stat-box-value" id="statStatus">-</div>
+                        <div class="stat-box-label">Status</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- 💰 PAYMENT PROGRESS BAR -->
+            <!-- ═══════════════════════════════════ -->
+            <div class="payment-progress-card">
+                <div class="progress-header">
+                    <span class="progress-title">💳 Payment Progress</span>
+                    <span class="progress-percentage" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressBarFill" style="width:0%;"></div>
+                </div>
+                <div class="progress-info">
+                    <div>
+                        <span class="progress-label">Total Fee:</span>
+                        <span class="progress-value" id="progressTotalFee">Rs. 0</span>
+                    </div>
+                    <div>
+                        <span class="progress-label">Paid:</span>
+                        <span class="progress-value" id="progressPaid">Rs. 0</span>
+                    </div>
+                    <div>
+                        <span class="progress-label">Balance:</span>
+                        <span class="progress-value" id="progressBalance">Rs. 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- 📋 INFO SECTIONS GRID -->
+            <!-- ═══════════════════════════════════ -->
+            <div class="info-sections-grid">
+
+                <!-- 👤 Personal Information -->
+                <div class="info-section">
+                    <div class="info-section-title">
+                        👤 Personal Information
+                    </div>
+                    <div class="info-rows">
+                        <div class="info-row">
+                            <span class="info-label">🆔 Student ID</span>
+                            <span class="info-value highlight" id="infoStudentId">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">👤 Full Name</span>
+                            <span class="info-value" id="infoName">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📞 Phone</span>
+                            <span class="info-value" id="infoPhone">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📧 Email</span>
+                            <span class="info-value" id="infoEmail">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🆔 NIC</span>
+                            <span class="info-value" id="infoNIC">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🎂 Date of Birth</span>
+                            <span class="info-value" id="infoDOB">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🏠 Address</span>
+                            <span class="info-value" id="infoAddress">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🎓 Course Information -->
+                <div class="info-section">
+                    <div class="info-section-title">
+                        🎓 Course Information
+                    </div>
+                    <div class="info-rows">
+                        <div class="info-row">
+                            <span class="info-label">📚 Course</span>
+                            <span class="info-value highlight" id="infoCourse">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🏫 Academy</span>
+                            <span class="info-value" id="infoAcademy">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📦 Batch</span>
+                            <span class="info-value" id="infoBatch">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📅 Enrolled Date</span>
+                            <span class="info-value" id="infoEnrolledDate">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📡 Enrolled Via</span>
+                            <span class="info-value" id="infoSource">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">✅ Status</span>
+                            <span class="info-value" id="infoStatus">-</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- 🧾 PAYMENT HISTORY -->
+            <!-- ═══════════════════════════════════ -->
+            <div class="payment-history-section">
+                <div class="history-title">
+                    🧾 Payment History
+                </div>
+                <div class="history-list" id="paymentHistoryList">
+                    <!-- Auto-populated -->
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- 📞 SUPPORT SECTION -->
+            <!-- ═══════════════════════════════════ -->
+            <div class="support-section">
+                <div class="support-title">
+                    💬 Need Help?
+                </div>
+                <div class="support-desc">
+                    Academy team එක්ක contact වෙන්න:
+                </div>
+                <div class="support-buttons">
+                    <button class="support-btn whatsapp" id="supportWhatsApp" onclick="contactWhatsApp()">
+                        📱 WhatsApp Academy
+                    </button>
+                    <button class="support-btn call" id="supportCall" onclick="contactCall()">
+                        📞 Call Academy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="portal-footer">
+                <div class="footer-text">🍴 Buono Cafe & Academy</div>
+                <div class="footer-subtext">Last login: <span id="footerLoginTime">-</span></div>
+            </div>
+
+        </div>
+        <!-- End Portal Content -->
+
+    </div>
+
+    <!-- Toast Container -->
+    <div class="portal-toast-container" id="portalToastContainer"></div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- 🔥 FIREBASE SDK -->
+    <!-- ═══════════════════════════════════════ -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="student-portal-script.js"></script>
+
+</body>
+</html>

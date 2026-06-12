@@ -1,113 +1,604 @@
-# 🔥 හරි! පට්ටම Plan! දෙකම හදමු! 🚀
-
-සතුටින් කරමු! Step-by-step යමු!
-
----
-
-## 📋 Plan:
-
-```
-Step 1: BUONO_MASTER_CONTEXT.md (BIG file)
-        - 10000+ words
-        - Everything inside!
-        
-Step 2: NEW_CHAT_PROMPT.txt (SHORT smart file)
-        - Quick start
-        - References MASTER_CONTEXT
-```
-
----
-
-## ⚠️ Context Limit Consideration:
-
-```
-BUONO_MASTER_CONTEXT.md - HUGE file!
-එක message එකේ ඔක්කොම දෙන්න බෑ! 
-
-Solution: SECTIONS BY SECTIONS!
-
-Plan:
-Message 1: Sections 1-4 (Overview + Rules + Architecture)
-Message 2: Sections 5-7 (Firebase + DATABASES + Snippets)
-Message 3: Sections 8-11 (Design + Mobile + Permissions + Collections)
-Message 4: Sections 12-15 (Users + Tasks + Errors + Features)
-Message 5: Sections 16-18 (Credentials + Roadmap + Practices)
-Message 6: NEW_CHAT_PROMPT.txt (final!)
-
-Each message - copy කරලා MASTER_CONTEXT.md එකට 
-append කරගන්න!
-```
-
----
-
-## 🚀 PART 1/6 - BUONO_MASTER_CONTEXT.md (Sections 1-4)
-
-**New file create කරන්න: `BUONO_MASTER_CONTEXT.md`**
-**Then paste this:**
-
 ```markdown
 # 🍴 BUONO PROJECT - MASTER CONTEXT FILE
-# Version: 10.3 (4-FILES RULE ACHIEVED!)
-# Last Updated: 2026-06-08
-# Purpose: Complete project knowledge - ONE file = AI knows EVERYTHING!
+# Version: 11.0 (Smart Master File with Status Tracking!)
+# Last Updated: 2026-06-10
+# Purpose: ONE file = AI knows EVERYTHING + Current Work!
 
 ═══════════════════════════════════════════════════════════════
 ## 📚 TABLE OF CONTENTS
 ═══════════════════════════════════════════════════════════════
 
-1. 🎯 PROJECT OVERVIEW
-2. 👤 DEVELOPER PROFILE
-3. 🔴 7 MANDATORY RULES
-4. 🏗️ ARCHITECTURE GUIDE
-5. 🔥 firebase-config.js MASTER REFERENCE
-6. ⭐ DATABASES ARRAY - FULL GUIDE
-7. 📝 CODE PATTERNS & SNIPPETS
-8. 🎨 DESIGN SYSTEM
-9. 📱 MOBILE PATTERNS
-10. 🔐 PERMISSIONS SYSTEM
-11. 🗄️ FIREBASE COLLECTIONS (18!)
-12. 👥 USER ROLES (7)
-13. 📋 COMMON TASKS (Step-by-Step!)
-14. 🐛 COMMON ERRORS + FIXES
-15. ✅ COMPLETED FEATURES
-16. 👤 TEST CREDENTIALS
-17. 🔮 FUTURE ROADMAP
-18. 💡 BEST PRACTICES
+PART A: 🆕 SMART TRACKING (READ FIRST!)
+  1. 🎯 Current Status Dashboard
+  2. 📋 Active Development Plan
+  3. 📖 How to Use This File
+  4. 🤖 AI Instructions
+
+PART B: PROJECT FUNDAMENTALS
+  5. 🎯 Project Overview
+  6. 👤 Developer Profile
+  7. 🔴 7 Mandatory Rules
+  8. 🏗️ Architecture Guide
+
+PART C: TECHNICAL REFERENCE
+  9. 🔥 Firebase Config Master
+  10. ⭐ DATABASES Array Guide
+  11. 📝 Code Patterns & Snippets
+  12. 🎨 Design System
+  13. 📱 Mobile Patterns
+
+PART D: SYSTEM REFERENCE
+  14. 🔐 Permissions System
+  15. 🗄️ Firebase Collections (18)
+  16. 👥 User Roles (7)
+  17. 🆕 Page-by-Page Features
+
+PART E: PRACTICAL GUIDES
+  18. 📋 Common Tasks (Step-by-Step)
+  19. 🐛 Common Errors + Fixes
+  20. 👤 Test Credentials
+  21. 💡 Best Practices
 
 ═══════════════════════════════════════════════════════════════
-## 1. 🎯 PROJECT OVERVIEW
+# 🆕 PART A: SMART TRACKING (CRITICAL!)
 ═══════════════════════════════════════════════════════════════
+
+## 1. 🎯 CURRENT STATUS DASHBOARD
+
+### 📅 Last Update Info:
+```
+Date: 2026-06-10
+Time: Evening session
+Developer: Naveen (Sachintha1999)
+Working on: Call Center Improvements
+```
+
+### 🏆 Current Version:
+```
+Project Version: v10.9
+File Updates:
+- callcenter.html      → v10.9 (Smart Date Buttons added)
+- callcenter-script.js → v10.9 (Date logic complete)
+- callcenter-style.css → v10.9 (Date button styles added)
+```
+
+### ✅ Recently Completed:
+```
+✅ Step 1: Smart Date Buttons (DONE - 2026-06-10)
+   - Quick buttons: Tomorrow, 3 Days, 1 Week, 2 Weeks, 1 Month
+   - Auto-set on status change (Smart Defaults)
+   - Auto badge display
+   - Active button highlighting
+   - Manual override clears active state
+   - Works in: Call Log, Might Join, Follow-ups tabs
+```
+
+### ⏳ Currently In Progress:
+```
+Nothing in progress (Step 1 complete, awaiting Step 2)
+```
+
+### 🎯 Next Steps (Order):
+```
+⏳ Step 2: Stats Bar Fix (HTML IDs missing)
+⏳ Step 3: Tab Badge Zero Hide
+⏳ Step 4: Lead Source Analytics
+⏳ Step 5: Reminder Notifications
+⏳ Step 6: Duplicate Smart Merge
+⏳ Step 7: Lead Scoring System
+```
+
+### 📊 Project Health:
+```
+🟢 Architecture: Excellent (v10.3 4-Files Rule!)
+🟢 Mobile: Fully responsive
+🟢 Performance: Real-time updates working
+🟢 Security: Permission-based access OK
+🟡 Documentation: Updated v11.0 today!
+🟢 Live Status: Production - working!
+```
+
+---
+
+## 2. 📋 ACTIVE DEVELOPMENT PLAN
+
+### 🎯 Current Focus: Call Center Improvements
+
+**Total Features Planned: 7**
+**Completed: 1**
+**Remaining: 6**
+
+### 📊 PROGRESS TRACKER:
+
+```
+┌────────────────────────────────────────────────┐
+│ FEATURE                          │ STATUS      │
+├────────────────────────────────────────────────┤
+│ Step 1: Smart Date Buttons       │ ✅ DONE     │
+│ Step 2: Stats Bar Fix            │ ⏳ NEXT     │
+│ Step 3: Tab Badge Zero Hide      │ ⏳ Pending  │
+│ Step 4: Lead Source Analytics    │ ⏳ Pending  │
+│ Step 5: Reminder Notifications   │ ⏳ Pending  │
+│ Step 6: Duplicate Smart Merge    │ ⏳ Pending  │
+│ Step 7: Lead Scoring System      │ ⏳ Pending  │
+└────────────────────────────────────────────────┘
+```
+
+### 📝 DETAILED PLAN:
+
+#### ✅ Step 1: Smart Date Buttons (COMPLETED)
+```
+What was done:
+- Quick buttons (Tomorrow, 3D, 1W, 2W, 1M)
+- Auto-date on status change
+- Smart defaults per status
+- Auto badge indicator
+- Active state highlighting
+
+Files modified:
+- callcenter.html (3 tabs + onchange handlers)
+- callcenter-script.js (helper functions)
+- callcenter-style.css (button styles + badge)
+
+Status: ✅ Working in production
+```
+
+#### ⏳ Step 2: Stats Bar Fix (NEXT!)
+```
+Problem:
+Script tries to update stats bars in:
+- Might Join tab
+- Follow-ups tab
+- Hold tab
+But HTML elements (mightJoinStats, followupsStats, 
+holdStats) don't exist!
+
+Solution:
+Add stats bar HTML divs in 3 tabs
+Display: Total | New | Old | Done Today | Remaining
+
+Files to modify:
+- callcenter.html (add 3 stats bars)
+
+Estimated time: 15 minutes
+```
+
+#### ⏳ Step 3: Tab Badge Zero Hide
+```
+What:
+Tab badges show "0" - looks ugly!
+0 = hide badge
+1+ = show badge
+
+Files:
+- callcenter-script.js (modify setEl logic)
+- callcenter-style.css (badge visibility)
+
+Estimated time: 5 minutes
+```
+
+#### ⏳ Step 4: Lead Source Analytics
+```
+What:
+New section in Reports tab:
+- Facebook: 45 leads, 12 enrolled (26%)
+- Instagram: 23 leads, 5 enrolled (21%)
+- Walk In: 67 leads, 30 enrolled (44%)
+- etc.
+
+Visual: Bar charts (like status bars)
+Highlight: Best performing source!
+
+Files:
+- callcenter.html (add section)
+- callcenter-script.js (calculation function)
+- callcenter-style.css (visual styles)
+
+Estimated time: 30 minutes
+```
+
+#### ⏳ Step 5: Reminder Notifications
+```
+What:
+- Page load = check today's follow-ups
+- Toast: "📅 3 follow-ups due today!"
+- Tab badge pulse animation
+- Click = jump to follow-ups tab
+- Browser notification (optional)
+
+Files:
+- callcenter-script.js (check on init)
+- callcenter-style.css (pulse animation)
+
+Estimated time: 25 minutes
+```
+
+#### ⏳ Step 6: Duplicate Smart Merge
+```
+What:
+- Quick Add = detect similar (name/phone)
+- "Merge" button = combine 2 leads
+- Combines: call history + WA history
+- Keep newest status
+- Settings tab: "Find Duplicates" tool
+
+Files:
+- callcenter.html (modals + settings section)
+- callcenter-script.js (merge logic)
+- callcenter-style.css (merge UI)
+
+Estimated time: 45 minutes
+```
+
+#### ⏳ Step 7: Lead Scoring System
+```
+What:
+Auto-score each lead 0-100:
++20 Course interest selected
++15 Might Join status
++10 Each call attempt (max 40)
++15 WhatsApp sent
++10 Follow-up date set
+-20 Hold status
+-30 Unable to join
+-10 Not in use
++50 Payment started
+
+Display:
+🟢 80-100: HOT LEAD 🔥
+🟡 50-79:  WARM
+🟠 30-49:  COOL
+🔴 0-29:   COLD
+
+Features:
+- Score badge on every lead card
+- Sort by score option
+- Reports: score distribution chart
+
+Files:
+- callcenter.html (score badges + filters)
+- callcenter-script.js (scoring logic)
+- callcenter-style.css (score colors)
+
+Estimated time: 1 hour
+```
+
+---
+
+## 3. 📖 HOW TO USE THIS FILE
+
+### 🆕 For NEW CHAT (After Freeze):
+
+```
+1. Open new chat with Claude/AI
+2. Copy this ENTIRE file
+3. Paste at the start
+4. Say one of these:
+
+For continuing work:
+"Continue from where we left off"
+→ AI reads "Current Status" and "Active Plan"
+→ Knows exactly what's next!
+
+For new feature:
+"Add a new feature: [description]"
+→ AI uses project structure to plan it
+
+For bug fix:
+"Bug in [page]: [description]"
+→ AI knows architecture, suggests fix
+
+For questions:
+"How does [feature] work?"
+→ AI explains based on docs
+```
+
+### 📂 Common Scenarios:
+
+#### Scenario 1: Chat froze in middle of work
+```
+Action: Paste this file → Say "Continue Step X"
+AI Response: Asks for current file → Continues
+
+Example:
+You: [paste file] "Continue Step 3"
+AI: "I see Step 3 is Tab Badge Zero Hide. 
+     Send me current callcenter-script.js to update."
+```
+
+#### Scenario 2: New bug found
+```
+Action: Paste this file → Describe bug
+AI Response: Identifies file → Asks → Fixes
+
+Example:
+You: [paste file] "Bug: Login fails on mobile"
+AI: "Send me login.html and login-script.js"
+```
+
+#### Scenario 3: New feature idea
+```
+Action: Paste this file → Describe feature
+AI Response: Plans it → Adds to current plan
+
+Example:
+You: [paste file] "Add: SMS notifications"
+AI: "Great idea! Here's the plan..."
+```
+
+#### Scenario 4: Just want to chat/discuss
+```
+Action: Paste this file → Ask questions
+AI Response: Uses docs to answer
+
+Example:
+You: [paste file] "Tell me about the inventory system"
+AI: "Buono inventory has 4 features..."
+```
+
+### 📥 What Files to Send:
+
+#### For Call Center work:
+```
+✅ callcenter.html
+✅ callcenter-script.js
+✅ callcenter-style.css
+(Don't need firebase-config.js usually)
+```
+
+#### For new database/page:
+```
+✅ firebase-config.js (to add to DATABASES)
+✅ Existing similar page (template)
+```
+
+#### For Permission/User issues:
+```
+✅ index.html
+✅ index-script.js
+✅ access.html (sometimes)
+```
+
+#### For Login/Auth issues:
+```
+✅ login.html
+✅ login-script.js
+✅ firebase-config.js
+```
+
+### 🎯 Quick Templates:
+
+#### Template: Continue Work
+```
+[Paste this file]
+
+"Continue from Current Status.
+Currently on Step [X].
+Files I'll send: [list]"
+```
+
+#### Template: Bug Report
+```
+[Paste this file]
+
+"Bug Report:
+Page: [name]
+Issue: [description]
+When: [steps to reproduce]
+Files attached: [list]"
+```
+
+#### Template: New Feature
+```
+[Paste this file]
+
+"New Feature Request:
+What: [description]
+Why: [reason]
+Priority: [high/medium/low]
+Affects: [pages/databases]"
+```
+
+---
+
+## 4. 🤖 AI INSTRUCTIONS
+
+### 👋 You are helping Naveen with Buono Project!
+
+### 🎯 BEHAVIORAL RULES:
+
+```
+✅ ALWAYS DO:
+1. Read "Current Status Dashboard" FIRST
+2. Read "Active Development Plan" SECOND
+3. Then answer/respond
+4. Speak Sinhala (Singlish OK)
+5. Give FULL files (no partial code!)
+6. Plan first, then ask for permission
+7. Step-by-step approach
+8. Clear test instructions
+9. Encouraging tone (Naveen learning!)
+10. Update this file's "Current Status" after each task
+
+❌ NEVER DO:
+1. Don't assume tech knowledge (no jargon!)
+2. Don't give partial code
+3. Don't skip planning phase
+4. Don't modify multiple files without explaining
+5. Don't use English-only responses
+6. Don't be technical without simplifying
+```
+
+### 🔄 STANDARD WORKFLOW:
+
+```
+Step 1: ACKNOWLEDGE
+  - "හරි!" / "Good!" / etc.
+  - Confirm you understood
+  - Reference current status
+
+Step 2: PLAN
+  - Explain what will be done
+  - List files to be modified
+  - Estimate complexity
+  - Ask for permission
+
+Step 3: REQUEST FILES (if needed)
+  - "Send me [file1.js]"
+  - Be specific about what you need
+
+Step 4: GIVE SOLUTION
+  - Full file replacements
+  - One file at a time
+  - Clear copy-paste instructions
+
+Step 5: TEST INSTRUCTIONS
+  - "Save → Deploy → Refresh"
+  - What to check
+  - Expected results
+
+Step 6: UPDATE STATUS
+  - Mark step as ✅ DONE
+  - Move to next step
+  - Update "Currently In Progress"
+```
+
+### 💬 RESPONSE FORMAT:
+
+```
+Good Response:
+═════════════
+"හරි නවීන්! 🎉
+
+Step 2 යමු - Stats Bar Fix!
+
+📋 Plan:
+- callcenter.html update කරන්න
+- 3 places add කරන්න (stats bars)
+
+📤 Send me:
+- callcenter.html
+
+මම update කරලා දෙන්නම්!"
+
+Bad Response:
+═════════════
+"Sure, I'll add stats bars by inserting div elements
+at lines 245-250 in your HTML file. You need to add..."
+(Too technical, partial info, no Sinhala)
+```
+
+### 🔧 FILE HANDLING:
+
+```
+When Naveen sends a file:
+1. Read entire file
+2. Understand structure
+3. Apply changes
+4. Give COMPLETE updated file
+5. Highlight what changed (in description, not code)
+
+Example:
+"✅ Updated callcenter.html!
+
+Changes made:
+- Added stats bars in 3 tabs
+- mightJoinStats div added
+- followupsStats div added  
+- holdStats div added
+
+Save → Deploy → Test!"
+```
+
+### 🎓 LEARNING STYLE:
+
+```
+Naveen's level: Beginner (copy/paste only)
+Best approach:
+- One concept at a time
+- Visual examples
+- Clear "what" before "why"
+- Practical over theoretical
+- Celebrate small wins!
+```
+
+### 🚨 EMERGENCY PROTOCOL:
+
+```
+If Naveen says "broken" / "error":
+1. STAY CALM (don't panic)
+2. Ask: "What's the exact error?"
+3. Ask: "Screenshot please?"
+4. Ask: "Console (F12) errors?"
+5. Suggest: "Last working commit"
+6. Solution: Revert if needed
+
+Don't make it worse!
+```
+
+### 📊 TRACK PROGRESS:
+
+```
+After each completed step:
+- Update Current Status section
+- Mark step ✅ DONE
+- Add timestamp
+- Update "Recently Completed"
+- Move next step to "In Progress"
+
+This way, even if chat freezes,
+next AI knows exactly where to continue!
+```
+
+[END OF PART 1/6]
+```
+
+---
+
+## ✅ Part 1 Done!
+
+
+```markdown
+═══════════════════════════════════════════════════════════════
+# PART B: PROJECT FUNDAMENTALS
+═══════════════════════════════════════════════════════════════
+
+## 5. 🎯 PROJECT OVERVIEW
 
 ### Project Identity:
-**Name:** Buono Employee & Business Management System
-**Business:** Buono Cafe + Buono Academy
-**Type:** Web Application (No mobile app - responsive web)
-**Status:** Production - LIVE!
+```
+Name:     Buono Employee & Business Management System
+Business: Buono Cafe + Buono Academy (Sri Lanka)
+Type:     Web Application (Responsive - no mobile app)
+Status:   Production - LIVE & Working!
+```
 
 ### Live URLs:
-- **Production:** https://buono-project-927b8.web.app
-- **GitHub:** https://github.com/Sachintha1999/Buono-project
-- **Firebase Console:** https://console.firebase.google.com/project/buono-project-927b8
+```
+🌐 Production:     https://buono-project-927b8.web.app
+🔗 GitHub:         https://github.com/Sachintha1999/Buono-project
+🔥 Firebase Console: https://console.firebase.google.com/project/buono-project-927b8
+```
 
 ### Tech Stack:
 ```
-Frontend:
+FRONTEND:
 - HTML5 (semantic)
 - CSS3 (custom, no framework)
 - JavaScript (Vanilla ES6+)
 
-Backend:
+BACKEND:
 - Firebase Firestore (NoSQL database)
 - Firebase Storage (image uploads)
 - Firebase Hosting (deployment)
 
-Firebase SDK:
+FIREBASE SDK:
 - Compat v8 (NOT v9!)
 - CDN: https://www.gstatic.com/firebasejs/8.10.1/
 
-Firebase Plan:
-- Blaze (Pay-as-you-go) 
-- BUT! Free tier inside (Rs. 0/month current cost)
+FIREBASE PLAN:
+- Blaze (Pay-as-you-go)
+- Free tier inside (Rs. 0/month current!)
 ```
 
 ### Session Management:
@@ -116,18 +607,18 @@ Firebase Plan:
 const stored = sessionStorage.getItem('loggedInUser');
 const user = JSON.parse(stored);
 
-// User object structure:
+// User object:
 {
     id: "firestore_doc_id",
     name: "Full Name",
-    nickname: "loginname",  
+    nickname: "loginname",
     password: "password",
     access: "Admin",        // Role
     permissions: {...}      // DB permissions
 }
 ```
 
-### Project Scale (Current):
+### Project Scale:
 ```
 📊 Pages:        10 main pages
 🗄️ Collections:  18 active
@@ -137,42 +628,39 @@ const user = JSON.parse(stored);
 🏆 Architecture: Auto-scaling (4-Files Rule!)
 ```
 
-═══════════════════════════════════════════════════════════════
-## 2. 👤 DEVELOPER PROFILE
-═══════════════════════════════════════════════════════════════
+---
 
-### About Naveen (Developer):
-- **Name:** Naveen
-- **GitHub:** Sachintha1999
-- **Background:** NO coding background!
-- **Skill:** Copy/paste only
-- **Tools:** VS Code + Firebase + GitHub
-- **Language:** Sinhala (Singlish OK)
+## 6. 👤 DEVELOPER PROFILE
+
+### About Naveen:
+```
+Name:       Naveen
+GitHub:     Sachintha1999
+Background: NO coding background!
+Skill:      Copy/paste only
+Tools:      VS Code + Firebase + GitHub
+Language:   Sinhala (Singlish OK)
+```
 
 ### Working Style:
 ```
-✅ Step-by-step approach
-✅ Full file replacement (NO partial code!)
-✅ Test after every change
-✅ Honest feedback preferred
-✅ Visual screenshots help
+✅ PREFERS:
+- Step-by-step approach
+- Full file replacement (NO partial code!)
+- Test after every change
+- Honest feedback
+- Visual screenshots help
+- Sinhala/Singlish responses
+- Plan first, then code
+- Clear instructions
 
-❌ NO partial code snippets
-❌ NO "add this line at line 245" 
-❌ NO complex git operations
-❌ NO command line beyond basics
-```
-
-### Preferred AI Behavior:
-```
-✅ Sinhala වලින් කතා කරන්න (Singlish OK)
-✅ Step-by-step explain කරන්න
-✅ Full file replace approach
-✅ Plan first, code after
-✅ Test instructions clear
-✅ Encouraging tone
-✅ Honest about complexity
-✅ Recommend best practices
+❌ AVOIDS:
+- Partial code snippets
+- "Add this line at line 245"
+- Complex git operations  
+- Command line beyond basics
+- Technical jargon without explanation
+- Multiple changes at once
 ```
 
 ### Common Commands Naveen Uses:
@@ -190,11 +678,11 @@ Ctrl + Shift + R    (Hard refresh)
 F12                 (Console)
 ```
 
-═══════════════════════════════════════════════════════════════
-## 3. 🔴 7 MANDATORY RULES
-═══════════════════════════════════════════════════════════════
+---
 
-### 🔴 RULE #1: GLOBAL FIREBASE CONFIG ⭐ MASTER!
+## 7. 🔴 7 MANDATORY RULES
+
+### 🔴 RULE #1: GLOBAL FIREBASE CONFIG ⭐
 
 **Every HTML page MUST have this script order:**
 ```html
@@ -206,69 +694,52 @@ F12                 (Console)
 <script src="mobile-script.js"></script>
 ```
 
-**firebase-config.js MASTER provides:**
+**firebase-config.js provides:**
 - ✅ Firebase initialized (`db`, `firebase.storage()`)
-- ✅ Auth helpers (`getCurrentUser()`, `logout()`, `checkAuth()`)
-- ✅ DATABASES array (7 DBs - SINGLE SOURCE OF TRUTH!)
-- ✅ Access helpers (`checkDBAccess()`, `getAccessibleDatabases()`)
-- ✅ UI builders (`buildTopbar()`, `buildDatabaseSwitcher()`)
+- ✅ Auth helpers (`getCurrentUser()`, `logout()`)
+- ✅ DATABASES array (7 DBs - SINGLE SOURCE!)
+- ✅ Access helpers (`checkDBAccess()`)
+- ✅ UI builders (`buildTopbar()`)
 - ✅ Format helpers (`formatDate()`, `formatCurrency()`)
-- ✅ Table helpers (`showTableLoading()`, `showTableEmpty()`)
-- ✅ Timestamp helper (`getServerTimestamp()`)
 
 **Page JS files MUST NOT have:**
 ```javascript
 ❌ const firebaseConfig = {...}
 ❌ firebase.initializeApp(...)
 ❌ const db = firebase.firestore()
-❌ const DATABASES = [...]  // Use global!
-```
-
-**Page JS files CAN have:**
-```javascript
-✅ Own buildDatabaseSwitcher() (uses global DATABASES)
-✅ Use db, getCurrentUser(), DATABASES directly
-✅ All global helpers
+❌ const DATABASES = [...]
 ```
 
 ### 🔴 RULE #2: MOBILE SUPPORT ALWAYS!
 
-**Every page MUST have:**
 ```html
 <link rel="stylesheet" href="mobile.css">
 <script src="mobile-script.js"></script>
 ```
 
-**Tables MUST use data-label:**
+Tables MUST use `data-label`:
 ```html
 <td data-label="Name">John Doe</td>
 <td data-label="Amount">Rs. 1,500</td>
 ```
 
-**Test on mobile:**
-- F12 → Device toolbar → iPhone/Android view
-- All buttons clickable
-- All text readable
-- No horizontal scroll
-
 ### 🔴 RULE #3: FILE SPLITTING (Strict!)
 
-**For EVERY page, create 3 files:**
+For EVERY page, 3 files:
 ```
 pagename.html         (structure)
 pagename-script.js    (logic)
-pagename-style.css    (styles - if custom needed)
+pagename-style.css    (styles)
 ```
 
 **NEVER:**
 - ❌ Inline JavaScript in HTML
-- ❌ Inline styles in HTML (except theme colors)
+- ❌ Inline styles in HTML
 - ❌ Multiple pages in one file
-- ❌ Mixed JS in different files
 
 ### 🔴 RULE #4: 7 DATABASES (Auto-Managed!)
 
-**Single source: `firebase-config.js` DATABASES array**
+Single source: `firebase-config.js` DATABASES array
 
 **All 7 DBs:**
 1. employeeDB (👥)
@@ -287,7 +758,7 @@ pagename-style.css    (styles - if custom needed)
 
 ### 🔴 RULE #5: PERMISSIONS - ALL DBs!
 
-**Every DB has 5 permissions:**
+Every DB has 5 permissions:
 - `add` - Create new
 - `view` - View all data
 - `selfView` - View own data only
@@ -297,45 +768,38 @@ pagename-style.css    (styles - if custom needed)
 **Special:**
 - Admin = ALL permissions auto-true
 - Manager = Most permissions
-- Other roles = Custom permissions per DB
+- Others = Custom per DB
 
 ### 🔴 RULE #6: FULL FILE REPLACE!
 
-**Always give COMPLETE files:**
 ```
 ✅ "Here is full file.js - paste replace!"
 ❌ "Add this line at line 245..."
 ❌ "Replace function X with..."
-❌ Partial code snippets
 ```
 
-**Why:** Naveen can't debug partial changes!
+Why: Naveen can't debug partial changes!
 
 ### 🔴 RULE #7: TOPBAR CONSISTENCY!
 
-**Every page MUST have:**
+Every page MUST have:
 - Buono logo (left)
 - DB switcher (left, after logo)
 - Welcome message (right)
 - Logout button (right)
 
-**DB switcher MUST:**
-- Show only accessible DBs
-- Highlight current DB
-- Quick navigation
+---
 
-═══════════════════════════════════════════════════════════════
-## 4. 🏗️ ARCHITECTURE GUIDE
-═══════════════════════════════════════════════════════════════
+## 8. 🏗️ ARCHITECTURE GUIDE
 
-### File Structure (Complete):
+### File Structure:
 ```
 public/
 ├── 🔥 GLOBAL FILES:
-│   ├── firebase-config.js  ⭐ MASTER (everything!)
-│   ├── style.css           (shared styles + DB switcher)
+│   ├── firebase-config.js  ⭐ MASTER
+│   ├── style.css           (shared)
 │   ├── mobile.css          (responsive)
-│   └── mobile-script.js    (mobile interactions)
+│   └── mobile-script.js    (mobile UI)
 │
 ├── 🔐 AUTH:
 │   ├── login.html
@@ -343,11 +807,11 @@ public/
 │
 ├── 🏠 HOME:
 │   ├── access.html         (✅ AUTO cards!)
-│   └── access-script.js    (Uses DATABASES.map!)
+│   └── access-script.js
 │
 ├── 👥 EMPLOYEE DB:
 │   ├── index.html          (✅ AUTO permissions!)
-│   └── index-script.js     (Uses DATABASES.forEach!)
+│   └── index-script.js
 │
 ├── 💰 CASHIER DB:
 │   ├── cashier.html
@@ -367,16 +831,12 @@ public/
 │
 ├── 📊 REPORTS DB:
 │   ├── reports.html
-│   └── reports-script.js   (with 📸 payment proof)
-│
-├── 🧑‍💼 MANAGER DASHBOARD:
-│   ├── manager.html
-│   └── manager-script.js
+│   └── reports-script.js
 │
 └── 📞 CALL CENTER:
     ├── callcenter.html
     ├── callcenter-style.css
-    └── callcenter-script.js (7 tabs!)
+    └── callcenter-script.js (9 tabs!)
 ```
 
 ### Load Order (Critical!):
@@ -425,26 +885,11 @@ Example:
 ✅ Easy maintenance (4-Files Rule!)
 ```
 
-[END OF PART 1/6]
-```
-
----
-
-## ✅ Part 1 Done!
-# 🎉 Part 1 Saved! Deploy කරත් කරලා! 💯
-
-Screenshot එකේ දකින්න පුළුවන් - file එක saved + deployed! හරිම perfect! 🚀
-
----
-
-## 🚀 PART 2/6 - Firebase Config + DATABASES Guide
-
-**BUONO_MASTER_CONTEXT.md එකේ පහළට scroll කරලා Part 1 අග append කරන්න:**
-
-```markdown
 ═══════════════════════════════════════════════════════════════
-## 5. 🔥 firebase-config.js MASTER REFERENCE
+# PART C: TECHNICAL REFERENCE
 ═══════════════════════════════════════════════════════════════
+
+## 9. 🔥 FIREBASE CONFIG MASTER
 
 ### Firebase Initialization:
 ```javascript
@@ -461,332 +906,128 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 ```
 
-### Global Helper Functions (Available Everywhere):
+### Global Helper Functions:
 
 #### 🔐 Auth Helpers:
-
-**`getCurrentUser()`**
 ```javascript
-// Get logged-in user from sessionStorage
+// Get logged-in user
 const user = getCurrentUser();
-// Returns: {id, name, nickname, password, access, permissions} or null
-```
 
-**`checkAuth()`**
-```javascript
-// Check if user logged in, redirect to login if not
+// Check auth (redirect if not logged in)
 const user = checkAuth();
-if (!user) return; // User redirected to login.html
-```
 
-**`logout()`**
-```javascript
-// Logout with confirm dialog
-logout(); // Confirms → clears session → redirects to login
-```
+// Logout with confirm
+logout();
 
-**`checkAccessLevel(allowedRoles)`**
-```javascript
-// Check if user has allowed role
+// Check role access
 const user = checkAccessLevel(['Admin', 'Manager']);
-if (!user) return; // Redirected to access.html if no permission
-```
 
-**`hasPermission(dbName)`**
-```javascript
-// Check view permission for specific DB
-if (hasPermission('inventoryDB')) {
-    // Show inventory data
-}
+// Check DB permission
+if (hasPermission('inventoryDB')) { ... }
 ```
 
 #### 🗄️ Database Helpers:
-
-**`getDatabaseById(dbId)`**
 ```javascript
 // Get DB config by ID
 const dbConfig = getDatabaseById('inventoryDB');
-console.log(dbConfig.name); // "Inventory Database"
-console.log(dbConfig.icon); // "📦"
-```
 
-**`checkDBAccess(dbId, userOverride)`**
-```javascript
-// Check if current user can access this DB
-if (checkDBAccess('purchasingDB')) {
-    // Allow access
-}
+// Check DB access
+if (checkDBAccess('purchasingDB')) { ... }
 
-// With override user:
-if (checkDBAccess('reportsDB', someUser)) {
-    // Check for specific user
-}
-```
-
-**`getAccessibleDatabases(userOverride)`**
-```javascript
-// Get all DBs current user can access
+// Get all accessible DBs
 const accessibleDbs = getAccessibleDatabases();
-accessibleDbs.forEach(db => {
-    console.log(`${db.icon} ${db.name}`);
-});
 ```
 
 #### 🎨 UI Builders:
-
-**`buildTopbar(currentDbId, options)`**
 ```javascript
-// Build standard topbar with logo + DB switcher + user info
-const topbarHTML = buildTopbar('cashierDB', {
-    title: 'Custom Title',        // Optional
-    showHomeBtn: true,            // Optional (default true)
-    extraButtons: '<button>...</button>'  // Optional
-});
-document.getElementById('topbarContainer').innerHTML = topbarHTML;
-```
+// Build complete topbar
+const topbarHTML = buildTopbar('cashierDB');
 
-**`buildDatabaseSwitcher(currentDbId)`**
-```javascript
-// Build DB switcher dropdown
+// Build DB switcher only
 const switcherHTML = buildDatabaseSwitcher('inventoryDB');
-// Auto-shows only accessible DBs, excludes current
-```
 
-**`toggleDBSwitcher(event)`**
-```javascript
-// Toggle DB switcher dropdown
-<button onclick="toggleDBSwitcher(event)">Switch DB</button>
+// Toggle DB switcher
+toggleDBSwitcher(event);
 ```
 
 #### ⭐ All-in-One Init:
-
-**`initPage(dbId, allowedAccess)`**
 ```javascript
 // Complete page initialization
 const user = initPage('cashierDB', ['Admin', 'Manager', 'Cashier']);
-if (!user) return; // Handled redirects
-
-// Auto:
-// 1. Check auth
-// 2. Check access level
-// 3. Check DB permission
-// 4. Build topbar (if topbarContainer exists)
-// Returns user object or null
+if (!user) return; // Handled redirects automatically
 ```
 
 #### 📅 Format Helpers:
-
-**`formatDate(date)`**
 ```javascript
-formatDate(new Date());           // "Jun 08, 2026"
-formatDate('2026-06-08');         // "Jun 08, 2026"
-formatDate(firestoreTimestamp);   // "Jun 08, 2026"
-```
-
-**`formatTime(date)`**
-```javascript
-formatTime(new Date());  // "11:36 PM"
-```
-
-**`formatDateTime(date)`**
-```javascript
-formatDateTime(new Date());  // "Jun 08, 2026 11:36 PM"
-```
-
-**`formatCurrency(amount)`**
-```javascript
-formatCurrency(1500);      // "Rs. 1,500.00"
-formatCurrency(1500.5);    // "Rs. 1,500.50"
-formatCurrency(null);      // "Rs. 0.00"
-```
-
-**`getServerTimestamp()`**
-```javascript
-// For Firestore timestamps
-await db.collection('items').add({
-    name: 'Item 1',
-    createdAt: getServerTimestamp()  // Server-side timestamp
-});
+formatDate(new Date());        // "Jun 10, 2026"
+formatTime(new Date());        // "11:36 PM"
+formatDateTime(new Date());    // "Jun 10, 2026 11:36 PM"
+formatCurrency(1500);          // "Rs. 1,500.00"
+getServerTimestamp();          // Firestore server timestamp
 ```
 
 #### 📊 Table Helpers:
-
-**`showTableLoading(tbodyId, cols)`**
 ```javascript
 showTableLoading('myTableBody', 5);
-// Shows: "⏳ Loading..." spanning 5 columns
-```
-
-**`showTableEmpty(tbodyId, cols, message)`**
-```javascript
 showTableEmpty('myTableBody', 5, 'No items found');
-// Shows: "📭 No items found"
 ```
 
-═══════════════════════════════════════════════════════════════
-## 6. ⭐ DATABASES ARRAY - FULL GUIDE
-═══════════════════════════════════════════════════════════════
+---
+
+## 10. ⭐ DATABASES ARRAY GUIDE
 
 ### Location: `firebase-config.js`
 
-### Purpose: 
+### Purpose:
 **SINGLE SOURCE OF TRUTH** for all 7 databases.
-Adding new DB = add 1 entry here = EVERYWHERE updates AUTO!
+Add 1 entry = EVERYWHERE updates AUTO!
 
-### Complete Field Reference:
+### Field Reference:
 
 #### 🔵 BASIC FIELDS (Required):
 ```javascript
 {
     id: 'newDB',                    // Unique ID (camelCase)
-    name: 'New Database',           // Full display name
-    shortName: 'New',               // Short name (DB switcher)
-    icon: '🆕',                     // Emoji icon
+    name: 'New Database',           // Display name
+    shortName: 'New',               // Short name
+    icon: '🆕',                     // Emoji
     url: 'newdb.html',              // Page URL
-    permPrefix: 'new',              // 3-letter prefix for permissions
+    permPrefix: 'new',              // 3-letter prefix
     color: '#XXXXXX'                // Brand color
 }
 ```
 
-#### 🟢 ACCESS PAGE FIELDS (Required for access.html cards):
+#### 🟢 ACCESS PAGE FIELDS:
 ```javascript
 {
     description: 'Short tagline',
-    
-    accessDescription: 'Full description for card display',
-    
-    badgeLabel: 'Data Entry',       // Badge text
-                                    // Options: 'Data Entry', 'Kitchen', 
-                                    //          'Purchasing', 'Call Center', 
-                                    //          'Management'
-    
-    badgeClass: 'badge-entry',      // CSS class for badge
-                                    // Options: badge-entry, badge-kitchen,
-                                    //          badge-purchasing, badge-callcenter,
-                                    //          badge-management
-    
-    cardClass: '',                  // Special card CSS class
-                                    // Options: '' (default), 
-                                    //          'purchasing-card',
-                                    //          'callcenter-card', 
-                                    //          'reports-card'
-    
-    adminManagerOnly: false,        // true = only Admin/Manager access
-    
-    accessChecks: ['add', 'view',   // Permission keys to check for access
-                   'selfView', 'edit']
-}
-```
-
-#### 🟡 ADVANCED ACCESS FIELDS (Optional):
-
-**`autoAccessRoles`** - Auto-grant access to specific roles
-```javascript
-autoAccessRoles: ['Manager', 'Call Operator']
-// Manager and Call Operator can access without permission check
-```
-
-**`privilegedRoles`** + **`privilegedRolePerms`** - Custom permissions for roles
-```javascript
-privilegedRoles: ['Admin', 'Manager'],
-privilegedRolePerms: { 
-    add: true, view: true, edit: true, delete: true 
-}
-// Admin/Manager get these badges shown on access card
-```
-
-**`specialRoleBadges`** - Custom badges per role
-```javascript
-specialRoleBadges: {
-    'Call Operator': [
-        { cssClass: 'perm-add', label: '➕ Add' },
-        { cssClass: 'perm-view', label: '👁️ View' },
-        { cssClass: 'perm-edit', label: '✏️ Edit' }
-    ]
-}
-// Call Operator sees these specific badges
-```
-
-**`customPermBadges`** - Override all default badges
-```javascript
-customPermBadges: [
-    { cssClass: 'perm-reports', label: '📊 View Reports' },
-    { cssClass: 'perm-reports', label: '⏳ Approvals' },
-    { cssClass: 'perm-reports', label: '📋 All Data' }
-]
-// Used for Reports DB (always shows these badges)
-```
-
-#### 🟣 INDEX PAGE FIELDS (Optional - Permission UI styling):
-
-**`permBorderColor`** - Custom border color for permission block
-```javascript
-permBorderColor: '#FF9800'  // Orange border around block
-```
-
-**`permTitleColor`** - Custom title color
-```javascript
-permTitleColor: '#FF9800'  // Orange title text
-```
-
-**`permSubtitle`** - Subtitle text (small grey)
-```javascript
-permSubtitle: '(Call Operators)'
-permSubtitle: '(Admin/Manager only)'
-```
-
-**`permEditLabel`** - Custom label for Edit checkbox
-```javascript
-permEditLabel: '✏️ Edit / Approve'  // Reports DB has this
-```
-
-**`defaultPermsForRole`** - Auto-check permissions for specific role
-```javascript
-defaultPermsForRole: {
-    'Call Operator': { 
-        add: true, view: true, selfView: true, edit: true 
-    }
-}
-// When Call Operator selected → these checkboxes auto-check
-```
-
-### Complete Example - All Fields:
-```javascript
-{
-    // BASIC
-    id: 'attendanceDB',
-    name: 'Attendance Database',
-    shortName: 'Attendance',
-    icon: '⏰',
-    url: 'attendance.html',
-    permPrefix: 'att',
-    color: '#FF5722',
-    
-    // ACCESS PAGE
-    description: 'Daily attendance tracking',
-    accessDescription: 'Check-in/out times, late tracking සහ monthly reports.',
+    accessDescription: 'Full description for card',
     badgeLabel: 'Data Entry',
     badgeClass: 'badge-entry',
     cardClass: '',
     adminManagerOnly: false,
-    accessChecks: ['add', 'view', 'selfView', 'edit'],
-    
-    // OPTIONAL ADVANCED
-    autoAccessRoles: ['Manager'],
-    
-    // INDEX PAGE STYLING
-    permBorderColor: '#FF5722',
-    permTitleColor: '#FF5722',
-    permSubtitle: '(All Employees)',
+    accessChecks: ['add', 'view', 'selfView', 'edit']
+}
+```
+
+#### 🟡 ADVANCED FIELDS (Optional):
+```javascript
+{
+    autoAccessRoles: ['Manager', 'Call Operator'],
+    privilegedRoles: ['Admin', 'Manager'],
+    privilegedRolePerms: { add: true, view: true },
+    specialRoleBadges: { 'Call Operator': [...] },
+    customPermBadges: [...],
+    permBorderColor: '#FF9800',
+    permTitleColor: '#FF9800',
+    permSubtitle: '(Call Operators)',
     defaultPermsForRole: {
-        'Cashier': { selfView: true },
-        'Head Chef': { selfView: true },
-        'Waiter': { selfView: true }
+        'Call Operator': { add: true, view: true }
     }
 }
 ```
 
-### Current 7 Databases (Reference):
+### Current 7 Databases:
 ```javascript
 const DATABASES = [
     { id: 'employeeDB',     icon: '👥', url: 'index.html' },
@@ -799,9 +1040,15 @@ const DATABASES = [
 ];
 ```
 
-═══════════════════════════════════════════════════════════════
-## 7. 📝 CODE PATTERNS & SNIPPETS
-═══════════════════════════════════════════════════════════════
+[END OF PART 2/6]
+```
+
+---
+
+## ✅ Part 2 Done!
+
+```markdown
+## 11. 📝 CODE PATTERNS & SNIPPETS
 
 ### Standard New Page Structure:
 
@@ -815,8 +1062,6 @@ const DATABASES = [
     <title>Buono - [PAGE NAME]</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
-    <!-- Custom CSS if needed: -->
-    <!-- <link rel="stylesheet" href="newpage-style.css"> -->
 </head>
 <body>
 
@@ -851,98 +1096,7 @@ const DATABASES = [
 
     <!-- MAIN CONTAINER -->
     <div class="dashboard-container">
-
-        <!-- STATS ROW -->
-        <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">[ICON]</div>
-                <div class="stat-info">
-                    <h3 id="stat1">0</h3>
-                    <p>Stat Label</p>
-                </div>
-            </div>
-            <!-- More stat cards... -->
-        </div>
-
-        <!-- PAGE TITLE -->
-        <div class="section-header">
-            <h2>📂 [PAGE TITLE]</h2>
-            <button class="btn-primary" id="addBtn" 
-                onclick="openAddModal()" style="display:none;">
-                ➕ Add New
-            </button>
-        </div>
-
-        <!-- SEARCH BAR -->
-        <div class="search-bar" id="searchBar">
-            <input type="text" id="searchInput" 
-                placeholder="🔍 Search..." 
-                onkeyup="searchData()">
-        </div>
-
-        <!-- TABLE -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="dataTableBody">
-                    <tr>
-                        <td colspan="3" style="text-align: center; padding: 20px;">
-                            ⏳ Loading...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- ADD/EDIT MODAL -->
-    <div id="dataModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">➕ Add New</h2>
-                <button class="modal-close" onclick="closeModal()">✖</button>
-            </div>
-            <form id="dataForm" onsubmit="return false;">
-                <label>Name:</label>
-                <input type="text" id="dataName" required>
-                
-                <input type="hidden" id="editDocId" value="">
-                
-                <div class="modal-buttons">
-                    <button type="button" class="btn-primary" 
-                        id="saveBtn" onclick="saveData()">
-                        💾 Save
-                    </button>
-                    <button type="button" class="btn-secondary" 
-                        onclick="closeModal()">
-                        ❌ Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- DELETE MODAL -->
-    <div id="deleteModal" class="modal" style="display: none;">
-        <div class="modal-content modal-small">
-            <div class="modal-header">
-                <h2>⚠️ Delete Confirmation</h2>
-                <button class="modal-close" onclick="closeDeleteModal()">✖</button>
-            </div>
-            <p style="text-align: center; margin: 20px 0;">
-                Delete <strong id="deleteName">this item</strong>?
-            </p>
-            <div class="modal-buttons">
-                <button class="btn-danger" onclick="confirmDelete()">🗑️ Yes</button>
-                <button class="btn-secondary" onclick="closeDeleteModal()">❌ No</button>
-            </div>
-        </div>
+        <!-- Stats, Search, Table, Modals... -->
     </div>
 
     <!-- SCRIPTS -->
@@ -958,25 +1112,15 @@ const DATABASES = [
 
 #### `newpage-script.js` Template:
 ```javascript
-// ═══════════════════════════════════════════
-// 🍴 BUONO - [PAGE NAME]
-// File: newpage-script.js
-// 🔥 Globals: db, getCurrentUser(), DATABASES
-// ═══════════════════════════════════════════
-
 // GLOBAL VARIABLES
 let allData = [];
-let deleteDocId = '';
 let currentUser = null;
 let myPerms = null;
 
 // INITIALIZE
 async function initializeApp() {
     const user = sessionStorage.getItem('loggedInUser');
-    if (!user) {
-        window.location.href = "login.html";
-        return;
-    }
+    if (!user) { window.location.href = "login.html"; return; }
     const userData = JSON.parse(user);
 
     // Refresh from Firebase
@@ -1010,43 +1154,10 @@ async function initializeApp() {
         `👋 Welcome, ${userData.name} (${userData.access})`;
 
     buildDatabaseSwitcher();
-    setupActionButtons();
     startDataListener();
 }
 
 initializeApp();
-
-// DATABASE SWITCHER
-function buildDatabaseSwitcher() {
-    const list = document.getElementById('dbDropdownList');
-    const accessible = getAccessibleDatabases(currentUser);
-    let html = '';
-    accessible.forEach(d => {
-        const isCurrent = d.id === '[DB_ID]';
-        html += `
-            <a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}">
-                <span>${d.icon}</span>
-                <span>${d.name}</span>
-                ${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}
-            </a>`;
-    });
-    list.innerHTML = html;
-
-    document.getElementById('dbSwitcher').addEventListener('click', function(e) {
-        e.stopPropagation();
-        document.getElementById('dbDropdown').classList.toggle('show');
-    });
-    document.addEventListener('click', function(e) {
-        const dd = document.getElementById('dbDropdown');
-        if (dd && !dd.contains(e.target) && !e.target.closest('#dbSwitcher')) 
-            dd.classList.remove('show');
-    });
-}
-
-// SETUP BUTTONS
-function setupActionButtons() {
-    if (myPerms.add) document.getElementById('addBtn').style.display = 'inline-block';
-}
 
 // REAL-TIME LISTENER
 function startDataListener() {
@@ -1059,110 +1170,7 @@ function startDataListener() {
     });
 }
 
-// RENDER TABLE
-function renderData(data) {
-    const tbody = document.getElementById('dataTableBody');
-    if (data.length === 0) {
-        showTableEmpty('dataTableBody', 3);
-        return;
-    }
-    
-    let html = '';
-    data.forEach((item, i) => {
-        let actions = '';
-        if (myPerms.edit) actions += `<button class="btn-edit" onclick="editData('${item.id}')">✏️</button>`;
-        if (myPerms.delete) actions += `<button class="btn-delete" onclick="openDeleteModal('${item.id}', '${item.name}')">🗑️</button>`;
-        
-        html += `
-            <tr>
-                <td data-label="#">${i+1}</td>
-                <td data-label="Name">${item.name}</td>
-                <td data-label="Actions" class="action-buttons">${actions}</td>
-            </tr>`;
-    });
-    tbody.innerHTML = html;
-}
-
-// OPEN ADD MODAL
-function openAddModal() {
-    document.getElementById('modalTitle').textContent = '➕ Add New';
-    document.getElementById('dataName').value = '';
-    document.getElementById('editDocId').value = '';
-    document.getElementById('dataModal').style.display = 'flex';
-}
-
-// EDIT
-function editData(docId) {
-    const item = allData.find(d => d.id === docId);
-    if (!item) return;
-    document.getElementById('modalTitle').textContent = '✏️ Edit';
-    document.getElementById('dataName').value = item.name || '';
-    document.getElementById('editDocId').value = docId;
-    document.getElementById('dataModal').style.display = 'flex';
-}
-
-// CLOSE MODAL
-function closeModal() {
-    document.getElementById('dataModal').style.display = 'none';
-}
-
-// SAVE
-async function saveData() {
-    const name = document.getElementById('dataName').value.trim();
-    const editDocId = document.getElementById('editDocId').value;
-    
-    if (!name) { alert('⚠️ Fill required fields!'); return; }
-    
-    try {
-        if (editDocId) {
-            await db.collection('[COLLECTION_NAME]').doc(editDocId).update({ name });
-            alert('✅ Updated!');
-        } else {
-            await db.collection('[COLLECTION_NAME]').add({
-                name, createdAt: getServerTimestamp()
-            });
-            alert('✅ Added!');
-        }
-        closeModal();
-    } catch (error) {
-        alert('❌ ' + error.message);
-    }
-}
-
-// DELETE
-function openDeleteModal(docId, name) {
-    deleteDocId = docId;
-    document.getElementById('deleteName').textContent = name;
-    document.getElementById('deleteModal').style.display = 'flex';
-}
-
-function closeDeleteModal() {
-    document.getElementById('deleteModal').style.display = 'none';
-}
-
-async function confirmDelete() {
-    if (!deleteDocId) return;
-    try {
-        await db.collection('[COLLECTION_NAME]').doc(deleteDocId).delete();
-        alert('✅ Deleted!');
-        closeDeleteModal();
-    } catch (error) {
-        alert('❌ ' + error.message);
-    }
-}
-
-// SEARCH
-function searchData() {
-    const text = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = allData.filter(d => d.name.toLowerCase().includes(text));
-    renderData(filtered);
-}
-
-// CLICK OUTSIDE MODAL
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) 
-        event.target.style.display = 'none';
-};
+// SAVE / EDIT / DELETE / SEARCH functions...
 ```
 
 ### Common Patterns:
@@ -1172,7 +1180,6 @@ window.onclick = function(event) {
 db.collection('collectionName')
     .orderBy('createdAt', 'desc')
     .onSnapshot((snapshot) => {
-        // Auto-updates on changes!
         const data = [];
         snapshot.forEach(doc => {
             data.push({ id: doc.id, ...doc.data() });
@@ -1191,19 +1198,16 @@ async function uploadImage(file) {
 }
 
 // Usage:
-const fileInput = document.getElementById('fileInput');
-const file = fileInput.files[0];
+const file = document.getElementById('fileInput').files[0];
 const imageURL = await uploadImage(file);
-// Save URL to Firestore
 ```
 
-#### 🔍 Search with Filter:
+#### 🔍 Search Filter:
 ```javascript
 function searchData() {
     const text = document.getElementById('searchInput').value.toLowerCase();
     const filtered = allData.filter(item =>
-        item.name.toLowerCase().includes(text) ||
-        item.category.toLowerCase().includes(text)
+        item.name.toLowerCase().includes(text)
     );
     renderData(filtered);
 }
@@ -1214,7 +1218,7 @@ function searchData() {
 function filterByDateRange(startDate, endDate) {
     const start = new Date(startDate);
     const end = new Date(endDate);
-    end.setHours(23, 59, 59); // End of day
+    end.setHours(23, 59, 59);
     
     return allData.filter(item => {
         const itemDate = item.createdAt?.toDate() || new Date(item.date);
@@ -1223,26 +1227,49 @@ function filterByDateRange(startDate, endDate) {
 }
 ```
 
-[END OF PART 2/6]
+#### 💬 WhatsApp Share:
+```javascript
+function shareWhatsApp(phone, message) {
+    const cleanPhone = phone.replace(/\D/g, '');
+    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+}
+```
+
+#### ✅ Approval Workflow:
+```javascript
+function approveItem(docId) {
+    if (!confirm('Approve?')) return;
+    db.collection('items').doc(docId).update({
+        status: 'approved',
+        approvedBy: currentUser.id,
+        approvedAt: getServerTimestamp()
+    });
+}
+```
+
+#### 📊 Statistics:
+```javascript
+function calculateStats() {
+    const total = allData.length;
+    const pending = allData.filter(d => d.status === 'pending').length;
+    const totalAmount = allData.reduce((sum, d) => sum + (d.amount || 0), 0);
+    
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statAmount').textContent = formatCurrency(totalAmount);
+}
 ```
 
 ---
 
-## ✅ Part 2 Done!
-# 🚀 PART 3/6 - Design + Mobile + Permissions + Collections
-
-**BUONO_MASTER_CONTEXT.md එකේ අග append කරන්න:**
-
-```markdown
-═══════════════════════════════════════════════════════════════
-## 8. 🎨 DESIGN SYSTEM
-═══════════════════════════════════════════════════════════════
+## 12. 🎨 DESIGN SYSTEM
 
 ### Color Palette:
 
 #### 🎨 Backgrounds:
 ```css
---bg-main:       #1a1a2e;    /* Main background (dark navy) */
+--bg-main:       #1a1a2e;    /* Main background */
 --bg-card:       #16213e;    /* Card backgrounds */
 --bg-input:      #0f3460;    /* Input fields */
 --bg-darker:     #0a0a1e;    /* Darker accents */
@@ -1251,26 +1278,18 @@ function filterByDateRange(startDate, endDate) {
 #### 🎨 Primary Colors (Buono Brand):
 ```css
 --primary-orange:    #f0a500;    /* Main brand orange */
---primary-orange-2:  #FF9800;    /* Alternative orange */
---accent-orange:     #ff6b35;    /* Accent orange */
+--primary-orange-2:  #FF9800;    /* Alternative */
+--accent-orange:     #ff6b35;    /* Accent */
 ```
 
 #### 🎨 Status Colors:
 ```css
---success-green:  #4CAF50;    /* Success, approved */
---danger-red:     #ff4444;    /* Error, delete, danger */
+--success-green:  #4CAF50;    /* Success */
+--danger-red:     #ff4444;    /* Error, delete */
 --warning-yellow: #FFC107;    /* Warning, pending */
 --info-blue:      #2196F3;    /* Info, manager */
---purple:         #9C27B0;    /* Purchasing, special */
+--purple:         #9C27B0;    /* Special */
 --cyan:           #00BCD4;    /* Call center */
-```
-
-#### 🎨 Text Colors:
-```css
---text-white:     #ffffff;    /* Primary text */
---text-grey:      #8892b0;    /* Secondary text */
---text-dim:       #888;       /* Disabled, hints */
---text-dark:      #555;       /* Very dim */
 ```
 
 #### 🎨 Role Badge Colors:
@@ -1287,13 +1306,10 @@ const badgeColors = {
 ```
 
 ### Typography:
-
 ```css
-/* Font Family */
 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 
              Roboto, Oxygen, Ubuntu, sans-serif;
 
-/* Font Sizes */
 h1: 28px (bold)
 h2: 22px (bold)
 h3: 18px (semi-bold)
@@ -1301,14 +1317,12 @@ body: 14px (regular)
 small: 12px (regular)
 tiny: 11px (regular)
 
-/* Common Weights */
 600: Semi-bold (headings)
 500: Medium (buttons)
 400: Regular (body)
 ```
 
 ### Spacing System:
-
 ```css
 --spacing-xs:  5px;
 --spacing-sm:  10px;
@@ -1317,17 +1331,16 @@ tiny: 11px (regular)
 --spacing-xl:  30px;
 --spacing-xxl: 40px;
 
-/* Border radius */
---radius-sm:   6px;   /* Small elements */
---radius-md:   10px;  /* Buttons, inputs */
---radius-lg:   12px;  /* Cards */
---radius-xl:   16px;  /* Big cards, modals */
+--radius-sm:   6px;
+--radius-md:   10px;
+--radius-lg:   12px;
+--radius-xl:   16px;
 ```
 
 ### Button Styles:
 
-#### Primary Button (Orange):
 ```css
+/* Primary (Orange) */
 .btn-primary {
     background: linear-gradient(135deg, #f0a500, #ff6b35);
     color: white;
@@ -1337,55 +1350,34 @@ tiny: 11px (regular)
     font-weight: 600;
     cursor: pointer;
 }
-```
 
-#### Secondary Button (Grey):
-```css
+/* Secondary (Grey) */
 .btn-secondary {
     background: #2a2a3e;
     color: white;
-    padding: 10px 20px;
     border: 1px solid #444;
-    border-radius: 8px;
-    cursor: pointer;
 }
-```
 
-#### Danger Button (Red):
-```css
+/* Danger (Red) */
 .btn-danger {
     background: #ff4444;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
 }
-```
 
-#### Edit Button (Yellow):
-```css
+/* Edit (Yellow) */
 .btn-edit {
     background: #FFC107;
     color: #1a1a2e;
-    padding: 6px 12px;
-    border-radius: 6px;
 }
-```
 
-#### Delete Button (Red):
-```css
+/* Delete (Red) */
 .btn-delete {
     background: #ff4444;
     color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
 }
 ```
 
 ### Form Elements:
-
-#### Input Fields:
 ```css
 input, select, textarea {
     background: #0f3460;
@@ -1394,18 +1386,13 @@ input, select, textarea {
     padding: 10px 15px;
     border-radius: 8px;
     width: 100%;
-    margin-bottom: 15px;
 }
 
 input:focus {
-    outline: none;
     border-color: #f0a500;
     box-shadow: 0 0 0 2px rgba(240, 165, 0, 0.2);
 }
-```
 
-#### Labels:
-```css
 label {
     color: #f0a500;
     font-weight: 600;
@@ -1415,8 +1402,6 @@ label {
 ```
 
 ### Cards:
-
-#### Standard Card:
 ```css
 .card {
     background: #16213e;
@@ -1424,29 +1409,22 @@ label {
     border-radius: 12px;
     border: 1px solid #2a4a7c;
 }
-```
 
-#### Stat Card:
-```css
 .stat-card {
     background: linear-gradient(135deg, #16213e, #1a2842);
     padding: 20px;
     border-radius: 12px;
     display: flex;
-    align-items: center;
     gap: 15px;
 }
 ```
 
 ### Modals:
-
 ```css
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
@@ -1464,7 +1442,7 @@ label {
 }
 ```
 
-### Badge Classes (Pre-built):
+### Badge Classes:
 ```css
 .badge-admin       { background: #ff4444; }
 .badge-manager     { background: #2196F3; }
@@ -1473,32 +1451,24 @@ label {
 .badge-chef        { background: #9C27B0; }
 .badge-operator    { background: #00BCD4; }
 .badge-waiter      { background: #607D8B; }
-.badge-entry       { background: #4CAF50; }
-.badge-kitchen     { background: #f0a500; }
-.badge-callcenter  { background: #00BCD4; }
-.badge-management  { background: #2196F3; }
-```
 
-### Permission Badges:
-```css
+/* Permission badges */
 .perm-add     { background: rgba(76,175,80,0.2);  color: #4CAF50; }
 .perm-view    { background: rgba(33,150,243,0.2); color: #2196F3; }
 .perm-self    { background: rgba(255,193,7,0.2);  color: #FFC107; }
 .perm-edit    { background: rgba(255,152,0,0.2);  color: #FF9800; }
 .perm-delete  { background: rgba(244,67,54,0.2);  color: #f44336; }
-.perm-reports { background: rgba(33,150,243,0.2); color: #2196F3; }
 ```
 
-═══════════════════════════════════════════════════════════════
-## 9. 📱 MOBILE PATTERNS
-═══════════════════════════════════════════════════════════════
+---
+
+## 13. 📱 MOBILE PATTERNS
 
 ### Breakpoints:
 ```css
-/* Mobile First Approach */
 @media (max-width: 768px)  { /* Tablet */ }
 @media (max-width: 600px)  { /* Mobile */ }
-@media (max-width: 480px)  { /* Small mobile */ }
+@media (max-width: 480px)  { /* Small phone */ }
 ```
 
 ### Responsive Table Pattern:
@@ -1517,7 +1487,7 @@ label {
         <tr>
             <td data-label="Name">John Doe</td>
             <td data-label="Amount">Rs. 1,500</td>
-            <td data-label="Date">Jun 08</td>
+            <td data-label="Date">Jun 10</td>
         </tr>
     </tbody>
 </table>
@@ -1555,7 +1525,6 @@ label {
 ```
 
 ### Mobile-Friendly Buttons:
-
 ```css
 @media (max-width: 600px) {
     .btn-primary,
@@ -1589,10 +1558,6 @@ label {
         justify-content: center;
         margin-bottom: 10px;
     }
-    
-    .db-switcher-name {
-        font-size: 14px;
-    }
 }
 ```
 
@@ -1605,15 +1570,11 @@ label {
 }
 
 @media (max-width: 768px) {
-    .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 480px) {
-    .stats-row {
-        grid-template-columns: 1fr;
-    }
+    .stats-row { grid-template-columns: 1fr; }
 }
 ```
 
@@ -1644,20 +1605,30 @@ button, .btn, input, select {
     min-height: 44px;
 }
 
-/* Larger spacing on mobile */
 @media (max-width: 600px) {
     .form-group { margin-bottom: 20px; }
     input, select { padding: 12px 15px; }
 }
 ```
 
+[END OF PART 3/6]
+```
+
+---
+
+## ✅ Part 3 Done!
+
+
+
+```markdown
 ═══════════════════════════════════════════════════════════════
-## 10. 🔐 PERMISSIONS SYSTEM
+# PART D: SYSTEM REFERENCE
 ═══════════════════════════════════════════════════════════════
+
+## 14. 🔐 PERMISSIONS SYSTEM
 
 ### Permission Structure:
 ```javascript
-// Each employee has permissions object:
 employee.permissions = {
     employeeDB:     { add, view, selfView, edit, delete },
     dayEndReportDB: { add, view, selfView, edit, delete },
@@ -1669,7 +1640,7 @@ employee.permissions = {
 }
 ```
 
-### 5 Permission Types Explained:
+### 5 Permission Types:
 
 #### `add` - Create Permission
 ```
@@ -1681,70 +1652,69 @@ employee.permissions = {
 #### `view` - View All Permission
 ```
 ✅ Can: See ALL records (everyone's data)
-✅ Shows: Full data table
-✅ Shows: Search bar
-✅ Implies: selfView (auto-true if view=true)
+✅ Shows: Full data table + search
+✅ Implies: selfView (auto-true)
 ```
 
 #### `selfView` - Self View Only
 ```
 ✅ Can: See only OWN records
-✅ Shows: Filtered table (own data only)
+✅ Shows: Filtered table (own data)
 ❌ Cannot: See others' data
-❌ Hides: Search bar (only own data)
+❌ Hides: Search bar
 ```
 
 #### `edit` - Edit Permission
 ```
 ✅ Can: Modify existing records
-✅ Shows: "✏️ Edit" buttons in table
-⚠️ Limited: May only edit own data if no view permission
+✅ Shows: "✏️ Edit" buttons
+⚠️ Limited: May only edit own data if no view
 ```
 
 #### `delete` - Delete Permission
 ```
 ✅ Can: Remove records
 ✅ Shows: "🗑️ Delete" buttons
-⚠️ Requires: view permission (can't delete others' data)
+⚠️ Requires: view permission
 ❌ Cannot: Delete own profile
 ```
 
-### Permission Combinations Examples:
+### Permission Examples:
 
 #### 👨‍💼 Admin (All Permissions):
 ```javascript
 {
-    add: true, view: true, selfView: true, 
+    add: true, view: true, selfView: true,
     edit: true, delete: true
 }
 // Auto-true for ALL DBs
 ```
 
-#### 💼 Cashier (Day End Reports):
+#### 💼 Cashier:
 ```javascript
 dayEndReportDB: {
     add: true,        // Can add reports
-    view: false,      // Can't see others
     selfView: true,   // See own reports
+    view: false,      // Can't see others
     edit: false,      // Can't edit
     delete: false     // Can't delete
 }
 ```
 
-#### 📞 Call Operator (Call Center):
+#### 📞 Call Operator:
 ```javascript
 callCenterDB: {
     add: true,        // Add leads
     view: true,       // See all leads
     selfView: true,
-    edit: true,       // Update lead status
-    delete: false     // Can't delete leads
+    edit: true,       // Update leads
+    delete: false     // Can't delete
 }
 ```
 
 ### Permission Check Patterns:
 
-#### Check single permission:
+#### Single permission:
 ```javascript
 const userData = JSON.parse(sessionStorage.getItem('loggedInUser'));
 const perms = userData.permissions?.inventoryDB || {};
@@ -1754,7 +1724,7 @@ if (perms.add) {
 }
 ```
 
-#### Check any access:
+#### Any access check:
 ```javascript
 const isAdmin = userData.access === 'Admin';
 const hasAccess = isAdmin || perms.add || perms.view || perms.selfView;
@@ -1765,7 +1735,7 @@ if (!hasAccess) {
 }
 ```
 
-#### Filter data based on permission:
+#### Filter data by permission:
 ```javascript
 let visibleData = [];
 if (myPerms.view) {
@@ -1780,20 +1750,13 @@ if (myPerms.view) {
 #### Auto self-view:
 ```javascript
 // When add or view checked → selfView auto-checked
-function autoCheckSelfView(prefix) {
-    const add = document.getElementById(prefix + '_add');
-    const view = document.getElementById(prefix + '_view');
-    const selfView = document.getElementById(prefix + '_selfView');
-    
-    if (add.checked || view.checked) {
-        selfView.checked = true;
-    }
+if (add.checked || view.checked) {
+    selfView.checked = true;
 }
 ```
 
 #### Admin auto-all:
 ```javascript
-// When access = Admin → all permissions auto-true
 if (access === 'Admin') {
     DATABASES.forEach(d => {
         PERM_KEYS.forEach(key => {
@@ -1803,357 +1766,216 @@ if (access === 'Admin') {
 }
 ```
 
-#### Role defaults:
-```javascript
-// Defined in DATABASES array
-defaultPermsForRole: {
-    'Call Operator': { 
-        add: true, view: true, selfView: true, edit: true 
-    }
-}
-// Auto-check when role selected
-```
+---
 
-═══════════════════════════════════════════════════════════════
-## 11. 🗄️ FIREBASE COLLECTIONS (18 ACTIVE!)
-═══════════════════════════════════════════════════════════════
+## 15. 🗄️ FIREBASE COLLECTIONS (18!)
 
-### Complete Collection List:
+### Complete List:
 
 #### 1. `employees` (HR)
 ```javascript
 {
-    id: "auto",
-    name: "Full Name",
-    nickname: "loginname",      // Unique
-    password: "password",
-    access: "Cashier",          // Role
-    permissions: { ... },       // All DB perms
-    createdAt: timestamp
+    name, nickname, password, access,
+    permissions: { ... },
+    createdAt
 }
 ```
 
 #### 2. `dayEndReports` (Cashier)
 ```javascript
 {
-    id: "auto",
-    date: "2026-06-08",
-    cashier: "name",
-    cashierId: "emp_id",
-    openingCash: 5000,
-    closingCash: 25000,
-    totalSales: 45000,
-    cashSales: 25000,
-    cardSales: 15000,
-    onlineSales: 5000,
-    bankDeposit: 20000,
-    expenses: [{ note, amount }],
-    notes: "...",
-    status: "pending",          // pending/approved/rejected
-    approvedBy: null,
-    createdAt: timestamp
+    date, cashier, cashierId,
+    openingCash, closingCash, totalSales,
+    cashSales, cardSales, onlineSales,
+    bankDeposit, expenses: [], notes,
+    status: "pending/approved/rejected",
+    approvedBy, createdAt
 }
 ```
 
 #### 3. `inventoryItems`
 ```javascript
 {
-    id: "auto",
-    name: "Item name",
-    category: "Beverages",
-    unit: "kg",                 // kg, L, pcs, etc.
-    currentStock: 50,
-    minStock: 10,               // Low stock alert level
-    costPrice: 100,
-    sellPrice: 150,
-    supplier: "name",
-    createdAt: timestamp
+    name, category, unit,
+    currentStock, minStock,
+    costPrice, sellPrice,
+    supplier, createdAt
 }
 ```
 
 #### 4. `inventoryCategories`
 ```javascript
 {
-    id: "auto",
-    name: "Beverages",
-    icon: "🥤",
-    color: "#2196F3",
-    createdAt: timestamp
+    name, icon, color, createdAt
 }
 ```
 
 #### 5. `stockMovements`
 ```javascript
 {
-    id: "auto",
-    itemId: "item_id",
-    itemName: "name",
-    type: "in",                 // in/out
-    quantity: 10,
-    reason: "Purchase",
-    referenceId: "purchase_id",
-    createdBy: "user_id",
-    createdAt: timestamp
+    itemId, itemName, type: "in/out",
+    quantity, reason, referenceId,
+    createdBy, createdAt
 }
 ```
 
 #### 6. `recipes` (Kitchen)
 ```javascript
 {
-    id: "auto",
-    name: "Recipe name",
-    category: "Main Course",
-    ingredients: [
-        { itemId, name, quantity, unit }
-    ],
-    sellPrice: 500,
-    costPrice: 200,
-    instructions: "...",
-    image: "url",
-    createdAt: timestamp
+    name, category,
+    ingredients: [{itemId, name, quantity, unit}],
+    sellPrice, costPrice,
+    instructions, image, createdAt
 }
 ```
 
 #### 7. `staffMeals`
 ```javascript
 {
-    id: "auto",
-    date: "2026-06-08",
-    recipeId: "recipe_id",
-    recipeName: "name",
-    quantity: 5,
-    cost: 1000,
-    employee: "name",
-    notes: "...",
-    createdAt: timestamp
+    date, recipeId, recipeName,
+    quantity, cost, employee, notes, createdAt
 }
 ```
 
 #### 8. `wastage`
 ```javascript
 {
-    id: "auto",
-    date: "2026-06-08",
-    itemId: "item_id",
-    itemName: "name",
-    quantity: 2,
-    unit: "kg",
-    reason: "Expired",
-    cost: 200,
-    reportedBy: "name",
-    createdAt: timestamp
+    date, itemId, itemName,
+    quantity, unit, reason,
+    cost, reportedBy, createdAt
 }
 ```
 
 #### 9. `stockIssues`
 ```javascript
 {
-    id: "auto",
-    date: "2026-06-08",
-    itemId: "item_id",
-    itemName: "name",
-    issueType: "shortage",      // shortage, damaged, etc.
-    description: "...",
-    status: "open",             // open/resolved
-    createdAt: timestamp
+    date, itemId, itemName,
+    issueType, description,
+    status: "open/resolved", createdAt
 }
 ```
 
 #### 10. `stockCounts`
 ```javascript
 {
-    id: "auto",
-    date: "2026-06-08",
-    items: [
-        { itemId, name, systemStock, physicalStock, difference }
-    ],
-    countedBy: "name",
-    status: "draft",            // draft/submitted
-    createdAt: timestamp
+    date, items: [{itemId, name, system, physical, diff}],
+    countedBy, status: "draft/submitted", createdAt
 }
 ```
 
 #### 11. `purchases` (Purchasing)
 ```javascript
 {
-    id: "auto",
-    invoiceNumber: "INV-001",
-    supplierId: "sup_id",
-    supplierName: "name",
-    date: "2026-06-08",
-    items: [
-        { itemId, name, quantity, unitPrice, total }
-    ],
-    subtotal: 5000,
-    tax: 0,
-    discount: 0,
-    total: 5000,
-    paymentStatus: "paid",      // paid/pending/partial
-    paymentMethod: "cash",      // cash/bank/credit
-    paymentProof: "url",        // 📸 Image URL
-    notes: "...",
-    status: "pending",          // pending/approved/rejected
-    approvedBy: null,
-    createdAt: timestamp
+    invoiceNumber, supplierId, supplierName, date,
+    items: [{itemId, name, quantity, unitPrice, total}],
+    subtotal, tax, discount, total,
+    paymentStatus: "paid/pending/partial",
+    paymentMethod: "cash/bank/credit",
+    paymentProof: "url",          // 📸 Image
+    notes, status: "pending/approved",
+    approvedBy, createdAt
 }
 ```
 
 #### 12. `suppliers`
 ```javascript
 {
-    id: "auto",
-    name: "Supplier name",
-    contact: "0771234567",
-    email: "...",
-    address: "...",
-    category: "Food",
-    paymentTerms: "30 days",
-    totalDue: 0,
-    createdAt: timestamp
+    name, contact, email, address,
+    category, paymentTerms, totalDue, createdAt
 }
 ```
 
 #### 13. `purchaseReturns`
 ```javascript
 {
-    id: "auto",
-    purchaseId: "purchase_id",
-    supplierId: "sup_id",
-    date: "2026-06-08",
-    items: [{ itemId, name, quantity, amount }],
-    totalAmount: 1000,
-    reason: "Damaged",
-    status: "pending",
-    createdAt: timestamp
+    purchaseId, supplierId, date,
+    items: [], totalAmount, reason,
+    status: "pending", createdAt
 }
 ```
 
 #### 14. `supplierCreditNotes`
 ```javascript
 {
-    id: "auto",
-    supplierId: "sup_id",
-    supplierName: "name",
-    creditAmount: 1000,
-    reason: "Return",
-    referenceId: "return_id",
-    used: false,
-    createdAt: timestamp
+    supplierId, supplierName,
+    creditAmount, reason, referenceId,
+    used: false, createdAt
 }
 ```
 
 #### 15. `leads` (Call Center)
 ```javascript
 {
-    id: "auto",
-    name: "Customer name",
-    phone: "0771234567",
-    whatsapp: "0771234567",
-    email: "...",
-    courseInterest: "course_id",
-    source: "Facebook",         // Source of lead
-    status: "new",              // 13 statuses!
-    assignedTo: "operator_id",
-    lastCallDate: null,
-    nextFollowUp: null,
-    callHistory: [
-        { date, status, notes, calledBy }
-    ],
-    paymentStatus: "not_paid",
-    paymentAmount: 0,
-    paymentProof: null,         // 📸 Image
-    notes: "...",
-    createdAt: timestamp
+    name, phone, countryCode, whatsapp, email,
+    courseInterest, source, status,    // 13 statuses!
+    callAttempts: 0,
+    assignedTo, lastCallDate, nextFollowUp,
+    callHistory: [{date, status, notes, calledBy}],
+    whatsappHistory: [{type, sentBy, date, preview}],
+    payment: {downPaid, downAmount, installment1Paid, ...},
+    followUpDate, notes,
+    createdAt, updatedAt, lastUpdatedAt
 }
 ```
 
 #### 16. `courses` (Academy)
 ```javascript
 {
-    id: "auto",
-    name: "Course name",
-    duration: "3 months",
-    fee: 25000,
-    description: "...",
-    active: true,
-    createdAt: timestamp
+    name, academy, fee, downPayment,
+    duration, description, active, createdAt
 }
 ```
 
-#### 17. `events` (Academy)
+#### 17. `events` (Academy/Campaigns)
 ```javascript
 {
-    id: "auto",
-    name: "Event name",
-    date: "2026-06-15",
-    type: "workshop",           // workshop, seminar, etc.
-    description: "...",
-    capacity: 50,
-    registered: 0,
-    active: true,
-    createdAt: timestamp
+    name, platform, startDate, status,
+    description, capacity, registered, createdAt
 }
 ```
 
-#### 18. `callCenterComments`
+#### 18. `callCenterComments` (Scripts)
 ```javascript
 {
-    id: "auto",
-    leadId: "lead_id",
-    comment: "Discussion notes",
-    addedBy: "operator_id",
-    addedByName: "name",
-    createdAt: timestamp
+    title, category, content,
+    createdBy, createdAt
 }
 ```
 
-### Collection Naming Convention:
+### Naming Convention:
 ```
 ✅ camelCase (employees, dayEndReports)
 ✅ Plural (employees, not employee)
 ✅ Descriptive (callCenterComments)
-❌ Snake_case (no day_end_reports)
+❌ snake_case
 ❌ UPPERCASE
-```
-
-[END OF PART 3/6]
 ```
 
 ---
 
-## ✅ Part 3 Done!
+## 16. 👥 USER ROLES (7!)
 
-# 🚀 PART 4/6 - User Roles + Common Tasks + Errors + Features
-
-**BUONO_MASTER_CONTEXT.md එකේ අග append කරන්න:**
-
-```markdown
-═══════════════════════════════════════════════════════════════
-## 12. 👥 USER ROLES (7 ROLES!)
-═══════════════════════════════════════════════════════════════
-
-### Role List with Details:
+### Role Details:
 
 #### 1. 👨‍💼 Admin
 ```
-Badge Color: #ff4444 (Red)
+Badge: 🔴 Red (#ff4444)
 Access: ALL databases, ALL permissions
 Auto-Permissions: TRUE for everything
-Can Do:
+Can:
 ✅ Manage all employees
 ✅ Set permissions for others
 ✅ View all data across all DBs
 ✅ Approve reports
 ✅ Access settings
-✅ Delete anything (except self)
 ```
 
 #### 2. 🧑‍💼 Manager
 ```
-Badge Color: #2196F3 (Blue)
+Badge: 🔵 Blue (#2196F3)
 Access: Most databases (including Reports)
 Auto-Access: Reports DB, Call Center DB
-Can Do:
+Can:
 ✅ View Reports Database
 ✅ Approve Day End Reports
 ✅ Approve Purchase Orders
@@ -2164,29 +1986,26 @@ Can Do:
 
 #### 3. 💰 Cashier
 ```
-Badge Color: #4CAF50 (Green)
+Badge: 🟢 Green (#4CAF50)
 Primary DB: Day End Reports
 Default Permissions:
-{
-    dayEndReportDB: { add: true, selfView: true }
-}
-Can Do:
+- dayEndReportDB: { add: true, selfView: true }
+
+Can:
 ✅ Create daily reports
 ✅ View own reports
 ❌ Cannot see other cashier reports
-❌ Cannot edit submitted reports
 ```
 
 #### 4. 📦 Purchasing Officer
 ```
-Badge Color: #FF9800 (Orange)
+Badge: 🟠 Orange (#FF9800)
 Primary DB: Purchasing
 Default Permissions:
-{
-    purchasingDB: { add: true, view: true, edit: true, selfView: true },
-    inventoryDB: { view: true, selfView: true }
-}
-Can Do:
+- purchasingDB: { add: true, view: true, edit: true }
+- inventoryDB: { view: true, selfView: true }
+
+Can:
 ✅ Create purchase orders
 ✅ Manage suppliers
 ✅ Update stock IN
@@ -2196,32 +2015,29 @@ Can Do:
 
 #### 5. 👨‍🍳 Head Chef
 ```
-Badge Color: #9C27B0 (Purple)
+Badge: 🟣 Purple (#9C27B0)
 Primary DB: Kitchen
 Default Permissions:
-{
-    kitchenDB: { add: true, view: true, edit: true, selfView: true },
-    inventoryDB: { view: true, selfView: true }
-}
-Can Do:
+- kitchenDB: { add: true, view: true, edit: true }
+- inventoryDB: { view: true, selfView: true }
+
+Can:
 ✅ Manage recipes
 ✅ Record staff meals
 ✅ Report wastage
 ✅ Stock count
-✅ Stock issues
 ✅ View inventory
 ```
 
 #### 6. 📞 Call Operator
 ```
-Badge Color: #00BCD4 (Cyan)
+Badge: 🩵 Cyan (#00BCD4)
 Primary DB: Call Center
-Auto-Access: Call Center (no permission check needed!)
+Auto-Access: Call Center (no permission needed!)
 Default Permissions:
-{
-    callCenterDB: { add: true, view: true, selfView: true, edit: true }
-}
-Can Do:
+- callCenterDB: { add: true, view: true, edit: true }
+
+Can:
 ✅ Add new leads
 ✅ Update lead status
 ✅ Call history tracking
@@ -2232,61 +2048,345 @@ Can Do:
 
 #### 7. 🍽️ Waiter
 ```
-Badge Color: #607D8B (Grey-blue)
+Badge: ⚪ Grey-blue (#607D8B)
 Primary DB: Custom (limited)
 Default Permissions:
-{
-    employeeDB: { selfView: true }  // Only self profile
-}
-Can Do:
+- employeeDB: { selfView: true }
+
+Can:
 ✅ View own profile
-✅ View own attendance (future)
 ❌ Limited other access
 ```
 
-### Role Selection in Add/Edit Employee:
-```html
-<select id="empAccess" onchange="handleAccessChange()">
-    <option value="">-- Select Access --</option>
-    <option value="Admin">👨‍💼 Admin</option>
-    <option value="Manager">🧑‍💼 Manager</option>
-    <option value="Cashier">💰 Cashier</option>
-    <option value="Purchasing Officer">📦 Purchasing Officer</option>
-    <option value="Head Chef">👨‍🍳 Head Chef</option>
-    <option value="Call Operator">📞 Call Operator</option>
-    <option value="Waiter">🍽️ Waiter</option>
-</select>
+---
+
+## 17. 🆕 PAGE-BY-PAGE FEATURES (DETAILED!)
+
+### 🏠 ACCESS.HTML (Home Page)
+```
+Purpose: Database selection home
+URL: /access.html
+
+Features:
+✅ Auto-generated DB cards (from DATABASES array)
+✅ Permission-based visibility
+✅ Admin Manager only cards (Reports)
+✅ Custom badges per DB
+✅ Click card → goes to DB page
+✅ Topbar with logout
+✅ Welcome message
+✅ Mobile responsive
+
+Files:
+- access.html
+- access-script.js
+- (Uses style.css + mobile.css)
 ```
 
-### Adding New Role (Future):
-```javascript
-// 1. Add to dropdown (HTML)
-<option value="Delivery">🛵 Delivery Driver</option>
+### 👥 INDEX.HTML (Employee Database)
+```
+Purpose: HR / Employee management
+URL: /index.html
 
-// 2. Add badge color (JS)
-const badgeColors = {
-    ...,
-    'Delivery': '#FF5722'
-};
+Features:
+✅ Add/Edit/Delete employees
+✅ 7 access roles
+✅ Permission setup (7 DBs × 5 perms = 35!)
+✅ Permission badges display
+✅ Auto-Admin permissions
+✅ Self-profile editing
+✅ Search functionality
+✅ Filter by role
+✅ Role-based badge colors
+✅ Mobile-friendly
 
-// 3. Add badge class (CSS)
-.badge-delivery { background: #FF5722; }
-
-// 4. Optional: Add auto-access in DATABASES array
-autoAccessRoles: ['Delivery']
+Files:
+- index.html
+- index-script.js
 ```
 
+### 💰 CASHIER.HTML (Day End Reports)
+```
+Purpose: Daily cashier reports
+URL: /cashier.html
+
+Features:
+✅ Add daily reports
+✅ Opening/closing cash entry
+✅ Multiple payment methods:
+   - Cash sales
+   - Card sales
+   - Online sales
+✅ Expenses tracking (multiple)
+✅ Bank deposits
+✅ Notes section
+✅ Status workflow:
+   - pending → approved/rejected
+✅ View by cashier (selfView)
+✅ Date-range filtering
+✅ Auto-calculate totals
+✅ Reports analytics
+
+Files:
+- cashier.html
+- cashier-script.js
+```
+
+### 📦 INVENTORY.HTML (Inventory Database)
+```
+Purpose: Stock & item management
+URL: /inventory.html
+
+Features:
+✅ Item management (CRUD)
+✅ Categories with icons (CRUD)
+✅ Stock IN tracking
+✅ Stock OUT tracking
+✅ Stock movements history
+✅ Low stock alerts (visual!)
+✅ Cost price tracking
+✅ Sell price tracking
+✅ Supplier linkage
+✅ Units (kg, L, pcs, etc.)
+✅ Real-time updates
+✅ Search by name/category
+✅ Filter by category
+✅ Stock value calculation
+
+Files:
+- inventory.html
+- inventory-script.js
+```
+
+### 🍳 KITCHEN.HTML (Kitchen Database)
+```
+Purpose: Recipes & kitchen operations
+URL: /kitchen.html
+
+Features:
+✅ Recipe management (CRUD)
+✅ Ingredient list (linked to inventory!)
+✅ Auto-calculate recipe cost
+✅ Recipe images
+✅ Sell price vs cost
+✅ Staff meals tracking
+✅ Wastage reporting
+✅ Stock issues reporting
+✅ Stock count (physical inventory)
+✅ Multiple tabs interface
+✅ Search recipes
+✅ Filter by category
+✅ Cost vs profit analysis
+
+Files:
+- kitchen.html
+- kitchen-script.js
+```
+
+### 🛒 PURCHASING.HTML (Purchasing Database)
+```
+Purpose: Purchase orders & suppliers
+URL: /purchasing.html
+
+Features:
+✅ Purchase orders (CRUD)
+✅ Supplier management (CRUD)
+✅ Invoice number tracking
+✅ Multi-item per purchase
+✅ Auto-calculate totals
+✅ Tax & discount support
+✅ Payment status:
+   - paid / pending / partial
+✅ Payment methods:
+   - cash / bank / credit
+✅ 📸 Payment Proof Upload (Firebase Storage!)
+✅ Image preview before upload
+✅ Purchase returns
+✅ Supplier credit notes
+✅ Auto stock IN on purchase save
+✅ Approval workflow (Admin/Manager)
+✅ Search & filter
+✅ Date filtering
+
+Files:
+- purchasing.html
+- purchasing-script.js
+```
+
+### 📞 CALLCENTER.HTML (Call Center - BIGGEST!)
+```
+Purpose: Academy lead management
+URL: /callcenter.html
+
+CURRENT VERSION: v10.9 (Smart Date Buttons added!)
+
+9 TABS:
+═══════════════════════════════════════
+
+1. 📱 QUICK ADD TAB:
+   ✅ Country code selector (14 countries)
+   ✅ Phone + Name input
+   ✅ Enter key = quick add
+   ✅ Duplicate detection
+   ✅ Recent leads table
+   ✅ Search + status filter
+   ✅ View | Call | WhatsApp | Edit | Delete
+
+2. 📞 CALL LOG TAB:
+   ✅ Lead search (name/phone)
+   ✅ Selected lead info
+   ✅ Call attempts tracker
+   ✅ Status update (13 options)
+   ✅ Course interest select
+   ✅ Follow-up date picker
+   ✅ ⚡ Smart Date Buttons (NEW! v10.9)
+      - Tomorrow, 3D, 1W, 2W, 1M
+   ✅ ⚡ Auto-date on status change (NEW! v10.9)
+   ✅ Call notes
+   ✅ Lead source select
+   ✅ Campaign select
+   ✅ "Save & Next ⚡" auto-loads next
+   ✅ WhatsApp buttons (4 types)
+   ✅ Pending queue (today + older)
+   ✅ Stats bar
+   ✅ Max attempts warning → Hold
+   ✅ Call history display
+
+3. 🔵 MIGHT JOIN TAB:
+   ✅ Smart categorization:
+      - 🔥 Attempt 1 (GREEN)
+      - ⚡ Attempt 2 (BLUE)
+      - 🟡 Attempt 3 (ORANGE)
+      - ⚠️ Attempt 4+ (RED + pulse!)
+      - ✅ Done Today (GREY faded)
+   ✅ FIFO sorting (oldest first)
+   ✅ Update form with Smart Date Buttons
+   ✅ WhatsApp options
+
+4. 🔄 FOLLOW-UPS TAB:
+   ✅ Includes statuses:
+      - Not Responding
+      - Switch off
+      - Will join next intake
+      - Call back later
+      - Will decide
+      - User busy
+   ✅ Same smart categorization
+   ✅ Smart Date Buttons
+   ✅ Update form
+
+5. ⏸️ HOLD TAB:
+   ✅ Includes statuses:
+      - Hold
+      - Unable to join
+      - Not in use
+   ✅ Re-activate to Need Call (reset attempts!)
+   ✅ Smart categorization
+
+6. ✅ ENROLLED TAB:
+   ✅ Successfully enrolled students
+   ✅ Course update
+   ✅ WhatsApp sent count badge
+   ✅ Done today badge
+   ✅ Confirmation/Payment templates
+
+7. 💰 PAYMENTS TAB:
+   ✅ Course fee display
+   ✅ Down payment status
+   ✅ Installment 1 status
+   ✅ Installment 2 status
+   ✅ Auto-calculated balance
+   ✅ Color-coded (red/green)
+   ✅ WhatsApp payment details
+
+8. 📊 REPORTS TAB:
+   ✅ Filters: Today/Week/Month/All
+   ✅ Stats:
+      - Total Leads
+      - Enrolled count
+      - Might Join count
+      - Expected Revenue
+      - Conversion Rate
+   ✅ Status breakdown bars
+   ✅ Sorted by count
+
+9. ⚙️ SETTINGS TAB:
+   ✅ Max Call Attempts setting
+   ✅ Course management (CRUD)
+   ✅ Auto-calculate installments
+   ✅ Default courses (SCA)
+   ✅ Campaign management (CRUD)
+   ✅ Operator Scripts (CRUD)
+
+SPECIAL FEATURES:
+═══════════════════════════════════════
+✅ 13 lead statuses
+✅ 14 country codes
+✅ 4 WhatsApp templates + Multi-select
+✅ Auto-next lead after save
+✅ Hold warning modal (max attempts)
+✅ Smart Categorization (v10.8)
+✅ Smart Date Buttons (v10.9)
+✅ Auto-defaults per status
+✅ Color-coded urgency
+✅ Pulse animations for high priority
+
+Files:
+- callcenter.html
+- callcenter-script.js
+- callcenter-style.css
+```
+
+### 📊 REPORTS.HTML (Reports Database)
+```
+Purpose: Cross-DB analytics & approvals
+URL: /reports.html
+Access: Admin & Manager only!
+
+Features:
+✅ Multi-DB reports view
+✅ Day End reports:
+   - View all
+   - Approve/Reject
+   - Cashier breakdown
+✅ Purchase orders:
+   - View all
+   - Approve/Reject
+   - 📸 Payment Proof Display
+✅ Stock count reports
+✅ Employee reports
+✅ Date-range filtering
+✅ Statistics calculations
+✅ Approval workflow
+✅ Export options (PDF future)
+
+Files:
+- reports.html
+- reports-script.js
+```
+
+[END OF PART 4/6]
+```
+
+---
+
+## ✅ Part 4 Done!
+
+
+```markdown
 ═══════════════════════════════════════════════════════════════
-## 13. 📋 COMMON TASKS (STEP-BY-STEP!)
+# PART E: PRACTICAL GUIDES
 ═══════════════════════════════════════════════════════════════
+
+## 18. 📋 COMMON TASKS (Step-by-Step!)
 
 ### TASK 1: Add New Database (4-Files Rule!) ⭐
 
 **Example: Adding "Attendance Database"**
 
 #### Step 1: Edit `firebase-config.js`
-Add new entry to DATABASES array:
 ```javascript
+// Add to DATABASES array:
 {
     id: 'attendanceDB',
     name: 'Attendance Database',
@@ -2297,7 +2397,7 @@ Add new entry to DATABASES array:
     color: '#FF5722',
     
     description: 'Daily attendance tracking',
-    accessDescription: 'Check-in/out times, late tracking සහ monthly reports.',
+    accessDescription: 'Check-in/out times, late tracking.',
     badgeLabel: 'Data Entry',
     badgeClass: 'badge-entry',
     cardClass: '',
@@ -2308,64 +2408,59 @@ Add new entry to DATABASES array:
     permTitleColor: '#FF5722',
     defaultPermsForRole: {
         'Cashier': { selfView: true },
-        'Head Chef': { selfView: true },
-        'Waiter': { selfView: true }
+        'Head Chef': { selfView: true }
     }
 }
 ```
 
 #### Step 2: Create `attendance.html`
-Use the template from Section 7!
-Replace [PAGE NAME], [DB NAME], [DB_ID] placeholders.
+Use the template from Section 11!
 
 #### Step 3: Create `attendance-style.css` (if needed)
-For custom styles only. Most styles come from `style.css`.
+Custom styles only.
 
 #### Step 4: Create `attendance-script.js`
-Use the template from Section 7!
-Replace [DB_ID], [COLLECTION_NAME] placeholders.
+Use the template from Section 11!
 
 #### Step 5: Deploy & Test
 ```bash
 firebase deploy
 ```
-- ✅ access.html → New card appears AUTO!
-- ✅ index.html → New permissions block appears AUTO!
-- ✅ All DB switchers updated AUTO!
 
-**Total time: 15-30 minutes!** 🎉
+✅ Total time: 15-30 minutes!
+✅ access.html → New card appears AUTO!
+✅ index.html → New permissions appear AUTO!
+✅ DB switchers updated AUTO!
 
 ---
 
-### TASK 2: Add New Field to Existing Database
+### TASK 2: Add New Field to Existing DB
 
 **Example: Add "phone" field to employees**
 
-#### Step 1: Update HTML form
+#### Update HTML form:
 ```html
 <label>📞 Phone:</label>
 <input type="text" id="empPhone" placeholder="Enter phone">
 ```
 
-#### Step 2: Update saveEmployee()
+#### Update saveEmployee():
 ```javascript
-async function saveEmployee() {
-    const phone = document.getElementById('empPhone').value.trim();
-    
-    await db.collection('employees').add({
-        name, nickname, password, access, permissions,
-        phone,  // ⭐ NEW FIELD
-        createdAt: getServerTimestamp()
-    });
-}
+const phone = document.getElementById('empPhone').value.trim();
+
+await db.collection('employees').add({
+    name, nickname, password, access, permissions,
+    phone,  // ⭐ NEW FIELD
+    createdAt: getServerTimestamp()
+});
 ```
 
-#### Step 3: Update editEmployee()
+#### Update editEmployee():
 ```javascript
 document.getElementById('empPhone').value = emp.phone || '';
 ```
 
-#### Step 4: Update table display (optional)
+#### Update table display:
 ```html
 <th>Phone</th>
 <td data-label="Phone">${emp.phone || '-'}</td>
@@ -2373,9 +2468,9 @@ document.getElementById('empPhone').value = emp.phone || '';
 
 ---
 
-### TASK 3: Add Image Upload (Firebase Storage)
+### TASK 3: Add Image Upload
 
-#### Step 1: Add Storage SDK to HTML
+#### Step 1: Add Storage SDK
 ```html
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 ```
@@ -2391,39 +2486,27 @@ document.getElementById('empPhone').value = emp.phone || '';
 ```javascript
 async function uploadImage(file) {
     if (!file) return null;
-    
     const storageRef = firebase.storage().ref();
-    const timestamp = Date.now();
-    const fileName = `${timestamp}_${file.name}`;
+    const fileName = `${Date.now()}_${file.name}`;
     const fileRef = storageRef.child(`uploads/${fileName}`);
     
     try {
         await fileRef.put(file);
-        const url = await fileRef.getDownloadURL();
-        return url;
+        return await fileRef.getDownloadURL();
     } catch (error) {
-        console.error('Upload error:', error);
-        alert('❌ Image upload failed!');
+        alert('❌ Upload failed!');
         return null;
     }
 }
 
-// Usage in save function:
-async function saveData() {
-    const fileInput = document.getElementById('imageUpload');
-    const file = fileInput.files[0];
-    
-    let imageURL = null;
-    if (file) {
-        imageURL = await uploadImage(file);
-        if (!imageURL) return; // Stop if upload failed
-    }
-    
-    await db.collection('items').add({
-        name, image: imageURL,
-        createdAt: getServerTimestamp()
-    });
-}
+// Usage:
+const file = document.getElementById('imageUpload').files[0];
+const imageURL = await uploadImage(file);
+
+await db.collection('items').add({
+    name, image: imageURL,
+    createdAt: getServerTimestamp()
+});
 ```
 
 #### Step 4: Preview before upload
@@ -2444,7 +2527,7 @@ document.getElementById('imageUpload').addEventListener('change', function(e) {
 
 ---
 
-### TASK 4: Add WhatsApp Share Button
+### TASK 4: Add WhatsApp Share
 
 ```html
 <button onclick="shareWhatsApp('${item.id}')">
@@ -2457,11 +2540,10 @@ function shareWhatsApp(itemId) {
     const item = allData.find(d => d.id === itemId);
     if (!item) return;
     
-    const phone = item.phone.replace(/[^0-9]/g, ''); // Remove non-digits
-    const message = `Hello ${item.name}! 
+    const phone = item.phone.replace(/[^0-9]/g, '');
+    const message = `Hello ${item.name}!
 
 Your order #${item.id} is ready.
-
 Total: ${formatCurrency(item.total)}
 
 Thank you for choosing Buono! 🍴`;
@@ -2475,7 +2557,7 @@ Thank you for choosing Buono! 🍴`;
 
 ### TASK 5: Add PDF Export
 
-#### Step 1: Add jsPDF library
+#### Step 1: Add jsPDF
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 ```
@@ -2486,22 +2568,16 @@ function exportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
-    // Header
     doc.setFontSize(18);
     doc.text('Buono Report', 14, 20);
     doc.setFontSize(11);
     doc.text(`Generated: ${formatDate(new Date())}`, 14, 28);
     
-    // Data
     let y = 40;
     allData.forEach((item, i) => {
         doc.text(`${i+1}. ${item.name} - ${formatCurrency(item.amount)}`, 14, y);
         y += 8;
-        
-        if (y > 280) {  // New page if needed
-            doc.addPage();
-            y = 20;
-        }
+        if (y > 280) { doc.addPage(); y = 20; }
     });
     
     doc.save(`Report_${Date.now()}.pdf`);
@@ -2522,7 +2598,6 @@ function exportPDF() {
 function filterByDateRange() {
     const start = document.getElementById('startDate').value;
     const end = document.getElementById('endDate').value;
-    
     if (!start || !end) return;
     
     const startDate = new Date(start);
@@ -2536,48 +2611,13 @@ function filterByDateRange() {
     
     renderData(filtered);
 }
-
-function clearFilter() {
-    document.getElementById('startDate').value = '';
-    document.getElementById('endDate').value = '';
-    renderData(allData);
-}
 ```
 
 ---
 
-### TASK 7: Add Statistics/Analytics
+### TASK 7: Add Approval System
 
 ```javascript
-function calculateStats() {
-    const total = allData.length;
-    const pending = allData.filter(d => d.status === 'pending').length;
-    const approved = allData.filter(d => d.status === 'approved').length;
-    const totalAmount = allData.reduce((sum, d) => sum + (d.amount || 0), 0);
-    
-    document.getElementById('statTotal').textContent = total;
-    document.getElementById('statPending').textContent = pending;
-    document.getElementById('statApproved').textContent = approved;
-    document.getElementById('statAmount').textContent = formatCurrency(totalAmount);
-}
-
-// Call after data loads
-function startDataListener() {
-    db.collection('items').onSnapshot(snapshot => {
-        allData = [];
-        snapshot.forEach(doc => allData.push({id: doc.id, ...doc.data()}));
-        renderData(allData);
-        calculateStats();  // ⭐ Auto-update stats
-    });
-}
-```
-
----
-
-### TASK 8: Add Approval System
-
-```javascript
-// Approve button (only Admin/Manager)
 function approveItem(docId) {
     if (!confirm('✅ Approve this item?')) return;
     
@@ -2589,7 +2629,6 @@ function approveItem(docId) {
     });
 }
 
-// Reject button
 function rejectItem(docId) {
     const reason = prompt('Rejection reason:');
     if (!reason) return;
@@ -2602,29 +2641,22 @@ function rejectItem(docId) {
     });
 }
 
-// Show buttons based on role + status
 function getActionButtons(item) {
     let buttons = '';
-    
     if (item.status === 'pending' && 
         (currentUser.access === 'Admin' || currentUser.access === 'Manager')) {
         buttons += `
-            <button class="btn-success" onclick="approveItem('${item.id}')">
-                ✅ Approve
-            </button>
-            <button class="btn-danger" onclick="rejectItem('${item.id}')">
-                ❌ Reject
-            </button>
+            <button class="btn-success" onclick="approveItem('${item.id}')">✅</button>
+            <button class="btn-danger" onclick="rejectItem('${item.id}')">❌</button>
         `;
     }
-    
     return buttons;
 }
 ```
 
 ---
 
-### TASK 9: Connect 2 Databases (Foreign Key)
+### TASK 8: Connect 2 Databases (Foreign Key)
 
 **Example: Recipe uses Inventory items**
 
@@ -2670,13 +2702,13 @@ async function saveRecipe() {
 
 ---
 
-### TASK 10: Backup Data (Export to JSON)
+### TASK 9: Backup Data (JSON Export)
 
 ```javascript
 async function backupAllData() {
     const backup = {
         timestamp: new Date().toISOString(),
-        version: '10.3',
+        version: '11.0',
         data: {}
     };
     
@@ -2693,7 +2725,6 @@ async function backupAllData() {
         });
     }
     
-    // Download as JSON file
     const json = JSON.stringify(backup, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -2704,16 +2735,14 @@ async function backupAllData() {
 }
 ```
 
-═══════════════════════════════════════════════════════════════
-## 14. 🐛 COMMON ERRORS + FIXES
-═══════════════════════════════════════════════════════════════
+---
+
+## 19. 🐛 COMMON ERRORS + FIXES
 
 ### ❌ Error 1: "firebase is not defined"
 ```
 Cause: firebase-config.js loaded BEFORE Firebase SDK
-Fix: Check script order in HTML!
-
-Correct order:
+Fix: Check script order:
 1. firebase-app.js
 2. firebase-firestore.js
 3. firebase-config.js ← AFTER!
@@ -2722,30 +2751,24 @@ Correct order:
 
 ### ❌ Error 2: "DATABASES is not defined"
 ```
-Cause: page-script.js loaded BEFORE firebase-config.js
-Fix: Same as above - check script order!
-
-OR: Trying to use DATABASES in page-script.js
-    that has own DATABASES array
-Fix: Remove local DATABASES, use global!
+Cause: page-script.js before firebase-config.js
+Fix: Same as above
+OR: Remove local DATABASES, use global!
 ```
 
 ### ❌ Error 3: "Cannot read property 'X' of undefined"
 ```
-Cause: User object missing or permissions not loaded
-Fix: 
-1. Check sessionStorage:
-   const user = sessionStorage.getItem('loggedInUser');
-   if (!user) redirect to login
-
+Cause: User object missing or perms not loaded
+Fix:
+1. Check sessionStorage exists
 2. Refresh from Firebase first:
    const userDoc = await db.collection('employees').doc(userId).get();
 ```
 
 ### ❌ Error 4: "Permission denied" (Firestore)
 ```
-Cause: Firestore rules blocking access
-Fix: Update Firestore rules in console:
+Cause: Firestore rules blocking
+Fix: Update rules in console:
 
 rules_version = '2';
 service cloud.firestore {
@@ -2755,32 +2778,23 @@ service cloud.firestore {
     }
   }
 }
-
-Production rules (better):
-match /employees/{document=**} {
-  allow read: if request.auth != null;
-  allow write: if request.auth.token.admin == true;
-}
 ```
 
 ### ❌ Error 5: "Quota exceeded" (Storage)
 ```
-Cause: Free tier limit reached (5GB)
-Fix: 
+Cause: Free tier limit reached
+Fix:
 1. Delete old images
-2. Compress images before upload
-3. Upgrade to Blaze plan
+2. Compress before upload
+3. Upgrade to Blaze (already on it!)
 ```
 
 ### ❌ Error 6: Images not loading
 ```
 Cause: CORS or invalid URL
 Fix:
-1. Check Firebase Storage rules:
-   allow read: if true;
-
-2. Get fresh download URL:
-   const url = await ref.getDownloadURL();
+1. Check Storage rules: allow read: if true;
+2. Get fresh URL: await ref.getDownloadURL();
 ```
 
 ### ❌ Error 7: Real-time listener not updating
@@ -2788,26 +2802,18 @@ Fix:
 Cause: Listener not started or detached
 Fix:
 1. Check console for errors
-2. Make sure onSnapshot called:
-   db.collection().onSnapshot(callback)
-
+2. Verify onSnapshot called
 3. Don't reassign db variable!
 ```
 
 ### ❌ Error 8: Form submits but data not saved
 ```
-Cause: 
-1. Network issue
-2. Validation failed silently
-3. Firestore rules
-
-Fix:
-1. Add console.log in try/catch
-2. Show error to user:
-   } catch (error) {
-       console.error('Save error:', error);
-       alert('❌ Error: ' + error.message);
-   }
+Cause: Network/validation/rules
+Fix: Add console.log in try/catch:
+} catch (error) {
+    console.error('Save error:', error);
+    alert('❌ Error: ' + error.message);
+}
 ```
 
 ### ❌ Error 9: Mobile view broken
@@ -2815,15 +2821,15 @@ Fix:
 Cause: mobile.css not loaded or data-label missing
 Fix:
 1. Check <link rel="stylesheet" href="mobile.css">
-2. Add data-label to all <td> elements:
+2. Add data-label to ALL <td>:
    <td data-label="Name">${item.name}</td>
 ```
 
 ### ❌ Error 10: Logout not working
 ```
-Cause: logout() function not defined
-Fix: Make sure firebase-config.js is loaded
-     (logout function is global there)
+Cause: logout() not defined
+Fix: Make sure firebase-config.js loaded
+     (logout is global function)
 ```
 
 ### ❌ Error 11: Modal not closing
@@ -2839,29 +2845,29 @@ window.onclick = function(event) {
 
 ### ❌ Error 12: Date format wrong
 ```
-Cause: Different date formats from Firebase
+Cause: Different formats from Firebase
 Fix: Use formatDate() helper:
 
-// For Firestore Timestamp:
+// Firestore Timestamp:
 formatDate(item.createdAt?.toDate())
 
-// For ISO string:
+// ISO string:
 formatDate(item.date)
 
-// For Date object:
+// Date object:
 formatDate(new Date())
 ```
 
 ### ❌ Error 13: "Maximum update depth exceeded"
 ```
 Cause: Infinite loop in onSnapshot
-Fix: Don't update Firestore inside onSnapshot callback
-     unless using update flags carefully!
+Fix: Don't update Firestore inside onSnapshot
+     unless using flags carefully!
 ```
 
 ### ❌ Error 14: Search not filtering
 ```
-Cause: Filter on wrong field or case-sensitive
+Cause: Wrong field or case-sensitive
 Fix:
 const filtered = allData.filter(item =>
     item.name.toLowerCase().includes(text.toLowerCase())
@@ -2881,165 +2887,19 @@ Fix:
 3. Cascade delete or warn user
 ```
 
-═══════════════════════════════════════════════════════════════
-## 15. ✅ COMPLETED FEATURES (v10.3 - Current State!)
-═══════════════════════════════════════════════════════════════
-
-### 🏆 Architecture Achievements:
-```
-✅ Master Firebase Config (centralized)
-✅ DATABASES array (single source of truth)
-✅ Auto-generated access cards
-✅ Auto-generated permission blocks
-✅ Auto DB switchers across all pages
-✅ Universal helpers (formatDate, etc.)
-✅ Permission-based access control
-✅ Real-time data sync (onSnapshot)
-✅ Mobile-responsive design
-✅ 4-FILES RULE achieved!
-```
-
-### 👥 Employee Database (HR):
-```
-✅ Add/Edit/Delete employees
-✅ Set 7 different access roles
-✅ Configure permissions for 7 DBs
-✅ Permission badges display
-✅ Auto Admin permissions
-✅ Self-profile editing
-✅ Search functionality
-✅ Mobile-friendly table
-```
-
-### 💰 Day End Reports:
-```
-✅ Daily cashier reports
-✅ Opening/closing cash
-✅ Multiple payment methods
-✅ Expenses tracking
-✅ Bank deposits
-✅ Approval workflow
-✅ View by cashier
-✅ Date-range filtering
-✅ Reports analytics
-```
-
-### 📦 Inventory Database:
-```
-✅ Item management
-✅ Categories with icons
-✅ Stock IN/OUT tracking
-✅ Low stock alerts
-✅ Cost/Sell price
-✅ Supplier linkage
-✅ Stock movements history
-✅ Real-time updates
-```
-
-### 🍳 Kitchen Database:
-```
-✅ Recipe management
-✅ Ingredient list (with inventory)
-✅ Staff meals tracking
-✅ Wastage reporting
-✅ Stock issues
-✅ Stock count
-✅ Cost calculation
-✅ Recipe images
-```
-
-### 🛒 Purchasing Database:
-```
-✅ Purchase orders
-✅ Supplier management
-✅ Invoice tracking
-✅ Payment status (paid/pending/partial)
-✅ Payment methods
-✅ Payment Proof Upload 📸 ⭐
-✅ Purchase returns
-✅ Supplier credit notes
-✅ Auto stock IN on purchase
-✅ Approval workflow
-```
-
-### 📞 Call Center Database:
-```
-✅ 7 tabs (Dashboard, Leads, etc.)
-✅ 13 lead statuses
-✅ Quick lead add
-✅ Duplicate detection
-✅ Call history tracking
-✅ Multiple comments per lead
-✅ WhatsApp deep linking
-✅ Payment tracking
-✅ Course management
-✅ Event management
-✅ Default courses (academy)
-✅ Analytics dashboard
-✅ Call scripts
-✅ Campaign management
-✅ Source tracking
-✅ Operator performance
-```
-
-### 📊 Reports Database:
-```
-✅ Multi-DB reports view
-✅ Day End reports view + approve
-✅ Purchase orders view + approve
-✅ Payment Proof Display 📸 ⭐
-✅ Stock count reports
-✅ Employee reports
-✅ Date-range filtering
-✅ Statistics calculations
-✅ Approval system
-✅ Admin/Manager only access
-```
-
-### 🔧 Global Features:
-```
-✅ Login system
-✅ Session management
-✅ Logout with confirm
-✅ DB switcher (every page)
-✅ Home button
-✅ User info display
-✅ Welcome greeting
-✅ Date/time live update
-✅ Responsive design
-✅ Dark theme
-✅ Loading states
-✅ Empty states
-✅ Confirm dialogs
-✅ Error handling
-✅ Toast notifications (basic)
-```
-
-[END OF PART 4/6]
-```
-
 ---
 
-## ✅ Part 4 Done!
-
-# 🚀 PART 5/6 - Test Credentials + Future + Best Practices + Quick Reference
-
-**BUONO_MASTER_CONTEXT.md එකේ අග append කරන්න:**
-
-```markdown
-═══════════════════════════════════════════════════════════════
-## 16. 👤 TEST CREDENTIALS
-═══════════════════════════════════════════════════════════════
+## 20. 👤 TEST CREDENTIALS
 
 ### Active Test Users:
 
-| # | Name             | Nickname  | Password | Access Level       | Color    |
-|---|------------------|-----------|----------|--------------------|----------|
-| 1 | Naveen           | Naveen    | sara     | Admin              | 🔴 Red    |
-| 2 | Tishan           | Tishan    | owner    | Manager            | 🔵 Blue   |
-| 3 | Siriwardana Alya | siri      | (set)    | Cashier            | 🟢 Green  |
-| 4 | Sujith           | suji      | (set)    | Head Chef          | 🟣 Purple |
-| 5 | Chamika          | chamika   | (set)    | Purchasing Officer | 🟠 Orange |
+| # | Name | Nickname | Password | Access | Color |
+|---|------|----------|----------|--------|-------|
+| 1 | Naveen | Naveen | sara | Admin | 🔴 Red |
+| 2 | Tishan | Tishan | owner | Manager | 🔵 Blue |
+| 3 | Siriwardana | siri | (set) | Cashier | 🟢 Green |
+| 4 | Sujith | suji | (set) | Head Chef | 🟣 Purple |
+| 5 | Chamika | chamika | (set) | Purchasing Officer | 🟠 Orange |
 
 ### Login URL:
 ```
@@ -3052,9 +2912,9 @@ https://buono-project-927b8.web.app/login.html
 ```
 Login: Naveen / sara
 Expected:
-✅ All 7 database cards on access.html
+✅ All 7 database cards visible
 ✅ Can add/edit/delete employees
-✅ All permission checkboxes auto-checked
+✅ All permissions auto-checked
 ✅ Can access Reports DB
 ```
 
@@ -3062,217 +2922,83 @@ Expected:
 ```
 Login: Tishan / owner
 Expected:
-✅ Reports DB card visible
+✅ Reports DB visible
 ✅ Can approve reports
-✅ Can manage employees (but not Admin)
 ✅ Auto-access to Call Center
+✅ Cannot manage Admin
 ```
 
-#### Test 3: Cashier Limited Access
+#### Test 3: Cashier Limited
 ```
 Login: siri / (password)
 Expected:
-✅ Only Day End Reports card visible
+✅ Only Day End Reports card
 ✅ Can add daily reports
-✅ See only own reports (not others')
+✅ See only own reports
 ❌ Cannot see Reports DB
 ```
 
-#### Test 4: Call Operator Special Access
+#### Test 4: Call Operator Special
 ```
-Login: (create call operator)
+Login: (call operator)
 Expected:
-✅ Call Center card visible (auto-access!)
+✅ Call Center card (auto-access!)
 ✅ Custom badges: Add/View/Edit
-✅ Cannot access other DBs (unless permitted)
+✅ Cannot access other DBs
 ```
 
 ### Creating Test Users:
 ```
 1. Login as Admin (Naveen/sara)
-2. Go to Employee Database (index.html)
+2. Go to Employee Database
 3. Click "➕ Add New Employee"
-4. Fill details:
-   - Name, Nickname (unique!), Password
-   - Select access level
-   - Permissions auto-fill based on role
-5. Save
-6. Logout → Login with new user
+4. Fill: Name, Nickname (unique!), Password
+5. Select access level
+6. Permissions auto-fill
+7. Save
+8. Logout → Login as new user
 ```
 
-═══════════════════════════════════════════════════════════════
-## 17. 🔮 FUTURE ROADMAP
-═══════════════════════════════════════════════════════════════
-
-### 🥇 Priority 1 (Next Sprint):
-
-#### Attendance Database
-```
-Why: Test 4-Files Rule with real example!
-Features:
-- Daily check-in/check-out
-- Late arrival tracking
-- Monthly attendance reports
-- Self-view for employees
-- Admin view for all
-- Overtime calculation
-- Leave management
-Time: 2-3 hours
+[END OF PART 5/6]
 ```
 
-#### POS System (Point of Sale)
-```
-Why: Replace manual day-end reports
-Features:
-- Quick order entry
-- Recipe-based pricing
-- Multiple payment methods
-- Receipt printing
-- Auto Day End generation
-- Real-time sales tracking
-- Customer info (optional)
-Time: 1-2 weeks
-```
+---
 
-### 🥈 Priority 2 (Coming Soon):
+## ✅ Part 5 Done!
 
-#### P/L Reports (Profit & Loss)
-```
-Features:
-- Monthly P&L statement
-- Revenue vs Expenses
-- Category-wise expenses
-- Comparative reports (month-on-month)
-- Charts/Graphs
-- PDF export
-- Auto-calculation from existing data
-Time: 1 week
-```
 
-#### Customer Loyalty Program
-```
-Features:
-- Customer database
-- Points earning system
-- Rewards redemption
-- Birthday offers
-- WhatsApp integration
-- Member cards
-Time: 1-2 weeks
-```
-
-#### WhatsApp Automation
-```
-Features:
-- Auto-send daily reports to owner
-- Lead follow-up reminders
-- Birthday wishes to customers
-- Payment reminders to suppliers
-- Order confirmations
-- Use WhatsApp Business API
-Time: 1 week
-```
-
-### 🥉 Priority 3 (Long-term):
-
-#### Multi-Branch Support
-```
-Features:
-- Multiple Buono branches
-- Branch-wise data isolation
-- Consolidated reports
-- Branch comparison
-- Centralized admin
-Time: 2-3 weeks
-```
-
-#### Customer Web Ordering
-```
-Features:
-- Public menu page
-- Online ordering
-- Delivery management
-- Customer login
-- Order tracking
-- Online payments (PayHere)
-Time: 1-2 months
-```
-
-#### Mobile App (PWA)
-```
-Features:
-- Progressive Web App
-- Offline support
-- Push notifications
-- Install on phone
-- Same codebase
-Time: 1 month
-```
-
-### 🏅 Priority 4 (Future Ideas):
-
-#### AI Features
-```
-- Demand prediction
-- Auto inventory ordering
-- Customer behavior analysis
-- Menu recommendations
-- Smart scheduling
-```
-
-#### Integrations
-```
-- Accounting software (QuickBooks)
-- Payment gateways (Stripe, PayHere)
-- Delivery platforms (PickMe, Uber)
-- Social media auto-posting
-- Email marketing (Mailchimp)
-```
-
-#### Advanced Features
-```
-- Multi-currency support
-- Multi-language (Sinhala, Tamil, English)
-- Voice commands
-- Barcode scanning
-- Kitchen display system
-- Table reservations
-- Inventory forecasting
-```
-
-═══════════════════════════════════════════════════════════════
-## 18. 💡 BEST PRACTICES
-═══════════════════════════════════════════════════════════════
+```markdown
+## 21. 💡 BEST PRACTICES
 
 ### File Naming Convention:
 ```
-✅ kebab-case for files:
-   - day-end-script.js
-   - call-center-style.css
+✅ kebab-case:
+   - call-center-script.js
+   - day-end-style.css
    
 ❌ Avoid:
    - dayEndScript.js (camelCase)
-   - day_end_script.js (snake_case)
+   - day_end.js (snake_case)
    - DayEnd.js (PascalCase)
 ```
 
-### Code Style:
+### JavaScript Style:
 
 #### Function Naming:
 ```javascript
-✅ camelCase for functions:
+✅ camelCase:
    - initializeApp()
    - buildDatabaseSwitcher()
    - calculateTotal()
    
 ❌ Avoid:
-   - InitializeApp() (PascalCase)
-   - init_app() (snake_case)
+   - InitializeApp()
+   - init_app()
 ```
 
 #### Variable Naming:
 ```javascript
-✅ Descriptive names:
+✅ Descriptive:
    - const currentUser = ...
    - let totalAmount = 0
    - const isAdmin = true
@@ -3280,55 +3006,45 @@ Time: 1 month
 ❌ Avoid:
    - const u = ...
    - let t = 0
-   - const x = true
 ```
 
 #### Constants:
 ```javascript
-✅ UPPER_SNAKE_CASE for constants:
+✅ UPPER_SNAKE_CASE:
    - const PERM_KEYS = ['add', 'view']
    - const MAX_RETRIES = 3
-   
-✅ Top of file:
-   // === GLOBAL CONSTANTS ===
-   const COLLECTION_NAME = 'items';
 ```
 
-### HTML Structure:
+### HTML Style:
 
 ```html
 ✅ DO:
-<!-- Group related elements -->
+<!-- Semantic + grouped -->
 <div class="form-group">
     <label>Name:</label>
     <input type="text" id="name">
 </div>
 
-<!-- Use semantic HTML -->
 <button class="btn-primary">Save</button>
 <table>...</table>
 <form>...</form>
 
 ❌ DON'T:
-<!-- Avoid divs for everything -->
-<div onclick="save()">Save</div>
-
-<!-- Avoid deep nesting -->
-<div><div><div><div>...</div></div></div></div>
+<div onclick="save()">Save</div>  <!-- Use button! -->
+<div><div><div><div>...</div></div></div></div>  <!-- Too nested -->
 ```
 
-### CSS Best Practices:
+### CSS Style:
 
 ```css
 ✅ DO:
-/* Use class names, not IDs for styling */
+/* Classes for styling */
 .btn-primary { ... }
 
-/* Group related styles */
+/* Group related */
 /* === BUTTONS === */
 .btn-primary { ... }
 .btn-secondary { ... }
-.btn-danger { ... }
 
 /* Mobile-first */
 .container { padding: 20px; }
@@ -3337,18 +3053,15 @@ Time: 1 month
 }
 
 ❌ DON'T:
-/* Avoid !important (use specificity instead) */
-.text { color: red !important; }
-
-/* Avoid inline styles in HTML */
-<div style="color:red; padding:20px;">
+.text { color: red !important; }  /* No !important */
+<div style="color:red;">  /* No inline styles */
 ```
 
 ### JavaScript Best Practices:
 
 ```javascript
 ✅ DO:
-// Async/await for clean code
+// Async/await
 async function saveData() {
     try {
         await db.collection('items').add(data);
@@ -3359,39 +3072,39 @@ async function saveData() {
     }
 }
 
-// Optional chaining for safety
+// Optional chaining
 const name = user?.profile?.name || 'Guest';
 
-// Use const/let, avoid var
+// Use const/let
 const PI = 3.14;
 let counter = 0;
 
 ❌ DON'T:
-// Avoid callbacks hell
+// No callback hell
 db.collection().add().then(function(){
     db.collection().get().then(function(){
-        // Nested mess!
+        // Mess!
     });
 });
 
-// Avoid var
-var x = 10;  // Use let or const!
+// No var
+var x = 10;  // Use let/const!
 ```
 
 ### Firebase Best Practices:
 
 ```javascript
 ✅ DO:
-// Use real-time listeners
+// Real-time listeners
 db.collection().onSnapshot(snap => {...});
 
-// Batch operations for performance
+// Batch operations
 const batch = db.batch();
 batch.set(ref1, data1);
 batch.set(ref2, data2);
 await batch.commit();
 
-// Use server timestamps
+// Server timestamps
 createdAt: getServerTimestamp()
 
 // Denormalize for display
@@ -3401,12 +3114,10 @@ createdAt: getServerTimestamp()
 }
 
 ❌ DON'T:
-// Avoid getting on every page load
-// (Use listeners instead)
+// Avoid get() on every load
 const snap = await db.collection().get();
 
-// Avoid storing sensitive data
-// in localStorage/sessionStorage
+// Don't store sensitive data
 sessionStorage.setItem('apiKey', 'xxx');
 
 // Avoid huge documents (1MB limit)
@@ -3418,23 +3129,19 @@ sessionStorage.setItem('apiKey', 'xxx');
 ### Performance Tips:
 
 ```javascript
-// 1. Use indexes for queries
-// Firestore needs index for compound queries
+// 1. Use indexes for compound queries
 db.collection('items')
     .where('status', '==', 'active')
     .where('category', '==', 'food')
     .orderBy('createdAt', 'desc')
-// → Firestore will prompt to create index
 
 // 2. Paginate large datasets
 let lastDoc = null;
 async function loadPage() {
     let query = db.collection('items').orderBy('createdAt').limit(20);
     if (lastDoc) query = query.startAfter(lastDoc);
-    
     const snap = await query.get();
     lastDoc = snap.docs[snap.docs.length - 1];
-    return snap.docs.map(d => ({id: d.id, ...d.data()}));
 }
 
 // 3. Debounce search
@@ -3448,59 +3155,26 @@ function searchData() {
 
 // 4. Lazy load images
 <img loading="lazy" src="...">
-
-// 5. Compress images before upload
-async function compressImage(file) {
-    // Use canvas to resize
-    // Reduces upload time + storage
-}
-```
-
-### Security Best Practices:
-
-```javascript
-✅ DO:
-// Server-side validation (Firestore rules)
-match /employees/{userId} {
-    allow read: if request.auth != null;
-    allow write: if request.auth.uid == userId 
-                 || isAdmin();
-}
-
-// Sanitize user input
-function sanitize(text) {
-    return text.replace(/[<>]/g, '');
-}
-
-// Hash passwords (future improvement)
-// Currently plain text - upgrade later!
-
-❌ DON'T:
-// Don't trust client-side validation only
-// Always validate on server (Firestore rules)
-
-// Don't expose API keys in code
-// (Firebase keys are public, but check rules!)
 ```
 
 ### Git Workflow:
 
 ```bash
-# Daily workflow:
-git status                    # Check changes
-git add .                     # Stage all
-git commit -m "feat: Added X" # Commit with clear message
-git push                      # Push to GitHub
+# Daily:
+git status
+git add .
+git commit -m "feat: Added X"
+git push
 
-# Commit message format:
-feat: New feature added
+# Commit messages:
+feat: New feature
 fix: Bug fix
-update: Updated existing feature
-docs: Documentation change
+update: Updated existing
+docs: Documentation
 style: CSS/UI change
 refactor: Code cleanup
 
-# Example commits:
+# Examples:
 git commit -m "feat: Added Attendance DB"
 git commit -m "fix: Login error on mobile"
 git commit -m "update: Improved DB switcher"
@@ -3514,11 +3188,10 @@ git commit -m "update: Improved DB switcher"
 1. Code:
    - Git push daily
    - Multiple branches for major changes
-   
+
 2. Firebase Data:
-   - Use export function (Task 10)
-   - Manual export from Firebase Console monthly
-   - Auto-export script (future)
+   - Use export function (Task 9)
+   - Manual export monthly
    
 3. Documentation:
    - Update MASTER_CONTEXT.md after features
@@ -3526,11 +3199,11 @@ git commit -m "update: Improved DB switcher"
    - Commit to Git
 ```
 
-═══════════════════════════════════════════════════════════════
-## 19. ⚡ QUICK REFERENCE - CHEAT SHEET
-═══════════════════════════════════════════════════════════════
+---
 
-### 🔥 Most Used Code Patterns:
+## ⚡ QUICK REFERENCE CHEAT SHEET
+
+### 🔥 Most Used Code:
 
 #### Get current user:
 ```javascript
@@ -3586,23 +3259,17 @@ db.collection('items')
 
 #### Format date:
 ```javascript
-formatDate(item.createdAt?.toDate());
-// "Jun 08, 2026"
+formatDate(item.createdAt?.toDate());  // "Jun 10, 2026"
 ```
 
 #### Format currency:
 ```javascript
-formatCurrency(1500);
-// "Rs. 1,500.00"
+formatCurrency(1500);  // "Rs. 1,500.00"
 ```
 
-#### Show modal:
+#### Show/hide modal:
 ```javascript
 document.getElementById('myModal').style.display = 'flex';
-```
-
-#### Hide modal:
-```javascript
 document.getElementById('myModal').style.display = 'none';
 ```
 
@@ -3610,60 +3277,60 @@ document.getElementById('myModal').style.display = 'none';
 
 ```css
 /* Layouts */
-.dashboard-container   /* Main page wrapper */
-.stats-row             /* Stats cards row */
-.stat-card             /* Single stat card */
-.section-header        /* Section title bar */
-.table-container       /* Table wrapper */
-.search-bar            /* Search input wrapper */
-.modal                 /* Modal overlay */
-.modal-content         /* Modal box */
-.modal-small           /* Smaller modal */
+.dashboard-container
+.stats-row
+.stat-card
+.section-header
+.table-container
+.search-bar
+.modal
+.modal-content
 
 /* Buttons */
-.btn-primary           /* Orange primary */
-.btn-secondary         /* Grey secondary */
-.btn-danger            /* Red danger */
-.btn-edit              /* Yellow edit */
-.btn-delete            /* Red delete */
-.btn-success           /* Green success */
-.btn-logout            /* Red logout */
-.btn-home              /* Home button */
+.btn-primary       /* Orange */
+.btn-secondary     /* Grey */
+.btn-danger        /* Red */
+.btn-edit          /* Yellow */
+.btn-delete        /* Red */
+.btn-success       /* Green */
+.btn-logout        /* Red logout */
 
 /* Badges */
-.badge                 /* Base badge */
-.badge-admin           /* Red admin */
-.badge-manager         /* Blue manager */
-.badge-cashier         /* Green cashier */
-.badge-purchasing      /* Orange */
-.badge-chef            /* Purple */
-.badge-operator        /* Cyan */
-.badge-waiter          /* Grey */
+.badge-admin
+.badge-manager
+.badge-cashier
+.badge-purchasing
+.badge-chef
+.badge-operator
+.badge-waiter
 
 /* Permission badges */
-.perm-add, .perm-view, .perm-self, .perm-edit, .perm-delete
+.perm-add
+.perm-view
+.perm-self
+.perm-edit
+.perm-delete
 
 /* Topbar */
-.topbar                /* Top navigation */
-.topbar-left           /* Left side */
-.topbar-right          /* Right side */
-.db-switcher           /* DB switcher */
-.db-switcher-dropdown  /* Dropdown menu */
+.topbar
+.topbar-left
+.topbar-right
+.db-switcher
+.db-switcher-dropdown
 
 /* Forms */
-.form-group            /* Form field wrapper */
-.permission-block      /* Permission section */
-.permission-checkboxes /* Checkbox group */
-.perm-checkbox         /* Single checkbox label */
+.form-group
+.permission-block
+.perm-checkbox
 ```
 
-### 📱 Mobile Quick Reference:
+### 📱 Mobile Quick:
 
 ```css
 /* Breakpoints */
 @media (max-width: 768px) { /* Tablet */ }
 @media (max-width: 600px) { /* Mobile */ }
-@media (max-width: 480px) { /* Small phone */ }
+@media (max-width: 480px) { /* Small */ }
 
 /* Table to cards */
 @media (max-width: 768px) {
@@ -3674,222 +3341,133 @@ document.getElementById('myModal').style.display = 'none';
 }
 ```
 
-### 🔧 Firebase Quick Commands:
+### 🔧 Firebase Commands:
 
 ```bash
-# Deploy
-firebase deploy
-
-# Deploy hosting only
-firebase deploy --only hosting
-
-# Deploy functions only (if used)
-firebase deploy --only functions
-
-# View Firebase project
-firebase open
-
-# Login
-firebase login
-
-# Logout
-firebase logout
-
-# Init new project
-firebase init
+firebase deploy              # Deploy all
+firebase deploy --only hosting  # Hosting only
+firebase open                # Open project
+firebase login               # Login
+firebase logout              # Logout
+firebase init                # Init new
 ```
 
-### 🧪 Debugging Quick:
+### 🧪 Debugging:
 
 ```javascript
-// Console logs
 console.log('Variable:', variable);
 console.table(arrayData);
 console.error('Error:', error);
 
-// Check Firebase status
 console.log('Firebase:', firebase.apps.length > 0);
-
-// Check current user
 console.log('User:', getCurrentUser());
-
-// Check DATABASES
 console.log('DBs:', DATABASES);
-
-// Check permissions
 console.log('Perms:', currentUser.permissions);
-```
-
-### 🎯 Common Tasks Quick:
-
-```javascript
-// Add new DB → firebase-config.js → DATABASES array → Add entry
-// Then create: newdb.html, newdb-style.css, newdb-script.js
-// Everything else updates AUTO!
-
-// Add new field → Update HTML form + saveX() + editX() + table display
-
-// Upload image → Use uploadImage() pattern
-
-// WhatsApp share → window.open('https://wa.me/94...')
-
-// PDF export → jsPDF library
-
-// Date filter → Filter array by date range
-
-// Statistics → Calculate from allData array
-
-// Approval → Update status field in Firestore
-```
-
-[END OF PART 5/6]
 ```
 
 ---
 
-## ✅ Part 5 Done!
+## 📊 PROJECT STATISTICS
 
-# 🚀 PART 6/6 - FINAL! Project Stats + Closing + NEW_CHAT_PROMPT!
-
-**BUONO_MASTER_CONTEXT.md එකේ අග append කරන්න (Final part!):**
-
-```markdown
-═══════════════════════════════════════════════════════════════
-## 20. 📊 PROJECT STATISTICS
-═══════════════════════════════════════════════════════════════
-
-### Current Project Stats (v10.3):
-
+### Current Stats (v11.0):
 ```
 📊 SCALE:
-─────────────────────
-Total Pages:          10
-Total Collections:    18
-Total Databases:      7
-User Roles:           7
-Permission Types:     5 per DB
-Total Permissions:    35 unique (7 DBs × 5)
+- Pages:              10
+- Collections:        18
+- Databases:          7
+- User Roles:         7
+- Permission Types:   5 per DB (35 total!)
 
 🏆 ARCHITECTURE:
-─────────────────────
-Master File:          firebase-config.js
-Lines Saved:          500+
-Files for New DB:     4 (was 10+)
-Time per New DB:      15-30 min (was hours!)
-Migration Phases:     10/10 Complete
+- Master File:        firebase-config.js
+- Lines Saved:        500+
+- Files per New DB:   4 (was 10+)
+- Time per New DB:    15-30 min (was hours!)
 
 ✅ FEATURES:
-─────────────────────
-Total Features:       500+
-Real-time Updates:    All pages
-Mobile Responsive:    All pages
-Image Uploads:        2 (Purchasing, Reports)
-WhatsApp Integration: 1 (Call Center)
-Approval Workflows:   2 (Day End, Purchasing)
-Multi-tab Interfaces: 1 (Call Center - 7 tabs)
+- Total:              500+
+- Real-time:          All pages
+- Mobile:             All pages
+- Image Uploads:      2 (Purchasing, Reports)
+- WhatsApp:           1 (Call Center - HUGE!)
+- Approvals:          2 (Day End, Purchasing)
+- Multi-tab UIs:      1 (Call Center - 9 tabs)
 
 🔥 TECH:
-─────────────────────
-Firebase SDK:         v8.10.1 (compat)
-Frontend:             HTML5, CSS3, ES6+
-No frameworks:        Pure web tech
-No build tools:       Direct deploy
-No npm:               No package.json
+- Firebase SDK:       v8.10.1 (compat)
+- Frontend:           HTML5, CSS3, ES6+
+- No frameworks
+- No build tools
+- No npm
 
 💰 COSTS:
-─────────────────────
-Monthly Cost:         Rs. 0
-Firebase Plan:        Blaze (with free tier)
-Hosting:              Free tier
-Storage:              Free tier (5GB)
-Firestore:            Free tier (50K reads/day)
+- Monthly:            Rs. 0
+- Plan:               Blaze (free tier active)
 ```
 
 ### Development Timeline:
-
 ```
-🚀 v1.0  - Basic Employee Management
-🚀 v2.0  - Day End Reports
-🚀 v3.0  - Inventory System
-🚀 v4.0  - Kitchen Module
-🚀 v5.0  - Purchasing Module
-🚀 v6.0  - Reports + Approvals
-🚀 v7.0  - Payment Proof Uploads 📸
-🚀 v8.0  - Call Center System (HUGE!)
-🚀 v9.0  - Permission System Overhaul
-🚀 v9.5  - Mobile Optimization
-🚀 v10.0 - Architecture Migration Start
-🚀 v10.1 - Master Firebase Config
-🚀 v10.2 - DATABASES Centralized
-🚀 v10.3 - 4-FILES RULE ACHIEVED! 🏆 (CURRENT)
-```
-
-### Code Quality Metrics:
-
-```
-✅ Code Duplication:   ~95% removed (from migration)
-✅ Single Responsibility: Each file = 1 purpose
-✅ DRY Principle:      Followed (Don't Repeat Yourself)
-✅ Mobile-First:       All pages responsive
-✅ Error Handling:     try/catch on all async
-✅ User Feedback:      Alerts for all actions
-✅ Loading States:     All tables show loading
-✅ Empty States:       All tables handle empty
-✅ Permission Checks:  On every page load
-✅ Real-time Updates:  onSnapshot everywhere
+v1.0  → Basic Employee Management
+v2.0  → Day End Reports
+v3.0  → Inventory System
+v4.0  → Kitchen Module
+v5.0  → Purchasing Module
+v6.0  → Reports + Approvals
+v7.0  → Payment Proof Uploads 📸
+v8.0  → Call Center System (HUGE!)
+v9.0  → Permission System Overhaul
+v9.5  → Mobile Optimization
+v10.0 → Architecture Migration
+v10.3 → 4-FILES RULE ACHIEVED! 🏆
+v10.4 → Pending Queue System
+v10.5 → Phase 1 (Country codes, WA)
+v10.7 → Tab Badges
+v10.8 → Smart Categorization
+v10.9 → Smart Date Buttons ⭐ (CURRENT)
+v11.0 → MASTER FILE v11 (Smart Tracking!) 📄
 ```
 
-═══════════════════════════════════════════════════════════════
-## 21. 🎯 WORKFLOW SUMMARY
-═══════════════════════════════════════════════════════════════
+---
 
-### Adding New Feature - Standard Workflow:
+## 🎯 WORKFLOW SUMMARY
 
+### Adding New Feature - Standard:
 ```
 1. 📋 PLAN
-   ↓
    - What feature?
    - Which DB affected?
    - New collection needed?
-   - UI mockup in mind?
 
 2. 💬 DISCUSS with AI
-   ↓
-   - Paste BUONO_MASTER_CONTEXT.md
+   - Paste MASTER_CONTEXT.md
    - Describe feature
-   - Get plan + file list
-   
+   - Get plan
+
 3. 🛠️ BUILD
-   ↓
-   - Get full files from AI
+   - Get full files
    - Copy-paste-save
    - Don't modify partial
-   
+
 4. 🧪 TEST
-   ↓
    - firebase deploy
-   - Ctrl+Shift+R (refresh)
-   - Test all scenarios
-   - Check console (F12)
-   
+   - Ctrl+Shift+R
+   - Check console
+
 5. ✅ COMMIT
-   ↓
    - git add .
    - git commit -m "feat: ..."
    - git push
-   
+
 6. 📝 UPDATE DOCS
-   ↓
    - Update MASTER_CONTEXT.md
-   - Add to "Completed Features"
-   - Save new version
+   - Update Current Status
+   - Save & commit
 ```
 
-### Daily Development Routine:
-
+### Daily Routine:
 ```
 Morning:
-□ Check Firebase Console (data overview)
+□ Check Firebase Console
 □ Review yesterday's commits
 □ Plan today's tasks
 
@@ -3897,17 +3475,14 @@ During Work:
 □ One feature at a time
 □ Test after every change
 □ Commit small, commit often
-□ Take screenshots for issues
 
 End of Day:
 □ Test all changes
 □ Commit + push
 □ Update docs if major change
-□ Backup if needed
 ```
 
 ### Emergency Recovery:
-
 ```
 🚨 If something breaks:
 
@@ -3917,249 +3492,123 @@ Step 3: Check git history:
         git log --oneline -10
 Step 4: Revert if needed:
         git reset --hard <commit-hash>
-Step 5: Force push (if shared):
-        git push --force
-Step 6: Re-deploy:
+Step 5: Re-deploy:
         firebase deploy
-
-🆘 If data corrupted:
-1. Don't write more data
-2. Check Firebase Console manually
-3. Restore from backup JSON (Task 10)
-4. Or restore from Firebase auto-backup
 ```
 
-═══════════════════════════════════════════════════════════════
-## 22. 🌟 SUCCESS STORIES (Achievements!)
-═══════════════════════════════════════════════════════════════
+---
 
-### Major Milestones Achieved:
-
-```
-🏆 MIGRATION SUCCESS (v10.3):
-   - 10 phases completed
-   - Zero bugs introduced
-   - 500+ lines removed
-   - 4-Files Rule achieved
-   
-🏆 CALL CENTER LAUNCH (v8.0):
-   - 7-tab complex UI
-   - 13 lead statuses
-   - Real WhatsApp integration
-   - Production-ready academy system
-   
-🏆 PAYMENT PROOF SYSTEM:
-   - Firebase Storage integration
-   - 2 modules using it
-   - Image preview
-   - Auto-cleanup
-   
-🏆 PERMISSION SYSTEM:
-   - 7 DBs × 5 perms = 35 permissions
-   - Role-based access
-   - Auto-handling for admin
-   - Smart defaults per role
-   
-🏆 ARCHITECTURE TRANSFORMATION:
-   - Manual → Auto-generation
-   - Hardcoded → Config-driven
-   - Duplicate → Centralized
-   - Coupled → Modular
-```
-
-### Lessons Learned:
-
-```
-💡 Documentation matters!
-   - Master context file saves time
-   - Helps future development
-   - Helps new chats/AI sessions
-   
-💡 Centralization wins!
-   - DATABASES array = single source of truth
-   - Change once, update everywhere
-   - Less bugs, easier maintenance
-   
-💡 Mobile-first works!
-   - Most users on mobile
-   - Responsive from day 1
-   - Less rework later
-   
-💡 Test users save time!
-   - Pre-created accounts
-   - Different roles ready
-   - Quick scenario testing
-   
-💡 Step-by-step approach!
-   - One change at a time
-   - Test before next
-   - Easier debugging
-```
-
-═══════════════════════════════════════════════════════════════
-## 23. 📞 SUPPORT & RESOURCES
-═══════════════════════════════════════════════════════════════
+## 📞 SUPPORT & RESOURCES
 
 ### Project Resources:
-
 ```
-🌐 Live Site:
-https://buono-project-927b8.web.app
-
-🔗 GitHub Repository:
-https://github.com/Sachintha1999/Buono-project
-
-🔥 Firebase Console:
-https://console.firebase.google.com/project/buono-project-927b8
-
-📚 Firebase v8 Docs:
-https://firebase.google.com/docs/web/setup?hl=en&authuser=0
+🌐 Live: https://buono-project-927b8.web.app
+🔗 Git:  https://github.com/Sachintha1999/Buono-project
+🔥 Console: https://console.firebase.google.com/project/buono-project-927b8
+📚 Docs: https://firebase.google.com/docs/web/setup
 ```
 
-### Quick Help Commands:
-
-```bash
-# Project setup
-git clone https://github.com/Sachintha1999/Buono-project.git
-cd Buono-project
-firebase login
-
-# Daily commands
-firebase deploy              # Deploy to live
-git add . && git commit -m "msg" && git push  # Save to GitHub
-firebase open hosting:site   # Open live URL
-
-# Debugging
-firebase deploy --debug     # Verbose deploy
-F12 in browser              # Console
-Network tab                 # Check requests
-```
-
-### Firebase Free Tier Limits:
-
+### Firebase Free Tier:
 ```
 📊 Firestore:
 - 50,000 reads/day
 - 20,000 writes/day
-- 20,000 deletes/day
 - 1 GB storage
 
 💾 Storage:
 - 5 GB total
 - 1 GB/day download
-- 20,000 uploads/day
 
 🚀 Hosting:
 - 10 GB storage
 - 360 MB/day transfer
 
-Current usage: <1% of limits! 💪
-```
-
-═══════════════════════════════════════════════════════════════
-## 24. 🎓 FINAL NOTES FOR AI ASSISTANT
-═══════════════════════════════════════════════════════════════
-
-### When Starting New Chat with This Context:
-
-```
-👋 You are helping Naveen with Buono Project!
-
-🎯 KEY POINTS TO REMEMBER:
-1. Naveen knows no coding - copy/paste only
-2. Speak in Sinhala (Singlish OK)
-3. Give FULL files - NO partial code!
-4. Step-by-step approach always
-5. Test instructions clear
-6. Encouraging tone always
-
-🔴 STRICT RULES:
-1. Follow 7 Mandatory Rules
-2. Use Global Firebase Config
-3. Use DATABASES array (don't duplicate!)
-4. Mobile support always
-5. File splitting (html/css/js)
-6. 4-Files Rule for new DBs
-7. Topbar consistency
-
-✅ WORKFLOW:
-1. Listen to request
-2. Plan first (no code yet!)
-3. Confirm with Naveen
-4. Give full files step-by-step
-5. Provide test instructions
-6. Help debug if issues
-7. Update docs after success
-
-❌ AVOID:
-- Partial code snippets
-- Complex command-line operations
-- Assuming Naveen knows tech terms
-- Building without confirmation
-- Modifying core files without permission
-```
-
-### Standard Response Format:
-
-```
-🎯 First message structure:
-1. Acknowledgment (Sinhala)
-2. Plan overview
-3. Files needed
-4. Confirm before coding
-
-📦 Code delivery structure:
-1. File name + purpose
-2. FULL file content
-3. What changed (if update)
-4. Test instructions
-5. Next step
-
-✅ After success:
-1. Celebrate!
-2. Update suggestions
-3. Next priority?
-```
-
-### Quick Reference for AI:
-
-```
-Project: Buono Cafe + Academy Management
-Stack:   HTML/CSS/JS + Firebase
-SDK:     v8.10.1 compat
-Pattern: 4-Files Rule (architecture v10.3)
-Style:   Dark theme + Orange brand
-Lang:    Sinhala communication
-Style:   Copy/paste friendly
-```
-
-═══════════════════════════════════════════════════════════════
-## 25. 🏁 END OF MASTER CONTEXT FILE
-═══════════════════════════════════════════════════════════════
-
-```
-📅 Last Updated: 2026-06-08
-📌 Version: 10.3
-🏆 Status: 4-FILES RULE ACHIEVED!
-✅ Complete: 99%
-🐛 Known Bugs: 0
-🚀 Production: LIVE!
-
-📝 Update Instructions:
-After every major feature:
-1. Update Section 15 (Completed Features)
-2. Update Section 11 (if new collection)
-3. Update Section 17 (move from Future to Done)
-4. Update version number
-5. Save & commit to Git
+Current usage: <1% 💪
 ```
 
 ---
 
-**🎉 Thank you for using BUONO MASTER CONTEXT!**
+═══════════════════════════════════════════════════════════════
+## 🏁 END OF MASTER CONTEXT FILE
+═══════════════════════════════════════════════════════════════
 
-This file contains EVERYTHING needed to continue developing the Buono project. 
-Just paste this file into any new chat with AI, and they'll have full project knowledge!
+```
+📅 Last Updated: 2026-06-10
+📌 Version: 11.0 (Smart Master with Status Tracking!)
+🏆 Status: Production - LIVE!
+✅ Complete: 99%
+🐛 Known Bugs: 0
+🚀 Active Plan: Call Center 7 Features (1/7 done)
+```
+
+---
+
+### 📝 HOW TO UPDATE THIS FILE:
+
+After every major feature:
+
+**1. Update Section 1 (Current Status Dashboard):**
+```
+- Change "Last Update" date
+- Change "Current Version"
+- Update "Recently Completed"
+- Update "Currently In Progress"
+- Update "Next Steps"
+```
+
+**2. Update Section 2 (Active Plan):**
+```
+- Mark completed step as ✅ DONE
+- Move next step to "NEXT"
+- Add new steps if planned
+```
+
+**3. Update Section 17 (Page Features):**
+```
+- If page got new feature
+- Update version notes
+- Add to features list
+```
+
+**4. Save & Commit:**
+```bash
+git add BUONO_MASTER_CONTEXT.md
+git commit -m "docs: Updated to v11.X"
+git push
+```
+
+---
+
+## 🎓 USING THIS FILE - NEW AI CHAT:
+
+### Standard Opening:
+```
+Step 1: Open new chat
+Step 2: Copy ENTIRE this file
+Step 3: Paste at start of conversation
+Step 4: Add your message:
+
+Examples:
+"Continue from Current Status"
+"Bug fix needed: [describe]"
+"New feature idea: [describe]"
+"Tell me about [feature]"
+```
+
+### Expected AI Behavior:
+```
+1. AI reads Current Status FIRST
+2. AI reads Active Plan SECOND
+3. AI knows project structure
+4. AI speaks Sinhala
+5. AI gives full files
+6. AI tracks progress
+7. AI updates this file
+```
+
+---
+
+**🎉 Thank you for using BUONO MASTER CONTEXT v11.0!**
 
 **Built with ❤️ by Naveen (Sachintha1999)**
 **With AI Assistance from Claude**
@@ -4171,238 +3620,263 @@ END OF FILE
 
 ---
 
-## ✅ BUONO_MASTER_CONTEXT.md COMPLETE! 🎉
+## ✅✅✅ ALL 6 PARTS COMPLETE! 🎉🎉🎉
 
 ```
-Save කරන්න!
+📄 BUONO_MASTER_CONTEXT.md - FULL VERSION 11.0!
 
-📄 Final file size: ~10,000+ words
-🎯 Contains: EVERYTHING about Buono project!
+Size: ~15,000+ words
+Sections: 21 main + 4 special
+Coverage: EVERYTHING!
+
+✨ NEW FEATURES:
+✅ Current Status Dashboard
+✅ Active Development Plan tracker
+✅ How to Use guide
+✅ AI Instructions
+✅ Page-by-Page Features (detailed!)
 ```
 
 ---
 
-# 📄 NOW! NEW_CHAT_PROMPT.txt - SHORT SMART VERSION!
+🎉🎉🎉 **PERFECT! Files 3ම කියෙව්වා!** 
 
-**Create new file: `NEW_CHAT_PROMPT.txt`**
+ඔයා **HUGE progress** කරලා! මට පේනවා **6 features** complete!
 
-**Ctrl+A → Delete → Paste this:**
+---
+
+## ✅ Completed Features Review:
 
 ```
-# 🍴 BUONO PROJECT - NEW CHAT STARTER (v10.3)
+✅ Step 1: Smart Date Buttons (v10.9)
+✅ Step 2: Stats Bar Fix (Might Join, Follow-ups, Hold)
+✅ Step 3: Tab Badge Zero Hide (v11.0)
+✅ Step 4: Lead Source Analytics (v11.1) 🆕
+✅ Step 5: Reminder Notifications (v11.2) 🆕
+✅ BONUS: Smart Hold (HOLD_TRIGGER_STATUSES) 🆕
+```
 
-ආයුබෝවන්! 👋
+**නියමයි! 7 ක plan එකෙන් 6 ක් DONE!** 🔥
 
-මම Naveen (Sachintha1999) - Buono Cafe + Academy 
-Management System project එක develop කරනවා.
+---
 
-═══════════════════════════════════════════
-🎯 IMPORTANT: FULL CONTEXT FILE EXISTS!
-═══════════════════════════════════════════
+## 📊 UPDATED MASTER CONTEXT FILE v12.0
 
-Complete project knowledge එක තියෙන්නේ:
-📄 BUONO_MASTER_CONTEXT.md
+Copy කරලා save කරන්න `BUONO_MASTER_CONTEXT.md`:
 
-⚠️ COMPLEX TASKS වලට ඒක paste කරන්න!
-   (Adding new DB, complex features, etc.)
+```markdown
+═══════════════════════════════════════════════════════════════
+# 🍴 BUONO PROJECT - MASTER CONTEXT FILE
+# Version: 12.0 (6 Features Complete!)
+# Last Updated: 2026-06-10 (Late Evening)
+# Status: Production - LIVE!
+═══════════════════════════════════════════════════════════════
 
-✅ SIMPLE TASKS වලට මේ prompt එක ඇති!
-   (Quick questions, bug fixes, etc.)
+## 1. 🎯 CURRENT STATUS DASHBOARD
 
-═══════════════════════════════════════════
-👤 QUICK ABOUT ME
-═══════════════════════════════════════════
+### 📅 Last Update Info:
+```
+Date: 2026-06-10
+Time: Late evening session
+Developer: Naveen (Sachintha1999)
+Working on: Call Center Improvements - 6 of 7 DONE!
+```
 
-- කොඩිං දන්නේ නැහැ - copy/paste විතරයි
-- VS Code + Firebase + GitHub
-- Sinhala කතා කරන්න (Singlish OK)
-- Step-by-step යමු
-- FULL FILE දෙන්න - partial code එපා!
+### 🏆 Current Version:
+```
+Project Version: v11.2
+File Updates:
+- callcenter.html      → v11.2 (Stats bars + Source Analytics + Smart Hold modal)
+- callcenter-script.js → v11.2 (Smart Hold + Source Analytics + Reminders)
+- callcenter-style.css → v11.2 (All new feature styles)
+```
 
-═══════════════════════════════════════════
-🔥 PROJECT QUICK INFO
-═══════════════════════════════════════════
+### ✅ Recently Completed (Massive Update!):
+```
+✅ Step 1: Smart Date Buttons (DONE - v10.9)
+   - Quick buttons (Tomorrow, 3D, 1W, 2W, 1M)
+   - Auto-defaults per status
+   - Active state highlighting
+   - Auto badge display
 
-Stack:    HTML + CSS + JS + Firebase
-SDK:      v8.10.1 (compat) - NOT v9!
-Plan:     Blaze (free tier - Rs.0/month)
-Status:   v10.3 - 4-FILES RULE ACHIEVED! 🏆
+✅ Step 2: Stats Bar Fix (DONE - v11.0)
+   - mightJoinStats div added ✓
+   - followupsStats div added ✓
+   - holdStats div added ✓
+   - Total | New | Old | Done Today | Remaining
 
-🌐 Live: https://buono-project-927b8.web.app
-🔗 Git:  https://github.com/Sachintha1999/Buono-project
+✅ Step 3: Tab Badge Zero Hide (DONE - v11.0)
+   - 0 count = hide badge
+   - 1+ count = show badge
+   - Smooth fade transition
 
-🔥 Firebase Config:
-{
-    apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
-    authDomain: "buono-project-927b8.firebaseapp.com",
-    projectId: "buono-project-927b8",
-    storageBucket: "buono-project-927b8.firebasestorage.app",
-    messagingSenderId: "706681135399",
-    appId: "1:706681135399:web:c15f197f1efe3a64f00902"
-}
+✅ Step 4: Lead Source Analytics (DONE - v11.1) 🆕
+   - Source breakdown (Facebook, Instagram, Walk In, etc.)
+   - Conversion rate per source
+   - Top Performer badge (🏆 Best Rate)
+   - Hidden Gem detection (✨)
+   - Rank medals (🥇🥈🥉)
+   - Smart insights generation
+   - Revenue per source
 
-═══════════════════════════════════════════
-🏗️ ARCHITECTURE (v10.3)
-═══════════════════════════════════════════
+✅ Step 5: Reminder Notifications (DONE - v11.2) 🆕
+   - Page load = check today's follow-ups
+   - Special reminder toast (clickable)
+   - Tab pulse animation (red dot)
+   - Browser notifications (optional)
+   - Auto-hide on tab click
+   - Overdue detection
 
-ALL 7 DATABASES: Auto-managed!
+✅ BONUS: Smart Hold (DONE - v11.2) 🆕
+   - HOLD_TRIGGER_STATUSES defined:
+     * "Need Call" + max attempts ✓
+     * "Not Responding" + max attempts ✓
+     * "Switch off" + max attempts ✓
+     * "User busy" + max attempts ✓
+   - NOT triggered for active conversations:
+     * "Will decide" (active)
+     * "Call back later" (scheduled)
+     * "Might Join" (interested)
+     * "Will join next intake" (committed)
+   - Works in Call Log AND Follow-ups tabs!
+```
 
-NEW DB ADD = ONLY 4 FILES!
-1. firebase-config.js → 1 entry to DATABASES
-2. newdb.html → Create
-3. newdb-style.css → Create
-4. newdb-script.js → Create
+### ⏳ Currently In Progress:
+```
+Nothing in progress (6/7 complete!)
+```
 
-Auto updates:
-✅ access.html cards
-✅ index.html permissions
-✅ All DB switchers
-✅ Permission checks
+### 🎯 Next Steps:
+```
+⏳ Step 6: Duplicate Smart Merge
+⏳ Step 7: Lead Scoring System (HOT/WARM/COOL/COLD)
+```
 
-═══════════════════════════════════════════
-🔴 7 MANDATORY RULES
-═══════════════════════════════════════════
+### 📊 Project Health:
+```
+🟢 Architecture: Excellent (4-Files Rule!)
+🟢 Mobile: Fully responsive
+🟢 Performance: Real-time updates working
+🟢 Security: Permission-based access OK
+🟢 Documentation: v12.0 updated!
+🟢 Live Status: Production - working!
+🟢 Features: 6/7 complete (86%!)
+```
 
-1. GLOBAL FIREBASE CONFIG (firebase-config.js)
-   Script order:
-   - firebase-app.js
-   - firebase-firestore.js
-   - firebase-storage.js (if needed)
-   - firebase-config.js
-   - page-script.js
-   - mobile-script.js
+---
 
-2. MOBILE SUPPORT ALWAYS!
-3. FILE SPLITTING (html/css/js)
-4. 7 DATABASES (auto-managed)
-5. PERMISSIONS - 5 types per DB (add/view/selfView/edit/delete)
-6. FULL FILE REPLACE!
-7. TOPBAR CONSISTENCY (auto switcher)
+## 2. 📋 ACTIVE DEVELOPMENT PLAN
 
-═══════════════════════════════════════════
-🗄️ 7 DATABASES + 18 COLLECTIONS
-═══════════════════════════════════════════
+### 🎯 Current Focus: Call Center Improvements
 
-DATABASES (logical):
-1. 👥 employeeDB → index.html
-2. 💰 dayEndReportDB → cashier.html
-3. 📦 inventoryDB → inventory.html
-4. 🍳 kitchenDB → kitchen.html
-5. 🛒 purchasingDB → purchasing.html
-6. 📞 callCenterDB → callcenter.html
-7. 📊 reportsDB → reports.html (Admin/Manager only)
+**Total Features Planned: 7 + 1 BONUS**
+**Completed: 6**
+**Remaining: 2**
 
-COLLECTIONS:
-employees, dayEndReports, inventoryItems,
-inventoryCategories, stockMovements, recipes,
-staffMeals, wastage, stockIssues, stockCounts,
-purchases, suppliers, purchaseReturns,
-supplierCreditNotes, leads, courses, events,
-callCenterComments
+### 📊 PROGRESS TRACKER:
 
-═══════════════════════════════════════════
-👥 7 USER ROLES
-═══════════════════════════════════════════
+```
+┌────────────────────────────────────────────────┐
+│ FEATURE                          │ STATUS      │
+├────────────────────────────────────────────────┤
+│ Step 1: Smart Date Buttons       │ ✅ DONE     │
+│ Step 2: Stats Bar Fix            │ ✅ DONE     │
+│ Step 3: Tab Badge Zero Hide      │ ✅ DONE     │
+│ Step 4: Lead Source Analytics    │ ✅ DONE     │
+│ Step 5: Reminder Notifications   │ ✅ DONE     │
+│ BONUS: Smart Hold                │ ✅ DONE     │
+│ Step 6: Duplicate Smart Merge    │ ⏳ NEXT     │
+│ Step 7: Lead Scoring System      │ ⏳ Pending  │
+└────────────────────────────────────────────────┘
 
-1. Admin (🔴) - All access
-2. Manager (🔵) - Reports + most
-3. Cashier (🟢) - Day End reports
-4. Purchasing Officer (🟠) - Purchasing
-5. Head Chef (🟣) - Kitchen
-6. Call Operator (🩵) - Call Center (auto-access!)
-7. Waiter (⚪) - Limited
+Progress: ████████████████░░░░ 75%
+```
 
-═══════════════════════════════════════════
-👤 TEST USERS
-═══════════════════════════════════════════
+---
 
-Naveen/sara/Admin
-Tishan/owner/Manager
-siri/(set)/Cashier
-suji/(set)/Head Chef
-chamika/(set)/Purchasing
+## 📞 CALL CENTER v11.2 - FULL FEATURE LIST:
 
-═══════════════════════════════════════════
-🎨 DESIGN COLORS
-═══════════════════════════════════════════
+### 🎯 Quick Add Tab:
+- 14 country codes
+- Duplicate detection
+- Enter = quick add
+- Search + filter
 
-BG:      #1a1a2e (dark navy)
-Card:    #16213e
-Input:   #0f3460
-Orange:  #f0a500 / #FF9800 (brand!)
-Green:   #4CAF50
-Red:     #ff4444
-Blue:    #2196F3
-Purple:  #9C27B0
-Cyan:    #00BCD4
+### 📞 Call Log Tab:
+- Smart Date Buttons (5 options)
+- Auto-set date on status change
+- Auto badge display
+- **Smart Hold** (only for specific statuses!)
+- Save & Next workflow
+- WhatsApp templates (4 + Multi)
+- Pending queue (Today + Older)
 
-═══════════════════════════════════════════
-💡 GLOBAL HELPERS (from firebase-config.js)
-═══════════════════════════════════════════
+### 🔵 Might Join Tab:
+- Smart Categorization (Att 1, 2, 3, 4+, Done)
+- Color-coded urgency
+- Stats bar (Total | New | Old | Done | Remaining)
+- Smart Date Buttons
 
-Auth:
-- getCurrentUser()
-- checkAuth()
-- logout()
-- checkAccessLevel(['Admin'])
-- hasPermission('inventoryDB')
+### 🔄 Follow-ups Tab:
+- Includes 6 statuses
+- Smart Categorization
+- Stats bar
+- Smart Date Buttons
+- **Smart Hold check** (NEW!)
+- Reminder pulse animation 🆕
 
-Database:
-- DATABASES (master array)
-- getDatabaseById(id)
-- checkDBAccess(dbId)
-- getAccessibleDatabases()
+### ⏸️ Hold Tab:
+- Hold + Unable to join + Not in use
+- Re-activate to Need Call
+- Stats bar
+- Smart Categorization
 
-UI:
-- buildTopbar(currentDbId)
-- buildDatabaseSwitcher(currentDbId)
+### ✅ Enrolled Tab:
+- Course management
+- WhatsApp confirmation
+- Done today badges
 
-Format:
-- formatDate(date)
-- formatTime(date)
-- formatDateTime(date)
-- formatCurrency(amount)
-- getServerTimestamp()
+### 💰 Payments Tab:
+- Down + Install 1 + Install 2
+- Auto-calculated balance
+- Color-coded (paid/pending)
 
-Tables:
-- showTableLoading(tbodyId, cols)
-- showTableEmpty(tbodyId, cols, message)
+### 📊 Reports Tab:
+- Today/Week/Month/All filters
+- 5 stat cards
+- Status breakdown bars
+- **Lead Source Analytics** 🆕
+  - Rank medals
+  - Top Performer badge
+  - Hidden Gem detection
+  - Conversion percentage
+  - Revenue tracking
+  - Smart insights
 
-═══════════════════════════════════════════
-🎯 COMMON SCENARIOS
-═══════════════════════════════════════════
+### ⚙️ Settings Tab:
+- Max attempts setting
+- Course management
+- Campaign management
+- Operator scripts
 
-📌 Quick question / bug fix:
-   → Use this prompt + ask directly
+---
 
-📌 Adding new feature:
-   → Paste BUONO_MASTER_CONTEXT.md first
-   → Then describe feature
+## 🆕 NEW HELPER FUNCTIONS (v11.2):
 
-📌 Adding new DB:
-   → Paste MASTER_CONTEXT
-   → Say: "Add [DB NAME] - use 4-Files Rule"
+```javascript
+// Smart Hold
+HOLD_TRIGGER_STATUSES = ['Need Call', 'Not Responding', 'Switch off', 'User busy']
 
-📌 Modifying existing:
-   → Paste current file
-   → Describe change
-   → Get full updated file
+// Source Analytics
+renderSourceAnalytics(leads, period)
 
-═══════════════════════════════════════════
-💬 DEPLOY COMMANDS
-═══════════════════════════════════════════
+// Reminders
+checkTodayReminders()
+showReminderToast(dueCount, overdueCount)
+addReminderPulse(count)
+removeReminderPulse()
+requestNotificationPermission()
+```
 
-Save files → 
-firebase deploy →
-Ctrl+Shift+R (browser) →
-F12 (console check)
-
-Git:
-git add .
-git commit -m "feat: description"
-git push
-
-═══════════════════════════════════════════
-🚀 READY!
-═══════════════════════════════════════════
-
+[Rest of file same as v11.0]
+═

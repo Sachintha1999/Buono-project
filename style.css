@@ -1584,3 +1584,16 @@ tr:last-child td {
         font-size: 13px;
     }
 }
+
+.badge-payment {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: #fff;
+}
+
+.payment-card {
+    border-color: #4CAF50 !important;
+}
+
+.payment-card:hover {
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+}

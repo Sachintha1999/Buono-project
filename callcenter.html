@@ -10,9 +10,7 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════ -->
-<!-- TOPBAR                         -->
-<!-- ═══════════════════════════════ -->
+<!-- TOPBAR -->
 <div class="topbar">
     <div class="topbar-left">
         <span class="topbar-icon">🍴</span>
@@ -41,9 +39,7 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════ -->
-<!-- MAIN CONTENT                   -->
-<!-- ═══════════════════════════════ -->
+<!-- MAIN CONTENT -->
 <div class="dashboard-container">
 
     <!-- PAGE HEADER -->
@@ -95,16 +91,18 @@
     <div class="tabs-container">
         <div class="tabs-scroll">
             <button class="tab-btn active" onclick="switchTab('quickAdd')" id="tab-quickAdd">📱 Quick Add</button>
-            <button class="tab-btn" onclick="switchTab('callLog')" id="tab-callLog">📞 Call Log</button>
-            <button class="tab-btn" onclick="switchTab('enrolled')" id="tab-enrolled">✅ Enrolled</button>
-            <button class="tab-btn" onclick="switchTab('followups')" id="tab-followups">🔄 Follow-ups</button>
+            <button class="tab-btn" onclick="switchTab('callLog')" id="tab-callLog">📞 Call Log <span class="tab-badge" id="badgeCallLog">0</span></button>
+            <button class="tab-btn" onclick="switchTab('mightJoin')" id="tab-mightJoin">🔵 Might Join <span class="tab-badge" id="badgeMightJoin">0</span></button>
+            <button class="tab-btn" onclick="switchTab('followups')" id="tab-followups">🔄 Follow-ups <span class="tab-badge" id="badgeFollowups">0</span></button>
+            <button class="tab-btn" onclick="switchTab('hold')" id="tab-hold">⏸️ Hold <span class="tab-badge" id="badgeHold">0</span></button>
+            <button class="tab-btn" onclick="switchTab('enrolled')" id="tab-enrolled">✅ Enrolled <span class="tab-badge" id="badgeEnrolled">0</span></button>
             <button class="tab-btn" onclick="switchTab('payments')" id="tab-payments">💰 Payments</button>
             <button class="tab-btn" onclick="switchTab('ccReports')" id="tab-ccReports">📊 Reports</button>
             <button class="tab-btn" onclick="switchTab('settings')" id="tab-settings">⚙️ Settings</button>
         </div>
     </div>
 
-    <!-- TAB 1: QUICK ADD (UPDATED with Country Selector!) -->
+    <!-- TAB 1: QUICK ADD -->
     <div class="tab-content active" id="content-quickAdd">
         <div class="section-card">
             <h2 class="section-title">⚡ Quick Add Lead</h2>
@@ -112,22 +110,21 @@
 
             <div class="quick-add-box">
                 <div class="quick-add-row">
-                    <!-- COUNTRY SELECTOR (NEW!) -->
                     <select id="quickCountry" class="country-selector" onchange="updatePhonePlaceholder()">
-                        <option value="+94" data-flag="🇱🇰" data-length="9" selected>🇱🇰 +94 (Sri Lanka)</option>
-                        <option value="+91" data-flag="🇮🇳" data-length="10">🇮🇳 +91 (India)</option>
-                        <option value="+971" data-flag="🇦🇪" data-length="9">🇦🇪 +971 (UAE)</option>
-                        <option value="+966" data-flag="🇸🇦" data-length="9">🇸🇦 +966 (Saudi Arabia)</option>
-                        <option value="+974" data-flag="🇶🇦" data-length="8">🇶🇦 +974 (Qatar)</option>
-                        <option value="+965" data-flag="🇰🇼" data-length="8">🇰🇼 +965 (Kuwait)</option>
-                        <option value="+973" data-flag="🇧🇭" data-length="8">🇧🇭 +973 (Bahrain)</option>
-                        <option value="+968" data-flag="🇴🇲" data-length="8">🇴🇲 +968 (Oman)</option>
-                        <option value="+1" data-flag="🇺🇸" data-length="10">🇺🇸 +1 (USA/Canada)</option>
-                        <option value="+44" data-flag="🇬🇧" data-length="10">🇬🇧 +44 (UK)</option>
-                        <option value="+61" data-flag="🇦🇺" data-length="9">🇦🇺 +61 (Australia)</option>
-                        <option value="+65" data-flag="🇸🇬" data-length="8">🇸🇬 +65 (Singapore)</option>
-                        <option value="+60" data-flag="🇲🇾" data-length="9">🇲🇾 +60 (Malaysia)</option>
-                        <option value="+0" data-flag="🌍" data-length="15">🌍 Other (Custom)</option>
+                        <option value="+94" selected>🇱🇰 +94 (Sri Lanka)</option>
+                        <option value="+91">🇮🇳 +91 (India)</option>
+                        <option value="+971">🇦🇪 +971 (UAE)</option>
+                        <option value="+966">🇸🇦 +966 (Saudi Arabia)</option>
+                        <option value="+974">🇶🇦 +974 (Qatar)</option>
+                        <option value="+965">🇰🇼 +965 (Kuwait)</option>
+                        <option value="+973">🇧🇭 +973 (Bahrain)</option>
+                        <option value="+968">🇴🇲 +968 (Oman)</option>
+                        <option value="+1">🇺🇸 +1 (USA/Canada)</option>
+                        <option value="+44">🇬🇧 +44 (UK)</option>
+                        <option value="+61">🇦🇺 +61 (Australia)</option>
+                        <option value="+65">🇸🇬 +65 (Singapore)</option>
+                        <option value="+60">🇲🇾 +60 (Malaysia)</option>
+                        <option value="+0">🌍 Other (Custom)</option>
                     </select>
 
                     <input type="tel" id="quickPhone" placeholder="7X XXX XXXX" maxlength="15"
@@ -147,7 +144,7 @@
 
         <div class="section-card">
             <div class="section-header-row">
-                <h2 class="section-title">📋 Recent Leads</h2>
+                <h2 class="section-title">📋 Recent Leads (All)</h2>
                 <div class="header-actions">
                     <input type="text" id="searchLeads" placeholder="🔍 Search leads..." class="search-input" oninput="searchLeads()">
                     <select id="filterStatus" class="filter-select" onchange="filterByStatus()">
@@ -191,71 +188,86 @@
         </div>
     </div>
 
-    <!-- TAB 2: CALL LOG (with Pending Queue) -->
-    <div class="tab-content" id="content-callLog">
+    <!-- TAB 7: PAYMENTS -->
+<div class="tab-content" id="content-payments">
+    
+    <!-- ⭐ NEW: Quick Action Bar -->
+    <div class="section-card payment-quick-action" id="paymentQuickAction" style="display:none;">
+        <div class="payment-action-content">
+            <div class="payment-action-icon">💳</div>
+            <div class="payment-action-text">
+                <div class="payment-action-title">Process New Payment</div>
+                <div class="payment-action-desc">
+                    අලුත් student payment එකක් process කරන්න — Student ID, Password, Receipt auto-generate වෙයි
+                </div>
+            </div>
+            <button class="btn-process-payment-main" onclick="openPaymentPage()">
+                ➕ Process New Payment
+            </button>
+        </div>
+    </div>
+    
+    <!-- Payment Tracking Table -->
+    <div class="section-card">
+        <div class="section-header-row">
+            <h2 class="section-title">💰 Payment Tracking</h2>
+            <div class="header-actions">
+                <span class="count-badge" id="paymentCount">0</span>
+                <button class="btn-primary" id="btnNewPaymentHeader" 
+                        onclick="openPaymentPage()" 
+                        style="display:none;">
+                    ➕ New Payment
+                </button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Name</th><th>Phone</th><th>Course</th><th>Total</th>
+                        <th>Down</th><th>Install 1</th><th>Install 2</th><th>Balance</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsTableBody">
+                    <tr><td colspan="9" class="table-empty">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-        <!-- PENDING STATS BAR -->
-        <div class="pending-stats-bar" id="pendingStatsBar">
-            <div class="ps-item">
-                <span class="ps-label">📅 Today Added:</span>
-                <span class="ps-value" id="psTodayAdded">0</span>
-            </div>
-            <div class="ps-divider">|</div>
-            <div class="ps-item">
-                <span class="ps-label">✅ Called:</span>
-                <span class="ps-value ps-success" id="psTodayCalled">0</span>
-            </div>
-            <div class="ps-divider">|</div>
-            <div class="ps-item">
-                <span class="ps-label">⏳ Remaining:</span>
-                <span class="ps-value ps-warning" id="psTodayRemaining">0</span>
-            </div>
-            <div class="ps-divider">|</div>
-            <div class="ps-item">
-                <span class="ps-label">⏰ Older Pending:</span>
-                <span class="ps-value ps-info" id="psOlderPending">0</span>
-            </div>
+    <!-- ⭐ TAB 3: MIGHT JOIN (with NEW Stats Bar!) -->
+    <div class="tab-content" id="content-mightJoin">
+
+        <!-- 🆕 STATS BAR ADDED! -->
+        <div class="pending-stats-bar" id="mightJoinStats">
+            <div class="ps-item"><span class="ps-label">📊 Total:</span><span class="ps-value">0</span></div>
         </div>
 
         <div class="calllog-layout">
-
-            <!-- LEFT: Log a Call Form -->
             <div class="calllog-form-panel">
                 <div class="section-card">
-                    <h2 class="section-title">📞 Log a Call</h2>
+                    <h2 class="section-title">🔵 Might Join - Update</h2>
 
-                    <div class="form-group">
-                        <label>🔍 Find Lead (Phone / Name)</label>
-                        <div class="lead-search-wrap">
-                            <input type="text" id="logSearchInput" placeholder="Search..." class="form-input" oninput="searchForLog()">
-                            <div class="lead-search-results" id="logSearchResults"></div>
+                    <div id="mjFormContainer" style="display:none">
+                        <div class="selected-lead-info">
+                            <div class="selected-lead-header">
+                                <span class="selected-lead-name" id="mjLeadName">-</span>
+                                <span class="selected-lead-phone" id="mjLeadPhone">-</span>
+                            </div>
+                            <div class="selected-lead-attempts" id="mjLeadAttempts">📞 Attempts: 0</div>
                         </div>
-                    </div>
 
-                    <div class="selected-lead-info" id="selectedLeadInfo" style="display:none">
-                        <div class="selected-lead-header">
-                            <span class="selected-lead-name" id="selLeadName">-</span>
-                            <span class="selected-lead-phone" id="selLeadPhone">-</span>
-                        </div>
-                        <div class="selected-lead-status" id="selLeadStatus">-</div>
-                        <div class="selected-lead-attempts" id="selLeadAttempts">📞 Attempts: 0</div>
-                    </div>
-
-                    <div id="callLogForm" style="display:none">
                         <div class="form-group">
-                            <label>👤 Name *</label>
-                            <input type="text" id="logName" class="form-input">
+                            <label>👤 Name</label>
+                            <input type="text" id="mjName" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label>📱 Phone *</label>
-                            <input type="tel" id="logPhone" class="form-input" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>📊 Status *</label>
-                            <select id="logStatus" class="form-select">
+                            <label>📊 Update Status</label>
+                            <select id="mjStatus" class="form-select" onchange="autoSetSmartDate('mjStatus', 'mjFollowUp')">
+                                <option value="Might Join">🔵 Might Join</option>
                                 <option value="Need Call">📱 Need Call</option>
                                 <option value="Enrolled">🟢 Enrolled</option>
-                                <option value="Might Join">🔵 Might Join</option>
                                 <option value="Not Responding">⚫ Not Responding</option>
                                 <option value="Unable to join">🔴 Unable to join</option>
                                 <option value="Switch off">⚪ Switch off</option>
@@ -265,163 +277,318 @@
                                 <option value="Will decide and get back to us">🤔 Will decide</option>
                                 <option value="User busy">📵 User busy</option>
                                 <option value="Hold">⏸️ Hold</option>
-                                <option value="Need Attention">⚠️ Need Attention</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>🎓 Course Interest</label>
-                            <select id="logCourse" class="form-select">
+                            <select id="mjCourse" class="form-select">
                                 <option value="">-- Select Course --</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>📅 Follow-up Date</label>
-                            <input type="datetime-local" id="logFollowUp" class="form-input">
+                            <label>📅 Follow-up Date <span id="mjFollowUpAutoBadge" class="auto-date-badge" style="display:none;"></span></label>
+                            <input type="datetime-local" id="mjFollowUp" class="form-input">
+                            <div class="date-quick-btns">
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('mjFollowUp', 1, this)">Tomorrow</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('mjFollowUp', 3, this)">3 Days</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('mjFollowUp', 7, this)">1 Week</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('mjFollowUp', 14, this)">2 Weeks</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('mjFollowUp', 30, this)">1 Month</button>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label>📝 Call Notes *</label>
-                            <textarea id="logNotes" class="form-textarea" rows="3" placeholder="Discussion notes... (WhatsApp message එකේ use වෙනවා)"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>📡 Lead Source</label>
-                            <select id="logSource" class="form-select">
-                                <option value="Walk In">Walk In</option>
-                                <option value="Facebook">Facebook</option>
-                                <option value="Instagram">Instagram</option>
-                                <option value="WhatsApp">WhatsApp</option>
-                                <option value="Referral">Referral</option>
-                                <option value="Website">Website</option>
-                                <option value="Event">Event</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>📢 Campaign / Event</label>
-                            <select id="logEvent" class="form-select">
-                                <option value="">-- No Campaign --</option>
-                            </select>
+                            <label>📝 Update Notes (Optional)</label>
+                            <textarea id="mjNotes" class="form-textarea" rows="3"></textarea>
                         </div>
 
                         <div class="form-actions">
-                            <button class="btn-primary" onclick="saveCallLog()">💾 Save & Next ⚡</button>
-                            <button class="btn-secondary" onclick="clearCallLogForm()">🔄 Clear</button>
+                            <button class="btn-primary" onclick="saveTabUpdate('mightJoin')">💾 Save Update</button>
+                            <button class="btn-secondary" onclick="clearTabForm('mightJoin')">🔄 Clear</button>
                         </div>
 
-                        <div class="wa-actions" id="waActions">
-                            <div class="wa-title">📲 WhatsApp Messages</div>
+                        <div class="wa-actions">
+                            <div class="wa-title">📲 WhatsApp</div>
                             <button class="btn-wa" onclick="openWAPreview('course')">📚 Course Details</button>
-                            <button class="btn-wa" onclick="openWAPreview('payment')">💳 Payment Details</button>
-                            <button class="btn-wa" onclick="openWAPreview('confirmation')">✅ Confirmation</button>
                             <button class="btn-wa" onclick="openWAPreview('multi')">📦 Multi-Select</button>
                         </div>
                     </div>
 
-                    <div class="no-lead-msg" id="noLeadMsg">
-                        <div class="no-lead-icon">🔍</div>
-                        <p>දකුණු පැත්තේ Pending Calls Queue එකෙන් lead එකක් select කරන්න!</p>
-                        <button class="btn-secondary" onclick="switchTab('quickAdd')">➕ Quick Add</button>
+                    <div class="no-lead-msg" id="mjNoLead">
+                        <div class="no-lead-icon">🔵</div>
+                        <p>දකුණු පැත්තේ Might Join lead එකක් select කරන්න!</p>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT: Pending Calls Queue -->
             <div class="calllog-history-panel">
-
-                <!-- TODAY'S NEW LEADS -->
                 <div class="section-card pending-section">
                     <div class="pending-header">
-                        <h2 class="section-title">📅 Today's New Leads</h2>
-                        <span class="pending-count" id="todayPendingCount">0</span>
+                        <h2 class="section-title">🔵 Might Join Leads</h2>
+                        <span class="pending-count" id="mightJoinCount">0</span>
                     </div>
-                    <div class="pending-list" id="todayPendingList">
-                        <div class="no-history"><div>📞</div><p>Loading...</p></div>
-                    </div>
-                </div>
-
-                <!-- OLDER PENDING -->
-                <div class="section-card pending-section">
-                    <div class="pending-header">
-                        <h2 class="section-title">⏰ Older Pending Calls</h2>
-                        <span class="pending-count older" id="olderPendingCount">0</span>
-                    </div>
-                    <div class="pending-list" id="olderPendingList">
-                        <div class="no-history"><div>⏰</div><p>Loading...</p></div>
+                    <div class="pending-list" id="mightJoinList">
+                        <div class="no-history"><div>🔵</div><p>Loading...</p></div>
                     </div>
                 </div>
-
-                <!-- CALL HISTORY (When lead selected) -->
-                <div class="section-card" id="callHistorySection" style="display:none;">
-                    <h2 class="section-title">📜 Call History</h2>
-                    <div class="call-history-list" id="callHistoryList">
-                        <div class="no-history"><div>📞</div><p>Lead select කරන්න</p></div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
 
-    <!-- TAB 3: ENROLLED -->
-    <div class="tab-content" id="content-enrolled">
-        <div class="section-card">
-            <div class="section-header-row">
-                <h2 class="section-title">✅ Enrolled Students</h2>
-                <span class="count-badge" id="enrolledCount">0</span>
-            </div>
-            <div class="table-wrap">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>#</th><th>Name</th><th>Phone</th><th>Course</th><th>Enrolled</th><th>Payment</th><th>WA Sent</th><th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="enrolledTableBody">
-                        <tr><td colspan="8" class="table-empty">Loading...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <!-- TAB 4: FOLLOW-UPS -->
+    <!-- TAB 4: FOLLOW-UPS (with NEW Stats Bar!) -->
     <div class="tab-content" id="content-followups">
-        <div class="section-card">
-            <div class="section-header-row">
-                <h2 class="section-title">🔄 Scheduled Follow-ups</h2>
-                <button class="btn-secondary" onclick="loadFollowUps()">🔄 Refresh</button>
-            </div>
 
-            <div class="followup-section">
-                <div class="followup-group-title">⚡ Today's Follow-ups</div>
-                <div class="table-wrap">
-                    <table class="data-table">
-                        <thead>
-                            <tr><th>Name</th><th>Phone</th><th>Status</th><th>Course</th><th>Scheduled</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="todayFollowUps">
-                            <tr><td colspan="6" class="table-empty">Loading...</td></tr>
-                        </tbody>
-                    </table>
+        <!-- 🆕 STATS BAR ADDED! -->
+        <div class="pending-stats-bar" id="followupsStats">
+            <div class="ps-item"><span class="ps-label">📊 Total:</span><span class="ps-value">0</span></div>
+        </div>
+
+        <div class="calllog-layout">
+            <div class="calllog-form-panel">
+                <div class="section-card">
+                    <h2 class="section-title">🔄 Follow-up - Update</h2>
+
+                    <div id="fuFormContainer" style="display:none">
+                        <div class="selected-lead-info">
+                            <div class="selected-lead-header">
+                                <span class="selected-lead-name" id="fuLeadName">-</span>
+                                <span class="selected-lead-phone" id="fuLeadPhone">-</span>
+                            </div>
+                            <div class="selected-lead-status" id="fuLeadStatus">-</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>👤 Name</label>
+                            <input type="text" id="fuName" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>📊 Update Status</label>
+                            <select id="fuStatus" class="form-select" onchange="autoSetSmartDate('fuStatus', 'fuFollowUp')">
+                                <option value="Not Responding">⚫ Not Responding</option>
+                                <option value="Switch off">⚪ Switch off</option>
+                                <option value="Will join the next intake">🟡 Will join next intake</option>
+                                <option value="Call back later">📞 Call back later</option>
+                                <option value="Will decide and get back to us">🤔 Will decide</option>
+                                <option value="User busy">📵 User busy</option>
+                                <option value="Need Call">📱 Need Call (Back to Call)</option>
+                                <option value="Might Join">🔵 Might Join</option>
+                                <option value="Enrolled">🟢 Enrolled</option>
+                                <option value="Hold">⏸️ Hold</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>🎓 Course Interest</label>
+                            <select id="fuCourse" class="form-select">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📅 Next Follow-up Date <span id="fuFollowUpAutoBadge" class="auto-date-badge" style="display:none;"></span></label>
+                            <input type="datetime-local" id="fuFollowUp" class="form-input">
+                            <div class="date-quick-btns">
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('fuFollowUp', 1, this)">Tomorrow</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('fuFollowUp', 3, this)">3 Days</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('fuFollowUp', 7, this)">1 Week</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('fuFollowUp', 14, this)">2 Weeks</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('fuFollowUp', 30, this)">1 Month</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Update Notes (Optional)</label>
+                            <textarea id="fuNotes" class="form-textarea" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="saveTabUpdate('followups')">💾 Save Update</button>
+                            <button class="btn-secondary" onclick="clearTabForm('followups')">🔄 Clear</button>
+                        </div>
+
+                        <div class="wa-actions">
+                            <div class="wa-title">📲 WhatsApp</div>
+                            <button class="btn-wa" onclick="openWAPreview('course')">📚 Course Details</button>
+                            <button class="btn-wa" onclick="openWAPreview('multi')">📦 Multi-Select</button>
+                        </div>
+                    </div>
+
+                    <div class="no-lead-msg" id="fuNoLead">
+                        <div class="no-lead-icon">🔄</div>
+                        <p>දකුණු පැත්තේ Follow-up lead එකක් select කරන්න!</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="followup-section">
-                <div class="followup-group-title">📅 Upcoming Follow-ups</div>
-                <div class="table-wrap">
-                    <table class="data-table">
-                        <thead>
-                            <tr><th>Name</th><th>Phone</th><th>Status</th><th>Course</th><th>Scheduled</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="upcomingFollowUps">
-                            <tr><td colspan="6" class="table-empty">Loading...</td></tr>
-                        </tbody>
-                    </table>
+            <div class="calllog-history-panel">
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">⚡ Today's Follow-ups</h2>
+                        <span class="pending-count" id="fuTodayCount">0</span>
+                    </div>
+                    <div class="pending-list" id="fuTodayList">
+                        <div class="no-history"><div>📅</div><p>Loading...</p></div>
+                    </div>
+                </div>
+
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">📅 Upcoming Follow-ups</h2>
+                        <span class="pending-count older" id="fuUpcomingCount">0</span>
+                    </div>
+                    <div class="pending-list" id="fuUpcomingList">
+                        <div class="no-history"><div>📅</div><p>Loading...</p></div>
+                    </div>
+                </div>
+
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">🔄 All Follow-up Status</h2>
+                        <span class="pending-count" id="fuAllCount">0</span>
+                    </div>
+                    <div class="pending-list" id="fuAllList">
+                        <div class="no-history"><div>🔄</div><p>Loading...</p></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 5: PAYMENTS -->
+    <!-- TAB 5: HOLD (with NEW Stats Bar!) -->
+    <div class="tab-content" id="content-hold">
+
+        <!-- 🆕 STATS BAR ADDED! -->
+        <div class="pending-stats-bar" id="holdStats">
+            <div class="ps-item"><span class="ps-label">📊 Total:</span><span class="ps-value">0</span></div>
+        </div>
+
+        <div class="calllog-layout">
+            <div class="calllog-form-panel">
+                <div class="section-card">
+                    <h2 class="section-title">⏸️ Hold - Update</h2>
+
+                    <div id="holdFormContainer" style="display:none">
+                        <div class="selected-lead-info">
+                            <div class="selected-lead-header">
+                                <span class="selected-lead-name" id="holdViewLeadName">-</span>
+                                <span class="selected-lead-phone" id="holdViewLeadPhone">-</span>
+                            </div>
+                            <div class="selected-lead-status" id="holdViewLeadStatus">-</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>👤 Name</label>
+                            <input type="text" id="holdName" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>📊 Re-activate / Change Status</label>
+                            <select id="holdStatus" class="form-select">
+                                <option value="Hold">⏸️ Hold (Keep)</option>
+                                <option value="Need Call">📱 Need Call (Re-activate)</option>
+                                <option value="Might Join">🔵 Might Join</option>
+                                <option value="Enrolled">🟢 Enrolled</option>
+                                <option value="Call back later">📞 Call back later</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Update Notes (Optional)</label>
+                            <textarea id="holdNotes" class="form-textarea" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="saveTabUpdate('hold')">💾 Save Update</button>
+                            <button class="btn-secondary" onclick="clearTabForm('hold')">🔄 Clear</button>
+                        </div>
+
+                        <div class="wa-actions">
+                            <div class="wa-title">📲 WhatsApp</div>
+                            <button class="btn-wa" onclick="openWAPreview('course')">📚 Course Details</button>
+                        </div>
+                    </div>
+
+                    <div class="no-lead-msg" id="holdNoLead">
+                        <div class="no-lead-icon">⏸️</div>
+                        <p>දකුණු පැත්තේ Hold lead එකක් select කරන්න!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calllog-history-panel">
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">⏸️ Hold Leads</h2>
+                        <span class="pending-count" id="holdCount">0</span>
+                    </div>
+                    <div class="pending-list" id="holdList">
+                        <div class="no-history"><div>⏸️</div><p>Loading...</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: ENROLLED -->
+    <div class="tab-content" id="content-enrolled">
+        <div class="calllog-layout">
+            <div class="calllog-form-panel">
+                <div class="section-card">
+                    <h2 class="section-title">✅ Enrolled - Update</h2>
+
+                    <div id="enrFormContainer" style="display:none">
+                        <div class="selected-lead-info">
+                            <div class="selected-lead-header">
+                                <span class="selected-lead-name" id="enrLeadName">-</span>
+                                <span class="selected-lead-phone" id="enrLeadPhone">-</span>
+                            </div>
+                            <div class="selected-lead-status" id="enrLeadStatus">🟢 Enrolled</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>👤 Name</label>
+                            <input type="text" id="enrName" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>🎓 Course</label>
+                            <select id="enrCourse" class="form-select">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Update Notes (Optional)</label>
+                            <textarea id="enrNotes" class="form-textarea" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="saveTabUpdate('enrolled')">💾 Save Update</button>
+                            <button class="btn-secondary" onclick="clearTabForm('enrolled')">🔄 Clear</button>
+                        </div>
+
+                        <div class="wa-actions">
+                            <div class="wa-title">📲 WhatsApp</div>
+                            <button class="btn-wa" onclick="openWAPreview('confirmation')">✅ Confirmation</button>
+                            <button class="btn-wa" onclick="openWAPreview('payment')">💳 Payment Details</button>
+                            <button class="btn-wa" onclick="openWAPreview('multi')">📦 Multi-Select</button>
+                        </div>
+                    </div>
+
+                    <div class="no-lead-msg" id="enrNoLead">
+                        <div class="no-lead-icon">✅</div>
+                        <p>දකුණු පැත්තේ Enrolled student එකක් select කරන්න!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calllog-history-panel">
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">✅ Enrolled Students</h2>
+                        <span class="pending-count" id="enrolledCount">0</span>
+                    </div>
+                    <div class="pending-list" id="enrolledList">
+                        <div class="no-history"><div>✅</div><p>Loading...</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 7: PAYMENTS -->
     <div class="tab-content" id="content-payments">
         <div class="section-card">
             <div class="section-header-row">
@@ -444,59 +611,85 @@
         </div>
     </div>
 
-    <!-- TAB 6: CC REPORTS -->
-    <div class="tab-content" id="content-ccReports">
-        <div class="section-card">
-            <h2 class="section-title">📊 Call Center Analytics</h2>
+    <!-- TAB 8: CC REPORTS -->
+<div class="tab-content" id="content-ccReports">
+    <div class="section-card">
+        <h2 class="section-title">📊 Call Center Analytics</h2>
 
-            <div class="report-filters">
-                <select id="reportPeriod" class="filter-select" onchange="loadCCReports()">
-                    <option value="today">Today</option>
-                    <option value="week">This Week</option>
-                    <option value="month" selected>This Month</option>
-                    <option value="all">All Time</option>
-                </select>
-            </div>
+        <div class="report-filters">
+            <select id="reportPeriod" class="filter-select" onchange="loadCCReports()">
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month" selected>This Month</option>
+                <option value="all">All Time</option>
+            </select>
+        </div>
 
-            <div class="report-stats-grid">
-                <div class="report-stat-card">
-                    <div class="rs-icon">👥</div>
-                    <div class="rs-number" id="rsTotalLeads">0</div>
-                    <div class="rs-label">Total Leads</div>
-                </div>
-                <div class="report-stat-card success">
-                    <div class="rs-icon">🟢</div>
-                    <div class="rs-number" id="rsEnrolled">0</div>
-                    <div class="rs-label">Enrolled</div>
-                </div>
-                <div class="report-stat-card info">
-                    <div class="rs-icon">🔵</div>
-                    <div class="rs-number" id="rsMightJoin">0</div>
-                    <div class="rs-label">Might Join</div>
-                </div>
-                <div class="report-stat-card warning">
-                    <div class="rs-icon">💰</div>
-                    <div class="rs-number" id="rsRevenue">Rs. 0</div>
-                    <div class="rs-label">Expected Revenue</div>
-                </div>
-                <div class="report-stat-card purple">
-                    <div class="rs-icon">📈</div>
-                    <div class="rs-number" id="rsConversion">0%</div>
-                    <div class="rs-label">Conversion Rate</div>
-                </div>
+        <div class="report-stats-grid">
+            <div class="report-stat-card">
+                <div class="rs-icon">👥</div>
+                <div class="rs-number" id="rsTotalLeads">0</div>
+                <div class="rs-label">Total Leads</div>
             </div>
+            <div class="report-stat-card success">
+                <div class="rs-icon">🟢</div>
+                <div class="rs-number" id="rsEnrolled">0</div>
+                <div class="rs-label">Enrolled</div>
+            </div>
+            <div class="report-stat-card info">
+                <div class="rs-icon">🔵</div>
+                <div class="rs-number" id="rsMightJoin">0</div>
+                <div class="rs-label">Might Join</div>
+            </div>
+            <div class="report-stat-card warning">
+                <div class="rs-icon">💰</div>
+                <div class="rs-number" id="rsRevenue">Rs. 0</div>
+                <div class="rs-label">Expected Revenue</div>
+            </div>
+            <div class="report-stat-card purple">
+                <div class="rs-icon">📈</div>
+                <div class="rs-number" id="rsConversion">0%</div>
+                <div class="rs-label">Conversion Rate</div>
+            </div>
+        </div>
 
-            <div class="status-breakdown">
-                <h3>📊 Status Breakdown</h3>
-                <div class="status-bars" id="statusBars">Loading...</div>
-            </div>
+        <div class="status-breakdown">
+            <h3>📊 Status Breakdown</h3>
+            <div class="status-bars" id="statusBars">Loading...</div>
         </div>
     </div>
 
-    <!-- TAB 7: SETTINGS -->
+    <!-- ⭐ NEW: LEAD SOURCE ANALYTICS -->
+    <div class="source-analytics">
+        <div class="source-analytics-header">
+            <h3 class="source-analytics-title">
+                📡 Lead Source Performance
+            </h3>
+            <span class="source-analytics-subtitle" id="sourceSubtitle">
+                Best performing sources
+            </span>
+        </div>
+
+        <div id="sourceAnalyticsList">
+            <div class="source-empty">
+                <div class="source-empty-icon">📡</div>
+                <p>Loading source analytics...</p>
+            </div>
+        </div>
+
+        <div class="source-insights" id="sourceInsights" style="display:none;">
+            <span class="source-insights-icon">💡</span>
+            <div class="source-insights-text" id="sourceInsightsText"></div>
+        </div>
+    </div>
+</div>
+
+           
+
+ 
+
+    <!-- TAB 9: SETTINGS -->
     <div class="tab-content" id="content-settings">
-        
-        <!-- CALL ATTEMPTS SETTING -->
         <div class="section-card">
             <h2 class="section-title">⚙️ Call Attempts Settings</h2>
             <div class="form-group">
@@ -505,7 +698,7 @@
                 <button class="btn-primary" onclick="saveMaxAttempts()" style="margin-left:10px;">💾 Save</button>
             </div>
             <p style="color:#888;font-size:0.85rem;">
-                💡 Need Call status එකේ leads කී වතාවක් call කරාද කියලා track කරනවා. මේ limit එකට ආවට පස්සේ warning එනවා "Move to Hold?"
+                💡 Need Call status එකේ leads කී වතාවක් call කරාද කියලා track කරනවා.
             </p>
         </div>
 
@@ -556,11 +749,7 @@
 
 </div><!-- /dashboard-container -->
 
-<!-- ═══════════════════════════════ -->
-<!-- MODALS                         -->
-<!-- ═══════════════════════════════ -->
-
-<!-- LEAD MODAL (with Country Selector!) -->
+<!-- LEAD MODAL -->
 <div class="modal-overlay" id="leadModal">
     <div class="modal-box modal-lg">
         <div class="modal-header">
@@ -791,7 +980,7 @@
     </div>
 </div>
 
-<!-- ⭐ NEW: HOLD WARNING MODAL -->
+<!-- HOLD WARNING MODAL -->
 <div class="modal-overlay" id="holdWarningModal">
     <div class="modal-box modal-sm">
         <div class="modal-header">
@@ -811,7 +1000,7 @@
     </div>
 </div>
 
-<!-- ⭐ NEW: WHATSAPP PREVIEW MODAL -->
+<!-- WHATSAPP PREVIEW MODAL -->
 <div class="modal-overlay" id="waPreviewModal">
     <div class="modal-box modal-lg">
         <div class="modal-header">
@@ -819,7 +1008,6 @@
             <button class="modal-close" onclick="closeModal('waPreviewModal')">✕</button>
         </div>
         <div class="modal-body">
-            <!-- Multi-template selector (shown when type=multi) -->
             <div id="waMultiSelect" style="display:none;margin-bottom:15px;">
                 <label style="color:#f0a500;font-weight:600;display:block;margin-bottom:10px;">📦 Select Templates to Include:</label>
                 <div class="wa-checkboxes">

@@ -1681,3 +1681,893 @@
 /* ═══════════════════════════════════════════
    END OF PHASE 1 STYLES
    ═══════════════════════════════════════════ */
+   
+/* ═══════════════════════════════════════════
+   STEP 2 - TAB BADGES (v10.7)
+   ═══════════════════════════════════════════ */
+
+.tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 5px;
+    min-width: 20px;
+    height: 18px;
+}
+
+.tab-btn.active .tab-badge {
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+.tab-btn:not(.active) .tab-badge {
+    background: rgba(240, 165, 0, 0.3);
+    color: #f0a500;
+}
+
+.pending-item-course {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #f0a500;
+}
+
+.pending-item-followup {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #2196F3;
+}
+
+
+/* ═══════════════════════════════════════════
+   STEP 3 - ATTEMPT SECTIONS & SMART CATEGORIZATION (v10.8)
+   ═══════════════════════════════════════════ */
+
+/* ─── ATTEMPT SECTION CARDS ─── */
+.attempt-section {
+    background: #16213e;
+    border: 2px solid #2a4a7c;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.attempt-section-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #1a2842, #16213e);
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.attempt-section-header:hover {
+    background: linear-gradient(135deg, #1a3852, #1a2842);
+}
+
+.attempt-section-title {
+    flex: 1;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.attempt-section-count {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-right: 10px;
+    min-width: 30px;
+    text-align: center;
+}
+
+.attempt-section-arrow {
+    color: #888;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.attempt-section-body {
+    padding: 12px;
+    background: #0f1d35;
+}
+
+.attempt-section-body .pending-item {
+    margin-bottom: 8px;
+}
+
+.attempt-section-body .pending-item:last-child {
+    margin-bottom: 0;
+}
+
+/* ─── ATTEMPT COLORS ─── */
+
+/* Attempt 1 - GREEN (Fresh!) */
+.attempt-section-1 {
+    border-color: #4CAF50;
+}
+.attempt-section-1 .attempt-section-header {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(76, 175, 80, 0.05));
+    border-bottom: 2px solid rgba(76, 175, 80, 0.3);
+}
+.attempt-section-1 .attempt-section-count {
+    background: #4CAF50;
+}
+
+/* Attempt 2 - BLUE (Normal) */
+.attempt-section-2 {
+    border-color: #2196F3;
+}
+.attempt-section-2 .attempt-section-header {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.2), rgba(33, 150, 243, 0.05));
+    border-bottom: 2px solid rgba(33, 150, 243, 0.3);
+}
+.attempt-section-2 .attempt-section-count {
+    background: #2196F3;
+}
+
+/* Attempt 3 - ORANGE (Warning) */
+.attempt-section-3 {
+    border-color: #FF9800;
+}
+.attempt-section-3 .attempt-section-header {
+    background: linear-gradient(135deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05));
+    border-bottom: 2px solid rgba(255, 152, 0, 0.3);
+}
+.attempt-section-3 .attempt-section-count {
+    background: #FF9800;
+}
+
+/* Attempt 4+ - RED (Last chance!) */
+.attempt-section-4 {
+    border-color: #f44336;
+}
+.attempt-section-4 .attempt-section-header {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(244, 67, 54, 0.05));
+    border-bottom: 2px solid rgba(244, 67, 54, 0.3);
+    animation: pulse-red-section 2s infinite;
+}
+.attempt-section-4 .attempt-section-count {
+    background: #f44336;
+}
+
+@keyframes pulse-red-section {
+    0%, 100% { box-shadow: inset 0 0 10px rgba(244, 67, 54, 0); }
+    50% { box-shadow: inset 0 0 15px rgba(244, 67, 54, 0.3); }
+}
+
+/* Done Today - GREY FADED */
+.attempt-section-done {
+    border-color: #555;
+    opacity: 0.7;
+}
+.attempt-section-done .attempt-section-header {
+    background: linear-gradient(135deg, rgba(85, 85, 85, 0.2), rgba(85, 85, 85, 0.05));
+    border-bottom: 2px solid rgba(85, 85, 85, 0.3);
+}
+.attempt-section-done .attempt-section-count {
+    background: #555;
+}
+
+/* Done Today items - faded look */
+.pending-item.done-today {
+    opacity: 0.6;
+    filter: grayscale(50%);
+    cursor: default;
+    pointer-events: auto;
+}
+
+.pending-item.done-today:hover {
+    opacity: 0.8;
+    filter: grayscale(30%);
+    transform: none;
+}
+
+.pending-item.done-today::after {
+    content: '✅ DONE TODAY';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+/* Pending item position relative for done badge */
+.pending-item {
+    position: relative;
+}
+
+/* ─── COURSE & FOLLOW-UP DISPLAY (in cards) ─── */
+.pending-item-course {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #f0a500;
+    font-weight: 500;
+}
+
+.pending-item-followup {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #2196F3;
+    font-weight: 500;
+}
+
+.pending-item-wa {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: #25D366;
+    font-weight: 500;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+    .attempt-section-title {
+        font-size: 0.85rem;
+    }
+    .attempt-section-count {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+    }
+    .attempt-section-body {
+        padding: 8px;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   END OF STEP 3 STYLES
+   ═══════════════════════════════════════════ */
+   /* ═══════════════════════════════════════════
+   STEP 1 - SMART DATE BUTTONS (v10.9)
+   ═══════════════════════════════════════════ */
+
+/* ─── DATE QUICK BUTTONS ROW ─── */
+.date-quick-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.btn-date-quick {
+    background: #0f3460;
+    border: 1px solid #2a4a7c;
+    border-radius: 6px;
+    color: #ccc;
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-date-quick:hover {
+    background: #1a4a7c;
+    border-color: #f0a500;
+    color: #f0a500;
+    transform: translateY(-1px);
+}
+
+.btn-date-quick.active {
+    background: rgba(240, 165, 0, 0.15);
+    border-color: #f0a500;
+    color: #f0a500;
+    font-weight: 600;
+}
+
+/* ─── AUTO DATE BADGE ─── */
+.auto-date-badge {
+    display: inline-block;
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: #4CAF50;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 8px;
+    animation: fadeInBadge 0.3s ease;
+}
+
+@keyframes fadeInBadge {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 480px) {
+    .date-quick-btns {
+        gap: 4px;
+    }
+
+    .btn-date-quick {
+        padding: 5px 8px;
+        font-size: 0.72rem;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   END OF STEP 1 STYLES
+   ═══════════════════════════════════════════ */
+   /* ═══════════════════════════════════════════
+   STEP 3 - SMART TAB BADGE HIDE (v11.0)
+   ═══════════════════════════════════════════ */
+
+/* Initially hide all badges - script will show if > 0 */
+.tab-badge:empty {
+    display: none !important;
+}
+
+/* Smooth fade in when badge appears */
+.tab-badge {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ═══════════════════════════════════════════
+   END OF STEP 3 STYLES
+   ═══════════════════════════════════════════ */
+   /* ═══════════════════════════════════════════
+   STEP 4 - LEAD SOURCE ANALYTICS (v11.1)
+   ═══════════════════════════════════════════ */
+
+/* ─── SOURCE ANALYTICS SECTION ─── */
+.source-analytics {
+    background: #16213e;
+    border: 1px solid #2a4a7c;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 24px;
+}
+
+.source-analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.source-analytics-title {
+    color: #f0a500;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.source-analytics-subtitle {
+    color: #8892b0;
+    font-size: 0.85rem;
+}
+
+/* ─── EMPTY STATE ─── */
+.source-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
+
+.source-empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    opacity: 0.6;
+}
+
+/* ─── SOURCE LIST ─── */
+.source-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ─── SOURCE ITEM CARD ─── */
+.source-item {
+    background: #0f3460;
+    border: 1px solid #1a2842;
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: all 0.2s ease;
+}
+
+.source-item:hover {
+    border-color: #f0a500;
+    transform: translateX(3px);
+}
+
+.source-item.top-performer {
+    border-color: #FFD700;
+    background: linear-gradient(135deg, #0f3460, #1a3852);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+}
+
+.source-item.hidden-gem {
+    border-color: #9C27B0;
+    background: linear-gradient(135deg, #0f3460, #1a2842);
+}
+
+/* ─── SOURCE HEADER (Rank + Name + Badges) ─── */
+.source-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.source-rank {
+    background: #2a4a7c;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.source-rank.rank-1 { background: linear-gradient(135deg, #FFD700, #FFA000); color: #1a1a2e; }
+.source-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #999); color: #1a1a2e; }
+.source-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B5A2B); color: #fff; }
+
+.source-name {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.source-badge {
+    background: rgba(255, 215, 0, 0.2);
+    color: #FFD700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.source-badge.best-rate {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border-color: rgba(76, 175, 80, 0.3);
+}
+
+.source-badge.gem {
+    background: rgba(156, 39, 176, 0.2);
+    color: #CE93D8;
+    border-color: rgba(156, 39, 176, 0.3);
+}
+
+/* ─── SOURCE STATS ROW ─── */
+.source-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.source-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.source-stat-label {
+    color: #8892b0;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.source-stat-value {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.source-stat-value.conversion-high {
+    color: #4CAF50;
+}
+
+.source-stat-value.conversion-med {
+    color: #FFC107;
+}
+
+.source-stat-value.conversion-low {
+    color: #ff6b6b;
+}
+
+/* ─── PROGRESS BAR ─── */
+.source-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.source-bar-track {
+    flex: 1;
+    background: #16213e;
+    border-radius: 4px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.source-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2196F3, #1976D2);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+}
+
+.source-bar-fill.conversion-high {
+    background: linear-gradient(90deg, #4CAF50, #2E7D32);
+}
+
+.source-bar-fill.conversion-med {
+    background: linear-gradient(90deg, #FFC107, #FFA000);
+}
+
+.source-bar-fill.conversion-low {
+    background: linear-gradient(90deg, #ff6b6b, #c62828);
+}
+
+.source-bar-percent {
+    color: #8892b0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* ─── INSIGHTS BOX ─── */
+.source-insights {
+    background: rgba(240, 165, 0, 0.08);
+    border: 1px solid rgba(240, 165, 0, 0.2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.source-insights-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.source-insights-text {
+    color: #ccc;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.source-insights-text strong {
+    color: #f0a500;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+    .source-stats {
+        gap: 12px;
+    }
+    
+    .source-stat-value {
+        font-size: 0.9rem;
+    }
+    
+    .source-stat-label {
+        font-size: 0.65rem;
+    }
+    
+    .source-name {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .source-analytics {
+        padding: 15px;
+    }
+    
+    .source-item {
+        padding: 12px;
+    }
+    
+    .source-bar-percent {
+        font-size: 0.7rem;
+        min-width: 35px;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   END OF STEP 4 STYLES
+   ═══════════════════════════════════════════ */
+
+   
+/* ═══════════════════════════════════════════
+   STEP 5 - REMINDER NOTIFICATIONS (v11.2)
+   ═══════════════════════════════════════════ */
+
+/* ─── REMINDER TOAST (Special Style) ─── */
+.toast.reminder-toast {
+    background: linear-gradient(135deg, #16213e, #1a2842);
+    border: 2px solid #FF9800;
+    border-left: 4px solid #FF9800;
+    cursor: pointer;
+    min-width: 280px;
+    padding: 14px 18px;
+    box-shadow: 0 4px 20px rgba(255, 152, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: reminderToastIn 0.4s ease;
+}
+
+.toast.reminder-toast:hover {
+    transform: translateX(-5px) scale(1.02);
+    box-shadow: 0 6px 25px rgba(255, 152, 0, 0.6);
+}
+
+.reminder-toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.reminder-toast-icon {
+    font-size: 2rem;
+    animation: bellShake 2s infinite;
+    flex-shrink: 0;
+}
+
+.reminder-toast-text {
+    flex: 1;
+}
+
+.reminder-toast-title {
+    color: #FF9800;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+}
+
+.reminder-toast-subtitle {
+    color: #ccc;
+    font-size: 0.75rem;
+    font-style: italic;
+}
+
+@keyframes reminderToastIn {
+    from { 
+        opacity: 0; 
+        transform: translateX(50px) scale(0.8); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0) scale(1); 
+    }
+}
+
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(-15deg); }
+    20%, 40% { transform: rotate(15deg); }
+    50% { transform: rotate(0deg); }
+}
+
+/* ─── TAB WITH REMINDER (Pulse Effect) ─── */
+.tab-btn.has-reminder {
+    position: relative;
+    animation: tabPulse 2s infinite;
+}
+
+.tab-btn.has-reminder::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background: #ff4444;
+    border-radius: 50%;
+    animation: dotBlink 1s infinite;
+    box-shadow: 0 0 8px rgba(255, 68, 68, 0.8);
+}
+
+@keyframes tabPulse {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
+    }
+    50% { 
+        box-shadow: 0 0 0 6px rgba(255, 152, 0, 0);
+    }
+}
+
+@keyframes dotBlink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* ─── REMINDER BADGE (Red instead of normal) ─── */
+.tab-badge.reminder-badge {
+    background: #ff4444 !important;
+    color: #fff !important;
+    animation: badgePulse 1.5s infinite;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
+}
+
+.tab-btn.active .tab-badge.reminder-badge {
+    background: #fff !important;
+    color: #ff4444 !important;
+}
+
+@keyframes badgePulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 68, 68, 0.5);
+    }
+    50% { 
+        transform: scale(1.15);
+        box-shadow: 0 0 0 6px rgba(255, 68, 68, 0);
+    }
+}
+
+/* ─── RESPONSIVE (MOBILE) ─── */
+@media (max-width: 768px) {
+    .toast.reminder-toast {
+        min-width: unset;
+        width: calc(100vw - 40px);
+        padding: 12px 14px;
+    }
+
+    .reminder-toast-icon {
+        font-size: 1.5rem;
+    }
+
+    .reminder-toast-title {
+        font-size: 0.85rem;
+    }
+
+    .reminder-toast-subtitle {
+        font-size: 0.7rem;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   END OF STEP 5 STYLES
+   ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   PAYMENT QUICK ACTION BAR (v11.3)
+   Added: 2026-06-12
+   ═══════════════════════════════════════════ */
+
+.payment-quick-action {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+    border: 2px solid #4CAF50;
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.2);
+    animation: paymentBarIn 0.4s ease;
+}
+
+@keyframes paymentBarIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.payment-action-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.payment-action-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+    animation: paymentIconPulse 2s infinite;
+}
+
+@keyframes paymentIconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.payment-action-text {
+    flex: 1;
+    min-width: 200px;
+}
+
+.payment-action-title {
+    color: #4CAF50;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.payment-action-desc {
+    color: #ccc;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.btn-process-payment-main {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    padding: 14px 26px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-process-payment-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(76, 175, 80, 0.6);
+    background: linear-gradient(135deg, #5DBF60, #388E3C);
+}
+
+.btn-process-payment-main:active {
+    transform: translateY(0);
+}
+
+/* Header button (smaller version) */
+#btnNewPaymentHeader {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32) !important;
+    color: #fff !important;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+}
+
+#btnNewPaymentHeader:hover {
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5) !important;
+    background: linear-gradient(135deg, #5DBF60, #388E3C) !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .payment-action-content {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .payment-action-icon {
+        font-size: 2rem;
+        margin: 0 auto;
+    }
+    
+    .btn-process-payment-main {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   END PAYMENT QUICK ACTION
+   ═══════════════════════════════════════════ */

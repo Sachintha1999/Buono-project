@@ -1,6 +1,7 @@
 /* ============================================
    LOGIN PAGE - STYLES
    File: login-style.css
+   Version: 2.0 (Login Help Box Added!)
    ============================================ */
 
 /* ===== LOGIN BODY ===== */
@@ -101,6 +102,12 @@
     transform: translateY(0);
 }
 
+#loginBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* ===== ERROR MESSAGE ===== */
 #loginError {
     color: #ff4444;
@@ -112,6 +119,37 @@
     background: rgba(255, 68, 68, 0.1);
     border-radius: 8px;
     border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+/* ═══════════════════════════════════════════
+   ⭐ LOGIN HELP BOX (NEW!)
+   ═══════════════════════════════════════════ */
+.login-help-box {
+    margin-top: 24px;
+    padding: 14px 16px;
+    background: rgba(240, 165, 0, 0.05);
+    border-left: 3px solid #f0a500;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.login-help-title {
+    color: #f0a500;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.login-help-text {
+    color: #aaa;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.login-help-text strong {
+    color: #ccc;
+    font-weight: 600;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -126,5 +164,13 @@
 
     .login-icon {
         font-size: 44px;
+    }
+
+    .login-help-box {
+        padding: 12px 14px;
+    }
+
+    .login-help-text {
+        font-size: 11px;
     }
 }
