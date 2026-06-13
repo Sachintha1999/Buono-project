@@ -188,58 +188,167 @@
         </div>
     </div>
 
-    <!-- TAB 7: PAYMENTS -->
-<div class="tab-content" id="content-payments">
-    
-    <!-- ⭐ NEW: Quick Action Bar -->
-    <div class="section-card payment-quick-action" id="paymentQuickAction" style="display:none;">
-        <div class="payment-action-content">
-            <div class="payment-action-icon">💳</div>
-            <div class="payment-action-text">
-                <div class="payment-action-title">Process New Payment</div>
-                <div class="payment-action-desc">
-                    අලුත් student payment එකක් process කරන්න — Student ID, Password, Receipt auto-generate වෙයි
+    <!-- TAB 2: CALL LOG -->
+    <div class="tab-content" id="content-callLog">
+
+        <div class="pending-stats-bar">
+            <div class="ps-item"><span class="ps-label">🆕 Added Today:</span><span class="ps-value ps-success" id="psTodayAdded">0</span></div>
+            <div class="ps-divider">|</div>
+            <div class="ps-item"><span class="ps-label">✅ Called Today:</span><span class="ps-value ps-info" id="psTodayCalled">0</span></div>
+            <div class="ps-divider">|</div>
+            <div class="ps-item"><span class="ps-label">⏳ Remaining Today:</span><span class="ps-value ps-warning" id="psTodayRemaining">0</span></div>
+            <div class="ps-divider">|</div>
+            <div class="ps-item"><span class="ps-label">📅 Older Pending:</span><span class="ps-value" id="psOlderPending">0</span></div>
+        </div>
+
+        <div class="calllog-layout">
+
+            <div class="calllog-form-panel">
+                <div class="section-card">
+                    <h2 class="section-title">📞 Call Log Entry</h2>
+
+                    <div class="form-group" style="position:relative;">
+                        <label>🔍 Search Lead (Name or Phone)</label>
+                        <input type="text" id="logSearchInput" class="form-input" 
+                               placeholder="Type name or phone..."
+                               oninput="searchForLog()">
+                        <div class="search-results" id="logSearchResults"></div>
+                    </div>
+
+                    <div id="selectedLeadInfo" style="display:none;">
+                        <div class="selected-lead-info">
+                            <div class="selected-lead-header">
+                                <span class="selected-lead-name" id="selLeadName">-</span>
+                                <span class="selected-lead-phone" id="selLeadPhone">-</span>
+                            </div>
+                            <div class="selected-lead-status" id="selLeadStatus">-</div>
+                            <div class="selected-lead-attempts" id="selLeadAttempts">📞 Attempts: 0/4</div>
+                        </div>
+                    </div>
+
+                    <div id="callLogForm" style="display:none;">
+                        <div class="form-group">
+                            <label>👤 Name</label>
+                            <input type="text" id="logName" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>📱 Phone</label>
+                            <input type="text" id="logPhone" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>📊 Call Status *</label>
+                            <select id="logStatus" class="form-select" onchange="autoSetSmartDate('logStatus', 'logFollowUp')">
+                                <option value="Need Call">📱 Need Call</option>
+                                <option value="Enrolled">🟢 Enrolled</option>
+                                <option value="Might Join">🔵 Might Join</option>
+                                <option value="Not Responding">⚫ Not Responding</option>
+                                <option value="Unable to join">🔴 Unable to join</option>
+                                <option value="Switch off">⚪ Switch off</option>
+                                <option value="Will join the next intake">🟡 Will join next intake</option>
+                                <option value="Call back later">📞 Call back later</option>
+                                <option value="Not in use">❌ Not in use</option>
+                                <option value="Will decide and get back to us">🤔 Will decide</option>
+                                <option value="User busy">📵 User busy</option>
+                                <option value="Hold">⏸️ Hold</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>🎓 Course Interest</label>
+                            <select id="logCourse" class="form-select">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📡 Lead Source</label>
+                            <select id="logSource" class="form-select">
+                                <option value="Walk In">Walk In</option>
+                                <option value="Facebook">Facebook</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Website">Website</option>
+                                <option value="Event">Event</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📢 Campaign</label>
+                            <select id="logEvent" class="form-select">
+                                <option value="">-- No Campaign --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>📅 Follow-up Date <span id="logFollowUpAutoBadge" class="auto-date-badge" style="display:none;"></span></label>
+                            <input type="datetime-local" id="logFollowUp" class="form-input">
+                            <div class="date-quick-btns">
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('logFollowUp', 1, this)">Tomorrow</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('logFollowUp', 3, this)">3 Days</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('logFollowUp', 7, this)">1 Week</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('logFollowUp', 14, this)">2 Weeks</button>
+                                <button type="button" class="btn-date-quick" onclick="setSmartDate('logFollowUp', 30, this)">1 Month</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>📝 Call Notes</label>
+                            <textarea id="logNotes" class="form-textarea" rows="3" placeholder="මොකද කතා කරේ?"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" onclick="saveCallLog()">💾 Save Call Log</button>
+                            <button class="btn-secondary" onclick="clearCallLogForm()">🔄 Clear</button>
+                        </div>
+
+                        <div class="wa-actions" id="waActions" style="display:none;">
+                            <div class="wa-title">📲 WhatsApp</div>
+                            <button class="btn-wa" onclick="openWAPreview('course')">📚 Course Details</button>
+                            <button class="btn-wa" onclick="openWAPreview('payment')">💳 Payment Details</button>
+                            <button class="btn-wa" onclick="openWAPreview('confirmation')">✅ Confirmation</button>
+                            <button class="btn-wa" onclick="openWAPreview('multi')">📦 Multi-Select</button>
+                        </div>
+                    </div>
+
+                    <div class="no-lead-msg" id="noLeadMsg">
+                        <div class="no-lead-icon">📞</div>
+                        <p>Search box එකෙන් lead එකක් search කරන්න</p>
+                        <p style="font-size:0.85rem;color:#888;margin-top:10px;">හෝ දකුණු පැත්තෙන් pending lead එකක් select කරන්න!</p>
+                    </div>
+                </div>
+
+                <div class="section-card" id="callHistorySection" style="display:none;">
+                    <h2 class="section-title">📜 Call History</h2>
+                    <div class="call-history-list" id="callHistoryList">
+                        <div class="no-history"><div>📞</div><p>Select lead</p></div>
+                    </div>
                 </div>
             </div>
-            <button class="btn-process-payment-main" onclick="openPaymentPage()">
-                ➕ Process New Payment
-            </button>
-        </div>
-    </div>
-    
-    <!-- Payment Tracking Table -->
-    <div class="section-card">
-        <div class="section-header-row">
-            <h2 class="section-title">💰 Payment Tracking</h2>
-            <div class="header-actions">
-                <span class="count-badge" id="paymentCount">0</span>
-                <button class="btn-primary" id="btnNewPaymentHeader" 
-                        onclick="openPaymentPage()" 
-                        style="display:none;">
-                    ➕ New Payment
-                </button>
+
+            <div class="calllog-history-panel">
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">🆕 අද Add කරපු Pending Leads</h2>
+                        <span class="pending-count" id="todayPendingCount">0</span>
+                    </div>
+                    <div class="pending-list" id="todayPendingList">
+                        <div class="no-history"><div>⏳</div><p>Loading...</p></div>
+                    </div>
+                </div>
+
+                <div class="section-card pending-section">
+                    <div class="pending-header">
+                        <h2 class="section-title">📅 පරණ Pending Leads</h2>
+                        <span class="pending-count older" id="olderPendingCount">0</span>
+                    </div>
+                    <div class="pending-list" id="olderPendingList">
+                        <div class="no-history"><div>⏳</div><p>Loading...</p></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="table-wrap">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Name</th><th>Phone</th><th>Course</th><th>Total</th>
-                        <th>Down</th><th>Install 1</th><th>Install 2</th><th>Balance</th><th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="paymentsTableBody">
-                    <tr><td colspan="9" class="table-empty">Loading...</td></tr>
-                </tbody>
-            </table>
-        </div>
     </div>
-</div>
 
-    <!-- ⭐ TAB 3: MIGHT JOIN (with NEW Stats Bar!) -->
+    <!-- TAB 3: MIGHT JOIN -->
     <div class="tab-content" id="content-mightJoin">
 
-        <!-- 🆕 STATS BAR ADDED! -->
         <div class="pending-stats-bar" id="mightJoinStats">
             <div class="ps-item"><span class="ps-label">📊 Total:</span><span class="ps-value">0</span></div>
         </div>
@@ -334,10 +443,9 @@
         </div>
     </div>
 
-    <!-- TAB 4: FOLLOW-UPS (with NEW Stats Bar!) -->
+    <!-- TAB 4: FOLLOW-UPS -->
     <div class="tab-content" id="content-followups">
 
-        <!-- 🆕 STATS BAR ADDED! -->
         <div class="pending-stats-bar" id="followupsStats">
             <div class="ps-item"><span class="ps-label">📊 Total:</span><span class="ps-value">0</span></div>
         </div>
@@ -450,10 +558,9 @@
         </div>
     </div>
 
-    <!-- TAB 5: HOLD (with NEW Stats Bar!) -->
+    <!-- TAB 5: HOLD -->
     <div class="tab-content" id="content-hold">
 
-        <!-- 🆕 STATS BAR ADDED! -->
         <div class="pending-stats-bar" id="holdStats">
             <div class="ps-item"><span class="ps-label">📊 Total:</span><span class="ps-value">0</span></div>
         </div>
@@ -590,10 +697,33 @@
 
     <!-- TAB 7: PAYMENTS -->
     <div class="tab-content" id="content-payments">
+        
+        <div class="section-card payment-quick-action" id="paymentQuickAction" style="display:none;">
+            <div class="payment-action-content">
+                <div class="payment-action-icon">💳</div>
+                <div class="payment-action-text">
+                    <div class="payment-action-title">Process New Payment</div>
+                    <div class="payment-action-desc">
+                        අලුත් student payment එකක් process කරන්න — Student ID, Password, Receipt auto-generate වෙයි
+                    </div>
+                </div>
+                <button class="btn-process-payment-main" onclick="openPaymentPage()">
+                    ➕ Process New Payment
+                </button>
+            </div>
+        </div>
+        
         <div class="section-card">
             <div class="section-header-row">
                 <h2 class="section-title">💰 Payment Tracking</h2>
-                <span class="count-badge" id="paymentCount">0</span>
+                <div class="header-actions">
+                    <span class="count-badge" id="paymentCount">0</span>
+                    <button class="btn-primary" id="btnNewPaymentHeader" 
+                            onclick="openPaymentPage()" 
+                            style="display:none;">
+                        ➕ New Payment
+                    </button>
+                </div>
             </div>
             <div class="table-wrap">
                 <table class="data-table">
@@ -612,81 +742,67 @@
     </div>
 
     <!-- TAB 8: CC REPORTS -->
-<div class="tab-content" id="content-ccReports">
-    <div class="section-card">
-        <h2 class="section-title">📊 Call Center Analytics</h2>
+    <div class="tab-content" id="content-ccReports">
+        <div class="section-card">
+            <h2 class="section-title">📊 Call Center Analytics</h2>
 
-        <div class="report-filters">
-            <select id="reportPeriod" class="filter-select" onchange="loadCCReports()">
-                <option value="today">Today</option>
-                <option value="week">This Week</option>
-                <option value="month" selected>This Month</option>
-                <option value="all">All Time</option>
-            </select>
+            <div class="report-filters">
+                <select id="reportPeriod" class="filter-select" onchange="loadCCReports()">
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month" selected>This Month</option>
+                    <option value="all">All Time</option>
+                </select>
+            </div>
+
+            <div class="report-stats-grid">
+                <div class="report-stat-card">
+                    <div class="rs-icon">👥</div>
+                    <div class="rs-number" id="rsTotalLeads">0</div>
+                    <div class="rs-label">Total Leads</div>
+                </div>
+                <div class="report-stat-card success">
+                    <div class="rs-icon">🟢</div>
+                    <div class="rs-number" id="rsEnrolled">0</div>
+                    <div class="rs-label">Enrolled</div>
+                </div>
+                <div class="report-stat-card info">
+                    <div class="rs-icon">🔵</div>
+                    <div class="rs-number" id="rsMightJoin">0</div>
+                    <div class="rs-label">Might Join</div>
+                </div>
+                <div class="report-stat-card warning">
+                    <div class="rs-icon">💰</div>
+                    <div class="rs-number" id="rsRevenue">Rs. 0</div>
+                    <div class="rs-label">Expected Revenue</div>
+                </div>
+                <div class="report-stat-card purple">
+                    <div class="rs-icon">📈</div>
+                    <div class="rs-number" id="rsConversion">0%</div>
+                    <div class="rs-label">Conversion Rate</div>
+                </div>
+            </div>
+
+            <div class="status-breakdown">
+                <h3>📊 Status Breakdown</h3>
+                <div class="status-bars" id="statusBars">Loading...</div>
+            </div>
         </div>
 
-        <div class="report-stats-grid">
-            <div class="report-stat-card">
-                <div class="rs-icon">👥</div>
-                <div class="rs-number" id="rsTotalLeads">0</div>
-                <div class="rs-label">Total Leads</div>
+        <div class="source-analytics">
+            <div class="source-analytics-header">
+                <h3 class="source-analytics-title">📡 Lead Source Performance</h3>
+                <span class="source-analytics-subtitle" id="sourceSubtitle">Best performing sources</span>
             </div>
-            <div class="report-stat-card success">
-                <div class="rs-icon">🟢</div>
-                <div class="rs-number" id="rsEnrolled">0</div>
-                <div class="rs-label">Enrolled</div>
+            <div id="sourceAnalyticsList">
+                <div class="source-empty"><div class="source-empty-icon">📡</div><p>Loading source analytics...</p></div>
             </div>
-            <div class="report-stat-card info">
-                <div class="rs-icon">🔵</div>
-                <div class="rs-number" id="rsMightJoin">0</div>
-                <div class="rs-label">Might Join</div>
+            <div class="source-insights" id="sourceInsights" style="display:none;">
+                <span class="source-insights-icon">💡</span>
+                <div class="source-insights-text" id="sourceInsightsText"></div>
             </div>
-            <div class="report-stat-card warning">
-                <div class="rs-icon">💰</div>
-                <div class="rs-number" id="rsRevenue">Rs. 0</div>
-                <div class="rs-label">Expected Revenue</div>
-            </div>
-            <div class="report-stat-card purple">
-                <div class="rs-icon">📈</div>
-                <div class="rs-number" id="rsConversion">0%</div>
-                <div class="rs-label">Conversion Rate</div>
-            </div>
-        </div>
-
-        <div class="status-breakdown">
-            <h3>📊 Status Breakdown</h3>
-            <div class="status-bars" id="statusBars">Loading...</div>
         </div>
     </div>
-
-    <!-- ⭐ NEW: LEAD SOURCE ANALYTICS -->
-    <div class="source-analytics">
-        <div class="source-analytics-header">
-            <h3 class="source-analytics-title">
-                📡 Lead Source Performance
-            </h3>
-            <span class="source-analytics-subtitle" id="sourceSubtitle">
-                Best performing sources
-            </span>
-        </div>
-
-        <div id="sourceAnalyticsList">
-            <div class="source-empty">
-                <div class="source-empty-icon">📡</div>
-                <p>Loading source analytics...</p>
-            </div>
-        </div>
-
-        <div class="source-insights" id="sourceInsights" style="display:none;">
-            <span class="source-insights-icon">💡</span>
-            <div class="source-insights-text" id="sourceInsightsText"></div>
-        </div>
-    </div>
-</div>
-
-           
-
- 
 
     <!-- TAB 9: SETTINGS -->
     <div class="tab-content" id="content-settings">
@@ -697,9 +813,7 @@
                 <input type="number" id="maxAttempts" class="form-input" value="4" min="1" max="20" style="max-width:200px;">
                 <button class="btn-primary" onclick="saveMaxAttempts()" style="margin-left:10px;">💾 Save</button>
             </div>
-            <p style="color:#888;font-size:0.85rem;">
-                💡 Need Call status එකේ leads කී වතාවක් call කරාද කියලා track කරනවා.
-            </p>
+            <p style="color:#888;font-size:0.85rem;">💡 Need Call status එකේ leads කී වතාවක් call කරාද කියලා track කරනවා.</p>
         </div>
 
         <div class="section-card">
@@ -709,12 +823,8 @@
             </div>
             <div class="table-wrap">
                 <table class="data-table">
-                    <thead>
-                        <tr><th>Course</th><th>Academy</th><th>Total Fee</th><th>Down</th><th>Installments</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody id="coursesTableBody">
-                        <tr><td colspan="6" class="table-empty">Loading...</td></tr>
-                    </tbody>
+                    <thead><tr><th>Course</th><th>Academy</th><th>Total Fee</th><th>Down</th><th>Installments</th><th>Actions</th></tr></thead>
+                    <tbody id="coursesTableBody"><tr><td colspan="6" class="table-empty">Loading...</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -726,12 +836,8 @@
             </div>
             <div class="table-wrap">
                 <table class="data-table">
-                    <thead>
-                        <tr><th>Campaign</th><th>Platform</th><th>Start</th><th>Status</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody id="eventsTableBody">
-                        <tr><td colspan="5" class="table-empty">Loading...</td></tr>
-                    </tbody>
+                    <thead><tr><th>Campaign</th><th>Platform</th><th>Start</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="eventsTableBody"><tr><td colspan="5" class="table-empty">Loading...</td></tr></tbody>
                 </table>
             </div>
         </div>
@@ -747,7 +853,7 @@
         </div>
     </div>
 
-</div><!-- /dashboard-container -->
+</div>
 
 <!-- LEAD MODAL -->
 <div class="modal-overlay" id="leadModal">
@@ -840,29 +946,17 @@
             <button class="modal-close" onclick="closeModal('courseModal')">✕</button>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Course Name *</label>
-                <input type="text" id="cName" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>Academy / Category</label>
-                <input type="text" id="cAcademy" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>Total Fee (Rs.) *</label>
-                <input type="number" id="cFee" class="form-input" oninput="calcCourseInstallments()">
-            </div>
-            <div class="form-group">
-                <label>Down Payment (Rs.) *</label>
-                <input type="number" id="cDown" class="form-input" oninput="calcCourseInstallments()">
-            </div>
-            <div class="form-group">
-                <label>📊 Installment Preview</label>
-                <div class="installment-preview" id="installmentPreview">Enter fee & down payment</div>
-            </div>
+            <div class="form-group"><label>Course Name *</label><input type="text" id="cName" class="form-input" placeholder="e.g. SCA Foundation"></div>
+            <div class="form-group"><label>Academy / Category</label><input type="text" id="cAcademy" class="form-input" placeholder="e.g. SAC"></div>
+            <div class="form-group"><label>Total Fee (Rs.) *</label><input type="number" id="cFee" class="form-input" placeholder="65000" oninput="calcCourseInstallments()"></div>
+            <div class="form-group"><label>Down Payment (Rs.) *</label><input type="number" id="cDown" class="form-input" placeholder="20000" oninput="calcCourseInstallments()"></div>
+            <div class="form-group"><label>📅 Course Duration (Months)</label><input type="number" id="cDuration" class="form-input" placeholder="3" min="1" max="36" oninput="calcCourseInstallments()"></div>
+            <div class="form-group"><label>💳 Number of Installments</label><input type="number" id="cInstallments" class="form-input" placeholder="2" min="1" max="12" value="2" oninput="calcCourseInstallments()"></div>
+            <div class="form-group"><label>⏱️ Payment Interval (Days)</label><input type="number" id="cInterval" class="form-input" placeholder="30" min="7" max="365" value="30" oninput="calcCourseInstallments()"></div>
+            <div class="form-group"><label>📊 Installment Plan Preview</label><div class="installment-preview" id="installmentPreview">Enter fee, down payment & installments to see plan</div></div>
         </div>
         <div class="modal-footer">
-            <button class="btn-primary" onclick="saveCourse()">💾 Save</button>
+            <button class="btn-primary" onclick="saveCourse()">💾 Save Course</button>
             <button class="btn-secondary" onclick="closeModal('courseModal')">Cancel</button>
         </div>
     </div>
@@ -876,33 +970,10 @@
             <button class="modal-close" onclick="closeModal('eventModal')">✕</button>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Campaign Name *</label>
-                <input type="text" id="evName" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>Platform</label>
-                <select id="evPlatform" class="form-select">
-                    <option value="Facebook">Facebook</option>
-                    <option value="Instagram">Instagram</option>
-                    <option value="WhatsApp">WhatsApp</option>
-                    <option value="Google">Google Ads</option>
-                    <option value="Event">Live Event</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Start Date</label>
-                <input type="date" id="evStart" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select id="evStatus" class="form-select">
-                    <option value="Active">🟢 Active</option>
-                    <option value="Paused">⏸️ Paused</option>
-                    <option value="Ended">🔴 Ended</option>
-                </select>
-            </div>
+            <div class="form-group"><label>Campaign Name *</label><input type="text" id="evName" class="form-input"></div>
+            <div class="form-group"><label>Platform</label><select id="evPlatform" class="form-select"><option value="Facebook">Facebook</option><option value="Instagram">Instagram</option><option value="WhatsApp">WhatsApp</option><option value="Google">Google Ads</option><option value="Event">Live Event</option><option value="Other">Other</option></select></div>
+            <div class="form-group"><label>Start Date</label><input type="date" id="evStart" class="form-input"></div>
+            <div class="form-group"><label>Status</label><select id="evStatus" class="form-select"><option value="Active">🟢 Active</option><option value="Paused">⏸️ Paused</option><option value="Ended">🔴 Ended</option></select></div>
         </div>
         <div class="modal-footer">
             <button class="btn-primary" onclick="saveEvent()">💾 Save</button>
@@ -919,24 +990,9 @@
             <button class="modal-close" onclick="closeModal('scriptModal')">✕</button>
         </div>
         <div class="modal-body">
-            <div class="form-group">
-                <label>Title *</label>
-                <input type="text" id="scTitle" class="form-input">
-            </div>
-            <div class="form-group">
-                <label>Category</label>
-                <select id="scCategory" class="form-select">
-                    <option value="Initial">Initial Call</option>
-                    <option value="Follow-up">Follow-up</option>
-                    <option value="Enrollment">Enrollment</option>
-                    <option value="Payment">Payment</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Content *</label>
-                <textarea id="scContent" class="form-textarea" rows="6"></textarea>
-            </div>
+            <div class="form-group"><label>Title *</label><input type="text" id="scTitle" class="form-input"></div>
+            <div class="form-group"><label>Category</label><select id="scCategory" class="form-select"><option value="Initial">Initial Call</option><option value="Follow-up">Follow-up</option><option value="Enrollment">Enrollment</option><option value="Payment">Payment</option><option value="Other">Other</option></select></div>
+            <div class="form-group"><label>Content *</label><textarea id="scContent" class="form-textarea" rows="6"></textarea></div>
         </div>
         <div class="modal-footer">
             <button class="btn-primary" onclick="saveScript()">💾 Save</button>
@@ -1011,26 +1067,11 @@
             <div id="waMultiSelect" style="display:none;margin-bottom:15px;">
                 <label style="color:#f0a500;font-weight:600;display:block;margin-bottom:10px;">📦 Select Templates to Include:</label>
                 <div class="wa-checkboxes">
-                    <label class="wa-checkbox-label">
-                        <input type="checkbox" id="waInclude_course" checked onchange="rebuildWAMessage()">
-                        <span>📚 Course Details</span>
-                    </label>
-                    <label class="wa-checkbox-label">
-                        <input type="checkbox" id="waInclude_payment" onchange="rebuildWAMessage()">
-                        <span>💳 Payment Details</span>
-                    </label>
-                    <label class="wa-checkbox-label">
-                        <input type="checkbox" id="waInclude_notes" onchange="rebuildWAMessage()">
-                        <span>📝 Discussion Notes</span>
-                    </label>
-                    <label class="wa-checkbox-label">
-                        <input type="checkbox" id="waInclude_confirmation" onchange="rebuildWAMessage()">
-                        <span>✅ Confirmation Message</span>
-                    </label>
-                    <label class="wa-checkbox-label">
-                        <input type="checkbox" id="waInclude_followup" onchange="rebuildWAMessage()">
-                        <span>📅 Follow-up Reminder</span>
-                    </label>
+                    <label class="wa-checkbox-label"><input type="checkbox" id="waInclude_course" checked onchange="rebuildWAMessage()"><span>📚 Course Details</span></label>
+                    <label class="wa-checkbox-label"><input type="checkbox" id="waInclude_payment" onchange="rebuildWAMessage()"><span>💳 Payment Details</span></label>
+                    <label class="wa-checkbox-label"><input type="checkbox" id="waInclude_notes" onchange="rebuildWAMessage()"><span>📝 Discussion Notes</span></label>
+                    <label class="wa-checkbox-label"><input type="checkbox" id="waInclude_confirmation" onchange="rebuildWAMessage()"><span>✅ Confirmation Message</span></label>
+                    <label class="wa-checkbox-label"><input type="checkbox" id="waInclude_followup" onchange="rebuildWAMessage()"><span>📅 Follow-up Reminder</span></label>
                 </div>
             </div>
             
@@ -1056,11 +1097,13 @@
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- SCRIPTS -->
+<!-- ⭐ SCRIPTS (Updated with PerfTracker + SmartStorage) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 <script src="firebase-config.js"></script>
+<script src="performance-tracker.js"></script>
+<script src="smart-storage-cache.js"></script>
 <script src="callcenter-script.js"></script>
 <script src="mobile-script.js"></script>
 

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Student Management - Buono Academy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="skeleton-loading.css">
+    <link rel="stylesheet" href="student-management-style.css">
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="topbarContainer"></div>
+
+<!-- MAIN CONTENT -->
+<div class="dashboard-container">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header anim-slide-top">
+        <div class="page-header-left">
+            <h1 class="page-title">🎓 Student Management</h1>
+            <p class="page-subtitle">Student profiles, payment history සහ batch management</p>
+        </div>
+        <div class="page-header-right">
+            <button class="btn-tracker-link" onclick="window.location.href='installment-tracker.html'" title="Installment Tracker">
+                🔔 Tracker
+            </button>
+            <button class="btn-refresh" onclick="hardRefresh()">🔄 Refresh</button>
+        </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row" id="statsRow">
+
+        <!-- Skeleton Stats (shown on load) -->
+        <div class="stat-card sk-stat-card" id="skStat0">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="stat-info">
+                <div class="skeleton skeleton-text sk-w-50"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;height:12px;"></div>
+            </div>
+        </div>
+        <div class="stat-card sk-stat-card" id="skStat1">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="stat-info">
+                <div class="skeleton skeleton-text sk-w-50"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;height:12px;"></div>
+            </div>
+        </div>
+        <div class="stat-card sk-stat-card" id="skStat2">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="stat-info">
+                <div class="skeleton skeleton-text sk-w-50"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;height:12px;"></div>
+            </div>
+        </div>
+        <div class="stat-card sk-stat-card" id="skStat3">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="stat-info">
+                <div class="skeleton skeleton-text sk-w-50"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;height:12px;"></div>
+            </div>
+        </div>
+        <div class="stat-card sk-stat-card" id="skStat4">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="stat-info">
+                <div class="skeleton skeleton-text sk-w-50"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;height:12px;"></div>
+            </div>
+        </div>
+
+        <!-- Real Stats (hidden on load) -->
+        <div class="stat-card real-stat" id="realStat0" style="display:none;">
+            <div class="stat-icon">🎓</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statTotal">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+        </div>
+        <div class="stat-card success real-stat" id="realStat1" style="display:none;">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statActive">0</div>
+                <div class="stat-label">Active</div>
+            </div>
+        </div>
+        <div class="stat-card danger real-stat" id="realStat2" style="display:none;">
+            <div class="stat-icon">⛔</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statSuspended">0</div>
+                <div class="stat-label">Suspended</div>
+            </div>
+        </div>
+        <div class="stat-card gold real-stat" id="realStat3" style="display:none;">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statTotalCollection">Rs. 0</div>
+                <div class="stat-label">Total Collection</div>
+            </div>
+        </div>
+        <div class="stat-card warning real-stat" id="realStat4" style="display:none;">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <div class="stat-number" id="statTotalBalance">Rs. 0</div>
+                <div class="stat-label">Total Balance Due</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH & FILTER BAR -->
+    <div class="search-filter-bar anim-slide-top" style="animation-delay:0.1s;">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by name, ID, phone..."
+                oninput="filterStudents()"
+                class="search-input"
+            >
+            <button class="btn-clear-search" onclick="clearSearch()" id="btnClearSearch" style="display:none;">✕</button>
+        </div>
+
+        <div class="filter-group">
+            <select id="filterBatch" class="filter-select" onchange="filterStudents()">
+                <option value="">📦 All Batches</option>
+            </select>
+
+            <select id="filterCourse" class="filter-select" onchange="filterStudents()">
+                <option value="">🎓 All Courses</option>
+            </select>
+
+            <select id="filterStatus" class="filter-select" onchange="filterStudents()">
+                <option value="">📊 All Status</option>
+                <option value="Active">✅ Active</option>
+                <option value="Suspended">⛔ Suspended</option>
+            </select>
+
+            <select id="filterPayment" class="filter-select" onchange="filterStudents()">
+                <option value="">💳 All Payments</option>
+                <option value="Paid">✅ Fully Paid</option>
+                <option value="Partial">⚡ Partial</option>
+                <option value="Pending">⏳ Pending</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- RESULTS INFO BAR -->
+    <div class="results-bar">
+        <span id="resultsInfo">⏳ Loading students...</span>
+        <span id="filterActiveTag" class="filter-active-tag" style="display:none;"></span>
+    </div>
+
+    <!-- STUDENTS TABLE -->
+    <div class="table-card" id="tableCard">
+        <div class="table-wrap">
+            <table class="data-table" id="studentsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Course</th>
+                        <th>Batch</th>
+                        <th>Paid</th>
+                        <th>Balance</th>
+                        <th>Payment Status</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTableBody">
+                    <!-- Skeleton rows injected by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div><!-- /dashboard-container -->
+
+
+<!-- ════════════════════════════════════════ -->
+<!-- STUDENT PROFILE MODAL -->
+<!-- ════════════════════════════════════════ -->
+<div class="modal-overlay" id="studentModal" onclick="handleModalClick(event)">
+    <div class="modal-box modal-xl">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <div class="modal-header-left">
+                <h3 id="modalStudentName">Student Profile</h3>
+                <span id="modalStudentId" class="modal-student-id">-</span>
+            </div>
+            <div class="modal-header-right">
+                <span id="modalStatusBadge" class="modal-status-badge">Active</span>
+                <button class="modal-close" onclick="closeStudentModal()">✕</button>
+            </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+
+            <!-- TABS inside modal -->
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" onclick="switchModalTab('profile')" id="mtab-profile">
+                    👤 Profile
+                </button>
+                <button class="modal-tab-btn" onclick="switchModalTab('payments')" id="mtab-payments">
+                    💳 Payments
+                </button>
+            </div>
+
+            <!-- TAB: Profile -->
+            <div class="modal-tab-content active" id="mcontent-profile">
+
+                <!-- Payment Summary Bar -->
+                <div class="payment-summary-bar">
+                    <div class="psb-item">
+                        <div class="psb-label">Total Fee</div>
+                        <div class="psb-value" id="modalTotalFee">Rs. 0</div>
+                    </div>
+                    <div class="psb-divider"></div>
+                    <div class="psb-item success">
+                        <div class="psb-label">Total Paid</div>
+                        <div class="psb-value" id="modalTotalPaid">Rs. 0</div>
+                    </div>
+                    <div class="psb-divider"></div>
+                    <div class="psb-item warning">
+                        <div class="psb-label">Balance Due</div>
+                        <div class="psb-value" id="modalBalance">Rs. 0</div>
+                    </div>
+                    <div class="psb-divider"></div>
+                    <div class="psb-item">
+                        <div class="psb-label">Payment Status</div>
+                        <div class="psb-value" id="modalPaymentStatus">-</div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="modal-progress-wrap">
+                    <div class="modal-progress-bar">
+                        <div class="modal-progress-fill" id="modalProgressFill" style="width:0%"></div>
+                    </div>
+                    <span class="modal-progress-label" id="modalProgressLabel">0%</span>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="info-grid">
+
+                    <!-- Personal Info -->
+                    <div class="info-section">
+                        <div class="info-section-title">👤 Personal Information</div>
+                        <div class="info-row">
+                            <span class="info-label">Full Name</span>
+                            <span class="info-value" id="miName">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Phone</span>
+                            <span class="info-value" id="miPhone">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email</span>
+                            <span class="info-value" id="miEmail">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">NIC</span>
+                            <span class="info-value" id="miNIC">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Date of Birth</span>
+                            <span class="info-value" id="miDOB">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Address</span>
+                            <span class="info-value" id="miAddress">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Course Info -->
+                    <div class="info-section">
+                        <div class="info-section-title">🎓 Course Information</div>
+                        <div class="info-row">
+                            <span class="info-label">Course</span>
+                            <span class="info-value" id="miCourse">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Academy</span>
+                            <span class="info-value" id="miAcademy">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Batch</span>
+                            <span class="info-value" id="miBatch">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Enrolled Date</span>
+                            <span class="info-value" id="miEnrolledDate">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Source</span>
+                            <span class="info-value" id="miSource">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Enrolled By</span>
+                            <span class="info-value" id="miEnrolledBy">-</span>
+                        </div>
+                    </div>
+
+                </div><!-- /info-grid -->
+
+                <!-- Login Credentials -->
+                <div class="credentials-box">
+                    <div class="credentials-title">🔐 Student Login Credentials</div>
+                    <div class="credentials-row">
+                        <div class="credential-item">
+                            <span class="credential-label">Username / Student ID</span>
+                            <span class="credential-value" id="miStudentId">-</span>
+                        </div>
+                        <div class="credential-item">
+                            <span class="credential-label">Password</span>
+                            <span class="credential-value" id="miPassword">-</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /mcontent-profile -->
+
+            <!-- TAB: Payments -->
+            <div class="modal-tab-content" id="mcontent-payments">
+
+                <!-- Payment Summary -->
+                <div class="payment-summary-bar">
+                    <div class="psb-item">
+                        <div class="psb-label">Total Fee</div>
+                        <div class="psb-value" id="modalTotalFee2">Rs. 0</div>
+                    </div>
+                    <div class="psb-divider"></div>
+                    <div class="psb-item success">
+                        <div class="psb-label">Total Paid</div>
+                        <div class="psb-value" id="modalTotalPaid2">Rs. 0</div>
+                    </div>
+                    <div class="psb-divider"></div>
+                    <div class="psb-item warning">
+                        <div class="psb-label">Balance Due</div>
+                        <div class="psb-value" id="modalBalance2">Rs. 0</div>
+                    </div>
+                </div>
+
+                <!-- Payment History List -->
+                <div class="payment-history-wrap">
+                    <div class="payment-history-title">📋 Payment History</div>
+                    <div id="modalPaymentList">
+                        <div class="no-payments">📭 No payment records found.</div>
+                    </div>
+                </div>
+
+            </div><!-- /mcontent-payments -->
+
+        </div><!-- /modal-body -->
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+            <div class="modal-footer-left">
+                <span class="footer-info" id="modalCreatedInfo">-</span>
+            </div>
+            <div class="modal-footer-right">
+                <button class="btn-action-edit" onclick="openEditModal()">
+                    ✏️ Edit
+                </button>
+                <button class="btn-action-suspend" id="btnSuspendToggle" onclick="openSuspendModal()">
+                    ⛔ Suspend
+                </button>
+                <button class="btn-action-payment" onclick="goToPayment()">
+                    💳 Payment
+                </button>
+                <button class="btn-whatsapp" onclick="contactStudentWhatsApp()">
+                    📱 WhatsApp
+                </button>
+                <button class="btn-secondary" onclick="closeStudentModal()">
+                    ✕ Close
+                </button>
+            </div>
+        </div>
+
+    </div><!-- /modal-box -->
+</div><!-- /modal-overlay -->
+
+
+<!-- ════════════════════════════════════════ -->
+<!-- ✏️ EDIT STUDENT MODAL -->
+<!-- ════════════════════════════════════════ -->
+<div class="modal-overlay" id="editModal" onclick="handleEditModalClick(event)">
+    <div class="modal-box">
+
+        <div class="modal-header edit-header">
+            <div class="modal-header-left">
+                <h3>✏️ Edit Student</h3>
+                <span id="editStudentIdLabel" class="modal-student-id">-</span>
+            </div>
+            <div class="modal-header-right">
+                <button class="modal-close" onclick="closeEditModal()">✕</button>
+            </div>
+        </div>
+
+        <div class="edit-form-body">
+
+            <div class="edit-section-title">👤 Personal Information</div>
+            <div class="edit-form-grid">
+                <div class="edit-form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="editName" class="edit-input" placeholder="Student Name">
+                </div>
+                <div class="edit-form-group">
+                    <label>Phone *</label>
+                    <input type="tel" id="editPhone" class="edit-input" placeholder="+94771234567">
+                </div>
+                <div class="edit-form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmail" class="edit-input" placeholder="email@example.com">
+                </div>
+                <div class="edit-form-group">
+                    <label>NIC</label>
+                    <input type="text" id="editNIC" class="edit-input" placeholder="200012345678">
+                </div>
+                <div class="edit-form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="editDOB" class="edit-input">
+                </div>
+                <div class="edit-form-group full-width">
+                    <label>Address</label>
+                    <textarea id="editAddress" class="edit-input edit-textarea" rows="2" placeholder="Address"></textarea>
+                </div>
+            </div>
+
+            <div class="edit-section-title">🎓 Course Information</div>
+            <div class="edit-form-grid">
+                <div class="edit-form-group">
+                    <label>Course *</label>
+                    <select id="editCourse" class="edit-input edit-select">
+                        <option value="">-- Loading Courses --</option>
+                    </select>
+                </div>
+                <div class="edit-form-group">
+                    <label>Batch *</label>
+                    <input type="text" id="editBatch" class="edit-input" placeholder="W32">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="modal-footer-left">
+                <span class="footer-info edit-warning">⚠️ වෙනස්කම් save කළාම ආපසු හැරවිය නොහැක</span>
+            </div>
+            <div class="modal-footer-right">
+                <button class="btn-save" id="btnSaveEdit" onclick="saveStudentEdit()">
+                    💾 Save Changes
+                </button>
+                <button class="btn-secondary" onclick="closeEditModal()">
+                    ✕ Cancel
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<!-- ⛔ SUSPEND / ACTIVATE MODAL -->
+<!-- ════════════════════════════════════════ -->
+<div class="modal-overlay" id="suspendModal" onclick="handleSuspendModalClick(event)">
+    <div class="modal-box suspend-modal-box">
+
+        <div class="modal-header suspend-header" id="suspendModalHeader">
+            <div class="modal-header-left">
+                <h3 id="suspendModalTitle">⛔ Suspend Student</h3>
+                <span id="suspendStudentIdLabel" class="modal-student-id">-</span>
+            </div>
+            <div class="modal-header-right">
+                <button class="modal-close" onclick="closeSuspendModal()">✕</button>
+            </div>
+        </div>
+
+        <div class="suspend-body">
+
+            <div class="suspend-student-info">
+                <div class="suspend-info-row">
+                    <span class="suspend-info-label">👤 Student</span>
+                    <span class="suspend-info-value" id="suspendStudentName">-</span>
+                </div>
+                <div class="suspend-info-row">
+                    <span class="suspend-info-label">🎓 Course</span>
+                    <span class="suspend-info-value" id="suspendStudentCourse">-</span>
+                </div>
+                <div class="suspend-info-row">
+                    <span class="suspend-info-label">📊 Current Status</span>
+                    <span class="suspend-info-value" id="suspendCurrentStatus">-</span>
+                </div>
+            </div>
+
+            <div id="suspendReasonGroup" class="suspend-reason-group">
+                <label class="suspend-reason-label">⚠️ Suspend කරන හේතුව *</label>
+                <textarea id="suspendReason" class="edit-input edit-textarea" rows="3"
+                    placeholder="උදා: ගෙවීම් නොකිරීම, පන්තිවලට නොපැමිණීම..."></textarea>
+            </div>
+
+            <div id="activateMessageGroup" class="activate-message-group" style="display:none;">
+                <div class="activate-message">
+                    ✅ මෙම student reactivate කරන්න අවශ්‍යද?<br>
+                    <small>Student නැවත Active තත්ත්වයට පත් වෙයි.</small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="modal-footer-left">
+                <span class="footer-info" id="suspendFooterInfo">-</span>
+            </div>
+            <div class="modal-footer-right">
+                <button class="btn-suspend-confirm" id="btnSuspendConfirm" onclick="confirmSuspendToggle()">
+                    ⛔ Suspend Student
+                </button>
+                <button class="btn-secondary" onclick="closeSuspendModal()">
+                    ✕ Cancel
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- SCRIPTS -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+<script src="firebase-config.js"></script>
+<script src="performance-tracker.js"></script>
+<script src="smart-storage-cache.js"></script>
+<script src="student-management-script.js"></script>
+<script src="mobile-script.js"></script>
+</body>
+</html> 

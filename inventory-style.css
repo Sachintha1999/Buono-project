@@ -1,21 +1,187 @@
 /* ════════════════════════════════════════════════
    📦 INVENTORY DATABASE STYLES
    📁 File: public/inventory-style.css
-   📅 Created: 2026-06-08 (v9.5 - File Split!)
+   📅 Updated: 2026-06-13 (v12.0 - Optimized!)
    ════════════════════════════════════════════════ */
 
-/* ═══════ STAT CARDS COLORS ═══════ */
+/* ═══════════════════════════════════════════════
+   LOADING OVERLAY
+   ═══════════════════════════════════════════════ */
+.inv-loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 46, 0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.4s ease;
+}
+
+.inv-loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.inv-loading-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.inv-loading-ring {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(240, 165, 0, 0.2);
+    border-top-color: #f0a500;
+    border-radius: 50%;
+    animation: invSpin 0.8s linear infinite;
+}
+
+@keyframes invSpin {
+    to { transform: rotate(360deg); }
+}
+
+.inv-loading-text {
+    color: #f0a500;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT FADE IN
+   ═══════════════════════════════════════════════ */
+#invMainContent {
+    transition: opacity 0.4s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   SKELETON LOADING
+   ═══════════════════════════════════════════════ */
+@keyframes invShimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+}
+
+.sk-text,
+.sk-icon {
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.04) 25%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.04) 75%
+    );
+    background-size: 600px 100%;
+    animation: invShimmer 1.4s infinite linear;
+    border-radius: 6px;
+    color: transparent !important;
+    user-select: none;
+}
+
+/* Skeleton stat card */
+.skeleton-stat .sk-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: block;
+}
+
+.skeleton-stat .sk-short {
+    width: 60px;
+    height: 22px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.skeleton-stat .sk-text:not(.sk-short) {
+    width: 100px;
+    height: 14px;
+    display: block;
+}
+
+/* Skeleton table rows */
+.sk-row td {
+    padding: 10px 14px !important;
+    border: none !important;
+}
+
+.sk-row-line {
+    height: 16px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+/* ═══════════════════════════════════════════════
+   STAT CARD ANIMATIONS
+   ═══════════════════════════════════════════════ */
+.stat-card {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
+}
+
+.stat-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(240, 165, 0, 0.15);
+}
+
+/* ═══════════════════════════════════════════════
+   LOGO PULSE
+   ═══════════════════════════════════════════════ */
+@keyframes invLogoPulse {
+    0%, 100% { transform: scale(1);   opacity: 1;    }
+    50%       { transform: scale(1.1); opacity: 0.85; }
+}
+
+.topbar-icon {
+    animation: invLogoPulse 3s ease-in-out infinite;
+    display: inline-block;
+}
+
+/* ═══════════════════════════════════════════════
+   MODAL SMOOTH ANIMATIONS
+   ═══════════════════════════════════════════════ */
+@keyframes invModalFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes invModalSlideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.modal {
+    animation: invModalFadeIn 0.25s ease;
+}
+
+.modal-content {
+    animation: invModalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════════
+   STAT CARDS COLORS
+   ═══════════════════════════════════════════════ */
 .stat-card.warning { border-color: #f0a500; }
 .stat-card.warning h3 { color: #f0a500; }
-.stat-card.danger { border-color: #ff4444; }
-.stat-card.danger h3 { color: #ff4444; }
+.stat-card.danger  { border-color: #ff4444; }
+.stat-card.danger  h3 { color: #ff4444; }
 .stat-card.success { border-color: #4CAF50; }
 .stat-card.success h3 { color: #4CAF50; }
 
-/* ═══════ STOCK STATUS COLORS ═══════ */
+/* ═══════════════════════════════════════════════
+   STOCK STATUS COLORS
+   ═══════════════════════════════════════════════ */
 .stock-good { color: #4CAF50; font-weight: 700; }
-.stock-low { color: #f0a500; font-weight: 700; }
-.stock-out { color: #ff4444; font-weight: 700; }
+.stock-low  { color: #f0a500; font-weight: 700; }
+.stock-out  { color: #ff4444; font-weight: 700; }
 
 .stock-badge {
     display: inline-block;
@@ -25,18 +191,21 @@
     font-weight: 700;
     text-transform: uppercase;
 }
-.stock-badge.good { background: rgba(76,175,80,0.15); color: #4CAF50; }
-.stock-badge.low { background: rgba(240,165,0,0.15); color: #f0a500; }
-.stock-badge.out { background: rgba(255,68,68,0.15); color: #ff4444; }
+.stock-badge.good { background: rgba(76,175,80,0.15);  color: #4CAF50; }
+.stock-badge.low  { background: rgba(240,165,0,0.15);  color: #f0a500; }
+.stock-badge.out  { background: rgba(255,68,68,0.15);  color: #ff4444; }
 
-/* ═══════ QUICK STOCK BUTTONS ═══════ */
+/* ═══════════════════════════════════════════════
+   QUICK STOCK BUTTONS
+   ═══════════════════════════════════════════════ */
 .qty-controls {
     display: inline-flex;
     align-items: center;
     gap: 4px;
 }
 
-.btn-stock-in, .btn-stock-out {
+.btn-stock-in,
+.btn-stock-out {
     background: rgba(76,175,80,0.15);
     color: #4CAF50;
     border: 1px solid rgba(76,175,80,0.3);
@@ -65,7 +234,9 @@
     color: white;
 }
 
-/* ═══════ CATEGORY CARD ═══════ */
+/* ═══════════════════════════════════════════════
+   CATEGORY CARDS
+   ═══════════════════════════════════════════════ */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -79,37 +250,26 @@
     border-radius: 12px;
     padding: 18px;
     position: relative;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.category-card.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .category-card:hover {
     border-color: #f0a500;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(240,165,0,0.12);
 }
 
-.category-card .cat-icon {
-    font-size: 36px;
-    margin-bottom: 8px;
-}
-
-.category-card .cat-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: #e0e0e0;
-    margin-bottom: 4px;
-}
-
-.category-card .cat-desc {
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 10px;
-}
-
-.category-card .cat-count {
-    font-size: 13px;
-    color: #f0a500;
-    font-weight: 600;
-}
+.category-card .cat-icon  { font-size: 36px; margin-bottom: 8px; }
+.category-card .cat-name  { font-size: 16px; font-weight: 700; color: #e0e0e0; margin-bottom: 4px; }
+.category-card .cat-desc  { font-size: 12px; color: #888; margin-bottom: 10px; }
+.category-card .cat-count { font-size: 13px; color: #f0a500; font-weight: 600; }
 
 .category-card .cat-actions {
     position: absolute;
@@ -130,12 +290,14 @@
     transition: all 0.2s;
 }
 
-.cat-btn.edit { color: #2196F3; }
-.cat-btn.edit:hover { background: rgba(33,150,243,0.2); }
+.cat-btn.edit   { color: #2196F3; }
+.cat-btn.edit:hover   { background: rgba(33,150,243,0.2); }
 .cat-btn.delete { color: #ff4444; }
 .cat-btn.delete:hover { background: rgba(255,68,68,0.2); }
 
-/* ═══════ FILTER BAR ═══════ */
+/* ═══════════════════════════════════════════════
+   FILTER BAR
+   ═══════════════════════════════════════════════ */
 .inv-filter-bar {
     background: #16213e;
     border: 1px solid rgba(240,165,0,0.15);
@@ -157,6 +319,7 @@
     border-radius: 8px;
     font-size: 13px;
     outline: none;
+    transition: border-color 0.2s;
 }
 
 .inv-filter-bar input:focus,
@@ -169,7 +332,22 @@
     min-width: 200px;
 }
 
-/* ═══════ EMOJI PICKER ═══════ */
+/* ═══════════════════════════════════════════════
+   PAGINATION
+   ═══════════════════════════════════════════════ */
+#invPaginationWrap {
+    padding: 10px 0 20px;
+}
+
+#invCounter {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+/* ═══════════════════════════════════════════════
+   EMOJI PICKER
+   ═══════════════════════════════════════════════ */
 .emoji-picker {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -194,16 +372,12 @@
     transition: all 0.15s;
 }
 
-.emoji-option:hover {
-    background: rgba(240,165,0,0.15);
-}
+.emoji-option:hover    { background: rgba(240,165,0,0.15); }
+.emoji-option.selected { border-color: #f0a500; background: rgba(240,165,0,0.2); }
 
-.emoji-option.selected {
-    border-color: #f0a500;
-    background: rgba(240,165,0,0.2);
-}
-
-/* ═══════ STOCK UPDATE MODAL ═══════ */
+/* ═══════════════════════════════════════════════
+   STOCK UPDATE MODAL
+   ═══════════════════════════════════════════════ */
 .stock-update-info {
     background: #0f3460;
     padding: 14px;
@@ -212,16 +386,8 @@
     text-align: center;
 }
 
-.stock-update-info h3 {
-    color: #f0a500;
-    font-size: 18px;
-    margin-bottom: 4px;
-}
-
-.stock-update-info p {
-    color: #aaa;
-    font-size: 13px;
-}
+.stock-update-info h3 { color: #f0a500; font-size: 18px; margin-bottom: 4px; }
+.stock-update-info p  { color: #aaa; font-size: 13px; }
 
 .current-stock-display {
     font-size: 28px;
@@ -230,7 +396,9 @@
     margin: 10px 0;
 }
 
-/* ═══════ RESPONSIVE ═══════ */
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
     .category-grid {
         grid-template-columns: 1fr 1fr;

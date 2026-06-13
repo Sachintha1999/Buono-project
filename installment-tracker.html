@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Installment Tracker</title>
+    <link rel="stylesheet" href="installment-tracker-style.css">
+    <link rel="stylesheet" href="skeleton-loading.css">
+</head>
+<body>
+
+    <!-- Topbar -->
+    <div id="topbarContainer"></div>
+
+    <div class="main-container">
+
+        <!-- ── PAGE TITLE ── -->
+        <div class="page-title">
+            <div>
+                <h1>🔔 Installment Tracker</h1>
+                <div class="subtitle">Payment dues සහ student status track කරන්න</div>
+            </div>
+            <button class="btn-refresh" id="btnRefresh" onclick="refreshTrackerData()">
+                🔄 Refresh
+            </button>
+        </div>
+
+        <!-- ═══════════════════════════════════
+             💀 SKELETON: SUMMARY CARDS
+        ═══════════════════════════════════ -->
+        <div class="summary-cards" id="skeletonSummaryCards">
+            <div class="summary-card overdue">
+                <div class="card-top">
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                </div>
+                <div class="skeleton skeleton-text sk-w-50" style="margin-top:10px;"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;"></div>
+            </div>
+            <div class="summary-card due-today">
+                <div class="card-top">
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                </div>
+                <div class="skeleton skeleton-text sk-w-50" style="margin-top:10px;"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;"></div>
+            </div>
+            <div class="summary-card upcoming">
+                <div class="card-top">
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                </div>
+                <div class="skeleton skeleton-text sk-w-50" style="margin-top:10px;"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;"></div>
+            </div>
+            <div class="summary-card paid">
+                <div class="card-top">
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                    <div class="skeleton skeleton-text sk-w-30" style="height:28px;"></div>
+                </div>
+                <div class="skeleton skeleton-text sk-w-50" style="margin-top:10px;"></div>
+                <div class="skeleton skeleton-text sk-w-70" style="margin-top:6px;"></div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════
+             📊 REAL: SUMMARY CARDS (hidden first)
+        ═══════════════════════════════════ -->
+        <div class="summary-cards" id="realSummaryCards" style="display:none;">
+            <div class="summary-card overdue" onclick="filterByCard('Overdue')">
+                <div class="card-top">
+                    <div class="card-icon">🚨</div>
+                    <div class="card-count" id="countOverdue">0</div>
+                </div>
+                <div class="card-label">Overdue</div>
+                <div class="card-amount" id="amountOverdue">Rs. 0</div>
+            </div>
+
+            <div class="summary-card due-today" onclick="filterByCard('Due Today')">
+                <div class="card-top">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-count" id="countDueToday">0</div>
+                </div>
+                <div class="card-label">Due Today</div>
+                <div class="card-amount" id="amountDueToday">Rs. 0</div>
+            </div>
+
+            <div class="summary-card upcoming" onclick="filterByCard('Upcoming')">
+                <div class="card-top">
+                    <div class="card-icon">📅</div>
+                    <div class="card-count" id="countUpcoming">0</div>
+                </div>
+                <div class="card-label">Upcoming</div>
+                <div class="card-amount" id="amountUpcoming">Rs. 0</div>
+            </div>
+
+            <div class="summary-card paid" onclick="filterByCard('Paid')">
+                <div class="card-top">
+                    <div class="card-icon">✅</div>
+                    <div class="card-count" id="countPaid">0</div>
+                </div>
+                <div class="card-label">Fully Paid</div>
+                <div class="card-amount" id="amountPaid">Rs. 0</div>
+            </div>
+        </div>
+
+        <!-- ── FILTERS ── -->
+        <div class="filters-section">
+            <div class="filters-row">
+                <select id="filterStatus" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Status</option>
+                    <option value="Overdue">🚨 Overdue</option>
+                    <option value="Due Today">⏰ Due Today</option>
+                    <option value="Upcoming">📅 Upcoming</option>
+                    <option value="Paid">✅ Paid</option>
+                </select>
+
+                <select id="filterBatch" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Batches</option>
+                </select>
+
+                <select id="filterCourse" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Courses</option>
+                </select>
+
+                <input type="text"
+                       id="searchInput"
+                       class="search-input"
+                       placeholder="🔍 Search by name, ID, phone..."
+                       oninput="applyFilters()">
+
+                <button class="btn-clear-filters" onclick="clearFilters()">
+                    ✕ Clear
+                </button>
+
+                <span class="filter-results-count" id="tableResultsCount">0 students</span>
+            </div>
+        </div>
+
+        <!-- ── TABLE SECTION ── -->
+        <div class="tracker-section">
+
+            <div class="tracker-header">
+                <div class="tracker-title">📋 Students Payment Tracker</div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th class="col-hide-mobile">Phone</th>
+                            <th class="col-hide-mobile">Course</th>
+                            <th>Balance</th>
+                            <th class="col-hide-mobile">Last Payment</th>
+                            <th>Next Due</th>
+                            <th>Days</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackerTableBody">
+                        <!-- 💀 SKELETON ROWS (10 fake rows) -->
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                        <tr class="skeleton-row"><td colspan="11"><div class="skeleton skeleton-text sk-w-100" style="height:36px;"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PAGINATION SECTION -->
+            <div class="pagination-section" id="paginationSection" style="display:none;">
+                <div class="pagination-info" id="paginationInfo">
+                    Showing 0 of 0 students
+                </div>
+                <button class="btn-load-more" id="btnLoadMore" onclick="loadMoreStudents()">
+                    📄 Load More
+                </button>
+            </div>
+
+            <div class="last-updated-bar" id="lastUpdatedBar">
+                Last updated: -
+            </div>
+        </div>
+
+    </div><!-- /main-container -->
+
+    <!-- ── VIEW STUDENT MODAL ── -->
+    <div class="modal-overlay" id="viewStudentModal">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3>👁️ Student Details</h3>
+                <button class="modal-close" onclick="closeViewModal()">✕</button>
+            </div>
+            <div class="modal-body" id="viewModalBody">
+                <!-- Dynamic content -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-wa-modal" onclick="sendWAFromModal()">
+                    📱 WhatsApp
+                </button>
+                <button class="btn-pay-modal" onclick="goToPaymentFromModal()">
+                    💳 Payment
+                </button>
+                <button class="btn-secondary" onclick="closeViewModal()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="performance-tracker.js"></script>
+    <script src="smart-storage-cache.js"></script>
+    <script src="installment-tracker-script.js"></script>
+    <script src="mobile-script.js"></script>
+</body>
+</html>

@@ -10,6 +10,14 @@
 </head>
 <body>
 
+<!-- ═══════ LOADING OVERLAY ═══════ -->
+<div class="rpt-loading-overlay" id="rptLoadingOverlay">
+    <div class="rpt-loading-wrap">
+        <div class="rpt-loading-ring"></div>
+        <div class="rpt-loading-text">Loading Reports...</div>
+    </div>
+</div>
+
 <!-- ═══════ TOPBAR ═══════ -->
 <div class="reports-topbar">
     <div class="reports-topbar-left">
@@ -28,6 +36,9 @@
         </div>
     </div>
 </div>
+
+<!-- ═══════ MAIN CONTENT WRAPPER ═══════ -->
+<div id="rptMainContent" style="opacity:0; transition: opacity 0.4s ease;">
 
 <!-- ═══════ MAIN LAYOUT ═══════ -->
 <div class="reports-layout">
@@ -129,45 +140,43 @@
             <button onclick="window.location.href='access.html'" style="background:#f0a500; color:#1a1a2e; border:none; padding:10px 24px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:20px;">← Back</button>
         </div>
 
-        <!-- ═══════════════════════════════════════════
-             ⏳ SECTION: PENDING APPROVALS ⭐ UPDATED!
-             ═══════════════════════════════════════════ -->
+        <!-- ═══════ SECTION: PENDING APPROVALS ═══════ -->
         <div id="section-pendingapprovals" class="rpt-section">
             <div class="rpt-section-header">
                 <div class="rpt-section-title">⏳ Pending Approvals</div>
                 <div class="rpt-section-subtitle">All submissions waiting for manager approval</div>
             </div>
 
-            <!-- Summary Cards (5 now!) -->
+            <!-- Summary Cards (5) with skeleton -->
             <div class="rpt-summary-cards">
-                <div class="rpt-summary-card orange">
+                <div class="rpt-summary-card orange skeleton-stat" id="rptStatCard1">
                     <div class="sc-icon">📊</div>
-                    <div class="sc-value" id="scStockCountsPending">0</div>
-                    <div class="sc-label">Stock Counts</div>
+                    <div class="sc-value sk-text" id="scStockCountsPending">0</div>
+                    <div class="sc-label sk-text">Stock Counts</div>
                 </div>
-                <div class="rpt-summary-card purchasing">
+                <div class="rpt-summary-card purchasing skeleton-stat" id="rptStatCard2">
                     <div class="sc-icon">🛒</div>
-                    <div class="sc-value" id="scPurchasesPending">0</div>
-                    <div class="sc-label">Purchase Bills</div>
+                    <div class="sc-value sk-text" id="scPurchasesPending">0</div>
+                    <div class="sc-label sk-text">Purchase Bills</div>
                 </div>
-                <div class="rpt-summary-card purple">
+                <div class="rpt-summary-card purple skeleton-stat" id="rptStatCard3">
                     <div class="sc-icon">🔄</div>
-                    <div class="sc-value" id="scReturnsPending">0</div>
-                    <div class="sc-label">Returns</div>
+                    <div class="sc-value sk-text" id="scReturnsPending">0</div>
+                    <div class="sc-label sk-text">Returns</div>
                 </div>
-                <div class="rpt-summary-card red">
+                <div class="rpt-summary-card red skeleton-stat" id="rptStatCard4">
                     <div class="sc-icon">⚠️</div>
-                    <div class="sc-value" id="scPendingCritical">0</div>
-                    <div class="sc-label">Critical Items</div>
+                    <div class="sc-value sk-text" id="scPendingCritical">0</div>
+                    <div class="sc-label sk-text">Critical Items</div>
                 </div>
-                <div class="rpt-summary-card yellow">
+                <div class="rpt-summary-card yellow skeleton-stat" id="rptStatCard5">
                     <div class="sc-icon">💰</div>
-                    <div class="sc-value" id="scPendingImpact">Rs. 0</div>
-                    <div class="sc-label">Total Value</div>
+                    <div class="sc-value sk-text" id="scPendingImpact">Rs. 0</div>
+                    <div class="sc-label sk-text">Total Value</div>
                 </div>
             </div>
 
-            <!-- Sub Tabs (3 now!) -->
+            <!-- Sub Tabs -->
             <div class="pending-subtabs">
                 <button class="pending-subtab active" id="ptab-stock" onclick="showPendingTab('stock', this)">
                     📊 Stock Counts <span class="tab-count" id="ptabStockCount">0</span>
@@ -432,13 +441,15 @@
     </div>
 </div>
 
+</div><!-- end rptMainContent -->
+
 <!-- Photo Fullscreen Modal -->
 <div class="photo-fullscreen-modal" id="photoFullscreenModal">
     <button class="photo-close-btn" onclick="closePhotoFullscreen()">✖</button>
     <img id="fullscreenImg" src="">
 </div>
 
-<!-- ⭐ UPDATED: Mark Paid Modal with Payment Proof! -->
+<!-- Mark Paid Modal with Payment Proof -->
 <div class="mark-paid-modal" id="markPaidModal">
     <div class="mark-paid-content" style="max-height:90vh; overflow-y:auto;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(76,175,80,0.2);">
@@ -451,7 +462,6 @@
             <input type="date" id="paidDateInput" style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:10px; border-radius:8px; margin-top:6px;">
         </div>
 
-        <!-- ⭐ NEW: Payment Proof Upload Section -->
         <div style="margin-top:14px;">
             <label style="font-size:11px; color:#4CAF50; text-transform:uppercase; font-weight:600;">📸 Payment Proof (Bank Slip / Receipt)</label>
             <div style="display:flex; gap:8px; margin-top:8px;">
@@ -465,7 +475,6 @@
             <input type="file" id="rptPaymentProofCamera" accept="image/*" capture="environment" style="display:none" onchange="handleRptPaymentProofFile(this)">
             <input type="file" id="rptPaymentProofGallery" accept="image/*" style="display:none" onchange="handleRptPaymentProofFile(this)">
 
-            <!-- Upload Progress -->
             <div id="rptPaymentProofProgress" style="display:none; margin-top:10px;">
                 <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:4px;">
                     <span>📤 Uploading...</span>
@@ -477,7 +486,6 @@
                 <div id="rptPaymentProofStatus" style="font-size:11px; color:#888; margin-top:4px;"></div>
             </div>
 
-            <!-- Photo Preview -->
             <div id="rptPaymentProofPreview" style="display:none; margin-top:10px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.3); border-radius:8px; padding:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <span style="color:#4CAF50; font-size:13px; font-weight:600;">✅ Proof Ready!</span>
@@ -489,13 +497,11 @@
                 <img id="rptPaymentProofImg" src="" style="width:100%; max-height:200px; object-fit:contain; border-radius:6px; cursor:pointer;" onclick="openPhotoFullscreen(this.src)">
             </div>
 
-            <!-- Or paste URL -->
             <div style="margin-top:8px;">
                 <label style="font-size:11px; color:#666;">🔗 Or paste proof URL:</label>
                 <input type="url" id="rptPaymentProofUrl" placeholder="https://..." style="width:100%; background:#0f3460; border:1px solid rgba(76,175,80,0.3); color:#e0e0e0; padding:8px; border-radius:8px; margin-top:4px; font-size:12px; box-sizing:border-box;" oninput="previewRptPaymentProofUrl()">
             </div>
         </div>
-        <!-- END: Payment Proof Section -->
 
         <div style="margin-top:14px;">
             <label style="font-size:11px; color:#888; text-transform:uppercase;">📝 Payment Notes (Optional)</label>

@@ -10,6 +10,14 @@
 </head>
 <body>
 
+<!-- ═══════ LOADING OVERLAY ═══════ -->
+<div class="purch-loading-overlay" id="purchLoadingOverlay">
+    <div class="purch-loading-wrap">
+        <div class="purch-loading-ring"></div>
+        <div class="purch-loading-text">Loading Purchasing...</div>
+    </div>
+</div>
+
 <!-- ═══════ TOP BAR ═══════ -->
 <div class="topbar">
     <div class="topbar-left">
@@ -31,33 +39,36 @@
     </div>
 </div>
 
+<!-- ═══════ MAIN CONTENT WRAPPER ═══════ -->
+<div id="purchMainContent" style="opacity:0; transition: opacity 0.4s ease;">
+
 <!-- ═══════ MAIN CONTAINER ═══════ -->
 <div class="dashboard-container">
 
     <!-- Stats Row -->
     <div class="stats-row">
-        <div class="stat-card">
+        <div class="stat-card" id="statCard1">
             <div class="stat-icon">📄</div>
             <div class="stat-info">
                 <h3 id="statTotalBills">0</h3>
                 <p>Total Bills</p>
             </div>
         </div>
-        <div class="stat-card warning">
+        <div class="stat-card warning" id="statCard2">
             <div class="stat-icon">⏳</div>
             <div class="stat-info">
                 <h3 id="statPending">0</h3>
                 <p>Pending</p>
             </div>
         </div>
-        <div class="stat-card success">
+        <div class="stat-card success" id="statCard3">
             <div class="stat-icon">✅</div>
             <div class="stat-info">
                 <h3 id="statApproved">0</h3>
                 <p>Approved</p>
             </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" id="statCard4">
             <div class="stat-icon">💰</div>
             <div class="stat-info">
                 <h3 id="statTotalValue">Rs.0</h3>
@@ -654,9 +665,9 @@
     </div>
 
 </div>
+</div><!-- end purchMainContent -->
 
 <!-- ═══════ MODALS ═══════ -->
-
 <div id="billDetailModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
     <div style="background:#16213e; width:90%; max-width:800px; max-height:90vh; overflow-y:auto; border-radius:12px; padding:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(255,152,0,0.2);">
@@ -672,7 +683,6 @@
     <img id="fullscreenImg" src="" style="max-width:95%; max-height:95vh; border-radius:8px;">
 </div>
 
-<!-- ⭐ UPDATED: Mark Paid Modal with Payment Proof! -->
 <div id="markPaidModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
     <div style="background:#16213e; width:90%; max-width:500px; max-height:90vh; overflow-y:auto; border-radius:12px; padding:24px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid rgba(76,175,80,0.2);">
@@ -684,22 +694,14 @@
             <label>📅 Payment Date *</label>
             <input type="date" id="paidDateInput">
         </div>
-
-        <!-- ⭐ NEW: Payment Proof Upload Section -->
         <div style="margin-top:14px;">
             <label style="color:#4CAF50; font-weight:600;">📸 Payment Proof (Bank Slip / Receipt)</label>
             <div style="display:flex; gap:8px; margin-top:8px;">
-                <button class="btn-secondary" style="flex:1; padding:10px; font-size:13px;" onclick="document.getElementById('paymentProofCamera').click()">
-                    📷 Camera
-                </button>
-                <button class="btn-secondary" style="flex:1; padding:10px; font-size:13px;" onclick="document.getElementById('paymentProofGallery').click()">
-                    🖼️ Gallery
-                </button>
+                <button class="btn-secondary" style="flex:1; padding:10px; font-size:13px;" onclick="document.getElementById('paymentProofCamera').click()">📷 Camera</button>
+                <button class="btn-secondary" style="flex:1; padding:10px; font-size:13px;" onclick="document.getElementById('paymentProofGallery').click()">🖼️ Gallery</button>
             </div>
             <input type="file" id="paymentProofCamera" accept="image/*" capture="environment" style="display:none" onchange="handlePaymentProofFile(this)">
             <input type="file" id="paymentProofGallery" accept="image/*" style="display:none" onchange="handlePaymentProofFile(this)">
-
-            <!-- Upload Progress -->
             <div id="paymentProofProgress" style="display:none; margin-top:10px;">
                 <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:4px;">
                     <span>📤 Uploading...</span>
@@ -710,8 +712,6 @@
                 </div>
                 <div id="paymentProofStatus" style="font-size:11px; color:#888; margin-top:4px;"></div>
             </div>
-
-            <!-- Photo Preview -->
             <div id="paymentProofPreview" style="display:none; margin-top:10px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.3); border-radius:8px; padding:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                     <span style="color:#4CAF50; font-size:13px; font-weight:600;">✅ Proof Ready!</span>
@@ -722,15 +722,11 @@
                 </div>
                 <img id="paymentProofImg" src="" style="width:100%; max-height:200px; object-fit:contain; border-radius:6px; cursor:pointer;" onclick="openPhotoFullscreen(this.src)">
             </div>
-
-            <!-- Or paste URL -->
             <div style="margin-top:8px;">
                 <label style="font-size:11px; color:#888;">🔗 Or paste proof URL:</label>
                 <input type="url" id="paymentProofUrl" placeholder="https://..." style="font-size:12px;" oninput="previewPaymentProofUrl()">
             </div>
         </div>
-        <!-- END: Payment Proof Section -->
-
         <div style="margin-top:14px;">
             <label>📝 Payment Notes (Optional)</label>
             <textarea id="paidNotesInput" rows="2" placeholder="eg: Paid in cash / Bank transfer ref #..."></textarea>

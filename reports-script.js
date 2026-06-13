@@ -1,16 +1,47 @@
 /* ═══════════════════════════════════════════════════════════ */
-/* ⚙️ REPORTS DATABASE - COMPLETE JAVASCRIPT                   */
+/* ⚙️ REPORTS DATABASE - OPTIMIZED JAVASCRIPT                  */
 /* Buono Cafe + Academy - Reports DB                           */
-/* Version: 10.1 - Architecture Migration!                     */
-/* ⭐ Uses global DATABASES from firebase-config.js            */
+/* 📅 Version: 11.0 - PERFORMANCE OPTIMIZED!                   */
+/* ⚡ Cache + PerfTracker + Background Refresh + Animations    */
 /* ═══════════════════════════════════════════════════════════ */
 
-// ❌ NO firebaseConfig - uses global from firebase-config.js!
-// ❌ NO DATABASES array - uses global from firebase-config.js!
-// ✅ Using globals: db, getCurrentUser(), DATABASES
+// ─── Perf Tracker ───
+const Perf = {
+    _marks: {},
+    start(label) { this._marks[label] = performance.now(); },
+    end(label) {
+        const t = performance.now() - (this._marks[label] || 0);
+        console.log(`⚡ [REPORTS] ${label}: ${t.toFixed(1)}ms`);
+        return t;
+    }
+};
 
-// 📂 DATABASES - Global from firebase-config.js!
-// No local array - uses global DATABASES
+// ─── Cache Keys ───
+const USER_CACHE_KEY      = 'buono_rpt_user_v1';
+const DAYEND_CACHE_KEY    = 'buono_rpt_dayend_v1';
+const EMPLOYEES_CACHE_KEY = 'buono_rpt_employees_v1';
+const SUPPLIERS_CACHE_KEY = 'buono_rpt_suppliers_v1';
+const INVENTORY_CACHE_KEY = 'buono_rpt_inventory_v1';
+const CACHE_3MIN          = 3 * 60 * 1000;
+const CACHE_5MIN          = 5 * 60 * 1000;
+
+// ─── Cache Helpers ───
+function cacheSet(key, data) {
+    try { sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); }
+    catch(e) { console.warn('Cache set failed:', e); }
+}
+function cacheGet(key, maxAge) {
+    try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.ts > maxAge) { sessionStorage.removeItem(key); return null; }
+        return parsed.data;
+    } catch(e) { return null; }
+}
+function cacheRemove(key) {
+    try { sessionStorage.removeItem(key); } catch(e) {}
+}
 
 // 🌐 GLOBAL VARIABLES
 let currentUser = null;
@@ -32,7 +63,9 @@ let currentPendingTab = 'stock';
 let currentCRTab = 'overdue';
 let expandedBillId = null;
 let markPaidBillId = '';
-// ⭐ Storage + Payment Proof
+let _pageRevealed = false;
+
+// Storage + Payment Proof
 const storage = firebase.storage();
 let rptPaymentProofPhotoUrl = '';
 let rptPaymentProofPhotoPath = '';
@@ -44,17 +77,14 @@ function fmt(amount) {
     if (amount === undefined || amount === null) return 'Rs. 0';
     return 'Rs. ' + Number(amount).toLocaleString('en-LK');
 }
-
 function fmtQty(num) {
     if (num === null || num === undefined || isNaN(num)) return 0;
     return Math.round(num * 1000) / 1000;
 }
-
 function dispQty(num) {
     if (num === null || num === undefined || isNaN(num)) return '0';
     return (Math.round(num * 1000) / 1000).toString();
 }
-
 function formatTimestamp(ts) {
     if (!ts) return 'N/A';
     if (typeof ts === 'string') return ts;
@@ -64,24 +94,18 @@ function formatTimestamp(ts) {
     }
     return 'N/A';
 }
-
 function escapeHtml(text) {
     if (!text) return '';
     return String(text)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
-
 function generateCreditNoteNumber() {
     const now = new Date();
     const datePart = now.toISOString().slice(2, 10).replace(/-/g, '');
     const rand = Math.floor(Math.random() * 900 + 100);
     return `SCN-${datePart}-${rand}`;
 }
-
 function getNetPayable(p) {
     const billTotal = p.billTotal || 0;
     const returnedValue = p.returnedValue || 0;
@@ -89,50 +113,91 @@ function getNetPayable(p) {
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 🚀 INITIALIZATION                                          */
+/* 🎬 REVEAL PAGE                                              */
+/* ─────────────────────────────────────────────────────────── */
+function revealPage() {
+    if (_pageRevealed) return;
+    _pageRevealed = true;
+    Perf.end('Total Init');
+
+    const overlay = document.getElementById('rptLoadingOverlay');
+    const content = document.getElementById('rptMainContent');
+
+    if (overlay) overlay.classList.add('hidden');
+    if (content) content.style.opacity = '1';
+
+    // Stagger stat card animations
+    const cards = document.querySelectorAll('#section-pendingapprovals .rpt-summary-card');
+    cards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 80);
+    });
+    // Also reveal other section cards
+    document.querySelectorAll('.rpt-summary-card').forEach(c => c.classList.add('visible'));
+
+    console.log('✅ [REPORTS] Page revealed! Console timings 👆');
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* 🚀 INITIALIZATION                                           */
 /* ─────────────────────────────────────────────────────────── */
 async function initializeApp() {
-    // ✅ Global getCurrentUser() use කරනවා
+    Perf.start('Total Init');
+    Perf.start('User Auth');
+
     const userData = getCurrentUser();
     if (!userData) { window.location.href = 'login.html'; return; }
     currentUser = userData;
 
-    try {
-        const userDoc = await db.collection('employees').doc(currentUser.id).get();
-        if (userDoc.exists) {
-            const d = userDoc.data();
-            currentUser.access = d.access;
-            currentUser.permissions = d.permissions || {};
-            currentUser.name = d.name;
-            currentUser.nickname = d.nickname;
-            sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
-        }
-    } catch (e) { console.warn(e); }
+    // ⚡ Try user cache first
+    const cachedUser = cacheGet(USER_CACHE_KEY, CACHE_5MIN);
+    if (cachedUser) {
+        console.log('✅ [REPORTS] User cache hit!');
+        Perf.end('User Auth');
+        applyUserData(cachedUser);
+        refreshUserBackground(userData.id);
+    } else {
+        Perf.start('Firebase User Fetch');
+        try {
+            const userDoc = await db.collection('employees').doc(currentUser.id).get();
+            if (userDoc.exists) {
+                const d = userDoc.data();
+                currentUser.access = d.access;
+                currentUser.permissions = d.permissions || {};
+                currentUser.name = d.name;
+                currentUser.nickname = d.nickname;
+                sessionStorage.setItem('loggedInUser', JSON.stringify(currentUser));
+            }
+        } catch(e) { console.warn(e); }
+        Perf.end('Firebase User Fetch');
+        Perf.end('User Auth');
+        cacheSet(USER_CACHE_KEY, currentUser);
+        applyUserData(currentUser);
+    }
 
     if (!['Admin', 'Manager'].includes(currentUser.access)) {
         document.getElementById('rptAccessDenied').style.display = 'flex';
         document.getElementById('reportsSidebar').style.display = 'none';
         document.querySelectorAll('.rpt-section').forEach(s => s.style.display = 'none');
+        revealPage();
         return;
     }
 
-    document.getElementById('rptUserName').textContent = currentUser.name || currentUser.nickname;
-    document.getElementById('rptUserBadge').textContent = currentUser.access;
-    const badgeColors = { 'Admin': '#ff4444', 'Manager': '#2196F3' };
-    document.getElementById('rptUserBadge').style.background = badgeColors[currentUser.access] || '#f0a500';
-
     buildSwitcher();
 
-    loadDayEndReports();
-    loadStockIssues();
-    loadStockCounts();
-    loadStaffMealsData();
-    loadWastageData();
-    loadPurchasesData();
-    loadSuppliersData();
-    loadInventoryItemsData();
-    loadPurchaseReturnsData();
+    // ⚡ Start all real-time listeners (parallel)
+    Perf.start('All Listeners Setup');
+    loadDayEndReports();    // cached + one-time
+    loadStockIssues();      // real-time
+    loadStockCounts();      // real-time
+    loadStaffMealsData();   // real-time
+    loadWastageData();      // real-time
+    loadPurchasesData();    // real-time
+    loadSuppliersData();    // real-time
+    loadInventoryItemsData(); // real-time
+    loadPurchaseReturnsData(); // real-time
+    Perf.end('All Listeners Setup');
 
+    // Set default filter dates
     const today = new Date().toISOString().split('T')[0];
     const thirtyAgo = new Date();
     thirtyAgo.setDate(thirtyAgo.getDate() - 30);
@@ -147,6 +212,7 @@ async function initializeApp() {
         if (el) el.value = today;
     });
 
+    // Handle URL hash navigation
     if (window.location.hash === '#pendingapprovals') showSection('pendingapprovals');
     else if (window.location.hash === '#stockissues' || window.location.hash === '#stockcountreport') showSection('stockcountreport');
     else if (window.location.hash === '#credittracking') showSection('creditTracking');
@@ -158,6 +224,30 @@ async function initializeApp() {
         }, 300);
     }
 }
+
+function applyUserData(userData) {
+    document.getElementById('rptUserName').textContent = userData.name || userData.nickname;
+    document.getElementById('rptUserBadge').textContent = userData.access;
+    const badgeColors = { 'Admin': '#ff4444', 'Manager': '#2196F3' };
+    document.getElementById('rptUserBadge').style.background = badgeColors[userData.access] || '#f0a500';
+}
+
+async function refreshUserBackground(userId) {
+    try {
+        const userDoc = await db.collection('employees').doc(userId).get();
+        if (userDoc.exists) {
+            const d = userDoc.data();
+            const base = getCurrentUser();
+            base.access = d.access;
+            base.permissions = d.permissions || {};
+            base.name = d.name;
+            base.nickname = d.nickname;
+            cacheSet(USER_CACHE_KEY, base);
+            console.log('🔄 [REPORTS] User cache refreshed background');
+        }
+    } catch(e) { console.warn('Background user refresh failed:', e); }
+}
+
 initializeApp();
 
 /* ─────────────────────────────────────────────────────────── */
@@ -204,6 +294,14 @@ function showSection(name) {
     const menu = document.getElementById('menu-' + name);
     if (menu) menu.classList.add('active');
 
+    // Reveal stat cards in newly shown section
+    setTimeout(() => {
+        const cards = section?.querySelectorAll('.rpt-summary-card') || [];
+        cards.forEach((card, i) => {
+            setTimeout(() => card.classList.add('visible'), i * 60);
+        });
+    }, 50);
+
     if (name === 'employees' && allEmployees.length === 0) loadEmployeeReports();
     if (name === 'pendingapprovals') { updatePendingStats(); renderPendingTab(); }
     if (name === 'stockcountreport') { updateSCRSummary(); renderSCRContent(); }
@@ -224,17 +322,29 @@ function closeSidebarMobile() {
     if (window.innerWidth <= 768) document.getElementById('reportsSidebar').classList.remove('open');
 }
 
-// ✅ Global logout() use කරනවා - firebase-config.js වල!
-// function logout() { ... } ← REMOVED!
-
 /* ─────────────────────────────────────────────────────────── */
-/* 📋 DAY END REPORTS                                         */
+/* 📋 DAY END REPORTS (with cache)                            */
 /* ─────────────────────────────────────────────────────────── */
 async function loadDayEndReports() {
+    Perf.start('DayEnd Load');
+    const cached = cacheGet(DAYEND_CACHE_KEY, CACHE_3MIN);
+    if (cached) {
+        allDayEndReports = cached;
+        console.log(`✅ [REPORTS] DayEnd cache hit! ${cached.length} reports`);
+        Perf.end('DayEnd Load');
+        buildCashierDropdown();
+        filteredReports = [...allDayEndReports];
+        renderDayEndReports(filteredReports);
+        updateDayEndSummary(filteredReports);
+        refreshDayEndBackground();
+        return;
+    }
     try {
         const snap = await db.collection('dayEndReports').orderBy('date', 'desc').get();
         allDayEndReports = [];
         snap.forEach(doc => allDayEndReports.push({ id: doc.id, ...doc.data() }));
+        cacheSet(DAYEND_CACHE_KEY, allDayEndReports);
+        console.log(`📋 [REPORTS] DayEnd fetched: ${allDayEndReports.length}`);
         buildCashierDropdown();
         filteredReports = [...allDayEndReports];
         renderDayEndReports(filteredReports);
@@ -242,6 +352,17 @@ async function loadDayEndReports() {
     } catch (e) {
         document.getElementById('dayendReportsList').innerHTML = `<div class="rpt-empty">⚠️ Error loading.</div>`;
     }
+    Perf.end('DayEnd Load');
+}
+
+async function refreshDayEndBackground() {
+    try {
+        const snap = await db.collection('dayEndReports').orderBy('date', 'desc').get();
+        allDayEndReports = [];
+        snap.forEach(doc => allDayEndReports.push({ id: doc.id, ...doc.data() }));
+        cacheSet(DAYEND_CACHE_KEY, allDayEndReports);
+        console.log('🔄 [REPORTS] DayEnd cache refreshed background');
+    } catch(e) { console.warn('Background DayEnd refresh failed:', e); }
 }
 
 function buildCashierDropdown() {
@@ -306,16 +427,40 @@ function toggleRpt(id) {
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 👥 EMPLOYEE REPORTS                                        */
+/* 👥 EMPLOYEE REPORTS (with cache)                           */
 /* ─────────────────────────────────────────────────────────── */
 async function loadEmployeeReports() {
+    Perf.start('Employees Load');
+    const cached = cacheGet(EMPLOYEES_CACHE_KEY, CACHE_5MIN);
+    if (cached) {
+        allEmployees = cached;
+        console.log(`✅ [REPORTS] Employees cache hit! ${cached.length}`);
+        Perf.end('Employees Load');
+        renderEmpStats();
+        renderEmpTable(allEmployees);
+        refreshEmployeesBackground();
+        return;
+    }
     try {
         const snap = await db.collection('employees').get();
         allEmployees = [];
         snap.forEach(doc => allEmployees.push({ id: doc.id, ...doc.data() }));
+        cacheSet(EMPLOYEES_CACHE_KEY, allEmployees);
+        console.log(`👥 [REPORTS] Employees fetched: ${allEmployees.length}`);
         renderEmpStats();
         renderEmpTable(allEmployees);
     } catch (e) { console.error(e); }
+    Perf.end('Employees Load');
+}
+
+async function refreshEmployeesBackground() {
+    try {
+        const snap = await db.collection('employees').get();
+        allEmployees = [];
+        snap.forEach(doc => allEmployees.push({ id: doc.id, ...doc.data() }));
+        cacheSet(EMPLOYEES_CACHE_KEY, allEmployees);
+        console.log('🔄 [REPORTS] Employees cache refreshed background');
+    } catch(e) { console.warn(e); }
 }
 
 function renderEmpStats() {
@@ -349,45 +494,68 @@ function filterEmpTable() {
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📊 LOADERS                                                 */
+/* 📊 REAL-TIME LISTENERS                                     */
 /* ─────────────────────────────────────────────────────────── */
 function loadStockCounts() {
+    Perf.start('StockCounts Listener');
     db.collection('stockCounts').orderBy('createdAt', 'desc').onSnapshot((snap) => {
         allStockCounts = [];
         snap.forEach(doc => allStockCounts.push({ id: doc.id, ...doc.data() }));
+        console.log(`📊 [REPORTS] StockCounts: ${allStockCounts.length}`);
         updateSidebarBadges();
         updatePendingStats();
         renderPendingTab();
         updateSCRSummary();
         renderSCRContent();
-    });
+        if (!_pageRevealed) revealPage();
+        Perf.end('StockCounts Listener');
+    }, err => { console.error(err); if (!_pageRevealed) revealPage(); });
 }
 
 function loadPurchasesData() {
+    Perf.start('Purchases Listener');
     db.collection('purchases').orderBy('createdAt', 'desc').onSnapshot((snap) => {
         allPurchases = [];
         snap.forEach(doc => allPurchases.push({ id: doc.id, ...doc.data() }));
+        console.log(`🛒 [REPORTS] Purchases: ${allPurchases.length}`);
         updateSidebarBadges();
         updatePendingStats();
         renderPendingTab();
         updateCRStats();
         if (document.getElementById('section-purchaseReports').style.display === 'block') loadPurchaseReports();
         if (document.getElementById('section-creditTracking').style.display === 'block') renderCRTab();
+        if (!_pageRevealed) revealPage();
+        Perf.end('Purchases Listener');
     });
 }
 
 function loadSuppliersData() {
+    const cached = cacheGet(SUPPLIERS_CACHE_KEY, CACHE_5MIN);
+    if (cached) {
+        allSuppliers = cached;
+        console.log(`✅ [REPORTS] Suppliers cache hit! ${cached.length}`);
+        updateSupplierFilters();
+    }
     db.collection('suppliers').orderBy('name').onSnapshot((snap) => {
         allSuppliers = [];
         snap.forEach(doc => allSuppliers.push({ id: doc.id, ...doc.data() }));
+        cacheSet(SUPPLIERS_CACHE_KEY, allSuppliers);
+        console.log(`🏪 [REPORTS] Suppliers: ${allSuppliers.length}`);
         updateSupplierFilters();
     });
 }
 
 function loadInventoryItemsData() {
+    const cached = cacheGet(INVENTORY_CACHE_KEY, CACHE_5MIN);
+    if (cached) {
+        allInventoryItems = cached;
+        console.log(`✅ [REPORTS] Inventory cache hit! ${cached.length}`);
+    }
     db.collection('inventoryItems').orderBy('itemName').onSnapshot((snap) => {
         allInventoryItems = [];
         snap.forEach(doc => allInventoryItems.push({ id: doc.id, ...doc.data() }));
+        cacheSet(INVENTORY_CACHE_KEY, allInventoryItems);
+        console.log(`📦 [REPORTS] Inventory: ${allInventoryItems.length}`);
     });
 }
 
@@ -395,12 +563,11 @@ function loadPurchaseReturnsData() {
     db.collection('purchaseReturns').orderBy('createdAt', 'desc').onSnapshot((snap) => {
         allPurchaseReturns = [];
         snap.forEach(doc => allPurchaseReturns.push({ id: doc.id, ...doc.data() }));
+        console.log(`🔄 [REPORTS] Returns: ${allPurchaseReturns.length}`);
         updateSidebarBadges();
         updatePendingStats();
         if (currentPendingTab === 'returns') renderPendingReturns();
-    }, err => {
-        console.error('Purchase Returns load error:', err);
-    });
+    }, err => console.error('Returns load error:', err));
 }
 
 function updateSupplierFilters() {
@@ -451,6 +618,12 @@ function updatePendingStats() {
     const totalValue = stockPending.reduce((s, c) => s + Math.abs(c.totalCostImpact || 0), 0)
                      + purchasePending.reduce((s, p) => s + (p.billTotal || 0), 0)
                      + returnsPending.reduce((s, r) => s + (r.returnTotal || 0), 0);
+
+    // Remove skeleton when data arrives
+    document.querySelectorAll('#section-pendingapprovals .skeleton-stat').forEach(el => {
+        el.classList.remove('skeleton-stat');
+        el.querySelectorAll('.sk-text').forEach(t => t.classList.remove('sk-text'));
+    });
 
     const e1 = document.getElementById('scStockCountsPending');
     const e2 = document.getElementById('scPurchasesPending');
@@ -664,6 +837,7 @@ async function approvePurchaseReturn(returnId) {
             if (inv) inv.currentStock = newStock;
         }
         await batch.commit();
+        cacheRemove(INVENTORY_CACHE_KEY);
         await recalculatePurchaseReturnStatus(r.originalPurchaseId);
         alert(`✅ Return Approved!\n\n📉 Stock reduced\n🧾 Credit note: ${creditNoteNumber}\n💵 Outstanding payment adjusted`);
     } catch (e) {
@@ -778,9 +952,12 @@ async function approvePurchase(billId) {
             approvedBy: currentUser.nickname, approvedByName: currentUser.name,
             approvedAt: firebase.firestore.FieldValue.serverTimestamp(), stockUpdated: true
         });
+        cacheRemove(INVENTORY_CACHE_KEY);
+        cacheRemove(SUPPLIERS_CACHE_KEY);
         alert(`✅ Purchase Approved!\n\n📦 Inventory updated.\n💰 Prices refreshed.\n📊 Stock movements logged.`);
     } catch (e) { console.error('Approve purchase error:', e); alert('❌ Error: ' + e.message); }
 }
+
 async function rejectPurchase(billId) {
     const reason = document.getElementById('purRejectReason-' + billId)?.value.trim();
     if (!reason) { alert('⚠️ Rejection reason!'); return; }
@@ -848,6 +1025,7 @@ async function approveStockCount(countId) {
             approvedByName: currentUser.name,
             approvedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
+        cacheRemove(INVENTORY_CACHE_KEY);
         alert('✅ Approved!');
     } catch (e) { alert('❌ ' + e.message); }
 }
@@ -911,6 +1089,7 @@ async function suspiciousApproveStockCount(countId) {
             approvedByName: currentUser.name,
             approvedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
+        cacheRemove(INVENTORY_CACHE_KEY);
         alert('⚠️ Suspicious Approved!');
     } catch (e) { alert('❌ ' + e.message); }
 }
@@ -1049,6 +1228,7 @@ function loadStockIssues() {
     db.collection('stockIssues').orderBy('createdAt', 'desc').onSnapshot((snap) => {
         allStockIssues = [];
         snap.forEach(doc => allStockIssues.push({ id: doc.id, ...doc.data() }));
+        console.log(`🚨 [REPORTS] StockIssues: ${allStockIssues.length}`);
         updateIssueStats();
         updateSidebarIssueBadge();
         updateSCRSummary();
@@ -1171,6 +1351,7 @@ function loadStaffMealsData() {
     db.collection('staffMeals').orderBy('date', 'desc').onSnapshot((snap) => {
         allStaffMeals = [];
         snap.forEach(doc => allStaffMeals.push({ id: doc.id, ...doc.data() }));
+        console.log(`🍽️ [REPORTS] StaffMeals: ${allStaffMeals.length}`);
     });
 }
 
@@ -1216,6 +1397,7 @@ function loadWastageData() {
     db.collection('wastage').orderBy('date', 'desc').onSnapshot((snap) => {
         allWastage = [];
         snap.forEach(doc => allWastage.push({ id: doc.id, ...doc.data() }));
+        console.log(`🗑️ [REPORTS] Wastage: ${allWastage.length}`);
     });
 }
 
@@ -1490,7 +1672,6 @@ function openMarkPaidModal(billId) {
     document.getElementById('markPaidBody').innerHTML = bodyHtml;
     document.getElementById('paidDateInput').value = new Date().toISOString().split('T')[0];
     document.getElementById('paidNotesInput').value = '';
-    // ⭐ Reset payment proof
     rptPaymentProofPhotoUrl = ''; rptPaymentProofPhotoPath = '';
     document.getElementById('rptPaymentProofUrl').value = '';
     document.getElementById('rptPaymentProofImg').src = '';
@@ -1507,7 +1688,6 @@ async function confirmMarkPaid() {
     if (!paidDate) { alert('⚠️ Payment date!'); return; }
     const p = allPurchases.find(x => x.id === markPaidBillId);
     const netPayable = p ? getNetPayable(p) : 0;
-    // ⭐ Payment proof
     const proofUrl = rptPaymentProofPhotoUrl || document.getElementById('rptPaymentProofUrl').value.trim();
     try {
         await db.collection('purchases').doc(markPaidBillId).update({
@@ -1542,9 +1722,11 @@ function openPhotoFullscreen(src) {
     document.getElementById('fullscreenImg').src = src;
     document.getElementById('photoFullscreenModal').classList.add('show');
 }
-// ════════════════════════════════════════════════════════════
-// 📸 PAYMENT PROOF - REPORTS DB ⭐ NEW!
-// ════════════════════════════════════════════════════════════
+function closePhotoFullscreen() { document.getElementById('photoFullscreenModal').classList.remove('show'); }
+
+/* ─────────────────────────────────────────────────────────── */
+/* 📸 PAYMENT PROOF                                           */
+/* ─────────────────────────────────────────────────────────── */
 async function compressImage(file, maxWidth = 1200, quality = 0.7) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1613,7 +1795,6 @@ async function removeRptPaymentProof() {
     document.getElementById('rptPaymentProofPreview').style.display = 'none';
     rptPaymentProofPhotoUrl = ''; rptPaymentProofPhotoPath = '';
 }
-function closePhotoFullscreen() { document.getElementById('photoFullscreenModal').classList.remove('show'); }
 
 window.onclick = function(event) {
     if (event.target.id === 'photoFullscreenModal') closePhotoFullscreen();

@@ -8,17 +8,25 @@
     <link rel="stylesheet" href="mobile.css">
     <link rel="stylesheet" href="callcenter-style.css">
     <link rel="stylesheet" href="payment-style.css">
+    <!-- NEW: Skeleton Loading CSS -->
+    <link rel="stylesheet" href="skeleton-loading.css">
 </head>
 <body>
-    <!-- Topbar (Auto-built) -->
     <div id="topbarContainer"></div>
-    
+
     <div class="dashboard-container">
-        
-        <!-- ═══════════════════════════════════════ -->
-        <!-- 📊 STATS ROW -->
-        <!-- ═══════════════════════════════════════ -->
-        <div class="stats-row">
+
+        <!-- 💀 SKELETON: Stats Row -->
+        <div class="skeleton-wrapper skeleton-stats-row" id="skeletonStats">
+            <div class="skeleton-stat-card"><div class="skeleton skeleton-stat-icon"></div><div class="skeleton-stat-content"><div class="skeleton skeleton-text sk-w-80"></div><div class="skeleton skeleton-text-sm sk-w-60"></div></div></div>
+            <div class="skeleton-stat-card"><div class="skeleton skeleton-stat-icon"></div><div class="skeleton-stat-content"><div class="skeleton skeleton-text sk-w-80"></div><div class="skeleton skeleton-text-sm sk-w-60"></div></div></div>
+            <div class="skeleton-stat-card"><div class="skeleton skeleton-stat-icon"></div><div class="skeleton-stat-content"><div class="skeleton skeleton-text sk-w-80"></div><div class="skeleton skeleton-text-sm sk-w-60"></div></div></div>
+            <div class="skeleton-stat-card"><div class="skeleton skeleton-stat-icon"></div><div class="skeleton-stat-content"><div class="skeleton skeleton-text sk-w-80"></div><div class="skeleton skeleton-text-sm sk-w-60"></div></div></div>
+            <div class="skeleton-stat-card"><div class="skeleton skeleton-stat-icon"></div><div class="skeleton-stat-content"><div class="skeleton skeleton-text sk-w-80"></div><div class="skeleton skeleton-text-sm sk-w-60"></div></div></div>
+        </div>
+
+        <!-- ✨ REAL: Stats Row -->
+        <div class="stats-row real-content" id="realStats" style="display: none;">
             <div class="stat-card">
                 <div class="stat-icon">💰</div>
                 <div>
@@ -55,10 +63,7 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ═══════════════════════════════════════ -->
-        <!-- 🎯 SOURCE BADGE (Auto-detect) -->
-        <!-- ═══════════════════════════════════════ -->
+
         <div class="source-badge-card">
             <div class="source-badge-content">
                 <div class="source-badge-icon">📍</div>
@@ -72,37 +77,107 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ═══════════════════════════════════════ -->
-        <!-- 📋 SECTION 1: CUSTOMER INFORMATION -->
-        <!-- ═══════════════════════════════════════ -->
+
         <div class="section-card">
-            <div class="section-title">📋 Customer Information</div>
+            <div class="section-title">🔍 Student Search</div>
             <div class="section-desc">
-                Phone number එක දාලා search කරන්න. Existing lead නම් auto-fill වෙයි.
+                Student ID, නම හෝ phone number ලියන්න. Existing student නම් auto-fill වෙයි.
             </div>
-            
-            <!-- Phone Search Row -->
-            <div class="form-group">
-                <label>Phone Number * (Search)</label>
-                <div class="phone-search-wrap">
-                    <div class="phone-input-wrap" style="flex: 1;">
-                        <span class="phone-prefix">+94</span>
-                        <input type="tel" 
-                               id="customerPhone" 
-                               class="quick-phone-input" 
-                               placeholder="75 1234567"
-                               maxlength="9">
-                    </div>
-                    <button class="btn-primary" id="btnSearchPhone">
-                        🔍 Search
-                    </button>
+
+            <div class="smart-search-wrap">
+                <div class="smart-search-box">
+                    <span class="smart-search-icon">🔍</span>
+                    <input type="text" id="smartSearchInput" class="smart-search-input"
+                        placeholder="BCA-W32-0001  හෝ  Naveen  හෝ  0771234567" autocomplete="off">
+                    <button class="smart-search-clear" id="btnSmartClear" onclick="clearSmartSearch()" style="display:none;">✕</button>
                 </div>
-                <div class="phone-search-status" id="phoneSearchStatus"></div>
+
+                <div class="search-suggestions" id="searchSuggestions" style="display:none;">
+                    <div class="suggestions-list" id="suggestionsList"></div>
+                </div>
             </div>
-            
-            <!-- Customer Form Grid -->
+
+            <div class="search-status-bar" id="searchStatusBar" style="display:none;"></div>
+
+            <!-- 💀 SKELETON: Student Summary -->
+            <div class="skeleton-wrapper skeleton-student-summary hidden" id="skeletonStudentSummary">
+                <div class="skeleton-summary-header">
+                    <div class="skeleton-summary-left">
+                        <div class="skeleton skeleton-text-sm sk-w-30"></div>
+                        <div class="skeleton skeleton-text-lg sk-w-60"></div>
+                    </div>
+                    <div class="skeleton-summary-right">
+                        <div class="skeleton skeleton-btn sk-w-100" style="height: 28px;"></div>
+                    </div>
+                </div>
+                <div class="skeleton-summary-stats">
+                    <div class="skeleton-summary-stat"><div class="skeleton skeleton-text-sm sk-w-60"></div><div class="skeleton skeleton-text-lg sk-w-80"></div></div>
+                    <div class="skeleton-summary-stat"><div class="skeleton skeleton-text-sm sk-w-60"></div><div class="skeleton skeleton-text-lg sk-w-80"></div></div>
+                    <div class="skeleton-summary-stat"><div class="skeleton skeleton-text-sm sk-w-60"></div><div class="skeleton skeleton-text-lg sk-w-80"></div></div>
+                    <div class="skeleton-summary-stat"><div class="skeleton skeleton-text-sm sk-w-60"></div><div class="skeleton skeleton-text-lg sk-w-80"></div></div>
+                </div>
+                <div class="skeleton-installment">
+                    <div class="skeleton skeleton-installment-icon"></div>
+                    <div class="skeleton-installment-text sk-w-100">
+                        <div class="skeleton skeleton-text-sm sk-w-80"></div>
+                        <div class="skeleton skeleton-text-sm sk-w-40"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ✨ REAL: Student Summary -->
+            <div class="student-summary-box real-content" id="studentSummaryBox" style="display:none;">
+                <div class="student-summary-header">
+                    <div class="student-summary-left">
+                        <span class="student-summary-id" id="summaryStudentId">-</span>
+                        <span class="student-summary-name" id="summaryStudentName">-</span>
+                    </div>
+                    <div class="student-summary-right">
+                        <span class="student-summary-badge" id="summaryStatusBadge">Active</span>
+                        <button class="student-summary-clear" onclick="clearStudentSelection()">✕ Clear</button>
+                    </div>
+                </div>
+
+                <div class="student-summary-stats">
+                    <div class="summary-stat">
+                        <div class="summary-stat-label">Total Fee</div>
+                        <div class="summary-stat-value" id="summaryTotalFee">Rs. 0</div>
+                    </div>
+                    <div class="summary-stat success">
+                        <div class="summary-stat-label">Total Paid</div>
+                        <div class="summary-stat-value" id="summaryTotalPaid">Rs. 0</div>
+                    </div>
+                    <div class="summary-stat warning">
+                        <div class="summary-stat-label">Balance Due</div>
+                        <div class="summary-stat-value" id="summaryBalance">Rs. 0</div>
+                    </div>
+                    <div class="summary-stat info">
+                        <div class="summary-stat-label">Payments Done</div>
+                        <div class="summary-stat-value" id="summaryPaymentsCount">0</div>
+                    </div>
+                </div>
+
+                <div class="installment-info-box" id="installmentInfoBox">
+                    <div class="installment-info-icon">💳</div>
+                    <div class="installment-info-text" id="installmentInfoText">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">
+                📋 Customer Information
+                <span class="readonly-badge" id="readonlyBadge" style="display:none;">🔒 Read Only</span>
+            </div>
+            <div class="section-desc" id="customerSectionDesc">
+                Phone number හෝ search box වලින් student/lead හොයාගන්න. Existing නම් auto-fill වෙයි.
+            </div>
+
             <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="customerPhone" class="form-input" placeholder="+94771234567">
+                </div>
                 <div class="form-group">
                     <label>Full Name *</label>
                     <input type="text" id="customerName" class="form-input" placeholder="Naveen Perera">
@@ -119,40 +194,55 @@
                     <label>Date of Birth</label>
                     <input type="date" id="customerDOB" class="form-input">
                 </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <div class="phone-search-status" id="phoneSearchStatus"></div>
+                </div>
                 <div class="form-group full-width">
                     <label>Address</label>
                     <textarea id="customerAddress" class="form-textarea" rows="2" placeholder="No. 123, Main Street, Colombo"></textarea>
                 </div>
             </div>
         </div>
-        
-        <!-- ═══════════════════════════════════════ -->
-        <!-- 🎓 SECTION 2: COURSE SELECTION -->
-        <!-- ═══════════════════════════════════════ -->
+
         <div class="section-card">
-            <div class="section-title">🎓 Course Selection</div>
+            <div class="section-title">
+                🎓 Course Selection
+                <span class="readonly-badge" id="courseReadonlyBadge" style="display:none;">🔒 Read Only</span>
+            </div>
             <div class="section-desc">
                 Academy සහ course එක තෝරන්න. Fee details auto-load වෙයි.
             </div>
-            
-            <div class="form-grid-2">
+
+            <!-- 💀 SKELETON: Course Selection -->
+            <div class="skeleton-wrapper skeleton-course-row" id="skeletonCourses">
+                <div class="skeleton-form-group">
+                    <div class="skeleton skeleton-text-sm sk-w-30"></div>
+                    <div class="skeleton skeleton-input sk-w-100"></div>
+                </div>
+                <div class="skeleton-form-group">
+                    <div class="skeleton skeleton-text-sm sk-w-30"></div>
+                    <div class="skeleton skeleton-input sk-w-100"></div>
+                </div>
+            </div>
+
+            <!-- ✨ REAL: Course Selection -->
+            <div class="form-grid-2 real-content" id="realCourses" style="display: none;">
                 <div class="form-group">
                     <label>Academy *</label>
                     <select id="academySelect" class="form-select">
-                        <option value="">-- Select Academy --</option>
-                        <option value="SAC">SAC - Specialty Academy Ceylon</option>
+                        <option value="">-- Academy තෝරන්න --</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Course *</label>
                     <select id="courseSelect" class="form-select" disabled>
-                        <option value="">-- Select Course --</option>
+                        <option value="">-- Course තෝරන්න --</option>
                     </select>
                 </div>
             </div>
-            
-            <!-- Course Fee Display -->
-            <div class="course-fee-box" id="courseFeeBox" style="display: none;">
+
+            <div class="course-fee-box" id="courseFeeBox" style="display:none;">
                 <div class="fee-item">
                     <span class="fee-label">💰 Course Fee</span>
                     <span class="fee-value" id="feeAmount">Rs. 0</span>
@@ -171,24 +261,28 @@
                 </div>
             </div>
         </div>
-        
-        <!-- ═══════════════════════════════════════ -->
-        <!-- 💳 SECTION 3: PAYMENT DETAILS -->
-        <!-- ═══════════════════════════════════════ -->
+
         <div class="section-card">
             <div class="section-title">💳 Payment Details</div>
-            <div class="section-desc">
-                Payment method එක තෝරලා amount දාන්න.
-            </div>
-            
-            <!-- Payment Method -->
+            <div class="section-desc">Payment method එක තෝරලා amount දාන්න.</div>
+
             <div class="form-group">
                 <label>Payment Method *</label>
-                <div class="payment-methods-grid" id="paymentMethodsGrid">
-                    <div class="loading-msg">⏳ Loading payment methods...</div>
+                
+                <!-- 💀 SKELETON: Payment Methods -->
+                <div class="skeleton-wrapper skeleton-payment-grid" id="skeletonPaymentMethods">
+                    <div class="skeleton-payment-card"><div class="skeleton skeleton-payment-icon"></div><div class="skeleton skeleton-payment-label"></div></div>
+                    <div class="skeleton-payment-card"><div class="skeleton skeleton-payment-icon"></div><div class="skeleton skeleton-payment-label"></div></div>
+                    <div class="skeleton-payment-card"><div class="skeleton skeleton-payment-icon"></div><div class="skeleton skeleton-payment-label"></div></div>
+                    <div class="skeleton-payment-card"><div class="skeleton skeleton-payment-icon"></div><div class="skeleton skeleton-payment-label"></div></div>
+                </div>
+
+                <!-- ✨ REAL: Payment Methods -->
+                <div class="payment-methods-grid real-content" id="paymentMethodsGrid" style="display: none;">
+                    <!-- JS fills this -->
                 </div>
             </div>
-            
+
             <div class="form-grid-2">
                 <div class="form-group">
                     <label>Amount * (LKR)</label>
@@ -196,15 +290,14 @@
                 </div>
                 <div class="form-group">
                     <label>Discount Code</label>
-                    <div style="display: flex; gap: 6px;">
-                        <input type="text" id="discountCode" class="form-input" placeholder="EARLY10" style="flex: 1;">
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="discountCode" class="form-input" placeholder="EARLY10" style="flex:1;">
                         <button class="btn-secondary" id="btnApplyDiscount">Apply</button>
                     </div>
                 </div>
             </div>
-            
-            <!-- Final Amount Display -->
-            <div class="final-amount-box" id="finalAmountBox" style="display: none;">
+
+            <div class="final-amount-box" id="finalAmountBox" style="display:none;">
                 <div class="final-amount-row">
                     <span>Original Amount:</span>
                     <span id="originalAmountDisplay">Rs. 0</span>
@@ -218,45 +311,33 @@
                     <span id="finalAmountDisplay">Rs. 0</span>
                 </div>
             </div>
-            
-            <!-- Slip Upload -->
-            <div class="form-group" id="slipUploadGroup" style="display: none;">
+
+            <div class="form-group" id="slipUploadGroup" style="display:none;">
                 <label>Payment Slip Upload</label>
                 <input type="file" id="paymentSlip" class="form-input" accept="image/*,.pdf">
                 <div class="slip-preview" id="slipPreview"></div>
             </div>
-            
-            <!-- Notes -->
+
             <div class="form-group">
                 <label>Notes (Optional)</label>
                 <textarea id="paymentNotes" class="form-textarea" rows="2" placeholder="Any additional notes..."></textarea>
             </div>
         </div>
-        
-        <!-- ═══════════════════════════════════════ -->
-        <!-- 💾 SUBMIT BUTTON -->
-        <!-- ═══════════════════════════════════════ -->
+
         <div class="section-card submit-section">
             <button class="btn-process-payment" id="btnProcessPayment">
                 💾 Process Payment
             </button>
-            <div class="submit-hint">
+            <div class="submit-hint" id="submitHint">
                 Submit කලාට පස්සේ Student ID + Password + Receipt auto-generate වෙයි.
             </div>
         </div>
-        
+
     </div>
 
-    <!-- ═══════════════════════════════════════ -->
-    <!-- 🧾 RECEIPT MODAL -->
-    <!-- ═══════════════════════════════════════ -->
     <div class="receipt-modal-overlay" id="receiptModalOverlay">
         <div class="receipt-modal" id="receiptModal">
-            
-            <!-- Print Area (only this prints) -->
             <div class="receipt-print-area" id="receiptPrintArea">
-                
-                <!-- Receipt Header -->
                 <div class="receipt-header">
                     <div class="receipt-logo">🍴</div>
                     <div class="receipt-business-name" id="receiptBusinessName">Buono</div>
@@ -270,10 +351,8 @@
                     <div class="receipt-date" id="receiptDate"></div>
                 </div>
 
-                <!-- Type Badge -->
                 <div class="receipt-type-badge" id="receiptTypeBadge">New Enrollment</div>
 
-                <!-- Student Info -->
                 <div class="receipt-section">
                     <div class="receipt-section-title">👤 Student Information</div>
                     <div class="receipt-row">
@@ -294,7 +373,6 @@
                     </div>
                 </div>
 
-                <!-- Course Info -->
                 <div class="receipt-section">
                     <div class="receipt-section-title">🎓 Course Information</div>
                     <div class="receipt-row">
@@ -311,7 +389,6 @@
                     </div>
                 </div>
 
-                <!-- Payment Info -->
                 <div class="receipt-section">
                     <div class="receipt-section-title">💳 Payment Information</div>
                     <div class="receipt-row">
@@ -332,8 +409,7 @@
                     </div>
                 </div>
 
-                <!-- Balance Info -->
-                <div class="receipt-balance-box" id="receiptBalanceBox">
+                <div class="receipt-balance-box">
                     <div class="receipt-balance-row">
                         <span>Remaining Balance</span>
                         <span id="receiptBalance">Rs. 0</span>
@@ -344,44 +420,31 @@
                     </div>
                 </div>
 
-                <!-- Footer -->
                 <div class="receipt-footer">
                     <div class="receipt-footer-msg">ස්තූතියි! Thank you for choosing Buono! 🙏</div>
                     <div class="receipt-footer-note">This is an official payment receipt.</div>
                     <div class="receipt-footer-note" id="receiptFooterContact"></div>
                 </div>
-
             </div>
-            <!-- End Print Area -->
 
-            <!-- Action Buttons (No Print) -->
             <div class="receipt-actions no-print">
-                <button class="receipt-btn print-btn" id="btnPrintReceipt" onclick="printReceipt()">
-                    🖨️ Print
-                </button>
-                <button class="receipt-btn whatsapp-btn" id="btnWhatsAppReceipt" onclick="sendWhatsApp()">
-                    📱 WhatsApp
-                </button>
-                <button class="receipt-btn new-btn" id="btnNewPayment" onclick="closeReceiptAndNew()">
-                    ➕ New Payment
-                </button>
-                <button class="receipt-btn close-btn" id="btnCloseReceipt" onclick="closeReceiptModal()">
-                    ✕ Close
-                </button>
+                <button class="receipt-btn print-btn" onclick="printReceipt()">🖨️ Print</button>
+                <button class="receipt-btn whatsapp-btn" onclick="sendWhatsApp()">📱 WhatsApp</button>
+                <button class="receipt-btn new-btn" onclick="closeReceiptAndNew()">➕ New Payment</button>
+                <button class="receipt-btn close-btn" onclick="closeReceiptModal()">✕ Close</button>
             </div>
-
         </div>
     </div>
-    <!-- End Receipt Modal -->
-    
-    <!-- Toast Container -->
+
     <div class="toast-container" id="toastContainer"></div>
-    
+
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="performance-tracker.js"></script>
+    <script src="smart-storage-cache.js"></script>
     <script src="payment-script.js"></script>
     <script src="mobile-script.js"></script>
 </body>

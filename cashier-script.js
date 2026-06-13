@@ -1,12 +1,10 @@
 // ═══════════════════════════════════════════════════════════
 // 💰 BUONO - DAY END REPORTS DATABASE
 // File: cashier-script.js
-// Version: 10.1 - Architecture Migration!
+// Version: 11.0 - Speed + Smooth + Professional
 // ⭐ Uses global DATABASES from firebase-config.js
+// ⭐ Original logic 100% preserved + enhancements
 // ═══════════════════════════════════════════════════════════
-
-// ❌ NO DATABASES array here! Uses global from firebase-config.js
-// ❌ NO firebaseConfig! Uses global db from firebase-config.js
 
 let currentUser = null;
 let myPerms = null;
@@ -14,27 +12,115 @@ let deleteReportId = null;
 let expenseRowCount = 1;
 let depositRowCount = 1;
 
+// ─── Pagination state ───
+const REPORTS_PAGE_SIZE = 20;
+let allReportsCache = [];
+let reportsLoaded = false;
+let reportsDisplayed = 0;
+
+// ─── Cache keys ───
+const USER_CACHE_KEY    = 'buono_cashier_user_v1';
+const REPORTS_CACHE_KEY = 'buono_cashier_reports_v1';
+const CACHE_DURATION_MS = 5 * 60 * 1000;       // 5 min for user
+const REPORTS_CACHE_MS  = 2 * 60 * 1000;       // 2 min for reports
+
+// ─── Perf tracker ───
+const Perf = {
+    _marks: {},
+    start(label) { this._marks[label] = performance.now(); },
+    end(label) {
+        const t = performance.now() - (this._marks[label] || 0);
+        console.log(`⚡ [Cashier] ${label}: ${t.toFixed(1)}ms`);
+        return t;
+    }
+};
+
+// ─── Cache helpers ───
+function cacheSet(key, data) {
+    try {
+        sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
+    } catch (e) {}
+}
+function cacheGet(key, maxAge) {
+    try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+        const { data, ts } = JSON.parse(raw);
+        if (Date.now() - ts > maxAge) { sessionStorage.removeItem(key); return null; }
+        return data;
+    } catch (e) { return null; }
+}
+function cacheRemove(key) {
+    try { sessionStorage.removeItem(key); } catch (e) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🚀 INITIALIZE APP
+// ═══════════════════════════════════════════════════════════
 async function initializeApp() {
-    // ✅ Global checkAuth() use කරනවා
+    Perf.start('Total Init');
+
     const userData = getCurrentUser();
     if (!userData) { window.location.href = "login.html"; return; }
 
-    try {
-        const userDoc = await db.collection('employees').doc(userData.id).get();
-        if (userDoc.exists) {
-            const latestData = userDoc.data();
-            userData.access = latestData.access;
-            userData.permissions = latestData.permissions || {};
-            userData.name = latestData.name;
-            userData.nickname = latestData.nickname;
-            sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
+    // ── Try cache first ──
+    const cached = cacheGet(USER_CACHE_KEY, CACHE_DURATION_MS);
+    if (cached) {
+        console.log('✅ [Cashier] Using cached user permissions');
+        userData.access      = cached.access;
+        userData.permissions = cached.permissions;
+        userData.name        = cached.name;
+        userData.nickname    = cached.nickname;
+        applyUserData(userData);
+        // Background refresh
+        refreshUserBackground(userData.id);
+    } else {
+        Perf.start('Firebase User Fetch');
+        try {
+            const userDoc = await db.collection('employees').doc(userData.id).get();
+            if (userDoc.exists) {
+                const latestData = userDoc.data();
+                userData.access      = latestData.access;
+                userData.permissions = latestData.permissions || {};
+                userData.name        = latestData.name;
+                userData.nickname    = latestData.nickname;
+                sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
+                cacheSet(USER_CACHE_KEY, {
+                    access:      userData.access,
+                    permissions: userData.permissions,
+                    name:        userData.name,
+                    nickname:    userData.nickname
+                });
+            }
+        } catch (error) {
+            console.error('Could not fetch latest user data:', error);
         }
-    } catch (error) {
-        console.error('Could not fetch latest user data:', error);
+        Perf.end('Firebase User Fetch');
+        applyUserData(userData);
     }
 
+    Perf.end('Total Init');
+}
+
+async function refreshUserBackground(uid) {
+    try {
+        const userDoc = await db.collection('employees').doc(uid).get();
+        if (userDoc.exists) {
+            const latest = userDoc.data();
+            const merged = {
+                access:      latest.access,
+                permissions: latest.permissions || {},
+                name:        latest.name,
+                nickname:    latest.nickname
+            };
+            cacheSet(USER_CACHE_KEY, merged);
+        }
+    } catch (e) {}
+}
+
+function applyUserData(userData) {
     const isAdmin = userData.access === 'Admin';
-    const perms = userData.permissions?.dayEndReportDB || {};
+    const perms   = userData.permissions?.dayEndReportDB || {};
     const hasAccess = isAdmin || perms.add || perms.view || perms.selfView || perms.edit || perms.delete;
 
     if (!hasAccess) {
@@ -49,26 +135,78 @@ async function initializeApp() {
 
     currentUser = userData;
 
-    document.getElementById('welcomeUser').textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
-    document.getElementById('cashierNameCard').textContent = userData.name;
-    document.getElementById('reportCashier').value = userData.name;
+    document.getElementById('welcomeUser').textContent     = `👋 Welcome, ${userData.name} (${userData.access})`;
+    document.getElementById('reportCashier').value         = userData.name;
 
     buildDBSwitcherDropdown();
     setupUI();
+    fillStatCards();
     loadReportCount();
+    revealPage();
 }
 
-initializeApp();
+// ═══════════════════════════════════════════════════════════
+// ✨ REVEAL PAGE (smooth fade-in)
+// ═══════════════════════════════════════════════════════════
+function revealPage() {
+    const overlay = document.getElementById('cashierLoadingOverlay');
+    if (overlay) overlay.classList.add('hidden');
 
-// ⭐ NEW: Uses global DATABASES array!
+    const main = document.getElementById('cashierMainContent');
+    if (main) main.style.opacity = '1';
+
+    // Stagger stat cards
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 80);
+    });
+}
+
+// ═══════════════════════════════════════════════════════════
+// 📊 FILL STAT CARDS (remove skeleton state)
+// ═══════════════════════════════════════════════════════════
+function fillStatCards() {
+    // Cashier card
+    _fillStat('statCardCashier', '👤', currentUser.name, 'Cashier');
+
+    // Date card
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'2-digit' });
+    _fillStat('statCardDate', '📅', dateStr, 'Today');
+
+    // Time card (will auto-update via setInterval)
+    const timeStr = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    _fillStat('statCardTime', '⏰', timeStr, 'Current Time', 'currentTime');
+
+    // Reports card (count loaded later)
+    const reportsLabel = myPerms.view ? 'Total Reports' : 'My Reports';
+    _fillStat('statCardReports', '📋', '0', reportsLabel, 'totalReportsCard');
+}
+
+function _fillStat(cardId, icon, value, label, valueId = null) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    card.classList.remove('skeleton-stat');
+    const valueHTML = valueId ? `<h3 id="${valueId}">${value}</h3>` : `<h3>${value}</h3>`;
+    card.innerHTML = `
+        <div class="stat-icon">${icon}</div>
+        <div class="stat-info">
+            ${valueHTML}
+            <p>${label}</p>
+        </div>
+    `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 🔄 DB SWITCHER DROPDOWN
+// ═══════════════════════════════════════════════════════════
 function buildDBSwitcherDropdown() {
     const list = document.getElementById('dbDropdownList');
     if (!list) return;
-    
+
     const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
     let html = '';
 
-    // ✅ Uses GLOBAL DATABASES from firebase-config.js
     DATABASES.forEach(database => {
         if (database.adminManagerOnly && !isAdminOrMgr) return;
 
@@ -107,6 +245,9 @@ function buildDBSwitcherDropdown() {
     });
 }
 
+// ═══════════════════════════════════════════════════════════
+// 🎨 SETUP UI
+// ═══════════════════════════════════════════════════════════
 function setupUI() {
     if (!myPerms.add) {
         document.getElementById('tab-new-btn').style.display = 'none';
@@ -115,19 +256,26 @@ function setupUI() {
 
     if (myPerms.view) {
         document.getElementById('reportsTitle').textContent = '📋 All Reports';
-        document.getElementById('reportsLabel').textContent = 'Total Reports';
     } else if (myPerms.selfView) {
         document.getElementById('reportsTitle').textContent = '📋 My Reports';
     }
 }
 
+// ═══════════════════════════════════════════════════════════
+// 🕒 DATE / TIME UPDATER
+// ═══════════════════════════════════════════════════════════
 function updateDateTime() {
     const now = new Date();
-    const options = { year: 'numeric', month: 'short', day: '2-digit' };
-    document.getElementById('todayDate').textContent = now.toLocaleDateString('en-US', options);
-    document.getElementById('currentTime').textContent = now.toLocaleTimeString('en-US', {
-        hour: '2-digit', minute: '2-digit', second: '2-digit'
-    });
+
+    const dateEl = document.getElementById('todayDate');
+    if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'2-digit' });
+    }
+
+    const timeEl = document.getElementById('currentTime');
+    if (timeEl) {
+        timeEl.textContent = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    }
 }
 
 function setupReportDate() {
@@ -135,13 +283,17 @@ function setupReportDate() {
     const yyyy = now.getFullYear();
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const dd = String(now.getDate()).padStart(2, '0');
-    document.getElementById('reportDate').value = `${yyyy}-${mm}-${dd}`;
+    const dateEl = document.getElementById('reportDate');
+    if (dateEl) dateEl.value = `${yyyy}-${mm}-${dd}`;
 }
 
-updateDateTime();
+// Start ticking immediately
 setInterval(updateDateTime, 1000);
 setupReportDate();
 
+// ═══════════════════════════════════════════════════════════
+// 📑 SECTION SWITCHING
+// ═══════════════════════════════════════════════════════════
 function showSection(sectionName, btnEl) {
     document.querySelectorAll('.dashboard-section').forEach(sec => sec.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
@@ -150,6 +302,9 @@ function showSection(sectionName, btnEl) {
     if (sectionName === 'myReports') loadReports();
 }
 
+// ═══════════════════════════════════════════════════════════
+// ➕ EXPENSE / DEPOSIT ROWS
+// ═══════════════════════════════════════════════════════════
 function addExpenseRow() {
     const container = document.getElementById('expensesContainer');
     const rowId = 'expense-row-' + expenseRowCount;
@@ -189,17 +344,23 @@ function addDepositRow() {
 
 function removeRow(rowId) {
     const row = document.getElementById(rowId);
-    if (row) {
+    if (!row) return;
+    // Smooth remove animation
+    row.classList.add('removing');
+    setTimeout(() => {
         row.remove();
         calculateShortExcess();
-    }
+    }, 220);
 }
 
+// ═══════════════════════════════════════════════════════════
+// 💰 CALCULATE SHORT / EXCESS
+// ═══════════════════════════════════════════════════════════
 function calculateShortExcess() {
-    const startingCash = parseFloat(document.getElementById('startingCash').value) || 0;
-    const posSale = parseFloat(document.getElementById('posSale').value) || 0;
+    const startingCash  = parseFloat(document.getElementById('startingCash').value)  || 0;
+    const posSale       = parseFloat(document.getElementById('posSale').value)       || 0;
     const serviceCharge = parseFloat(document.getElementById('serviceCharge').value) || 0;
-    const dayEndCash = parseFloat(document.getElementById('dayEndCash').value) || 0;
+    const dayEndCash    = parseFloat(document.getElementById('dayEndCash').value)    || 0;
 
     let totalExpenses = 0;
     document.querySelectorAll('.expense-amount').forEach(input => {
@@ -214,13 +375,13 @@ function calculateShortExcess() {
     document.getElementById('totalDeposits').textContent = 'Rs. ' + totalDeposits.toFixed(2);
 
     const expectedCash = startingCash + posSale + serviceCharge - totalExpenses - totalDeposits;
-    const shortExcess = dayEndCash - expectedCash;
+    const shortExcess  = dayEndCash - expectedCash;
 
-    const box = document.getElementById('shortExcessBox');
-    const valueEl = document.getElementById('shortExcessValue');
+    const box      = document.getElementById('shortExcessBox');
+    const valueEl  = document.getElementById('shortExcessValue');
     const statusEl = document.getElementById('shortExcessStatus');
 
-    box.className = 'short-excess-box';
+    box.className     = 'short-excess-box';
     valueEl.className = 'short-excess-value';
 
     if (dayEndCash === 0 && startingCash === 0 && posSale === 0) {
@@ -248,18 +409,21 @@ function calculateShortExcess() {
     }
 }
 
+// ═══════════════════════════════════════════════════════════
+// 📤 SUBMIT REPORT
+// ═══════════════════════════════════════════════════════════
 async function submitReport() {
     if (!myPerms.add) {
         alert('⛔ ඔයාට Add permission නැහැ!');
         return;
     }
 
-    const shiftType = document.getElementById('shiftType').value;
-    const startingCash = parseFloat(document.getElementById('startingCash').value) || 0;
-    const posSale = parseFloat(document.getElementById('posSale').value) || 0;
+    const shiftType     = document.getElementById('shiftType').value;
+    const startingCash  = parseFloat(document.getElementById('startingCash').value)  || 0;
+    const posSale       = parseFloat(document.getElementById('posSale').value)       || 0;
     const serviceCharge = parseFloat(document.getElementById('serviceCharge').value) || 0;
-    const cardMachine = parseFloat(document.getElementById('cardMachine').value) || 0;
-    const dayEndCash = parseFloat(document.getElementById('dayEndCash').value) || 0;
+    const cardMachine   = parseFloat(document.getElementById('cardMachine').value)   || 0;
+    const dayEndCash    = parseFloat(document.getElementById('dayEndCash').value)    || 0;
 
     if (!shiftType) { alert('⚠️ Shift Type select කරන්න!'); return; }
     if (startingCash === 0 && posSale === 0 && dayEndCash === 0) { alert('⚠️ Values enter කරන්න!'); return; }
@@ -267,7 +431,7 @@ async function submitReport() {
     const expenses = [];
     let totalExpenses = 0;
     document.querySelectorAll('.multi-row[id^="expense-row"]').forEach(row => {
-        const desc = row.querySelector('.expense-desc').value.trim();
+        const desc   = row.querySelector('.expense-desc').value.trim();
         const amount = parseFloat(row.querySelector('.expense-amount').value) || 0;
         if (desc && amount > 0) {
             expenses.push({ description: desc, amount });
@@ -278,7 +442,7 @@ async function submitReport() {
     const deposits = [];
     let totalDeposits = 0;
     document.querySelectorAll('.multi-row[id^="deposit-row"]').forEach(row => {
-        const bank = row.querySelector('.deposit-bank').value;
+        const bank   = row.querySelector('.deposit-bank').value;
         const amount = parseFloat(row.querySelector('.deposit-amount').value) || 0;
         if (bank && amount > 0) {
             deposits.push({ bank, amount });
@@ -287,11 +451,11 @@ async function submitReport() {
     });
 
     const expectedCash = startingCash + posSale + serviceCharge - totalExpenses - totalDeposits;
-    const shortExcess = dayEndCash - expectedCash;
+    const shortExcess  = dayEndCash - expectedCash;
 
     const report = {
         date: document.getElementById('reportDate').value,
-        cashierName: currentUser.name,
+        cashierName:     currentUser.name,
         cashierNickname: currentUser.nickname,
         shiftType, startingCash, posSale, serviceCharge, cardMachine,
         expenses, totalExpenses, deposits, totalDeposits,
@@ -301,31 +465,36 @@ async function submitReport() {
     };
 
     const btn = document.getElementById('btnSubmit');
-    btn.disabled = true;
+    btn.disabled    = true;
     btn.textContent = '⏳ Submitting...';
 
     try {
         await db.collection('dayEndReports').add(report);
         document.getElementById('successModal').style.display = 'flex';
         resetForm();
-        btn.disabled = false;
+        btn.disabled    = false;
         btn.textContent = '✅ SUBMIT DAY END REPORT';
+
+        // Invalidate caches
+        cacheRemove(REPORTS_CACHE_KEY);
+        reportsLoaded = false;
+
         loadReportCount();
     } catch (error) {
         console.error('Error:', error);
         alert('❌ Error: ' + error.message);
-        btn.disabled = false;
+        btn.disabled    = false;
         btn.textContent = '✅ SUBMIT DAY END REPORT';
     }
 }
 
 function resetForm() {
-    document.getElementById('shiftType').value = '';
-    document.getElementById('startingCash').value = '';
-    document.getElementById('posSale').value = '';
+    document.getElementById('shiftType').value     = '';
+    document.getElementById('startingCash').value  = '';
+    document.getElementById('posSale').value       = '';
     document.getElementById('serviceCharge').value = '';
-    document.getElementById('cardMachine').value = '';
-    document.getElementById('dayEndCash').value = '';
+    document.getElementById('cardMachine').value   = '';
+    document.getElementById('dayEndCash').value    = '';
 
     document.getElementById('expensesContainer').innerHTML = `
         <div class="multi-row" id="expense-row-0">
@@ -358,10 +527,54 @@ function closeSuccessModal() {
     document.getElementById('successModal').style.display = 'none';
 }
 
-async function loadReports() {
+// ═══════════════════════════════════════════════════════════
+// 📋 LOAD REPORTS (with cache + pagination)
+// ═══════════════════════════════════════════════════════════
+async function loadReports(forceRefresh = false) {
     const container = document.getElementById('reportsList');
-    container.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">⏳ Loading reports...</div>';
 
+    // ── Try cache first ──
+    if (!forceRefresh && reportsLoaded && allReportsCache.length > 0) {
+        renderReports();
+        return;
+    }
+
+    if (!forceRefresh) {
+        const cached = cacheGet(REPORTS_CACHE_KEY, REPORTS_CACHE_MS);
+        if (cached) {
+            console.log('✅ [Cashier] Using cached reports');
+            allReportsCache = cached;
+            reportsLoaded   = true;
+            renderReports();
+            return;
+        }
+    }
+
+    // Show skeleton if no data yet
+    if (allReportsCache.length === 0) {
+        container.innerHTML = `
+            <div class="report-card sk-report-card">
+                <div class="sk-text sk-medium" style="height:20px;margin-bottom:14px"></div>
+                <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                <div class="sk-text sk-short"></div>
+            </div>
+            <div class="report-card sk-report-card">
+                <div class="sk-text sk-medium" style="height:20px;margin-bottom:14px"></div>
+                <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                <div class="sk-text sk-short"></div>
+            </div>
+            <div class="report-card sk-report-card">
+                <div class="sk-text sk-medium" style="height:20px;margin-bottom:14px"></div>
+                <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                <div class="sk-text sk-short"></div>
+            </div>
+        `;
+    }
+
+    Perf.start('Reports Fetch');
     try {
         let query;
         if (myPerms.view) {
@@ -370,6 +583,7 @@ async function loadReports() {
             query = db.collection('dayEndReports').where('cashierNickname', '==', currentUser.nickname);
         } else {
             container.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">⛔ No view permission</div>';
+            document.getElementById('reportsPaginationWrap').style.display = 'none';
             return;
         }
 
@@ -382,6 +596,7 @@ async function loadReports() {
                     <div style="font-size:18px; color:#888;">තාම Reports නැහැ</div>
                 </div>
             `;
+            document.getElementById('reportsPaginationWrap').style.display = 'none';
             return;
         }
 
@@ -389,70 +604,11 @@ async function loadReports() {
         snapshot.forEach(doc => reports.push({ id: doc.id, ...doc.data() }));
         reports.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
 
-        let html = '';
-        reports.forEach(r => {
-            let seClass = 'perfect', seText = '✅ PERFECT', seValue = 'Rs. 0.00';
-            if (Math.abs(r.shortExcess) < 0.01) {
-                seClass = 'perfect'; seText = '✅ PERFECT'; seValue = 'Rs. 0.00';
-            } else if (r.shortExcess > 0) {
-                seClass = 'excess'; seText = '⬆️ EXCESS'; seValue = '+ Rs. ' + r.shortExcess.toFixed(2);
-            } else {
-                seClass = 'short'; seText = '⬇️ SHORT'; seValue = '- Rs. ' + Math.abs(r.shortExcess).toFixed(2);
-            }
+        allReportsCache = reports;
+        reportsLoaded   = true;
+        cacheSet(REPORTS_CACHE_KEY, reports);
 
-            let expensesHtml = '';
-            if (r.expenses && r.expenses.length > 0) {
-                r.expenses.forEach(exp => {
-                    expensesHtml += `<div class="expense-item"><span>${exp.description}</span><span>Rs. ${exp.amount.toFixed(2)}</span></div>`;
-                });
-            } else {
-                expensesHtml = '<div style="color:#666; font-size:13px; padding:5px;">No expenses</div>';
-            }
-
-            let depositsHtml = '';
-            if (r.deposits && r.deposits.length > 0) {
-                r.deposits.forEach(dep => {
-                    depositsHtml += `<div class="deposit-item"><span>🏦 ${dep.bank}</span><span>Rs. ${dep.amount.toFixed(2)}</span></div>`;
-                });
-            } else {
-                depositsHtml = '<div style="color:#666; font-size:13px; padding:5px;">No deposits</div>';
-            }
-
-            const deleteBtn = myPerms.delete
-                ? `<button class="btn-delete" onclick="openDeleteReportModal('${r.id}')" style="margin-top:10px; width:100%;">🗑️ Delete Report</button>`
-                : '';
-
-            html += `
-                <div class="report-card">
-                    <div class="report-card-header">
-                        <div>
-                            <span class="report-date">📅 ${r.date}</span>
-                            <span style="color:#888; font-size:13px; margin-left:10px;">by ${r.cashierName}</span>
-                        </div>
-                        <span class="report-shift-badge ${r.shiftType.toLowerCase()}">${r.shiftType === 'Morning' ? '🌅' : '🌆'} ${r.shiftType}</span>
-                    </div>
-                    <div class="report-details-grid">
-                        <div class="report-detail-item"><span class="report-detail-label">Starting Cash</span><span class="report-detail-value">Rs. ${r.startingCash.toFixed(2)}</span></div>
-                        <div class="report-detail-item"><span class="report-detail-label">POS Sale</span><span class="report-detail-value">Rs. ${r.posSale.toFixed(2)}</span></div>
-                        <div class="report-detail-item"><span class="report-detail-label">Service Charge</span><span class="report-detail-value">Rs. ${r.serviceCharge.toFixed(2)}</span></div>
-                        <div class="report-detail-item"><span class="report-detail-label">Card Machine</span><span class="report-detail-value">Rs. ${r.cardMachine.toFixed(2)}</span></div>
-                        <div class="report-detail-item"><span class="report-detail-label">Total Expenses</span><span class="report-detail-value" style="color:#ff4444;">Rs. ${r.totalExpenses.toFixed(2)}</span></div>
-                        <div class="report-detail-item"><span class="report-detail-label">Total Deposits</span><span class="report-detail-value" style="color:#FF9800;">Rs. ${r.totalDeposits.toFixed(2)}</span></div>
-                        <div class="report-detail-item"><span class="report-detail-label">Day End Cash</span><span class="report-detail-value">Rs. ${r.dayEndCash.toFixed(2)}</span></div>
-                    </div>
-                    <div class="report-short-excess ${seClass}">${seText}: ${seValue}</div>
-                    <button class="report-expand-btn" onclick="toggleExpand('${r.id}')">📋 View Details</button>
-                    <div class="report-expanded" id="expand-${r.id}">
-                        <div class="detail-list"><h4>📤 Expenses</h4>${expensesHtml}</div>
-                        <div class="detail-list"><h4>🏦 Bank Deposits</h4>${depositsHtml}</div>
-                        ${deleteBtn}
-                    </div>
-                </div>
-            `;
-        });
-
-        container.innerHTML = html;
-
+        renderReports();
     } catch (error) {
         console.error('Error:', error);
         container.innerHTML = `
@@ -463,13 +619,125 @@ async function loadReports() {
             </div>
         `;
     }
+    Perf.end('Reports Fetch');
 }
 
+// ═══════════════════════════════════════════════════════════
+// 🎨 RENDER REPORTS (with pagination)
+// ═══════════════════════════════════════════════════════════
+function renderReports() {
+    const container = document.getElementById('reportsList');
+    const paginationWrap = document.getElementById('reportsPaginationWrap');
+    const counter = document.getElementById('reportsCounter');
+    const loadMoreBtn = document.getElementById('btnLoadMoreReports');
+
+    if (reportsDisplayed === 0) reportsDisplayed = REPORTS_PAGE_SIZE;
+    const toShow = allReportsCache.slice(0, reportsDisplayed);
+
+    let html = '';
+    toShow.forEach(r => {
+        let seClass = 'perfect', seText = '✅ PERFECT', seValue = 'Rs. 0.00';
+        if (Math.abs(r.shortExcess) < 0.01) {
+            seClass = 'perfect'; seText = '✅ PERFECT'; seValue = 'Rs. 0.00';
+        } else if (r.shortExcess > 0) {
+            seClass = 'excess';  seText = '⬆️ EXCESS';  seValue = '+ Rs. ' + r.shortExcess.toFixed(2);
+        } else {
+            seClass = 'short';   seText = '⬇️ SHORT';   seValue = '- Rs. ' + Math.abs(r.shortExcess).toFixed(2);
+        }
+
+        let expensesHtml = '';
+        if (r.expenses && r.expenses.length > 0) {
+            r.expenses.forEach(exp => {
+                expensesHtml += `<div class="expense-item"><span>${exp.description}</span><span>Rs. ${exp.amount.toFixed(2)}</span></div>`;
+            });
+        } else {
+            expensesHtml = '<div style="color:#666; font-size:13px; padding:5px;">No expenses</div>';
+        }
+
+        let depositsHtml = '';
+        if (r.deposits && r.deposits.length > 0) {
+            r.deposits.forEach(dep => {
+                depositsHtml += `<div class="deposit-item"><span>🏦 ${dep.bank}</span><span>Rs. ${dep.amount.toFixed(2)}</span></div>`;
+            });
+        } else {
+            depositsHtml = '<div style="color:#666; font-size:13px; padding:5px;">No deposits</div>';
+        }
+
+        const deleteBtn = myPerms.delete
+            ? `<button class="btn-delete" onclick="openDeleteReportModal('${r.id}')" style="margin-top:10px; width:100%;">🗑️ Delete Report</button>`
+            : '';
+
+        html += `
+            <div class="report-card">
+                <div class="report-card-header">
+                    <div>
+                        <span class="report-date">📅 ${r.date}</span>
+                        <span style="color:#888; font-size:13px; margin-left:10px;">by ${r.cashierName}</span>
+                    </div>
+                    <span class="report-shift-badge ${r.shiftType.toLowerCase()}">${r.shiftType === 'Morning' ? '🌅' : '🌆'} ${r.shiftType}</span>
+                </div>
+                <div class="report-details-grid">
+                    <div class="report-detail-item"><span class="report-detail-label">Starting Cash</span><span class="report-detail-value">Rs. ${r.startingCash.toFixed(2)}</span></div>
+                    <div class="report-detail-item"><span class="report-detail-label">POS Sale</span><span class="report-detail-value">Rs. ${r.posSale.toFixed(2)}</span></div>
+                    <div class="report-detail-item"><span class="report-detail-label">Service Charge</span><span class="report-detail-value">Rs. ${r.serviceCharge.toFixed(2)}</span></div>
+                    <div class="report-detail-item"><span class="report-detail-label">Card Machine</span><span class="report-detail-value">Rs. ${r.cardMachine.toFixed(2)}</span></div>
+                    <div class="report-detail-item"><span class="report-detail-label">Total Expenses</span><span class="report-detail-value" style="color:#ff4444;">Rs. ${r.totalExpenses.toFixed(2)}</span></div>
+                    <div class="report-detail-item"><span class="report-detail-label">Total Deposits</span><span class="report-detail-value" style="color:#FF9800;">Rs. ${r.totalDeposits.toFixed(2)}</span></div>
+                    <div class="report-detail-item"><span class="report-detail-label">Day End Cash</span><span class="report-detail-value">Rs. ${r.dayEndCash.toFixed(2)}</span></div>
+                </div>
+                <div class="report-short-excess ${seClass}">${seText}: ${seValue}</div>
+                <button class="report-expand-btn" onclick="toggleExpand('${r.id}')">📋 View Details</button>
+                <div class="report-expanded" id="expand-${r.id}">
+                    <div class="detail-list"><h4>📤 Expenses</h4>${expensesHtml}</div>
+                    <div class="detail-list"><h4>🏦 Bank Deposits</h4>${depositsHtml}</div>
+                    ${deleteBtn}
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+
+    // Stagger card animations
+    const cards = container.querySelectorAll('.report-card');
+    cards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 50);
+    });
+
+    // Pagination UI
+    const total = allReportsCache.length;
+    const shown = toShow.length;
+    if (total > REPORTS_PAGE_SIZE) {
+        paginationWrap.style.display = 'block';
+        counter.textContent = `Showing ${shown} of ${total} reports`;
+        if (shown >= total) {
+            loadMoreBtn.style.display = 'none';
+            counter.textContent = `✅ All ${total} reports loaded`;
+        } else {
+            loadMoreBtn.style.display = 'inline-block';
+            loadMoreBtn.textContent = `⬇️ Load More (${total - shown} remaining)`;
+        }
+    } else {
+        paginationWrap.style.display = 'none';
+    }
+}
+
+function loadMoreReports() {
+    reportsDisplayed += REPORTS_PAGE_SIZE;
+    renderReports();
+}
+
+// ═══════════════════════════════════════════════════════════
+// 📂 EXPAND / COLLAPSE
+// ═══════════════════════════════════════════════════════════
 function toggleExpand(docId) {
     const el = document.getElementById('expand-' + docId);
     el.classList.toggle('show');
 }
 
+// ═══════════════════════════════════════════════════════════
+// 🔢 LOAD REPORT COUNT
+// ═══════════════════════════════════════════════════════════
 async function loadReportCount() {
     try {
         let query;
@@ -479,12 +747,16 @@ async function loadReportCount() {
             query = db.collection('dayEndReports').where('cashierNickname', '==', currentUser.nickname);
         }
         const snapshot = await query.get();
-        document.getElementById('totalReportsCard').textContent = snapshot.size;
+        const countEl = document.getElementById('totalReportsCard');
+        if (countEl) countEl.textContent = snapshot.size;
     } catch (error) {
         console.error('Count error:', error);
     }
 }
 
+// ═══════════════════════════════════════════════════════════
+// 🗑️ DELETE REPORT
+// ═══════════════════════════════════════════════════════════
 function openDeleteReportModal(reportId) {
     deleteReportId = reportId;
     document.getElementById('deleteReportModal').style.display = 'flex';
@@ -501,7 +773,13 @@ async function confirmDeleteReport() {
         await db.collection('dayEndReports').doc(deleteReportId).delete();
         alert('✅ Report deleted!');
         closeDeleteReportModal();
-        loadReports();
+
+        // Invalidate caches
+        cacheRemove(REPORTS_CACHE_KEY);
+        reportsLoaded = false;
+        reportsDisplayed = 0;
+
+        loadReports(true);
         loadReportCount();
     } catch (error) {
         alert('❌ Error: ' + error.message);
@@ -513,3 +791,8 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
     }
 }
+
+// ═══════════════════════════════════════════════════════════
+// 🚀 START!
+// ═══════════════════════════════════════════════════════════
+initializeApp();

@@ -1,11 +1,93 @@
 // ═══════════════════════════════════════════════════════════
 // 🍳 BUONO - KITCHEN DATABASE
 // File: kitchen-script.js
-// Version: 10.1 - Architecture Migration!
+// Version: 12.0 - Optimized! (Skeleton + Cache + Pagination)
 // ⭐ Uses global DATABASES from firebase-config.js
 // ═══════════════════════════════════════════════════════════
 
-// ❌ NO DATABASES array! Uses global from firebase-config.js
+// ─── Performance Tracker ───────────────────────────────────
+const Perf = {
+    _marks: {},
+    start(label) { this._marks[label] = performance.now(); },
+    end(label) {
+        const t = performance.now() - (this._marks[label] || 0);
+        console.log(`⚡ [KIT] ${label}: ${t.toFixed(1)}ms`);
+        return t;
+    }
+};
+
+// ─── Cache Keys ────────────────────────────────────────────
+const KIT_USER_CACHE_KEY = 'buono_kit_user_v1';
+const KIT_INV_CACHE_KEY  = 'buono_kit_inventory_v1';
+const KIT_EMP_CACHE_KEY  = 'buono_kit_employees_v1';
+const CACHE_5MIN         = 5 * 60 * 1000;
+
+// ─── Cache Helpers ─────────────────────────────────────────
+function kitCacheSet(key, data) {
+    try { sessionStorage.setItem(key, JSON.stringify({ ts: Date.now(), data })); }
+    catch(e) { console.warn('Cache set failed:', e); }
+}
+function kitCacheGet(key, maxAge) {
+    try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+        const obj = JSON.parse(raw);
+        if (Date.now() - obj.ts > maxAge) { sessionStorage.removeItem(key); return null; }
+        return obj.data;
+    } catch(e) { return null; }
+}
+function kitCacheRemove(key) {
+    try { sessionStorage.removeItem(key); } catch(e) {}
+}
+
+// ─── Pagination State (recipes) ────────────────────────────
+const RECIPE_PAGE_SIZE = 30;
+let recipeDisplayed    = 0;
+let recipeFilteredCache = [];
+
+// ─── Debounce ──────────────────────────────────────────────
+let _recipeDebounce = null;
+function debounceFilterRecipes() {
+    clearTimeout(_recipeDebounce);
+    _recipeDebounce = setTimeout(filterRecipes, 200);
+}
+
+// ─── Reveal tracking ───────────────────────────────────────
+let _revealed = false;
+function revealPageOnce() {
+    if (_revealed) return;
+    _revealed = true;
+
+    const overlay = document.getElementById('kitLoadingOverlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+        setTimeout(() => { overlay.style.display = 'none'; }, 450);
+    }
+
+    const main = document.getElementById('kitMainContent');
+    if (main) main.style.opacity = '1';
+
+    // Stagger stat cards
+    document.querySelectorAll('.stat-card').forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 80);
+    });
+
+    console.log('✨ [KIT] Page revealed!');
+}
+
+// ─── Fill skeleton stat card ───────────────────────────────
+function _fillStat(cardId, icon, value, label) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    card.classList.remove('skeleton-stat');
+    card.innerHTML = `
+        <div class="stat-icon">${icon}</div>
+        <div class="stat-info">
+            <h3 id="${cardId}Val">${value}</h3>
+            <p>${label}</p>
+        </div>
+    `;
+}
 
 // ═══════════════════════════════════════
 // 🌐 GLOBALS
@@ -51,29 +133,36 @@ function isManagerUser() { return ['Admin', 'Manager'].includes(currentUser?.acc
 // 🚀 INITIALIZE APP
 // ═══════════════════════════════════════
 async function initializeApp() {
+    Perf.start('Total Init');
+    console.log('🚀 Initializing Kitchen v12.0...');
+
     const userData = getCurrentUser();
     if (!userData) { window.location.href = "login.html"; return; }
 
-    try {
-        const userDoc = await db.collection('employees').doc(userData.id).get();
-        if (userDoc.exists) {
-            const d = userDoc.data();
-            userData.access = d.access;
-            userData.permissions = d.permissions || {};
-            userData.name = d.name;
-            userData.nickname = d.nickname;
-            sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
-        }
-    } catch (e) { console.error(e); }
-
-    const isAdmin = userData.access === 'Admin';
-    const perms = userData.permissions?.kitchenDB || {};
-    const hasAccess = isAdmin || perms.add || perms.view || perms.selfView || perms.edit || perms.delete;
-    if (!hasAccess) { alert('⛔ Access denied!'); window.location.href = "access.html"; return; }
-
-    myPerms = isAdmin ? { add:true, view:true, selfView:true, edit:true, delete:true } : perms;
-    currentUser = userData;
-    document.getElementById('welcomeUser').textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
+    // ── User cache first ──
+    Perf.start('User Load');
+    const cachedUser = kitCacheGet(KIT_USER_CACHE_KEY, CACHE_5MIN);
+    if (cachedUser) {
+        console.log('✅ [KIT] User from cache (instant!)');
+        _applyUser(cachedUser);
+        Perf.end('User Load');
+        _refreshUserBackground(userData.id);
+    } else {
+        try {
+            const userDoc = await db.collection('employees').doc(userData.id).get();
+            if (userDoc.exists) {
+                const d = userDoc.data();
+                userData.access = d.access;
+                userData.permissions = d.permissions || {};
+                userData.name = d.name;
+                userData.nickname = d.nickname;
+                sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
+            }
+        } catch (e) { console.error(e); }
+        kitCacheSet(KIT_USER_CACHE_KEY, userData);
+        _applyUser(userData);
+        Perf.end('User Load');
+    }
 
     const seen = localStorage.getItem('seenRejectedIds_' + userData.id);
     if (seen) seenRejectedIds = new Set(JSON.parse(seen));
@@ -82,13 +171,69 @@ async function initializeApp() {
     setupUI();
     setDefaultDates();
 
-    await loadInventoryItems();
-    await loadEmployees();
+    // ── Inventory + Employees (cache first, then fresh) ──
+    Perf.start('Inventory Load');
+    const cachedInv = kitCacheGet(KIT_INV_CACHE_KEY, CACHE_5MIN);
+    if (cachedInv) {
+        console.log('✅ [KIT] Inventory from cache!');
+        allInventoryItems = cachedInv;
+        _populateWasteSelect();
+        Perf.end('Inventory Load');
+        loadInventoryItems(true); // background refresh
+    } else {
+        await loadInventoryItems(false);
+        Perf.end('Inventory Load');
+    }
 
+    Perf.start('Employees Load');
+    const cachedEmp = kitCacheGet(KIT_EMP_CACHE_KEY, CACHE_5MIN);
+    if (cachedEmp) {
+        console.log('✅ [KIT] Employees from cache!');
+        allEmployees = cachedEmp;
+        _populateEmpFilter();
+        Perf.end('Employees Load');
+        loadEmployees(true); // background refresh
+    } else {
+        await loadEmployees(false);
+        Perf.end('Employees Load');
+    }
+
+    // ── Real-time listeners ──
     loadRecipes();
     loadStaffMeals();
     loadWastage();
     loadStockCounts();
+
+    Perf.end('Total Init');
+}
+
+function _applyUser(userData) {
+    const isAdmin = userData.access === 'Admin';
+    const perms = userData.permissions?.kitchenDB || {};
+    const hasAccess = isAdmin || perms.add || perms.view || perms.selfView || perms.edit || perms.delete;
+    if (!hasAccess) { alert('⛔ Access denied!'); window.location.href = "access.html"; return; }
+
+    myPerms = isAdmin ? { add:true, view:true, selfView:true, edit:true, delete:true } : perms;
+    currentUser = userData;
+    document.getElementById('welcomeUser').textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
+    console.log('✅ User:', currentUser.name, '|', currentUser.access);
+}
+
+async function _refreshUserBackground(uid) {
+    try {
+        const userDoc = await db.collection('employees').doc(uid).get();
+        if (userDoc.exists) {
+            const latest = userDoc.data();
+            const userData = getCurrentUser();
+            userData.access = latest.access;
+            userData.permissions = latest.permissions || {};
+            userData.name = latest.name;
+            userData.nickname = latest.nickname;
+            sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
+            kitCacheSet(KIT_USER_CACHE_KEY, userData);
+            console.log('🔄 [KIT] User cache refreshed in background');
+        }
+    } catch(e) { console.warn('Background user refresh failed:', e); }
 }
 
 initializeApp();
@@ -121,15 +266,14 @@ function showSection(name, btnEl) {
     if (name === 'kitchenreports') generateKitchenReports();
 }
 
-// ⭐ NEW: Uses global DATABASES array!
+// ⭐ Uses global DATABASES array!
 function buildDBSwitcherDropdown() {
     const list = document.getElementById('dbDropdownList');
     if (!list) return;
-    
+
     const isAdminOrMgr = ['Admin', 'Manager'].includes(currentUser.access);
     let html = '';
-    
-    // ✅ Uses GLOBAL DATABASES from firebase-config.js
+
     DATABASES.forEach(d => {
         if (d.adminManagerOnly && !isAdminOrMgr) return;
         const isAdmin = currentUser.access === 'Admin';
@@ -140,7 +284,7 @@ function buildDBSwitcherDropdown() {
         html += `<a href="${d.url}" class="db-dropdown-item ${isCurrent ? 'current' : ''}"><span>${d.icon}</span><span>${d.name}</span>${isCurrent ? '<span style="margin-left:auto; color:#4CAF50;">✓</span>' : ''}</a>`;
     });
     list.innerHTML = html;
-    
+
     const switcher = document.getElementById('dbSwitcher');
     if (switcher) {
         switcher.addEventListener('click', function(e) {
@@ -156,29 +300,43 @@ function buildDBSwitcherDropdown() {
 
 
 // ═══════ DATA LOADERS ═══════
-async function loadInventoryItems() {
+function _populateWasteSelect() {
+    const wasteSelect = document.getElementById('wasteItem');
+    if (!wasteSelect) return;
+    wasteSelect.innerHTML = '<option value="">-- Select --</option>';
+    allInventoryItems.forEach(item => {
+        wasteSelect.innerHTML += `<option value="${item.id}" data-unit="${item.unit}" data-price="${item.pricePerUnit || 0}" data-stock="${item.currentStock}">${item.itemName} (${dispQty(item.currentStock)} ${item.unit})</option>`;
+    });
+}
+
+async function loadInventoryItems(isBackground) {
     try {
         const snap = await db.collection('inventoryItems').orderBy('itemName').get();
         allInventoryItems = [];
         snap.forEach(doc => allInventoryItems.push({ id: doc.id, ...doc.data() }));
-        const wasteSelect = document.getElementById('wasteItem');
-        wasteSelect.innerHTML = '<option value="">-- Select --</option>';
-        allInventoryItems.forEach(item => {
-            wasteSelect.innerHTML += `<option value="${item.id}" data-unit="${item.unit}" data-price="${item.pricePerUnit || 0}" data-stock="${item.currentStock}">${item.itemName} (${dispQty(item.currentStock)} ${item.unit})</option>`;
-        });
+        kitCacheSet(KIT_INV_CACHE_KEY, allInventoryItems);
+        _populateWasteSelect();
+        if (isBackground) console.log('🔄 [KIT] Inventory refreshed in background');
     } catch (e) { console.error(e); }
 }
 
-async function loadEmployees() {
+function _populateEmpFilter() {
+    const filterStaff = document.getElementById('filterMealStaff');
+    if (!filterStaff) return;
+    filterStaff.innerHTML = '<option value="">👥 All Staff</option>';
+    allEmployees.forEach(emp => {
+        filterStaff.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
+    });
+}
+
+async function loadEmployees(isBackground) {
     try {
         const snap = await db.collection('employees').orderBy('name').get();
         allEmployees = [];
         snap.forEach(doc => allEmployees.push({ id: doc.id, ...doc.data() }));
-        const filterStaff = document.getElementById('filterMealStaff');
-        filterStaff.innerHTML = '<option value="">👥 All Staff</option>';
-        allEmployees.forEach(emp => {
-            filterStaff.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
-        });
+        kitCacheSet(KIT_EMP_CACHE_KEY, allEmployees);
+        _populateEmpFilter();
+        if (isBackground) console.log('🔄 [KIT] Employees refreshed in background');
     } catch (e) { console.error(e); }
 }
 
@@ -199,7 +357,7 @@ function updateTabBadges() {
     const pending = allStockCounts.filter(c => c.status === 'pending_approval').length;
     const approved = allStockCounts.filter(c => c.status === 'approved' || c.status === 'suspicious_approved').length;
     const rejected = allStockCounts.filter(c => c.status === 'rejected').length;
-    
+
     const pBadge = document.getElementById('pendingCountBadge');
     pBadge.textContent = pending;
     pBadge.style.display = pending > 0 ? 'inline-block' : 'none';
@@ -216,11 +374,8 @@ function updateTabBadges() {
     const rejectedCounts = allStockCounts.filter(c => c.status === 'rejected');
     const hasNewRejected = rejectedCounts.some(c => !seenRejectedIds.has(c.id));
 
-    if (hasNewRejected && rejected > 0) {
-        rTab.classList.add('has-new');
-    } else {
-        rTab.classList.remove('has-new');
-    }
+    if (hasNewRejected && rejected > 0) rTab.classList.add('has-new');
+    else rTab.classList.remove('has-new');
 }
 
 
@@ -268,9 +423,7 @@ function updateDashboardAlert() {
     alert.classList.remove('show');
 }
 
-function handleAlertAction() {
-    // fallback
-}
+function handleAlertAction() { /* fallback */ }
 
 
 // ═══════ STOCK SHORTAGE DETECTION ═══════
@@ -315,15 +468,27 @@ function renderStockIssueWarning(issues, warningEl, listEl, saveBtnEl) {
 
 // ═══════ TAB 1: RECIPES ═══════
 function loadRecipes() {
+    Perf.start('Recipes Listener');
     db.collection('recipes').orderBy('recipeName').onSnapshot((snap) => {
         allRecipes = [];
         snap.forEach(doc => allRecipes.push({ id: doc.id, ...doc.data() }));
-        document.getElementById('statTotalRecipes').textContent = allRecipes.length;
+        Perf.end('Recipes Listener');
+        console.log('✅ [KIT] Recipes loaded:', allRecipes.length);
+
+        _fillStat('kitStatCard1', '📋', allRecipes.length, 'Total Recipes');
+
         if (allRecipes.length > 0) {
             const avg = allRecipes.reduce((s, r) => s + (r.margin || 0), 0) / allRecipes.length;
-            document.getElementById('statAvgMargin').textContent = avg.toFixed(1) + '%';
+            _fillStat('kitStatCard4', '💰', avg.toFixed(1) + '%', 'Avg Profit Margin');
+        } else {
+            _fillStat('kitStatCard4', '💰', '0%', 'Avg Profit Margin');
         }
+
         filterRecipes();
+        revealPageOnce();
+    }, (err) => {
+        console.error('Recipes listener error:', err);
+        revealPageOnce();
     });
 }
 
@@ -335,18 +500,27 @@ function filterRecipes() {
         if (catFilter && r.category !== catFilter) return false;
         return true;
     });
-    renderRecipes(filtered);
+    recipeFilteredCache = filtered;
+    recipeDisplayed = 0;
+    renderRecipesPaged();
 }
 
-function renderRecipes(recipes) {
+function renderRecipesPaged() {
+    const recipes = recipeFilteredCache;
     const grid = document.getElementById('recipeGrid');
-    if (recipes.length === 0) { 
-        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">📭 No recipes found.</div>'; 
-        return; 
+
+    if (recipes.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">📭 No recipes found.</div>';
+        document.getElementById('recipePaginationWrap').style.display = 'none';
+        return;
     }
+
+    if (recipeDisplayed === 0) recipeDisplayed = RECIPE_PAGE_SIZE;
+    const toShow = recipes.slice(0, recipeDisplayed);
+
     const catIcons = { 'Hot Beverages':'☕','Cold Beverages':'🧃','Desserts':'🍰','Main Course':'🍔','Appetizers':'🥗','Snacks':'🥪','Bakery':'🍞','Special':'🎂' };
     let html = '';
-    recipes.forEach(r => {
+    toShow.forEach(r => {
         const catIcon = catIcons[r.category] || '📋';
         let ingHtml = '';
         (r.ingredients || []).forEach(ing => {
@@ -358,6 +532,36 @@ function renderRecipes(recipes) {
         html += `<div class="recipe-card"><div class="recipe-card-top"><div class="rc-header"><div class="rc-name">${catIcon} ${r.recipeName}</div><span class="rc-cat">${r.category}</span></div><div class="rc-price">Rs. ${(r.sellingPrice||0).toFixed(2)}</div><div class="rc-price-label">Selling Price</div></div><div class="cost-breakdown"><div class="cost-item"><div class="ci-value red">Rs. ${(r.fullCost||0).toFixed(0)}</div><div class="ci-label">Full Cost</div></div><div class="cost-item"><div class="ci-value green">Rs. ${(r.profit||0).toFixed(0)}</div><div class="ci-label">Profit</div></div><div class="cost-item"><div class="ci-value blue">${(r.margin||0).toFixed(1)}%</div><div class="ci-label">Margin</div></div></div><div class="rc-ingredients"><h4>🧪 Ingredients (${(r.ingredients||[]).length})</h4>${ingHtml}</div>${actions ? `<div class="rc-actions">${actions}</div>` : ''}</div>`;
     });
     grid.innerHTML = html;
+
+    // Stagger animate
+    setTimeout(() => {
+        document.querySelectorAll('.recipe-card').forEach((card, i) => {
+            setTimeout(() => card.classList.add('visible'), i * 40);
+        });
+    }, 20);
+
+    // Pagination
+    const wrap = document.getElementById('recipePaginationWrap');
+    const counter = document.getElementById('recipeCounter');
+    if (recipes.length > RECIPE_PAGE_SIZE) {
+        wrap.style.display = 'block';
+        counter.textContent = `Showing ${toShow.length} of ${recipes.length} recipes`;
+        document.getElementById('btnLoadMoreRecipes').style.display = toShow.length < recipes.length ? 'inline-block' : 'none';
+    } else {
+        wrap.style.display = 'none';
+    }
+}
+
+function loadMoreRecipes() {
+    recipeDisplayed += RECIPE_PAGE_SIZE;
+    renderRecipesPaged();
+}
+
+// Backward compat
+function renderRecipes(recipes) {
+    recipeFilteredCache = recipes;
+    recipeDisplayed = 0;
+    renderRecipesPaged();
 }
 
 function addIngredientRow(data) {
@@ -376,9 +580,9 @@ function addIngredientRow(data) {
     ingredientRowCount++;
 }
 
-function removeIngredientRow(rowId) { 
-    document.getElementById(rowId).remove(); 
-    calculateRecipeCost(); 
+function removeIngredientRow(rowId) {
+    document.getElementById(rowId).remove();
+    calculateRecipeCost();
 }
 
 function onIngredientChange(rowId) {
@@ -510,7 +714,8 @@ function loadStaffMeals() {
         allStaffMeals = [];
         snap.forEach(doc => allStaffMeals.push({ id: doc.id, ...doc.data() }));
         const today = new Date().toISOString().split('T')[0];
-        document.getElementById('statStaffMeals').textContent = allStaffMeals.filter(m => m.date === today).length;
+        const todayCount = allStaffMeals.filter(m => m.date === today).length;
+        _fillStat('kitStatCard2', '🍽️', todayCount, 'Staff Meals Today');
         filterStaffMeals();
     });
 }
@@ -616,6 +821,7 @@ function addMealIngredientRow() {
 }
 
 function removeMealRow(rowId) { document.getElementById(rowId).remove(); calculateMealCost(); }
+
 function calculateMealCost() {
     let menuCost = 0;
     const stockNeeded = {};
@@ -724,7 +930,8 @@ async function saveStaffMeal() {
         }
         alert('✅ Saved!');
         closeMealModal();
-        await loadInventoryItems();
+        kitCacheRemove(KIT_INV_CACHE_KEY);
+        await loadInventoryItems(false);
     } catch (e) { alert('❌ ' + e.message); }
 }
 
@@ -743,7 +950,7 @@ function loadWastage() {
         snap.forEach(doc => allWastage.push({ id: doc.id, ...doc.data() }));
         const today = new Date().toISOString().split('T')[0];
         const todayWaste = allWastage.filter(w => w.date === today).reduce((s, w) => s + (w.costLoss || 0), 0);
-        document.getElementById('statWastage').textContent = 'Rs. ' + todayWaste.toFixed(0);
+        _fillStat('kitStatCard3', '🗑️', 'Rs. ' + todayWaste.toFixed(0), 'Wastage Today');
         filterWastage();
     });
 }
@@ -829,7 +1036,8 @@ async function saveWastage() {
         await db.collection('stockMovements').add({ itemId, itemName: item.itemName, type: 'OUT', quantity: fmtQty(quantity), reason: 'Wastage: ' + reason, previousStock: fmtQty(item.currentStock), newStock, date, handledBy: currentUser.nickname, handledByName: currentUser.name, createdAt: getServerTimestamp() });
         alert('✅ Saved!');
         closeWasteModal();
-        await loadInventoryItems();
+        kitCacheRemove(KIT_INV_CACHE_KEY);
+        await loadInventoryItems(false);
     } catch (e) { alert('❌ ' + e.message); }
 }
 

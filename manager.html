@@ -10,6 +10,14 @@
 </head>
 <body>
 
+    <!-- ===== LOADING OVERLAY ===== -->
+    <div class="mgr-loading-overlay" id="mgrLoadingOverlay">
+        <div class="mgr-loading-wrap">
+            <div class="mgr-loading-ring"></div>
+            <div class="mgr-loading-text">Loading Manager Dashboard...</div>
+        </div>
+    </div>
+
     <!-- ===== TOP NAVIGATION BAR ===== -->
     <div class="topbar">
         <div class="topbar-left">
@@ -22,20 +30,23 @@
         </div>
     </div>
 
+    <!-- ===== MAIN CONTENT WRAPPER ===== -->
+    <div id="mgrMainContent" style="opacity:0; transition: opacity 0.4s ease;">
+
     <!-- ===== MAIN DASHBOARD CONTAINER ===== -->
     <div class="dashboard-container">
 
-        <!-- ===== STAT CARDS ===== -->
+        <!-- ===== STAT CARDS (with skeleton) ===== -->
         <div class="stats-row">
-            <div class="stat-card">
+            <div class="stat-card skeleton-stat" id="mgrStatCard1">
                 <div class="stat-icon">👥</div>
                 <div class="stat-info">
-                    <h3 id="totalEmployees">0</h3>
-                    <p>Total Employees</p>
+                    <h3 id="totalEmployees" class="sk-text">0</h3>
+                    <p class="sk-text">Total Employees</p>
                 </div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card" id="mgrStatCard2">
                 <div class="stat-icon">📅</div>
                 <div class="stat-info">
                     <h3 id="todayDate">-</h3>
@@ -43,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card" id="mgrStatCard3">
                 <div class="stat-icon">⏰</div>
                 <div class="stat-info">
                     <h3 id="currentTime">-</h3>
@@ -51,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card" id="mgrStatCard4">
                 <div class="stat-icon">🔑</div>
                 <div class="stat-info">
                     <h3 id="myAccess">Manager</h3>
@@ -71,15 +82,15 @@
         <!-- SECTION 1: EMPLOYEE MANAGEMENT -->
         <!-- ═══════════════════════════════════════════ -->
         <div id="section-employees" class="dashboard-section active">
-            
+
             <div class="section-header">
                 <h2>👥 Employee Management</h2>
                 <button class="btn-primary" onclick="openAddModal()">➕ Add Employee</button>
             </div>
 
             <div class="search-bar">
-                <input type="text" id="searchEmployee" 
-                    placeholder="🔍 Search employee name or nickname..." 
+                <input type="text" id="searchEmployee"
+                    placeholder="🔍 Search employee name or nickname..."
                     onkeyup="searchEmployees()">
             </div>
 
@@ -95,11 +106,9 @@
                         </tr>
                     </thead>
                     <tbody id="employeeTableBody">
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: 20px;">
-                                ⏳ Loading employees...
-                            </td>
-                        </tr>
+                        <tr class="sk-row"><td colspan="5"><div class="sk-text sk-row-line"></div></td></tr>
+                        <tr class="sk-row"><td colspan="5"><div class="sk-text sk-row-line"></div></td></tr>
+                        <tr class="sk-row"><td colspan="5"><div class="sk-text sk-row-line"></div></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -109,7 +118,7 @@
         <!-- SECTION 2: DASHBOARDS ACCESS -->
         <!-- ═══════════════════════════════════════════ -->
         <div id="section-dashboards" class="dashboard-section">
-            
+
             <div class="section-header">
                 <h2>📊 All Dashboards</h2>
             </div>
@@ -170,7 +179,7 @@
         <!-- SECTION 3: SETTINGS -->
         <!-- ═══════════════════════════════════════════ -->
         <div id="section-settings" class="dashboard-section">
-            
+
             <div class="section-header">
                 <h2>⚙️ Settings</h2>
             </div>
@@ -193,6 +202,8 @@
         </div>
 
     </div>
+
+    </div><!-- end mgrMainContent -->
 
     <!-- ═══════════════════════════════════════════ -->
     <!-- ADD / EDIT EMPLOYEE MODAL -->
@@ -229,9 +240,9 @@
                 <input type="hidden" id="editDocId" value="">
 
                 <div class="modal-buttons">
-                    <button type="button" class="btn-primary" id="saveBtn" 
+                    <button type="button" class="btn-primary" id="saveBtn"
                         onclick="saveEmployee()">💾 Save</button>
-                    <button type="button" class="btn-secondary" 
+                    <button type="button" class="btn-secondary"
                         onclick="closeModal()">❌ Cancel</button>
                 </div>
             </form>
@@ -248,7 +259,7 @@
                 <button class="modal-close" onclick="closeDeleteModal()">✖</button>
             </div>
             <p style="text-align: center; font-size: 16px; margin: 20px 0;">
-                Are you sure you want to delete 
+                Are you sure you want to delete
                 <strong id="deleteEmpName">this employee</strong>?
             </p>
             <p style="text-align: center; color: #ff4444; font-size: 14px;">

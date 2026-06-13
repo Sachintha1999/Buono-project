@@ -1,91 +1,144 @@
 // ============================================
-// 🔐 LOGIN PAGE - SCRIPT (Smart Routing!)
+// 🔐 LOGIN PAGE - OPTIMIZED SCRIPT
 // File: login-script.js
-// Version: 2.0 (Employee + Student Support)
-// 
-// 🔥 Firebase: Loaded from firebase-config.js
-// 📦 Available globals: db, getCurrentUser(), isStudentLogin()
+// Version: 3.0 - Performance Optimized!
 // ============================================
 
+// ─── Perf Tracker ───
+const Perf = {
+    _marks: {},
+    start(label) { this._marks[label] = performance.now(); },
+    end(label) {
+        const t = performance.now() - (this._marks[label] || 0);
+        console.log(`⚡ [LOGIN] ${label}: ${t.toFixed(1)}ms`);
+        return t;
+    }
+};
+
+Perf.start('Total Init');
+
+// ─── Reveal Page ───
+function revealLoginPage() {
+    Perf.end('Total Init');
+    const overlay = document.getElementById('loginLoadingOverlay');
+    const content = document.getElementById('loginMainContent');
+    if (overlay) overlay.classList.add('hidden');
+    if (content) {
+        content.style.opacity = '1';
+        content.style.transform = 'translateY(0)';
+    }
+    console.log('✅ [LOGIN] Page ready!');
+}
+
+// ─── Smart Error Display ───
+function showError(message) {
+    const errorEl = document.getElementById('loginError');
+    errorEl.textContent = message;
+    errorEl.classList.remove('show');
+    // Force reflow to restart animation
+    void errorEl.offsetWidth;
+    errorEl.classList.add('show');
+}
+
+function hideError() {
+    const errorEl = document.getElementById('loginError');
+    errorEl.classList.remove('show');
+}
+
+// ─── Button Loading ───
+function setButtonLoading(isLoading) {
+    const loginBtn = document.getElementById('loginBtn');
+    if (isLoading) {
+        loginBtn.disabled = true;
+        loginBtn.textContent = '⏳ Checking...';
+    } else {
+        loginBtn.disabled = false;
+        loginBtn.textContent = '🔐 Login';
+        loginBtn.style.background = '';
+    }
+}
 
 // ===================================
 // 🚀 AUTO-REDIRECT (Smart!)
 // ===================================
+(function checkExistingLogin() {
+    Perf.start('Auto-redirect Check');
 
-// Check Employee Login
-if (getCurrentUser()) {
-    console.log('✅ Employee already logged in - redirecting to access.html');
-    window.location.href = 'access.html';
-}
-
-// Check Student Login
-const existingStudent = sessionStorage.getItem('loggedInStudent');
-if (existingStudent) {
-    try {
-        const student = JSON.parse(existingStudent);
-        console.log('✅ Student already logged in:', student.studentId);
-        window.location.href = 'student-portal.html';
-    } catch (e) {
-        sessionStorage.removeItem('loggedInStudent');
+    // Check Employee Login
+    if (getCurrentUser()) {
+        console.log('✅ [LOGIN] Employee already logged in → access.html');
+        Perf.end('Auto-redirect Check');
+        window.location.href = 'access.html';
+        return;
     }
-}
 
+    // Check Student Login
+    const existingStudent = sessionStorage.getItem('loggedInStudent');
+    if (existingStudent) {
+        try {
+            const student = JSON.parse(existingStudent);
+            console.log('✅ [LOGIN] Student already logged in:', student.studentId);
+            Perf.end('Auto-redirect Check');
+            window.location.href = 'student-portal.html';
+            return;
+        } catch (e) {
+            sessionStorage.removeItem('loggedInStudent');
+        }
+    }
+
+    Perf.end('Auto-redirect Check');
+
+    // No existing login - reveal page smoothly
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', revealLoginPage);
+    } else {
+        // Tiny delay for smooth transition
+        setTimeout(revealLoginPage, 50);
+    }
+})();
 
 // ===================================
 // 🔐 SMART LOGIN FUNCTION
-// Auto-detect: Employee OR Student!
 // ===================================
 async function loginUser() {
     const userId = document.getElementById('loginNickname').value.trim();
     const password = document.getElementById('loginPassword').value.trim();
-    const errorEl = document.getElementById('loginError');
 
-    // Error hide first
-    errorEl.style.display = 'none';
+    hideError();
 
-    // ✅ Validation
     if (!userId || !password) {
         showError("⚠️ Please enter ID/Nickname and Password!");
         return;
     }
 
-    // Button disable - prevent double-click
     setButtonLoading(true);
+    Perf.start('Login Attempt');
 
     try {
-        // ═══════════════════════════════════════════
-        // 🎯 SMART DETECTION:
-        // BCA-XXX-XXXX → Student login
-        // Otherwise   → Employee login
-        // ═══════════════════════════════════════════
-        
         if (isStudentLogin(userId)) {
-            console.log('🎓 Student login detected:', userId);
+            console.log('🎓 [LOGIN] Student login detected:', userId);
             await loginAsStudent(userId.toUpperCase(), password);
         } else {
-            console.log('👤 Employee login detected:', userId);
+            console.log('👤 [LOGIN] Employee login detected:', userId);
             await loginAsEmployee(userId, password);
         }
-
     } catch (error) {
-        console.error("❌ Login error:", error);
+        console.error("❌ [LOGIN] Error:", error);
         showError("❌ Connection error! Try again.");
         setButtonLoading(false);
     }
 }
 
-
 // ===================================
 // 👤 EMPLOYEE LOGIN
 // ===================================
 async function loginAsEmployee(nickname, password) {
-    console.log('🔍 Searching employee:', nickname);
-    
+    console.log('🔍 [LOGIN] Searching employee:', nickname);
+
     const snapshot = await db.collection('employees')
         .where('nickname', '==', nickname)
         .get();
 
-    // Nickname not found
     if (snapshot.empty) {
         showError("❌ Nickname not found!");
         setButtonLoading(false);
@@ -95,14 +148,13 @@ async function loginAsEmployee(nickname, password) {
     const userDoc = snapshot.docs[0];
     const userData = userDoc.data();
 
-    // Password check
     if (userData.password !== password) {
         showError("❌ Wrong Password!");
         setButtonLoading(false);
         return;
     }
 
-    // ✅ EMPLOYEE LOGIN SUCCESS - Save session
+    // ✅ EMPLOYEE LOGIN SUCCESS
     const userInfo = {
         id: userDoc.id,
         name: userData.name,
@@ -113,32 +165,29 @@ async function loginAsEmployee(nickname, password) {
 
     sessionStorage.setItem('loggedInUser', JSON.stringify(userInfo));
 
-    // Success feedback
     const loginBtn = document.getElementById('loginBtn');
     loginBtn.textContent = '✅ Welcome ' + userData.nickname + '!';
     loginBtn.style.background = 'linear-gradient(135deg, #4CAF50, #2e7d32)';
 
-    console.log('🎉 Employee login success:', userData.nickname);
+    Perf.end('Login Attempt');
+    console.log('🎉 [LOGIN] Employee success:', userData.nickname);
 
-    // Redirect to access page
     setTimeout(() => {
         window.location.href = 'access.html';
     }, 800);
 }
 
-
 // ===================================
 // 🎓 STUDENT LOGIN
 // ===================================
 async function loginAsStudent(studentId, password) {
-    console.log('🔍 Searching student:', studentId);
-    
+    console.log('🔍 [LOGIN] Searching student:', studentId);
+
     const snapshot = await db.collection('students')
         .where('studentId', '==', studentId)
         .limit(1)
         .get();
 
-    // Student ID not found
     if (snapshot.empty) {
         showError("❌ Student ID not found!");
         setButtonLoading(false);
@@ -148,21 +197,19 @@ async function loginAsStudent(studentId, password) {
     const studentDoc = snapshot.docs[0];
     const studentData = studentDoc.data();
 
-    // Password check
     if (studentData.password !== password) {
         showError("❌ Wrong Password!");
         setButtonLoading(false);
         return;
     }
 
-    // Account status check
     if (studentData.status === 'Suspended') {
         showError("⛔ Account suspended! Contact admin.");
         setButtonLoading(false);
         return;
     }
 
-    // ✅ STUDENT LOGIN SUCCESS - Save session
+    // ✅ STUDENT LOGIN SUCCESS
     const studentInfo = {
         docId: studentDoc.id,
         studentId: studentData.studentId,
@@ -178,48 +225,17 @@ async function loginAsStudent(studentId, password) {
 
     sessionStorage.setItem('loggedInStudent', JSON.stringify(studentInfo));
 
-    // Success feedback
     const loginBtn = document.getElementById('loginBtn');
     loginBtn.textContent = '🎓 Welcome ' + studentData.name + '!';
     loginBtn.style.background = 'linear-gradient(135deg, #9C27B0, #6A1B9A)';
 
-    console.log('🎉 Student login success:', studentData.studentId);
+    Perf.end('Login Attempt');
+    console.log('🎉 [LOGIN] Student success:', studentData.studentId);
 
-    // Redirect to student portal
     setTimeout(() => {
         window.location.href = 'student-portal.html';
     }, 1000);
 }
-
-
-// ===================================
-// 🎨 HELPER FUNCTIONS
-// ===================================
-
-/**
- * Show error message
- */
-function showError(message) {
-    const errorEl = document.getElementById('loginError');
-    errorEl.textContent = message;
-    errorEl.style.display = "block";
-}
-
-/**
- * Toggle login button loading state
- */
-function setButtonLoading(isLoading) {
-    const loginBtn = document.getElementById('loginBtn');
-    if (isLoading) {
-        loginBtn.disabled = true;
-        loginBtn.textContent = '⏳ Checking...';
-    } else {
-        loginBtn.disabled = false;
-        loginBtn.textContent = '🔐 Login';
-        loginBtn.style.background = '';
-    }
-}
-
 
 // ===================================
 // ⌨️ ENTER KEY SUPPORT
@@ -230,7 +246,6 @@ document.addEventListener('keypress', function(e) {
     }
 });
 
-
 // ===================================
 // 🔠 AUTO-UPPERCASE Student IDs
 // ===================================
@@ -239,7 +254,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (idInput) {
         idInput.addEventListener('input', function(e) {
             const val = e.target.value;
-            // Auto-uppercase if looks like Student ID
             if (val.toUpperCase().startsWith('BCA') || val.toUpperCase().startsWith('B-')) {
                 e.target.value = val.toUpperCase();
             }
@@ -247,5 +261,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
-console.log('🔐 Login script loaded! (v2.0 - Smart Routing: Employee + Student)');
+console.log('🔐 [LOGIN] Script loaded! v3.0 - Optimized');

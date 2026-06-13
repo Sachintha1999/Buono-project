@@ -1,8 +1,41 @@
 /* ============================================
-   LOGIN PAGE - STYLES
+   LOGIN PAGE - OPTIMIZED STYLES
    File: login-style.css
-   Version: 2.0 (Login Help Box Added!)
+   Version: 3.0 - Optimized!
    ============================================ */
+
+/* ===== LOADING OVERLAY ===== */
+.login-loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.login-loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.login-loading-wrap { text-align: center; }
+.login-loading-ring {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(240,165,0,0.15);
+    border-top-color: #f0a500;
+    border-radius: 50%;
+    animation: loginSpin 0.8s linear infinite;
+    margin: 0 auto 14px;
+}
+.login-loading-text {
+    color: #f0a500;
+    font-size: 14px;
+    font-weight: 600;
+}
+@keyframes loginSpin { to { transform: rotate(360deg); } }
 
 /* ===== LOGIN BODY ===== */
 .login-body {
@@ -25,6 +58,7 @@
     max-width: 400px;
     border: 1px solid rgba(240, 165, 0, 0.3);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 /* ===== LOGIN HEADER ===== */
@@ -35,8 +69,13 @@
 
 .login-icon {
     font-size: 52px;
-    display: block;
+    display: inline-block;
     margin-bottom: 12px;
+    animation: loginLogoPulse 3s ease-in-out infinite;
+}
+@keyframes loginLogoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
 }
 
 .login-header h1 {
@@ -63,13 +102,14 @@
     font-size: 15px;
     margin-bottom: 16px;
     box-sizing: border-box;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 #loginForm input:focus {
     outline: none;
     border-color: #f0a500;
-    box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.15);
+    transform: translateY(-1px);
 }
 
 #loginForm input::placeholder {
@@ -88,14 +128,14 @@
     font-weight: 700;
     cursor: pointer;
     margin-top: 8px;
-    transition: all 0.2s;
+    transition: all 0.25s ease;
     letter-spacing: 0.5px;
 }
 
 #loginBtn:hover {
     background: linear-gradient(135deg, #e09400, #c07800);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(240, 165, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(240, 165, 0, 0.4);
 }
 
 #loginBtn:active {
@@ -109,6 +149,11 @@
 }
 
 /* ===== ERROR MESSAGE ===== */
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+}
 #loginError {
     color: #ff4444;
     text-align: center;
@@ -120,10 +165,12 @@
     border-radius: 8px;
     border: 1px solid rgba(255, 68, 68, 0.3);
 }
+#loginError.show {
+    display: block;
+    animation: errorShake 0.45s cubic-bezier(.36,.07,.19,.97);
+}
 
-/* ═══════════════════════════════════════════
-   ⭐ LOGIN HELP BOX (NEW!)
-   ═══════════════════════════════════════════ */
+/* ===== LOGIN HELP BOX ===== */
 .login-help-box {
     margin-top: 24px;
     padding: 14px 16px;

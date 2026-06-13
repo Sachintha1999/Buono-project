@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════
-   BUONO PAYMENT SYSTEM - Page Specific Styles
-   Version: 2.0 (Step 3F - Receipt Modal)
+   💳 BUONO PAYMENT SYSTEM - Page Specific Styles
+   File: payment-style.css
+   Version: 3.0 (Smart Search + Student Flow)
    ═══════════════════════════════════════════ */
 
 /* ── SOURCE BADGE CARD ── */
@@ -45,33 +46,405 @@
     font-weight: 700;
 }
 
-/* ── PHONE SEARCH WRAP ── */
-.phone-search-wrap {
+/* ═══════════════════════════════════════════
+   🔍 SMART SEARCH
+   ═══════════════════════════════════════════ */
+
+.smart-search-wrap {
+    position: relative;
+    margin-top: 12px;
+}
+
+.smart-search-box {
     display: flex;
-    gap: 10px;
-    align-items: stretch;
+    align-items: center;
+    background: #0f3460;
+    border: 1px solid #2a4a7c;
+    border-radius: 10px;
+    padding: 0 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.phone-search-wrap .btn-primary {
-    white-space: nowrap;
-    padding: 0 20px;
+.smart-search-box:focus-within {
+    border-color: #f0a500;
+    box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.12);
 }
 
+.smart-search-icon {
+    color: #888;
+    font-size: 1rem;
+    margin-right: 8px;
+}
+
+.smart-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 0.95rem;
+    padding: 13px 0;
+    width: 100%;
+    font-family: inherit;
+}
+
+.smart-search-input::placeholder {
+    color: #666;
+}
+
+.smart-search-clear {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.smart-search-clear:hover {
+    background: rgba(255, 68, 68, 0.12);
+    color: #ff6666;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #16213e;
+    border: 1px solid #2a4a7c;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    z-index: 200;
+    overflow: hidden;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.suggestion-item {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: #1a2a4a;
+}
+
+.sug-left,
+.sug-right {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sug-left {
+    min-width: 180px;
+}
+
+.sug-right {
+    align-items: flex-end;
+    text-align: right;
+    flex: 1;
+}
+
+.sug-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.sug-badge.student {
+    background: rgba(156, 39, 176, 0.14);
+    color: #ce93d8;
+    border: 1px solid rgba(156, 39, 176, 0.35);
+}
+
+.sug-badge.suspended {
+    background: rgba(255, 68, 68, 0.15);
+    color: #ff8a80;
+    border: 1px solid rgba(255, 68, 68, 0.35);
+}
+
+.sug-badge.lead {
+    background: rgba(33, 150, 243, 0.14);
+    color: #90caf9;
+    border: 1px solid rgba(33, 150, 243, 0.35);
+}
+
+.sug-badge.new {
+    background: rgba(240, 165, 0, 0.14);
+    color: #f0a500;
+    border: 1px solid rgba(240, 165, 0, 0.35);
+}
+
+.sug-name {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.sug-id {
+    color: #ce93d8;
+    font-family: monospace;
+    font-size: 0.83rem;
+    font-weight: 600;
+}
+
+.sug-phone,
+.sug-course,
+.sug-status,
+.sug-desc {
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
+.sug-paid {
+    color: #4CAF50;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.sug-balance {
+    color: #FF9800;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.new-customer-item {
+    background: rgba(240, 165, 0, 0.04);
+}
+
+.new-customer-item:hover {
+    background: rgba(240, 165, 0, 0.10);
+}
+
+/* ── SEARCH STATUS BAR ── */
+.search-status-bar {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.search-status-bar.status-info {
+    background: rgba(33, 150, 243, 0.12);
+    color: #90caf9;
+    border-color: rgba(33, 150, 243, 0.28);
+}
+
+.search-status-bar.status-found {
+    background: rgba(76, 175, 80, 0.12);
+    color: #a5d6a7;
+    border-color: rgba(76, 175, 80, 0.28);
+}
+
+.search-status-bar.status-new {
+    background: rgba(240, 165, 0, 0.12);
+    color: #ffd180;
+    border-color: rgba(240, 165, 0, 0.28);
+}
+
+.search-status-bar.status-warning {
+    background: rgba(255, 68, 68, 0.12);
+    color: #ff8a80;
+    border-color: rgba(255, 68, 68, 0.28);
+}
+
+/* ═══════════════════════════════════════════
+   👤 STUDENT SUMMARY BOX
+   ═══════════════════════════════════════════ */
+
+.student-summary-box {
+    margin-top: 16px;
+    background: linear-gradient(135deg, #0f3460, #122b50);
+    border: 1px solid #2a4a7c;
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.student-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.student-summary-left,
+.student-summary-right {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.student-summary-right {
+    align-items: flex-end;
+}
+
+.student-summary-id {
+    color: #ce93d8;
+    font-family: monospace;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.student-summary-name {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.student-summary-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(76, 175, 80, 0.14);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.28);
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.student-summary-badge.suspended {
+    background: rgba(255, 68, 68, 0.14);
+    color: #ff6666;
+    border-color: rgba(255, 68, 68, 0.28);
+}
+
+.student-summary-clear {
+    background: #1a2842;
+    color: #aaa;
+    border: 1px solid #2a4a7c;
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.student-summary-clear:hover {
+    background: #ff4444;
+    color: #fff;
+    border-color: #ff4444;
+}
+
+.student-summary-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.summary-stat {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 14px 12px;
+}
+
+.summary-stat.success {
+    background: rgba(76, 175, 80, 0.10);
+    border-color: rgba(76, 175, 80, 0.20);
+}
+
+.summary-stat.warning {
+    background: rgba(255, 152, 0, 0.10);
+    border-color: rgba(255, 152, 0, 0.20);
+}
+
+.summary-stat.info {
+    background: rgba(33, 150, 243, 0.10);
+    border-color: rgba(33, 150, 243, 0.20);
+}
+
+.summary-stat-label {
+    color: #888;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.summary-stat-value {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.installment-info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(240, 165, 0, 0.08);
+    border: 1px solid rgba(240, 165, 0, 0.22);
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.installment-info-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.installment-info-text {
+    color: #ffd180;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+/* ── READ ONLY BADGES ── */
+.readonly-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+    background: rgba(240, 165, 0, 0.14);
+    color: #f0a500;
+    border: 1px solid rgba(240, 165, 0, 0.28);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+/* ── PHONE SEARCH STATUS ── */
 .phone-search-status {
     margin-top: 8px;
     font-size: 0.85rem;
     color: #888;
     min-height: 18px;
-}
-
-.phone-search-status.found {
-    color: #4CAF50;
-    font-weight: 600;
-}
-
-.phone-search-status.not-found {
-    color: #FF9800;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
 }
 
 /* ── COURSE FEE BOX ── */
@@ -89,6 +462,7 @@
     align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    gap: 10px;
 }
 
 .fee-item:last-child {
@@ -112,6 +486,7 @@
     color: #f0a500;
     font-weight: 700;
     font-size: 1rem;
+    text-align: right;
 }
 
 .fee-item.highlight .fee-value {
@@ -190,6 +565,7 @@
     padding: 6px 0;
     color: #ccc;
     font-size: 0.95rem;
+    gap: 12px;
 }
 
 .final-amount-row.discount {
@@ -214,6 +590,7 @@
     color: #888;
     font-size: 0.85rem;
     display: none;
+    border: 1px solid rgba(255,255,255,0.04);
 }
 
 .slip-preview.show {
@@ -371,6 +748,7 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 12px;
+    gap: 10px;
 }
 
 .receipt-title {
@@ -439,6 +817,7 @@
     align-items: center;
     padding: 5px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    gap: 10px;
 }
 
 .receipt-row:last-child {
@@ -506,6 +885,7 @@
     padding: 5px 0;
     color: #ccc;
     font-size: 0.88rem;
+    gap: 10px;
 }
 
 .receipt-balance-row:first-child span:last-child {
@@ -639,7 +1019,6 @@
    ═══════════════════════════════════════════ */
 @media print {
 
-    /* Hide everything except receipt */
     body > *:not(.receipt-modal-overlay) {
         display: none !important;
     }
@@ -666,13 +1045,12 @@
         padding: 10px !important;
     }
 
-    /* Dark → Light for print */
     .receipt-business-name { color: #000 !important; }
-    .receipt-business-sub  { color: #555 !important; }
+    .receipt-business-sub { color: #555 !important; }
     .receipt-business-contact { color: #555 !important; }
-    .receipt-title  { color: #000 !important; }
-    .receipt-no     { color: #000 !important; }
-    .receipt-date   { color: #555 !important; }
+    .receipt-title { color: #000 !important; }
+    .receipt-no { color: #000 !important; }
+    .receipt-date { color: #555 !important; }
 
     .receipt-type-badge {
         background: #000 !important;
@@ -689,8 +1067,8 @@
     }
 
     .receipt-section-title { color: #000 !important; }
-    .receipt-label  { color: #555 !important; }
-    .receipt-value  { color: #000 !important; }
+    .receipt-label { color: #555 !important; }
+    .receipt-value { color: #000 !important; }
 
     .receipt-value.highlight {
         color: #000 !important;
@@ -698,7 +1076,7 @@
     }
 
     .receipt-value.discount-value { color: #c00 !important; }
-    .receipt-value.total-value    { color: #006600 !important; }
+    .receipt-value.total-value { color: #006600 !important; }
 
     .receipt-balance-box {
         background: #f0f0f0 !important;
@@ -708,33 +1086,32 @@
     }
 
     .receipt-balance-row { color: #333 !important; }
-    .receipt-footer-msg  { color: #000 !important; }
+    .receipt-footer-msg { color: #000 !important; }
     .receipt-footer-note { color: #555 !important; }
 
     .receipt-divider {
         border-top-color: #999 !important;
     }
 
-    /* Hide action buttons when printing */
     .no-print {
         display: none !important;
     }
 }
 
-/* ── RESPONSIVE ── */
+/* ═══════════════════════════════════════════
+   📱 RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .student-summary-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .source-badge-content {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
-    }
-
-    .phone-search-wrap {
-        flex-direction: column;
-    }
-
-    .phone-search-wrap .btn-primary {
-        width: 100%;
     }
 
     .payment-methods-grid {
@@ -746,7 +1123,26 @@
         font-size: 1rem;
     }
 
-    /* Receipt Mobile */
+    .student-summary-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .student-summary-right {
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .suggestion-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .sug-right {
+        align-items: flex-start;
+        text-align: left;
+    }
+
     .receipt-modal {
         margin: 10px auto;
     }
@@ -771,8 +1167,22 @@
         grid-template-columns: 1fr;
     }
 
-    .fee-item {
-        font-size: 0.85rem;
+    .student-summary-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .fee-item,
+    .final-amount-row,
+    .receipt-row,
+    .receipt-balance-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .fee-value,
+    .receipt-value {
+        text-align: left;
+        max-width: 100%;
     }
 
     .receipt-actions {
@@ -781,5 +1191,11 @@
 
     .receipt-business-name {
         font-size: 1.4rem;
+    }
+
+    .readonly-badge {
+        display: inline-flex;
+        margin-left: 0;
+        margin-top: 8px;
     }
 }

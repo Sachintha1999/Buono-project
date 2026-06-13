@@ -1,7 +1,100 @@
 /* ============================================
-   MANAGER DASHBOARD - STYLES
+   MANAGER DASHBOARD - OPTIMIZED STYLES
    File: manager-style.css
+   Version: 2.0 - Optimized!
    ============================================ */
+
+/* ===== LOADING OVERLAY ===== */
+.mgr-loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.mgr-loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.mgr-loading-wrap { text-align: center; }
+.mgr-loading-ring {
+    width: 56px;
+    height: 56px;
+    border: 4px solid rgba(76,175,80,0.15);
+    border-top-color: #4CAF50;
+    border-radius: 50%;
+    animation: mgrSpin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+.mgr-loading-text {
+    color: #4CAF50;
+    font-size: 15px;
+    font-weight: 600;
+}
+@keyframes mgrSpin { to { transform: rotate(360deg); } }
+
+/* ===== SKELETON SHIMMER ===== */
+@keyframes mgrShimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+}
+.sk-text {
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0.04) 25%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.04) 75%);
+    background-size: 600px 100%;
+    animation: mgrShimmer 1.4s infinite linear;
+    border-radius: 4px;
+    color: transparent !important;
+    user-select: none;
+    display: inline-block;
+    min-width: 50px;
+}
+.skeleton-stat .stat-icon { opacity: 0.2; }
+.skeleton-stat h3.sk-text { min-width: 60px; height: 24px; display: block; }
+.skeleton-stat p.sk-text { min-width: 80px; height: 13px; display: block; margin-top: 4px; }
+.sk-row-line {
+    height: 16px;
+    width: 100%;
+    display: block;
+}
+
+/* ===== STAT CARD ANIMATIONS ===== */
+.stat-card {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease, border-color 0.2s;
+}
+.stat-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== MODAL ANIMATIONS ===== */
+@keyframes mgrModalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mgrModalSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal { animation: mgrModalFadeIn 0.25s ease; }
+.modal-content {
+    animation: mgrModalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ===== LOGO PULSE ===== */
+.topbar-icon {
+    animation: mgrLogoPulse 3s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes mgrLogoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+}
 
 /* ===== MANAGER BADGE ===== */
 .manager-badge {
@@ -28,12 +121,12 @@
     align-items: center;
     gap: 16px;
     border: 1px solid rgba(240, 165, 0, 0.2);
-    transition: transform 0.2s;
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     border-color: rgba(240, 165, 0, 0.5);
+    box-shadow: 0 8px 24px rgba(240,165,0,0.15);
 }
 
 .stat-icon {
@@ -122,11 +215,13 @@
     color: white;
     font-size: 14px;
     box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .search-bar input:focus {
     outline: none;
     border-color: #f0a500;
+    box-shadow: 0 0 0 3px rgba(240,165,0,0.15);
 }
 
 /* ===== TABLE ===== */
@@ -275,12 +370,13 @@ tr:hover td {
     padding: 24px;
     text-align: center;
     border: 1px solid rgba(255,255,255,0.1);
-    transition: transform 0.2s;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .dash-card:hover {
     transform: translateY(-4px);
     border-color: rgba(240, 165, 0, 0.4);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .dash-card.active-card {
@@ -426,12 +522,14 @@ form select {
     color: white;
     font-size: 14px;
     box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 form input:focus,
 form select:focus {
     outline: none;
     border-color: #f0a500;
+    box-shadow: 0 0 0 3px rgba(240,165,0,0.15);
 }
 
 form select option {

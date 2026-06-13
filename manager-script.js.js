@@ -1,23 +1,78 @@
 // ============================================
-// MANAGER DASHBOARD - SCRIPT
+// MANAGER DASHBOARD - OPTIMIZED SCRIPT
 // File: manager-script.js
-// Version: 9.7 - Global Firebase Config!
+// Version: 10.0 - Performance Optimized!
 // ============================================
 
-// ❌ REMOVED: firebaseConfig block (now in firebase-config.js!)
-// ✅ Using globals: db, getCurrentUser(), logout()
+// ─── Perf Tracker ───
+const Perf = {
+    _marks: {},
+    start(label) { this._marks[label] = performance.now(); },
+    end(label) {
+        const t = performance.now() - (this._marks[label] || 0);
+        console.log(`⚡ [MANAGER] ${label}: ${t.toFixed(1)}ms`);
+        return t;
+    }
+};
+
+// ─── Cache Keys ───
+const USER_CACHE_KEY = 'buono_mgr_user_v1';
+const CACHE_5MIN = 5 * 60 * 1000;
+
+// ─── Cache Helpers ───
+function cacheSet(key, data) {
+    try { sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() })); }
+    catch(e) { console.warn('Cache set failed:', e); }
+}
+function cacheGet(key, maxAge) {
+    try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.ts > maxAge) { sessionStorage.removeItem(key); return null; }
+        return parsed.data;
+    } catch(e) { return null; }
+}
+function cacheRemove(key) {
+    try { sessionStorage.removeItem(key); } catch(e) {}
+}
 
 // ===================================
 // GLOBAL VARIABLES
 // ===================================
 let deleteDocId = '';
 let allEmployees = [];
+let currentUser = null;
+let _pageRevealed = false;
+
+// ─── Reveal Page ───
+function revealPage() {
+    if (_pageRevealed) return;
+    _pageRevealed = true;
+    Perf.end('Total Init');
+
+    const overlay = document.getElementById('mgrLoadingOverlay');
+    const content = document.getElementById('mgrMainContent');
+
+    if (overlay) overlay.classList.add('hidden');
+    if (content) content.style.opacity = '1';
+
+    // Stagger stat card animations
+    const cards = document.querySelectorAll('.stat-card');
+    cards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 80);
+    });
+
+    console.log('✅ [MANAGER] Page revealed! Console timings 👆');
+}
 
 // ===================================
-// LOGIN CHECK
+// LOGIN CHECK (with cache)
 // ===================================
-function checkLogin() {
-    // ✅ Global getCurrentUser() use කරනවා
+async function checkLogin() {
+    Perf.start('Total Init');
+    Perf.start('User Auth');
+
     const userData = getCurrentUser();
 
     if (!userData) {
@@ -32,23 +87,69 @@ function checkLogin() {
         return null;
     }
 
+    // ⚡ Try cache first
+    const cached = cacheGet(USER_CACHE_KEY, CACHE_5MIN);
+    if (cached) {
+        console.log('✅ [MANAGER] User cache hit!');
+        Perf.end('User Auth');
+        applyUserData(cached);
+        refreshUserBackground(userData.id);
+        return cached;
+    }
+
+    Perf.start('Firebase User Fetch');
+    try {
+        const userDoc = await db.collection('employees').doc(userData.id).get();
+        if (userDoc.exists) {
+            const d = userDoc.data();
+            userData.access = d.access;
+            userData.permissions = d.permissions || {};
+            userData.name = d.name;
+            userData.nickname = d.nickname;
+            sessionStorage.setItem('loggedInUser', JSON.stringify(userData));
+        }
+    } catch (e) { console.warn(e); }
+    Perf.end('Firebase User Fetch');
+    Perf.end('User Auth');
+
+    cacheSet(USER_CACHE_KEY, userData);
+    applyUserData(userData);
+    return userData;
+}
+
+function applyUserData(userData) {
     const welcomeEl = document.getElementById('welcomeUser');
     if (welcomeEl) {
         welcomeEl.textContent = `👋 Welcome, ${userData.name} (${userData.access})`;
     }
-
     document.getElementById('settingName').textContent = userData.name;
     document.getElementById('settingNickname').textContent = userData.nickname;
     document.getElementById('settingAccess').textContent = userData.access;
     document.getElementById('myAccess').textContent = userData.access;
-
-    return userData;
 }
 
-const currentUser = checkLogin();
+async function refreshUserBackground(userId) {
+    try {
+        const userDoc = await db.collection('employees').doc(userId).get();
+        if (userDoc.exists) {
+            const d = userDoc.data();
+            const base = getCurrentUser();
+            base.access = d.access;
+            base.permissions = d.permissions || {};
+            base.name = d.name;
+            base.nickname = d.nickname;
+            cacheSet(USER_CACHE_KEY, base);
+            console.log('🔄 [MANAGER] User cache refreshed background');
+        }
+    } catch(e) { console.warn(e); }
+}
 
-// ✅ Global logout() use කරනවා - firebase-config.js වල!
-// function logout() { ... } ← REMOVED!
+// ─── Initialize ───
+(async function init() {
+    currentUser = await checkLogin();
+    if (!currentUser) return;
+    loadEmployees();
+})();
 
 // ===================================
 // SECTION SWITCHING
@@ -91,15 +192,23 @@ updateDateTime();
 setInterval(updateDateTime, 1000);
 
 // ===================================
-// LOAD EMPLOYEES
+// LOAD EMPLOYEES (Real-time)
 // ===================================
 function loadEmployees() {
+    Perf.start('Employees Listener');
     db.collection('employees')
         .orderBy('createdAt', 'desc')
         .onSnapshot((snapshot) => {
 
         const tbody = document.getElementById('employeeTableBody');
         tbody.innerHTML = '';
+
+        // Remove skeleton from stat card
+        const statCard1 = document.getElementById('mgrStatCard1');
+        if (statCard1) {
+            statCard1.classList.remove('skeleton-stat');
+            statCard1.querySelectorAll('.sk-text').forEach(t => t.classList.remove('sk-text'));
+        }
 
         document.getElementById('totalEmployees').textContent = snapshot.size;
 
@@ -110,6 +219,8 @@ function loadEmployees() {
                         📭 No employees found. Click "Add Employee" to add one!
                     </td>
                 </tr>`;
+            if (!_pageRevealed) revealPage();
+            Perf.end('Employees Listener');
             return;
         }
 
@@ -145,10 +256,17 @@ function loadEmployees() {
                     </td>
                 </tr>`;
         });
+
+        console.log(`👥 [MANAGER] Employees loaded: ${snapshot.size}`);
+
+        // ⚡ Reveal page after first load
+        if (!_pageRevealed) revealPage();
+        Perf.end('Employees Listener');
+    }, err => {
+        console.error('Employees load error:', err);
+        if (!_pageRevealed) revealPage();
     });
 }
-
-loadEmployees();
 
 // ===================================
 // BADGE COLOR
@@ -273,6 +391,10 @@ async function saveEmployee() {
                 password: password,
                 access: access
             });
+            // Invalidate cache if editing self
+            if (currentUser && editDocId === currentUser.id) {
+                cacheRemove(USER_CACHE_KEY);
+            }
             alert('✅ Employee updated successfully!');
         } else {
             const existCheck = await db.collection('employees')
@@ -336,3 +458,5 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
     }
 }
+
+console.log('🧑‍💼 [MANAGER] Script loaded! v10.0 - Optimized');

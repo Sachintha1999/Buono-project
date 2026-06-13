@@ -1,10 +1,50 @@
 /* ============================================================
-   BUONO - Settings Page Additions (v3.0)
+   BUONO - Settings Page Styles (v4.0)
+   Smart Batch! (Skeletons + Animations)
    Most styles inherited from callcenter-style.css
-   This file = only unique additions
+   This file = unique additions only
    ============================================================ */
 
-/* ── Toggle Switches (Unique to Settings) ── */
+/* ════════════════════════════════════════════
+   SKELETON STAT CARD (unique to settings)
+════════════════════════════════════════════ */
+.sk-stat-card {
+    background: #16213e;
+    border: 1px solid #0f3460;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* skeleton-icon size (reused from skeleton-loading.css pattern) */
+.skeleton-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════════
+   SAVE BUTTON (larger)
+════════════════════════════════════════════ */
+.btn-save-main {
+    padding: 14px 40px !important;
+    font-size: 1rem !important;
+    min-width: 280px;
+    transition: all 0.3s ease !important;
+}
+
+.btn-save-main:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ════════════════════════════════════════════
+   TOGGLE SWITCHES
+════════════════════════════════════════════ */
 .toggle-list {
     display: flex;
     flex-direction: column;
@@ -23,8 +63,9 @@
 }
 
 .toggle-item:hover {
-    border-color: #2a4a7c;
+    border-color: #f0a500;
     background: #1a2842;
+    transform: translateX(3px);
 }
 
 .toggle-info {
@@ -33,9 +74,7 @@
     gap: 12px;
 }
 
-.toggle-icon {
-    font-size: 1.3rem;
-}
+.toggle-icon { font-size: 1.3rem; }
 
 .toggle-name {
     color: #ddd;
@@ -43,6 +82,7 @@
     font-weight: 500;
 }
 
+/* Toggle Switch (CSS only) */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -86,7 +126,9 @@
     transform: translateX(24px);
 }
 
-/* ── Discount Codes List ── */
+/* ════════════════════════════════════════════
+   DISCOUNT CODES LIST
+════════════════════════════════════════════ */
 .discount-list {
     display: flex;
     flex-direction: column;
@@ -143,7 +185,9 @@
     letter-spacing: 0.5px;
 }
 
-/* ── Variable Buttons (WhatsApp Template) ── */
+/* ════════════════════════════════════════════
+   VARIABLE BUTTONS (WhatsApp Template)
+════════════════════════════════════════════ */
 .variable-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -173,11 +217,11 @@
     box-shadow: 0 2px 8px rgba(240, 165, 0, 0.3);
 }
 
-.var-btn:active {
-    transform: translateY(0);
-}
+.var-btn:active { transform: translateY(0); }
 
-/* ── WhatsApp Preview Box ── */
+/* ════════════════════════════════════════════
+   WHATSAPP PREVIEW
+════════════════════════════════════════════ */
 .whatsapp-preview-box {
     background: #075E54;
     padding: 16px;
@@ -193,52 +237,32 @@
     font-size: 0.9rem;
     line-height: 1.6;
     min-height: 100px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     word-wrap: break-word;
     font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
-.whatsapp-preview strong {
-    color: #128C7E;
-}
+.whatsapp-preview strong { color: #128C7E; }
 
-/* ── Stat Card Stat Number (smaller for text) ── */
-#statBusiness, #statUpdated {
+/* ════════════════════════════════════════════
+   STAT NUMBER OVERRIDES (text values)
+════════════════════════════════════════════ */
+#statBusiness,
+#statUpdated {
     font-size: 1rem !important;
     line-height: 1.2;
 }
 
-/* ── Mobile Responsive ── */
+/* ════════════════════════════════════════════
+   MOBILE RESPONSIVE
+════════════════════════════════════════════ */
 @media (max-width: 768px) {
-    .toggle-item {
-        padding: 12px 14px;
-    }
-    
-    .toggle-name {
-        font-size: 0.85rem;
-    }
-    
-    .discount-info {
-        gap: 8px;
-    }
-    
-    .discount-code-badge {
-        font-size: 0.8rem;
-        padding: 4px 10px;
-    }
-    
-    .variable-buttons {
-        gap: 4px;
-        padding: 10px;
-    }
-    
-    .var-btn {
-        font-size: 0.72rem;
-        padding: 5px 10px;
-    }
-    
-    .whatsapp-preview {
-        font-size: 0.85rem;
-        padding: 12px 14px;
-    }
+    .toggle-item       { padding: 12px 14px; }
+    .toggle-name       { font-size: 0.85rem; }
+    .discount-info     { gap: 8px; }
+    .discount-code-badge { font-size: 0.8rem; padding: 4px 10px; }
+    .variable-buttons  { gap: 4px; padding: 10px; }
+    .var-btn           { font-size: 0.72rem; padding: 5px 10px; }
+    .whatsapp-preview  { font-size: 0.85rem; padding: 12px 14px; }
+    .btn-save-main     { min-width: auto; width: 100%; }
 }

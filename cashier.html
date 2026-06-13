@@ -6,12 +6,11 @@
     <title>Buono - Day End Reports</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="cashier-style.css">
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════ -->
-    <!-- TOP NAVIGATION BAR                            -->
-    <!-- ═══════════════════════════════════════════ -->
+    <!-- TOP NAVIGATION BAR -->
     <div class="topbar">
         <div class="topbar-left">
             <span class="topbar-icon">🍴</span>
@@ -40,40 +39,48 @@
         </div>
     </div>
 
+    <!-- LOADING OVERLAY -->
+    <div class="cashier-loading-overlay" id="cashierLoadingOverlay">
+        <div class="cashier-loading-wrap">
+            <div class="cashier-loading-ring"></div>
+            <div class="cashier-loading-text">Loading Day End Reports...</div>
+        </div>
+    </div>
+
     <!-- ===== MAIN CONTAINER ===== -->
-    <div class="dashboard-container">
+    <div class="dashboard-container" id="cashierMainContent" style="opacity:0">
 
-        <!-- ===== STAT CARDS ===== -->
+        <!-- ===== STAT CARDS (with skeleton initial state) ===== -->
         <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">👤</div>
+            <div class="stat-card skeleton-stat" id="statCardCashier">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="cashierNameCard">-</h3>
-                    <p>Cashier</p>
+                    <h3 class="sk-text sk-short" id="cashierNameCard">-</h3>
+                    <p class="sk-text">Cashier</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">📅</div>
+            <div class="stat-card skeleton-stat" id="statCardDate">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="todayDate">-</h3>
-                    <p>Today</p>
+                    <h3 class="sk-text sk-short" id="todayDate">-</h3>
+                    <p class="sk-text">Today</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">⏰</div>
+            <div class="stat-card skeleton-stat" id="statCardTime">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="currentTime">-</h3>
-                    <p>Current Time</p>
+                    <h3 class="sk-text sk-short" id="currentTime">-</h3>
+                    <p class="sk-text">Current Time</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">📋</div>
+            <div class="stat-card skeleton-stat" id="statCardReports">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="totalReportsCard">0</h3>
-                    <p id="reportsLabel">My Reports</p>
+                    <h3 class="sk-text sk-short" id="totalReportsCard">0</h3>
+                    <p class="sk-text" id="reportsLabel">My Reports</p>
                 </div>
             </div>
         </div>
@@ -89,9 +96,7 @@
             <button class="nav-tab" id="tab-reports-btn" onclick="showSection('myReports', this)">📋 Reports</button>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION 1: NEW REPORT                        -->
-        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 1: NEW REPORT -->
         <div id="section-newReport" class="dashboard-section active">
             
             <div class="section-header">
@@ -206,20 +211,42 @@
             </div>
         </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION 2: REPORTS LIST                      -->
-        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION 2: REPORTS LIST -->
         <div id="section-myReports" class="dashboard-section">
             
             <div class="section-header">
                 <h2 id="reportsTitle">📋 My Reports</h2>
-                <button class="btn-secondary" onclick="loadReports()">🔄 Refresh</button>
+                <button class="btn-secondary" onclick="loadReports(true)">🔄 Refresh</button>
             </div>
 
             <div class="reports-list" id="reportsList">
-                <div style="text-align:center; padding:40px; color:#888;">
-                    ⏳ Loading reports...
+                <!-- Skeleton reports -->
+                <div class="report-card sk-report-card">
+                    <div class="sk-text sk-medium" style="height:20px;margin-bottom:14px"></div>
+                    <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                    <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                    <div class="sk-text sk-short"></div>
                 </div>
+                <div class="report-card sk-report-card">
+                    <div class="sk-text sk-medium" style="height:20px;margin-bottom:14px"></div>
+                    <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                    <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                    <div class="sk-text sk-short"></div>
+                </div>
+                <div class="report-card sk-report-card">
+                    <div class="sk-text sk-medium" style="height:20px;margin-bottom:14px"></div>
+                    <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                    <div class="sk-text sk-long" style="margin-bottom:8px"></div>
+                    <div class="sk-text sk-short"></div>
+                </div>
+            </div>
+
+            <!-- Load More -->
+            <div id="reportsPaginationWrap" style="display:none; margin-top:20px; text-align:center;">
+                <div id="reportsCounter" style="color:#888; font-size:13px; margin-bottom:10px;"></div>
+                <button class="btn-secondary" id="btnLoadMoreReports" onclick="loadMoreReports()">
+                    ⬇️ Load More
+                </button>
             </div>
         </div>
 
@@ -255,19 +282,10 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════ -->
-    <!-- SCRIPTS                                       -->
-    <!-- ═══════════════════════════════════════════ -->
-    
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="firebase-config.js"></script>
-    
-    <!-- Main Script -->
     <script src="cashier-script.js"></script>
-    
-    <!-- Mobile Script (MANDATORY!) -->
     <script src="mobile-script.js"></script>
 
 </body>

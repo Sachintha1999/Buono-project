@@ -4,56 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - System Settings</title>
-    
-    <!-- ✅ Main styles -->
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
-    
-    <!-- ✅ Reuse Call Center styles (already beautiful!) -->
+    <link rel="stylesheet" href="skeleton-loading.css">
     <link rel="stylesheet" href="callcenter-style.css">
-    
-    <!-- ✅ Settings-specific additions only -->
     <link rel="stylesheet" href="settings-style.css">
 </head>
 <body>
 
-    <!-- ✅ Shared Topbar -->
     <div id="topbarContainer"></div>
 
-    <!-- ✅ Main Dashboard Container -->
     <div class="dashboard-container">
 
-        <!-- ✅ Stats Row (like Call Center!) -->
-        <div class="stats-row">
-            <div class="stat-card">
+        <!-- STATS ROW -->
+        <div class="stats-row" id="statsRow">
+
+            <!-- Skeleton Stats -->
+            <div class="stat-card sk-stat-card" id="skStat0">
+                <div class="skeleton skeleton-icon"></div>
+                <div style="flex:1;">
+                    <div class="skeleton skeleton-text sk-w-70" style="margin-bottom:6px;"></div>
+                    <div class="skeleton skeleton-text sk-w-50" style="height:11px;"></div>
+                </div>
+            </div>
+            <div class="stat-card sk-stat-card" id="skStat1">
+                <div class="skeleton skeleton-icon"></div>
+                <div style="flex:1;">
+                    <div class="skeleton skeleton-text sk-w-50" style="margin-bottom:6px;"></div>
+                    <div class="skeleton skeleton-text sk-w-70" style="height:11px;"></div>
+                </div>
+            </div>
+            <div class="stat-card sk-stat-card" id="skStat2">
+                <div class="skeleton skeleton-icon"></div>
+                <div style="flex:1;">
+                    <div class="skeleton skeleton-text sk-w-30" style="margin-bottom:6px;"></div>
+                    <div class="skeleton skeleton-text sk-w-70" style="height:11px;"></div>
+                </div>
+            </div>
+            <div class="stat-card sk-stat-card" id="skStat3">
+                <div class="skeleton skeleton-icon"></div>
+                <div style="flex:1;">
+                    <div class="skeleton skeleton-text sk-w-30" style="margin-bottom:6px;"></div>
+                    <div class="skeleton skeleton-text sk-w-70" style="height:11px;"></div>
+                </div>
+            </div>
+            <div class="stat-card sk-stat-card" id="skStat4">
+                <div class="skeleton skeleton-icon"></div>
+                <div style="flex:1;">
+                    <div class="skeleton skeleton-text sk-w-50" style="margin-bottom:6px;"></div>
+                    <div class="skeleton skeleton-text sk-w-70" style="height:11px;"></div>
+                </div>
+            </div>
+
+            <!-- Real Stats (hidden initially) -->
+            <div class="stat-card real-stat" id="realStat0" style="display:none;">
                 <div class="stat-icon">🏢</div>
                 <div>
                     <div class="stat-number" id="statBusiness">-</div>
                     <div class="stat-label">Business Name</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card real-stat" id="realStat1" style="display:none;">
                 <div class="stat-icon">📋</div>
                 <div>
                     <div class="stat-number" id="statBatch">-</div>
                     <div class="stat-label">Current Batch</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card real-stat" id="realStat2" style="display:none;">
                 <div class="stat-icon">🏷️</div>
                 <div>
                     <div class="stat-number" id="statDiscounts">0</div>
                     <div class="stat-label">Discount Codes</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card real-stat" id="realStat3" style="display:none;">
                 <div class="stat-icon">💳</div>
                 <div>
                     <div class="stat-number" id="statPayments">0</div>
                     <div class="stat-label">Payment Methods</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card real-stat" id="realStat4" style="display:none;">
                 <div class="stat-icon">🕒</div>
                 <div>
                     <div class="stat-number" id="statUpdated">Never</div>
@@ -62,8 +95,8 @@
             </div>
         </div>
 
-        <!-- ✅ Tabs Container (like Call Center!) -->
-        <div class="tabs-container">
+        <!-- TABS -->
+        <div class="tabs-container anim-slide-top" style="animation-delay:0.05s;">
             <div class="tabs-scroll">
                 <button class="tab-btn active" onclick="switchTab('business', event)">
                     🏢 Business Info
@@ -80,84 +113,67 @@
             </div>
         </div>
 
-        <!-- ════════════════════════════════
-             TAB: BUSINESS INFO
-             ════════════════════════════════ -->
+        <!-- TAB: BUSINESS INFO -->
         <div id="tab-business" class="tab-content active">
-            
-            <div class="section-card">
+            <div class="section-card anim-slide-top" style="animation-delay:0.1s;">
                 <h3 class="section-title">🏢 Business Information</h3>
                 <p class="section-desc">Receipt, WhatsApp messages සහ all communications වලට use වෙන business details.</p>
 
                 <div class="form-grid-2">
                     <div class="form-group full-width">
                         <label>Business Name *</label>
-                        <input type="text" class="form-input" id="businessName" 
+                        <input type="text" class="form-input" id="businessName"
                                placeholder="Buono Cafe & Academy">
                     </div>
-
                     <div class="form-group full-width">
                         <label>Address</label>
-                        <textarea class="form-textarea" id="businessAddress" 
+                        <textarea class="form-textarea" id="businessAddress"
                                   placeholder="No. 123, Main Street, Colombo"></textarea>
                     </div>
-
                     <div class="form-group">
                         <label>Phone</label>
-                        <input type="text" class="form-input" id="businessPhone" 
+                        <input type="text" class="form-input" id="businessPhone"
                                placeholder="+94 11 234 5678">
                     </div>
-
                     <div class="form-group">
                         <label>WhatsApp Number</label>
-                        <input type="text" class="form-input" id="businessWhatsapp" 
+                        <input type="text" class="form-input" id="businessWhatsapp"
                                placeholder="+94 77 123 4567">
                     </div>
-
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-input" id="businessEmail" 
+                        <input type="email" class="form-input" id="businessEmail"
                                placeholder="info@buono.lk">
                     </div>
-
                     <div class="form-group">
                         <label>Website</label>
-                        <input type="url" class="form-input" id="businessWebsite" 
+                        <input type="url" class="form-input" id="businessWebsite"
                                placeholder="www.buono.lk">
                     </div>
-
                     <div class="form-group full-width">
                         <label>Tagline</label>
-                        <input type="text" class="form-input" id="businessTagline" 
+                        <input type="text" class="form-input" id="businessTagline"
                                placeholder="Your business tagline">
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- ════════════════════════════════
-             TAB: ACADEMY
-             ════════════════════════════════ -->
+        <!-- TAB: ACADEMY -->
         <div id="tab-academy" class="tab-content">
-            
-            <div class="section-card">
+            <div class="section-card anim-slide-top" style="animation-delay:0.1s;">
                 <h3 class="section-title">🎓 Academy Settings</h3>
                 <p class="section-desc">Student ID generation, batch management සහ academy configurations.</p>
 
                 <div class="form-grid-2">
                     <div class="form-group">
                         <label>Current Batch Number *</label>
-                        <input type="text" class="form-input" id="currentBatch" 
-                               placeholder="W32">
+                        <input type="text" class="form-input" id="currentBatch" placeholder="W32">
                     </div>
-
                     <div class="form-group">
                         <label>Student ID Prefix</label>
-                        <input type="text" class="form-input" id="studentIdPrefix" 
-                               placeholder="BCA">
+                        <input type="text" class="form-input" id="studentIdPrefix" placeholder="BCA">
                     </div>
-
                     <div class="form-group">
                         <label>Default Installments</label>
                         <select class="form-select" id="defaultInstallments">
@@ -167,23 +183,20 @@
                             <option value="4">4 Installments</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Academy Short Name</label>
-                        <input type="text" class="form-input" id="academyShortName" 
-                               placeholder="SAC">
+                        <input type="text" class="form-input" id="academyShortName" placeholder="SAC">
                     </div>
-
                     <div class="form-group full-width">
                         <label>Academy Full Name</label>
-                        <input type="text" class="form-input" id="academyFullName" 
+                        <input type="text" class="form-input" id="academyFullName"
                                placeholder="Specialty Academy Ceylon">
                     </div>
                 </div>
             </div>
 
-            <!-- Discount Codes Section -->
-            <div class="section-card">
+            <!-- Discount Codes -->
+            <div class="section-card anim-slide-top" style="animation-delay:0.15s;">
                 <div class="section-header-row">
                     <div>
                         <h3 class="section-title">🏷️ Discount Codes</h3>
@@ -192,15 +205,13 @@
                     <span class="count-badge" id="discountCount">0</span>
                 </div>
 
-                <div class="discount-list" id="discountList">
-                    <!-- Dynamic content -->
-                </div>
+                <div class="discount-list" id="discountList"></div>
 
                 <div class="quick-add-box" style="margin-top:15px;">
                     <div class="form-grid-2" style="margin-bottom:10px;">
                         <div class="form-group">
                             <label>Code Name</label>
-                            <input type="text" class="form-input" id="newDiscountCode" 
+                            <input type="text" class="form-input" id="newDiscountCode"
                                    placeholder="EARLY2024" style="text-transform:uppercase;">
                         </div>
                         <div class="form-group">
@@ -212,7 +223,7 @@
                         </div>
                         <div class="form-group full-width">
                             <label>Value</label>
-                            <input type="number" class="form-input" id="newDiscountValue" 
+                            <input type="number" class="form-input" id="newDiscountValue"
                                    placeholder="Enter value (e.g., 10 or 500)">
                         </div>
                     </div>
@@ -221,16 +232,11 @@
                     </button>
                 </div>
             </div>
-
         </div>
 
-        <!-- ════════════════════════════════
-             TAB: PAYMENT
-             ════════════════════════════════ -->
+        <!-- TAB: PAYMENT -->
         <div id="tab-payment" class="tab-content">
-
-            <!-- Payment Methods -->
-            <div class="section-card">
+            <div class="section-card anim-slide-top" style="animation-delay:0.1s;">
                 <h3 class="section-title">💳 Payment Methods</h3>
                 <p class="section-desc">Enable/disable accepted payment methods.</p>
 
@@ -245,7 +251,6 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-
                     <div class="toggle-item">
                         <div class="toggle-info">
                             <span class="toggle-icon">🏦</span>
@@ -256,7 +261,6 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-
                     <div class="toggle-item">
                         <div class="toggle-info">
                             <span class="toggle-icon">💳</span>
@@ -267,7 +271,6 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-
                     <div class="toggle-item">
                         <div class="toggle-info">
                             <span class="toggle-icon">📱</span>
@@ -281,70 +284,59 @@
                 </div>
             </div>
 
-            <!-- Bank Details -->
-            <div class="section-card">
+            <div class="section-card anim-slide-top" style="animation-delay:0.15s;">
                 <h3 class="section-title">🏦 Bank Account Details</h3>
                 <p class="section-desc">Bank transfer payments සඳහා account information.</p>
 
                 <div class="form-grid-2">
                     <div class="form-group full-width">
                         <label>Bank Name</label>
-                        <input type="text" class="form-input" id="bankName" 
+                        <input type="text" class="form-input" id="bankName"
                                placeholder="Commercial Bank of Ceylon">
                     </div>
-
                     <div class="form-group">
                         <label>Account Name</label>
-                        <input type="text" class="form-input" id="bankAccountName" 
+                        <input type="text" class="form-input" id="bankAccountName"
                                placeholder="Buono Pvt Ltd">
                     </div>
-
                     <div class="form-group">
                         <label>Account Number</label>
-                        <input type="text" class="form-input" id="bankAccountNumber" 
+                        <input type="text" class="form-input" id="bankAccountNumber"
                                placeholder="1234567890">
                     </div>
-
                     <div class="form-group full-width">
                         <label>Branch</label>
-                        <input type="text" class="form-input" id="bankBranch" 
+                        <input type="text" class="form-input" id="bankBranch"
                                placeholder="Colombo 03">
                     </div>
                 </div>
             </div>
 
-            <!-- Online Payment -->
-            <div class="section-card">
+            <div class="section-card anim-slide-top" style="animation-delay:0.2s;">
                 <h3 class="section-title">📱 Online Payment Numbers</h3>
                 <p class="section-desc">Mobile wallet payment numbers.</p>
 
                 <div class="form-grid-2">
                     <div class="form-group">
                         <label>Dialog eZ Cash</label>
-                        <input type="text" class="form-input" id="ezCash" 
+                        <input type="text" class="form-input" id="ezCash"
                                placeholder="077 XXX XXXX">
                     </div>
-
                     <div class="form-group">
                         <label>Mobitel mCash / Other</label>
-                        <input type="text" class="form-input" id="mCash" 
+                        <input type="text" class="form-input" id="mCash"
                                placeholder="071 XXX XXXX">
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- ════════════════════════════════
-             TAB: WHATSAPP
-             ════════════════════════════════ -->
+        <!-- TAB: WHATSAPP -->
         <div id="tab-whatsapp" class="tab-content">
-
-            <div class="section-card">
+            <div class="section-card anim-slide-top" style="animation-delay:0.1s;">
                 <h3 class="section-title">📱 WhatsApp Message Template</h3>
                 <p class="section-desc">Receipt එක send කරන WhatsApp message format එක customize කරන්න.</p>
 
-                <!-- Variable Buttons -->
                 <div class="form-group">
                     <label>Quick Insert Variables:</label>
                     <div class="variable-buttons">
@@ -361,15 +353,13 @@
                     </div>
                 </div>
 
-                <!-- Template Textarea -->
                 <div class="form-group">
                     <label>Message Template:</label>
-                    <textarea class="form-textarea" id="whatsappTemplate" rows="10" 
+                    <textarea class="form-textarea" id="whatsappTemplate" rows="10"
                               placeholder="Type your message template here..."
                               style="min-height:200px; font-family:'Courier New', monospace;"></textarea>
                 </div>
 
-                <!-- Preview -->
                 <div class="form-group">
                     <label>👁️ Live Preview:</label>
                     <div class="whatsapp-preview-box">
@@ -379,30 +369,26 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- ✅ Save Action -->
-        <div class="section-card" style="text-align:center;">
-            <button class="btn-primary" onclick="saveSettings()" 
-                    style="padding:14px 40px; font-size:1rem; min-width:280px;">
+        <!-- SAVE BUTTON -->
+        <div class="section-card anim-slide-top" style="text-align:center; animation-delay:0.2s;">
+            <button class="btn-primary btn-save-main" id="btnSaveSettings" onclick="saveSettings()">
                 💾 Save All Settings
             </button>
         </div>
 
     </div>
-    <!-- End Dashboard Container -->
 
-    <!-- ✅ Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- ✅ Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="performance-tracker.js"></script>
+    <script src="smart-storage-cache.js"></script>
     <script src="settings-script.js"></script>
     <script src="mobile-script.js"></script>
-
 </body>
 </html>

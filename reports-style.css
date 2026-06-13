@@ -1,10 +1,100 @@
 /* ═══════════════════════════════════════════════════════════ */
 /* 🎨 REPORTS DATABASE - COMPLETE STYLES                       */
 /* Buono Cafe + Academy - Reports DB                           */
+/* 📅 Version: 11.0 - OPTIMIZED!                               */
 /* ═══════════════════════════════════════════════════════════ */
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📌 TOPBAR (උඩ තීරුව)                                       */
+/* 🚀 LOADING OVERLAY                                          */
+/* ─────────────────────────────────────────────────────────── */
+.rpt-loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.rpt-loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.rpt-loading-wrap { text-align: center; }
+.rpt-loading-ring {
+    width: 56px;
+    height: 56px;
+    border: 4px solid rgba(240,165,0,0.15);
+    border-top-color: #f0a500;
+    border-radius: 50%;
+    animation: rptSpin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+.rpt-loading-text {
+    color: #f0a500;
+    font-size: 15px;
+    font-weight: 600;
+}
+@keyframes rptSpin { to { transform: rotate(360deg); } }
+
+/* ─────────────────────────────────────────────────────────── */
+/* 🦴 SKELETON SHIMMER                                         */
+/* ─────────────────────────────────────────────────────────── */
+@keyframes rptShimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+}
+.sk-text {
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0.04) 25%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.04) 75%);
+    background-size: 600px 100%;
+    animation: rptShimmer 1.4s infinite linear;
+    border-radius: 4px;
+    color: transparent !important;
+    user-select: none;
+    display: inline-block;
+    min-width: 50px;
+}
+.skeleton-stat .sc-icon { opacity: 0.2; }
+.skeleton-stat .sc-value.sk-text { min-width: 60px; height: 26px; }
+.skeleton-stat .sc-label.sk-text { min-width: 80px; height: 13px; margin-top: 4px; }
+
+/* ─────────────────────────────────────────────────────────── */
+/* ✨ STAT CARD ENTRY ANIMATIONS                               */
+/* ─────────────────────────────────────────────────────────── */
+.rpt-summary-card {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.2s ease;
+}
+.rpt-summary-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.rpt-summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(240,165,0,0.15);
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* 🎬 MODAL ANIMATIONS                                         */
+/* ─────────────────────────────────────────────────────────── */
+@keyframes rptModalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rptModalSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.mark-paid-modal.show { animation: rptModalFadeIn 0.25s ease; }
+.mark-paid-content {
+    animation: rptModalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─────────────────────────────────────────────────────────── */
+/* 📌 TOPBAR                                                   */
 /* ─────────────────────────────────────────────────────────── */
 .reports-topbar {
     background: #16213e;
@@ -31,17 +121,27 @@
     border-radius: 6px;
     display: none;
 }
-.reports-topbar-title { font-size: 18px; font-weight: 700; color: #f0a500; }
+.reports-topbar-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f0a500;
+    animation: rptLogoPulse 3s ease-in-out infinite;
+}
 .reports-topbar-title span {
     color: #e0e0e0;
     font-weight: 400;
     font-size: 14px;
     margin-left: 8px;
+    animation: none;
+}
+@keyframes rptLogoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
 }
 .reports-topbar-right { display: flex; align-items: center; gap: 12px; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📂 DATABASE SWITCHER (Switch DB Dropdown)                  */
+/* 📂 DATABASE SWITCHER                                        */
 /* ─────────────────────────────────────────────────────────── */
 .rpt-db-switcher { position: relative; }
 .rpt-db-switcher-btn {
@@ -53,7 +153,9 @@
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
+    transition: all 0.2s;
 }
+.rpt-db-switcher-btn:hover { background: rgba(240,165,0,0.25); }
 .rpt-db-dropdown {
     position: absolute;
     top: calc(100% + 8px);
@@ -67,7 +169,7 @@
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
-.rpt-db-dropdown.show { display: block; }
+.rpt-db-dropdown.show { display: block; animation: rptModalFadeIn 0.2s ease; }
 .rpt-db-dropdown a {
     display: flex;
     align-items: center;
@@ -77,6 +179,7 @@
     text-decoration: none;
     font-size: 14px;
     border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s;
 }
 .rpt-db-dropdown a:hover { background: rgba(240,165,0,0.15); color: #f0a500; }
 .rpt-db-dropdown a.current {
@@ -85,7 +188,7 @@
     font-weight: 600;
 }
 
-/* 👤 USER INFO + LOGOUT */
+/* USER INFO */
 .rpt-user-info { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #e0e0e0; }
 .rpt-user-badge {
     padding: 4px 10px;
@@ -103,11 +206,12 @@
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
+    transition: all 0.2s;
 }
 .rpt-logout-btn:hover { background: #ff4444; color: white; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📐 LAYOUT (Sidebar + Content)                              */
+/* 📐 LAYOUT                                                   */
 /* ─────────────────────────────────────────────────────────── */
 .reports-layout {
     display: flex;
@@ -139,7 +243,6 @@
 }
 .sidebar-nav { padding: 12px 0; }
 
-/* Sidebar menu items */
 .sb-item {
     display: flex;
     align-items: center;
@@ -161,7 +264,6 @@
 .sb-item .sb-icon { font-size: 18px; width: 24px; text-align: center; }
 .sb-item .sb-label { flex: 1; }
 
-/* Sidebar badges (counts) */
 .sb-count-badge {
     background: #ff4444;
     color: white;
@@ -216,7 +318,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📄 CONTENT AREA (දකුණු පැත්ත)                              */
+/* 📄 CONTENT AREA                                             */
 /* ─────────────────────────────────────────────────────────── */
 .reports-content {
     margin-left: 260px;
@@ -233,7 +335,7 @@
 .rpt-section-subtitle { font-size: 13px; color: #888; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📊 SUMMARY CARDS (උඩ stats cards)                          */
+/* 📊 SUMMARY CARDS                                            */
 /* ─────────────────────────────────────────────────────────── */
 .rpt-summary-cards {
     display: grid;
@@ -247,9 +349,7 @@
     border-radius: 12px;
     padding: 16px;
     text-align: center;
-    transition: transform 0.2s;
 }
-.rpt-summary-card:hover { transform: translateY(-2px); }
 .rpt-summary-card .sc-icon { font-size: 26px; margin-bottom: 6px; }
 .rpt-summary-card .sc-value {
     font-size: 22px;
@@ -259,7 +359,6 @@
 }
 .rpt-summary-card .sc-label { font-size: 11px; color: #888; }
 
-/* Color variants */
 .rpt-summary-card.green .sc-value { color: #4CAF50; }
 .rpt-summary-card.red .sc-value { color: #ff4444; }
 .rpt-summary-card.blue .sc-value { color: #2196F3; }
@@ -269,7 +368,7 @@
 .rpt-summary-card.purchasing .sc-value { color: #FF9800; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 🔍 FILTERS BAR (Date/Cashier/Shift filters)                */
+/* 🔍 FILTERS BAR                                              */
 /* ─────────────────────────────────────────────────────────── */
 .rpt-filters {
     background: #16213e;
@@ -307,7 +406,9 @@
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
+    transition: opacity 0.2s;
 }
+.rpt-filter-btn:hover { opacity: 0.85; }
 .rpt-filter-btn.apply { background: #f0a500; color: #1a1a2e; }
 .rpt-filter-btn.reset { background: rgba(255,255,255,0.08); color: #aaa; }
 
@@ -360,7 +461,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* ✅ APPROVAL CARDS (Stock & Purchase pending cards)         */
+/* ✅ APPROVAL CARDS                                           */
 /* ─────────────────────────────────────────────────────────── */
 .approval-card {
     background: #16213e;
@@ -369,6 +470,11 @@
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.approval-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 .approval-card.purchasing { border-left-color: #FF9800; }
 .approval-card-header {
@@ -416,7 +522,6 @@
 .approval-submitted-by { font-size: 13px; color: #aaa; }
 .approval-submitted-by strong { color: #e0e0e0; }
 
-/* Approval stats */
 .approval-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -445,7 +550,6 @@
 .approval-stat .as-value.orange { color: #f0a500; }
 .approval-stat .as-value.purchasing { color: #FF9800; }
 
-/* Approval items table */
 .approval-items-table {
     width: 100%;
     border-collapse: collapse;
@@ -471,7 +575,6 @@
 .approval-items-table tr.row-surplus { background: rgba(33,150,243,0.04); }
 .approval-items-table tr.row-match { background: rgba(76,175,80,0.04); }
 
-/* Difference badges */
 .diff-badge {
     padding: 2px 8px;
     border-radius: 8px;
@@ -483,7 +586,6 @@
 .diff-badge.shortage { background: rgba(240,165,0,0.15); color: #f0a500; }
 .diff-badge.critical { background: rgba(255,68,68,0.15); color: #ff4444; }
 
-/* Price change badges (Purchasing) */
 .price-change-badge {
     display: inline-block;
     padding: 2px 6px;
@@ -496,7 +598,6 @@
 .price-change-badge.down { background: rgba(76,175,80,0.15); color: #4CAF50; }
 .price-change-badge.same { background: rgba(255,255,255,0.05); color: #888; }
 
-/* Approval/Reject notes boxes */
 .approval-notes-box {
     background: rgba(76,175,80,0.05);
     border: 1px solid rgba(76,175,80,0.2);
@@ -558,7 +659,6 @@
     box-sizing: border-box;
 }
 
-/* Approval action buttons */
 .approval-actions {
     display: flex;
     gap: 10px;
@@ -574,8 +674,9 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
+    transition: opacity 0.2s;
 }
-.btn-approve-count:hover { background: #43A047; }
+.btn-approve-count:hover { opacity: 0.9; }
 .btn-suspicious-approve {
     background: linear-gradient(135deg, #f0a500, #FF9800);
     color: #1a1a2e;
@@ -585,6 +686,7 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
+    transition: opacity 0.2s;
 }
 .btn-suspicious-approve:hover { opacity: 0.9; }
 .btn-reject-count {
@@ -596,6 +698,7 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 700;
+    transition: all 0.2s;
 }
 .btn-reject-count:hover { background: #ff4444; color: white; }
 .btn-show-reject {
@@ -607,10 +710,12 @@
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
+    transition: all 0.2s;
 }
+.btn-show-reject:hover { background: rgba(255,68,68,0.2); }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📊 STOCK COUNT REPORT TABS (SCR)                           */
+/* 📊 STOCK COUNT REPORT TABS                                  */
 /* ─────────────────────────────────────────────────────────── */
 .scr-tabs {
     display: flex;
@@ -655,14 +760,15 @@
 }
 .scr-tab.active .tab-count { background: #f0a500; color: #1a1a2e; }
 
-/* Count result cards */
 .count-result-card {
     background: #16213e;
     border-radius: 12px;
     padding: 18px 22px;
     margin-bottom: 12px;
     border-left: 4px solid #f0a500;
+    transition: transform 0.2s;
 }
+.count-result-card:hover { transform: translateY(-2px); }
 .count-result-card.approved { border-left-color: #4CAF50; }
 .count-result-card.suspicious_approved {
     border-left-color: #FF9800;
@@ -771,7 +877,7 @@
 .crc-btn.investigate { background: rgba(255,68,68,0.15); color: #ff4444; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 🚨 ISSUE CARDS (Stock Issues)                              */
+/* 🚨 ISSUE CARDS                                              */
 /* ─────────────────────────────────────────────────────────── */
 .issue-card {
     background: #16213e;
@@ -779,7 +885,9 @@
     border-radius: 12px;
     padding: 16px 20px;
     margin-bottom: 12px;
+    transition: transform 0.2s;
 }
+.issue-card:hover { transform: translateY(-2px); }
 .issue-card.resolved { border-color: rgba(76,175,80,0.3); }
 .issue-card.noted { border-color: rgba(33,150,243,0.3); }
 .issue-card-header {
@@ -865,7 +973,6 @@
 .issue-reason strong { color: #f0a500; }
 .reported-by { font-size: 11px; color: #888; margin-top: 6px; }
 
-/* Manager notes section */
 .manager-notes-section {
     background: rgba(33,150,243,0.05);
     border: 1px solid rgba(33,150,243,0.2);
@@ -923,12 +1030,13 @@
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
+    transition: opacity 0.2s;
 }
+.issue-action-btn:hover { opacity: 0.85; }
 .issue-action-btn.resolve { background: rgba(76,175,80,0.15); color: #4CAF50; }
 .issue-action-btn.note { background: rgba(33,150,243,0.15); color: #2196F3; }
 .issue-action-btn.reopen { background: rgba(240,165,0,0.15); color: #f0a500; }
 
-/* Issue status sub-tabs */
 .issue-status-tabs {
     display: flex;
     gap: 4px;
@@ -980,6 +1088,7 @@
     align-items: center;
     gap: 12px;
     cursor: pointer;
+    transition: background 0.2s;
 }
 .rpt-item-header:hover { background: rgba(240,165,0,0.06); }
 .rpt-date-badge {
@@ -1055,7 +1164,7 @@
 .rpt-d-row .dv.orange { color: #f0a500; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 👥 EMPLOYEE REPORTS                                        */
+/* 👥 EMPLOYEE REPORTS                                         */
 /* ─────────────────────────────────────────────────────────── */
 .emp-stats-grid {
     display: grid;
@@ -1106,11 +1215,7 @@
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-/* Search box */
-.rpt-search-box {
-    position: relative;
-    margin-bottom: 16px;
-}
+.rpt-search-box { position: relative; margin-bottom: 16px; }
 .rpt-search-box input {
     width: 100%;
     max-width: 320px;
@@ -1312,10 +1417,7 @@
     font-size: 14px;
 }
 
-.pbill-photo {
-    text-align: center;
-    margin: 14px 0;
-}
+.pbill-photo { text-align: center; margin: 14px 0; }
 .pbill-photo img {
     max-width: 250px;
     max-height: 250px;
@@ -1323,11 +1425,7 @@
     border: 2px solid rgba(255,152,0,0.3);
     cursor: pointer;
 }
-.pbill-photo .pp-label {
-    font-size: 11px;
-    color: #888;
-    margin-top: 6px;
-}
+.pbill-photo .pp-label { font-size: 11px; color: #888; margin-top: 6px; }
 
 .pbill-meta-info {
     font-size: 11px;
@@ -1391,13 +1489,15 @@
     cursor: pointer;
     font-size: 12px;
     font-weight: 600;
+    transition: opacity 0.2s;
 }
+.pbill-btn:hover { opacity: 0.85; }
 .pbill-btn.photo { background: rgba(33,150,243,0.15); color: #2196F3; }
 .pbill-btn.markpaid { background: #4CAF50; color: white; }
 .pbill-btn.markunpaid { background: rgba(240,165,0,0.15); color: #f0a500; }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📊 GENERIC DATA TABLE                                      */
+/* 📊 GENERIC DATA TABLE                                       */
 /* ─────────────────────────────────────────────────────────── */
 .rpt-data-table {
     width: 100%;
@@ -1430,17 +1530,14 @@
 .photo-fullscreen-modal {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.95);
     z-index: 10000;
     align-items: center;
     justify-content: center;
     padding: 20px;
 }
-.photo-fullscreen-modal.show { display: flex; }
+.photo-fullscreen-modal.show { display: flex; animation: rptModalFadeIn 0.3s ease; }
 .photo-fullscreen-modal img {
     max-width: 95%;
     max-height: 95vh;
@@ -1461,15 +1558,12 @@
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 💰 MARK PAID MODAL                                         */
+/* 💰 MARK PAID MODAL                                          */
 /* ─────────────────────────────────────────────────────────── */
 .mark-paid-modal {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.8);
     z-index: 9999;
     align-items: center;
@@ -1485,7 +1579,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* 📱 MOBILE RESPONSIVE                                       */
+/* 📱 MOBILE RESPONSIVE                                        */
 /* ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .hamburger-btn { display: block; }
@@ -1507,15 +1601,9 @@
 }
 
 /* ═══════════════════════════════════════════════════════════ */
-/* 🏪 SUPPLIER ANALYSIS SECTION (NEW!)                         */
+/* 🏪 SUPPLIER ANALYSIS SECTION                                 */
 /* ═══════════════════════════════════════════════════════════ */
-
-/* ─────────────────────────────────────────────────────────── */
-/* 🏆 TOP SUPPLIERS - MEDAL CARDS                             */
-/* ─────────────────────────────────────────────────────────── */
-.top-suppliers-section {
-    margin-bottom: 24px;
-}
+.top-suppliers-section { margin-bottom: 24px; }
 .top-suppliers-title {
     font-size: 16px;
     color: #FFC107;
@@ -1541,7 +1629,6 @@
 }
 .top-supplier-card:hover { transform: translateY(-3px); }
 
-/* Medal ranks */
 .top-supplier-card.rank-1 {
     border: 2px solid #FFD700;
     background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, #16213e 100%);
@@ -1573,11 +1660,7 @@
     margin-bottom: 4px;
     padding-right: 40px;
 }
-.top-supplier-phone {
-    font-size: 11px;
-    color: #888;
-    margin-bottom: 12px;
-}
+.top-supplier-phone { font-size: 11px; color: #888; margin-bottom: 12px; }
 .top-supplier-value {
     font-size: 22px;
     font-weight: 700;
@@ -1596,12 +1679,7 @@
     border-radius: 6px;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* 📋 ALL SUPPLIERS GRID                                      */
-/* ─────────────────────────────────────────────────────────── */
-.all-suppliers-section {
-    margin-top: 28px;
-}
+.all-suppliers-section { margin-top: 28px; }
 .all-suppliers-header {
     display: flex;
     justify-content: space-between;
@@ -1725,9 +1803,6 @@
 }
 .supplier-card.expanded .supplier-expand-icon { transform: rotate(180deg); }
 
-/* ─────────────────────────────────────────────────────────── */
-/* 📊 EXPANDED SUPPLIER DETAILS                               */
-/* ─────────────────────────────────────────────────────────── */
 .supplier-details {
     display: none;
     padding: 20px;
@@ -1736,9 +1811,7 @@
 }
 .supplier-card.expanded .supplier-details { display: block; }
 
-.supplier-detail-section {
-    margin-bottom: 20px;
-}
+.supplier-detail-section { margin-bottom: 20px; }
 .supplier-detail-section h4 {
     font-size: 13px;
     color: #FF9800;
@@ -1749,7 +1822,6 @@
     border-bottom: 1px solid rgba(255,152,0,0.2);
 }
 
-/* Payment status breakdown */
 .payment-breakdown {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -1776,7 +1848,6 @@
 .payment-stat.bank .payment-stat-value { color: #2196F3; }
 .payment-stat.unpaid .payment-stat-value { color: #ff4444; }
 
-/* Top items table */
 .top-items-table {
     width: 100%;
     border-collapse: collapse;
@@ -1798,7 +1869,6 @@
 }
 .top-items-table tr:hover { background: rgba(255,152,0,0.04); }
 
-/* Recent bills mini-list */
 .recent-bills-list {
     background: rgba(0,0,0,0.2);
     border-radius: 8px;
@@ -1841,7 +1911,6 @@
     font-size: 13px;
 }
 
-/* No bills message */
 .supplier-no-bills {
     text-align: center;
     padding: 30px;
@@ -1855,9 +1924,6 @@
     opacity: 0.4;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* 📱 MOBILE RESPONSIVE for Supplier Analysis                 */
-/* ─────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
     .top-suppliers-grid { grid-template-columns: 1fr; }
     .suppliers-grid { grid-template-columns: 1fr; }

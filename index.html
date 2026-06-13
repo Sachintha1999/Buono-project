@@ -6,6 +6,7 @@
     <title>Buono - Employee Database</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="index-style.css">
 </head>
 <body>
 
@@ -37,38 +38,46 @@
         </div>
     </div>
 
-    <div class="dashboard-container">
+    <!-- LOADING OVERLAY -->
+    <div class="idx-loading-overlay" id="idxLoadingOverlay">
+        <div class="idx-loading-wrap">
+            <div class="idx-loading-ring"></div>
+            <div class="idx-loading-text">Loading Employee Database...</div>
+        </div>
+    </div>
+
+    <div class="dashboard-container" id="idxMainContent" style="opacity:0">
 
         <div class="stats-row">
-            <div class="stat-card">
-                <div class="stat-icon">👥</div>
+            <div class="stat-card skeleton-stat" id="idxStatCard1">
+                <div class="stat-icon idx-sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="totalEmployees">0</h3>
-                    <p>Total Employees</p>
+                    <h3 class="idx-sk-text idx-sk-short" id="totalEmployees">0</h3>
+                    <p class="idx-sk-text">Total Employees</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">📅</div>
+            <div class="stat-card skeleton-stat" id="idxStatCard2">
+                <div class="stat-icon idx-sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="todayDate">-</h3>
-                    <p>Today</p>
+                    <h3 class="idx-sk-text idx-sk-short" id="todayDate">-</h3>
+                    <p class="idx-sk-text">Today</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">⏰</div>
+            <div class="stat-card skeleton-stat" id="idxStatCard3">
+                <div class="stat-icon idx-sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="currentTime">-</h3>
-                    <p>Current Time</p>
+                    <h3 class="idx-sk-text idx-sk-short" id="currentTime">-</h3>
+                    <p class="idx-sk-text">Current Time</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">🔑</div>
+            <div class="stat-card skeleton-stat" id="idxStatCard4">
+                <div class="stat-icon idx-sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="myAccess">-</h3>
-                    <p>Access Level</p>
+                    <h3 class="idx-sk-text idx-sk-short" id="myAccess">-</h3>
+                    <p class="idx-sk-text">Access Level</p>
                 </div>
             </div>
         </div>
@@ -80,7 +89,7 @@
         <div class="search-bar" id="searchBar">
             <input type="text" id="searchEmployee" 
                 placeholder="🔍 Search employee name, nickname or access..." 
-                onkeyup="searchEmployees()">
+                onkeyup="onSearchKeyup()">
         </div>
 
         <div class="section-header">
@@ -104,19 +113,45 @@
                     </tr>
                 </thead>
                 <tbody id="employeeTableBody">
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 20px;">
-                            ⏳ Loading employees...
-                        </td>
+                    <!-- Skeleton rows -->
+                    <tr class="idx-sk-row">
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                    </tr>
+                    <tr class="idx-sk-row">
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                    </tr>
+                    <tr class="idx-sk-row">
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
+                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
+                        <td><span class="idx-sk-text idx-sk-short"></span></td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination wrap -->
+        <div id="empPaginationWrap" style="display:none; margin-top:20px; text-align:center;">
+            <div id="empCounter" style="color:#888; font-size:13px; margin-bottom:10px;"></div>
+            <button class="btn-secondary" id="btnLoadMoreEmp" onclick="loadMoreEmployees()">
+                ⬇️ Load More
+            </button>
+        </div>
     </div>
 
-    <!-- ═══════════════════════════════════════ -->
     <!-- ADD / EDIT EMPLOYEE MODAL -->
-    <!-- ═══════════════════════════════════════ -->
     <div id="employeeModal" class="modal" style="display: none;">
         <div class="modal-content" style="width: 600px;">
             <div class="modal-header">
@@ -152,9 +187,6 @@
 
                 <input type="hidden" id="editDocId" value="">
 
-                <!-- ═══════════════════════════════════════ -->
-                <!-- PERMISSIONS SECTION - AUTO GENERATED!  -->
-                <!-- ═══════════════════════════════════════ -->
                 <div id="permissionsSection" style="margin-top: 25px;">
 
                     <div style="background: #0f3460; padding: 12px 18px; 
@@ -167,12 +199,8 @@
                         </p>
                     </div>
 
-                    <!-- ⭐ AUTO-GENERATED PERMISSION BLOCKS! -->
-                    <div id="permissionsContainer">
-                        <!-- All DATABASES blocks render here via JS -->
-                    </div>
+                    <div id="permissionsContainer"></div>
 
-                    <!-- FOOTER NOTE -->
                     <div style="background: #1a1a2e; padding: 12px 15px; 
                         border-radius: 8px; margin-top: 12px; 
                         border: 1px dashed #4CAF50;">
@@ -182,7 +210,7 @@
                         </p>
                     </div>
 
-                </div><!-- /permissionsSection -->
+                </div>
 
                 <div class="modal-buttons">
                     <button type="button" class="btn-primary" 
@@ -199,9 +227,7 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════ -->
     <!-- DELETE CONFIRM MODAL -->
-    <!-- ═══════════════════════════════════════ -->
     <div id="deleteModal" class="modal" style="display: none;">
         <div class="modal-content modal-small">
             <div class="modal-header">
@@ -226,7 +252,6 @@
         </div>
     </div>
 
-    <!-- ===== SCRIPTS (CORRECT ORDER!) ===== -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="firebase-config.js"></script>

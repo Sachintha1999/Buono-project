@@ -14,18 +14,28 @@
 <body>
 
     <!-- ═══════════════════════════════════════════ -->
+    <!-- LOADING OVERLAY                               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="inv-loading-overlay" id="invLoadingOverlay">
+        <div class="inv-loading-wrap">
+            <div class="inv-loading-ring"></div>
+            <div class="inv-loading-text">Loading Inventory...</div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
     <!-- TOP NAVIGATION BAR                            -->
     <!-- ═══════════════════════════════════════════ -->
     <div class="topbar">
         <div class="topbar-left">
             <span class="topbar-icon">🍴</span>
             <h2 style="margin-right:15px;">Buono</h2>
-            
+
             <div class="db-switcher" id="dbSwitcher">
                 <span class="db-switcher-icon">📦</span>
                 <span class="db-switcher-name">Inventory Database</span>
                 <span class="db-switcher-arrow">▼</span>
-                
+
                 <div class="db-switcher-dropdown" id="dbDropdown">
                     <div class="db-dropdown-title">📂 Switch to:</div>
                     <div id="dbDropdownList"></div>
@@ -37,7 +47,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="topbar-right">
             <span id="welcomeUser">👋 Welcome</span>
             <button class="btn-logout" onclick="logout()">🚪 Logout</button>
@@ -47,41 +57,43 @@
     <!-- ═══════════════════════════════════════════ -->
     <!-- MAIN CONTAINER                                -->
     <!-- ═══════════════════════════════════════════ -->
-    <div class="dashboard-container">
+    <div class="dashboard-container" id="invMainContent" style="opacity:0;">
 
         <!-- ═══════ STAT CARDS ═══════ -->
         <div class="stats-row">
-            <div class="stat-card success">
-                <div class="stat-icon">📦</div>
+
+            <div class="stat-card success skeleton-stat" id="invStatCard1">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statTotalItems">0</h3>
-                    <p>Total Items</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
 
-            <div class="stat-card warning">
-                <div class="stat-icon">⚠️</div>
+            <div class="stat-card warning skeleton-stat" id="invStatCard2">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statLowStock">0</h3>
-                    <p>Low Stock Items</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
 
-            <div class="stat-card danger">
-                <div class="stat-icon">🚫</div>
+            <div class="stat-card danger skeleton-stat" id="invStatCard3">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statOutStock">0</h3>
-                    <p>Out of Stock</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon">💰</div>
+            <div class="stat-card skeleton-stat" id="invStatCard4">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statTotalValue">Rs. 0</h3>
-                    <p>Total Stock Value</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
+
         </div>
 
         <!-- Page Title -->
@@ -102,7 +114,7 @@
         <div id="section-items" class="dashboard-section active">
 
             <div class="inv-filter-bar">
-                <input type="text" id="searchItem" placeholder="🔍 Search items..." onkeyup="filterItems()">
+                <input type="text" id="searchItem" placeholder="🔍 Search items..." onkeyup="debounceFilter()">
                 <select id="filterCategory" onchange="filterItems()">
                     <option value="">📂 All Categories</option>
                 </select>
@@ -135,14 +147,22 @@
                         </tr>
                     </thead>
                     <tbody id="itemsTableBody">
-                        <tr>
-                            <td colspan="9" style="text-align: center; padding: 20px;">
-                                ⏳ Loading items...
-                            </td>
-                        </tr>
+                        <!-- Skeleton rows -->
+                        <tr class="sk-row"><td colspan="9"><div class="sk-text sk-row-line"></div></td></tr>
+                        <tr class="sk-row"><td colspan="9"><div class="sk-text sk-row-line"></div></td></tr>
+                        <tr class="sk-row"><td colspan="9"><div class="sk-text sk-row-line"></div></td></tr>
+                        <tr class="sk-row"><td colspan="9"><div class="sk-text sk-row-line"></div></td></tr>
+                        <tr class="sk-row"><td colspan="9"><div class="sk-text sk-row-line"></div></td></tr>
                     </tbody>
                 </table>
             </div>
+
+            <!-- Pagination -->
+            <div id="invPaginationWrap" style="display:none; margin-top:20px; text-align:center;">
+                <div id="invCounter" style="color:#888; font-size:13px; margin-bottom:10px;"></div>
+                <button class="btn-secondary" id="btnLoadMore" onclick="loadMoreItems()">⬇️ Load More</button>
+            </div>
+
         </div>
 
         <!-- ═══════════════════════════════════════════ -->
@@ -196,7 +216,7 @@
             </div>
         </div>
 
-    </div>
+    </div><!-- end #invMainContent -->
 
     <!-- ═══════════════════════════════════════════ -->
     <!-- ADD / EDIT ITEM MODAL                         -->

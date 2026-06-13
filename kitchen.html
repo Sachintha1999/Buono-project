@@ -10,6 +10,14 @@
 </head>
 <body>
 
+    <!-- ═══════ LOADING OVERLAY ═══════ -->
+    <div class="kit-loading-overlay" id="kitLoadingOverlay">
+        <div class="kit-loading-wrap">
+            <div class="kit-loading-ring"></div>
+            <div class="kit-loading-text">Loading Kitchen...</div>
+        </div>
+    </div>
+
     <!-- ═══════ TOP BAR ═══════ -->
     <div class="topbar">
         <div class="topbar-left">
@@ -33,7 +41,7 @@
         </div>
     </div>
 
-    <div class="dashboard-container">
+    <div class="dashboard-container" id="kitMainContent" style="opacity:0;">
 
         <!-- ═══════ DASHBOARD ALERT ═══════ -->
         <div class="dashboard-alert" id="dashboardAlert">
@@ -45,34 +53,34 @@
             <button class="alert-btn" id="alertActionBtn" onclick="handleAlertAction()">View</button>
         </div>
 
-        <!-- ═══════ TOP STATS CARDS ═══════ -->
+        <!-- ═══════ TOP STATS CARDS (SKELETON) ═══════ -->
         <div class="stats-row">
-            <div class="stat-card success">
-                <div class="stat-icon">📋</div>
+            <div class="stat-card success skeleton-stat" id="kitStatCard1">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statTotalRecipes">0</h3>
-                    <p>Total Recipes</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
-            <div class="stat-card warning">
-                <div class="stat-icon">🍽️</div>
+            <div class="stat-card warning skeleton-stat" id="kitStatCard2">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statStaffMeals">0</h3>
-                    <p>Staff Meals Today</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
-            <div class="stat-card danger">
-                <div class="stat-icon">🗑️</div>
+            <div class="stat-card danger skeleton-stat" id="kitStatCard3">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statWastage">Rs. 0</h3>
-                    <p>Wastage Today</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon">💰</div>
+            <div class="stat-card skeleton-stat" id="kitStatCard4">
+                <div class="stat-icon sk-icon"></div>
                 <div class="stat-info">
-                    <h3 id="statAvgMargin">0%</h3>
-                    <p>Avg Profit Margin</p>
+                    <h3 class="sk-text sk-short">...</h3>
+                    <p class="sk-text">...</p>
                 </div>
             </div>
         </div>
@@ -93,7 +101,7 @@
         <!-- ═══════ TAB 1: RECIPES ═══════ -->
         <div id="section-recipes" class="dashboard-section active">
             <div class="kitchen-filter-bar">
-                <input type="text" id="searchRecipe" placeholder="🔍 Search recipes..." onkeyup="filterRecipes()">
+                <input type="text" id="searchRecipe" placeholder="🔍 Search recipes..." oninput="debounceFilterRecipes()">
                 <select id="filterRecipeCategory" onchange="filterRecipes()">
                     <option value="">🏷️ All Categories</option>
                 </select>
@@ -103,7 +111,28 @@
                 <button class="btn-primary" id="addRecipeBtn" onclick="openAddRecipeModal()" style="display:none;">➕ Add New Recipe</button>
             </div>
             <div class="recipe-grid" id="recipeGrid">
-                <div style="grid-column: 1/-1; text-align:center; padding:40px; color:#888;">⏳ Loading...</div>
+                <!-- Skeleton recipe cards -->
+                <div class="recipe-card-skeleton">
+                    <div class="sk-text" style="width:60%; height:18px; margin-bottom:10px;"></div>
+                    <div class="sk-text" style="width:40%; height:24px; margin-bottom:14px;"></div>
+                    <div class="sk-text" style="width:100%; height:60px;"></div>
+                </div>
+                <div class="recipe-card-skeleton">
+                    <div class="sk-text" style="width:60%; height:18px; margin-bottom:10px;"></div>
+                    <div class="sk-text" style="width:40%; height:24px; margin-bottom:14px;"></div>
+                    <div class="sk-text" style="width:100%; height:60px;"></div>
+                </div>
+                <div class="recipe-card-skeleton">
+                    <div class="sk-text" style="width:60%; height:18px; margin-bottom:10px;"></div>
+                    <div class="sk-text" style="width:40%; height:24px; margin-bottom:14px;"></div>
+                    <div class="sk-text" style="width:100%; height:60px;"></div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="recipePaginationWrap" style="display:none; margin-top:20px; text-align:center;">
+                <div id="recipeCounter" style="color:#888; font-size:13px; margin-bottom:10px;"></div>
+                <button class="btn-secondary" id="btnLoadMoreRecipes" onclick="loadMoreRecipes()">⬇️ Load More</button>
             </div>
         </div>
 
@@ -329,7 +358,7 @@
             </div>
         </div>
 
-    </div>
+    </div><!-- end #kitMainContent -->
 
     <!-- ═══════ MODALS ═══════ -->
 
