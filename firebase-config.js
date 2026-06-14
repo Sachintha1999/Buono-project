@@ -1,7 +1,7 @@
 // ============================================
 // 🔥 FIREBASE GLOBAL CONFIG - MASTER FILE!
 // File: firebase-config.js
-// Version: 12.7 (Smart Cache System!) ⭐ NEW
+// Version: 13.0 (New API Key + Identity Platform!) ⭐ NEW
 // Used by ALL pages!
 // ============================================
 
@@ -9,7 +9,7 @@
 // 🔥 Firebase Configuration
 // ===================================
 const firebaseConfig = {
-    apiKey: "AIzaSyBkXBs5GrfnMIFnJLJWkSMULYxGKz0Shtk",
+    apiKey: "AIzaSyBIViMPMRuOoUAQhvyFEbDVAGYn4YvfwCI",
     authDomain: "buono-project-927b8.firebaseapp.com",
     projectId: "buono-project-927b8",
     storageBucket: "buono-project-927b8.firebasestorage.app",
@@ -329,6 +329,50 @@ const DATABASES = [
             'Cashier': { add: true, view: true, selfView: false, edit: false },
             'Call Operator': { add: true, view: true, selfView: false, edit: false }
         }
+    },
+    {
+        id: 'approveDB',
+        name: 'Approvals',
+        shortName: 'Approvals',
+        icon: '✅',
+        url: 'approve.html',
+        permPrefix: 'apv',
+        color: '#D4AF37',
+        description: 'Approve pending signup requests',
+        accessDescription: 'Approve new employee සහ student signup requests. Admin auto-access, Manager/Others need manual grant.',
+        badgeLabel: 'Admin Tools',
+        badgeClass: 'badge-management',
+        cardClass: 'approve-card',
+        adminManagerOnly: false,
+        accessChecks: ['approveStudents', 'approveEmployees'],
+        autoAccessRoles: [],
+        privilegedRoles: ['Admin'],
+        privilegedRolePerms: {
+            approveStudents: true,
+            approveEmployees: true,
+            approveManagers: true
+        },
+        specialRoleBadges: {
+            'Manager': [
+                { cssClass: 'perm-add', label: '✅ Approve Staff' },
+                { cssClass: 'perm-view', label: '🎓 Approve Students' }
+            ],
+            'Call Operator': [
+                { cssClass: 'perm-view', label: '🎓 Students Only' }
+            ]
+        },
+        permBorderColor: '#D4AF37',
+        permTitleColor: '#D4AF37',
+        permSubtitle: '(Admin auto, Manager/Others need manual grant)',
+        permEditLabel: '✅ Manage Approvals',
+        defaultPermsForRole: {
+            'Manager': { approveStudents: false, approveEmployees: false, approveManagers: false },
+            'Cashier': { approveStudents: false, approveEmployees: false },
+            'Call Operator': { approveStudents: false, approveEmployees: false },
+            'Purchasing Officer': { approveStudents: false, approveEmployees: false },
+            'Head Chef': { approveStudents: false, approveEmployees: false },
+            'Waiter': { approveStudents: false, approveEmployees: false }
+        }
     }
 ];
 
@@ -353,7 +397,7 @@ function checkAuth() {
 function logout() {
     if (confirm('🚪 Logout කරන්න ඕනද?')) {
         sessionStorage.removeItem('loggedInUser');
-        window.location.href = 'login.html';
+        window.location.href = 'welcome.html';
     }
 }
 
@@ -756,7 +800,7 @@ function checkStudentAuth() {
 function studentLogout() {
     if (confirm('🚪 Logout කරන්න ඕනද?')) {
         sessionStorage.removeItem('loggedInStudent');
-        window.location.href = 'login.html';
+        window.location.href = 'welcome.html';
     }
 }
 
@@ -1428,10 +1472,13 @@ async function testCache() {
 // ===================================
 // ✅ Ready!
 // ===================================
-console.log('🔥 Firebase initialized! (v12.7 - Smart Cache System!) ⭐');
+console.log('🔥 Firebase initialized! (v13.0 - New API Key + Identity Platform!) ⭐');
 console.log('📊 Databases loaded:', DATABASES.length);
 console.log('🆔 ID System: Transaction-based (100% no duplicates!)');
 console.log('🔔 Tracker DB: Ready!');
+console.log('✅ Approve DB: Ready! (Admin auto-access)');
+console.log('🚪 Logout: Redirects to welcome.html!');
+console.log('🔐 Signup: FIXED! (New API key + Identity Platform)');
 console.log('⚡ Pagination: getPaginatedStudents(), getStudentByDocId(), getPendingPaymentStudents()');
 console.log('💾 Smart Cache: cacheStudent(), getCachedStudent(), getCacheStats()');
 console.log('🧪 Tests: Run testPagination() or testCache() in console');

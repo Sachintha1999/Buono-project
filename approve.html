@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Approvals - Buono Admin</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
+    
+    <!-- Google Fonts: Poppins (Premium) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="approve-style.css">
+</head>
+<body>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 🌀 LOADING OVERLAY                       -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-coffee">☕</div>
+            <div class="loading-ring"></div>
+            <div class="loading-text">Loading approvals...</div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 🎯 TOP BAR                               -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="brand-logo">☕</div>
+            <div class="brand-info">
+                <div class="brand-name">Buono</div>
+                <div class="brand-sub">Admin Approvals</div>
+            </div>
+        </div>
+        
+        <div class="topbar-right">
+            <div class="user-info">
+                <span class="user-badge">👑 Admin</span>
+                <span class="user-name" id="userName">Loading...</span>
+            </div>
+            <button class="btn-home" onclick="goHome()" title="Back to Home">
+                🏠 Home
+            </button>
+            <button class="btn-logout" onclick="handleLogout()" title="Logout">
+                🚪 Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 📦 MAIN CONTENT                          -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="main-content" id="mainContent" style="opacity:0;">
+        
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="page-title">
+                <span class="title-icon">✅</span>
+                Pending Approvals
+            </h1>
+            <p class="page-subtitle">Review and approve new signup requests</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card stat-employees" id="statEmployees">
+                <div class="stat-icon">👔</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="empCount">0</div>
+                    <div class="stat-label">Pending Employees</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-students" id="statStudents">
+                <div class="stat-icon">🎓</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stdCount">0</div>
+                    <div class="stat-label">Pending Students</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-total" id="statTotal">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="totalCount">0</div>
+                    <div class="stat-label">Total Pending</div>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-today" id="statToday">
+                <div class="stat-icon">📅</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="todayCount">0</div>
+                    <div class="stat-label">Today's Signups</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="employees" onclick="switchTab('employees')">
+                <span class="tab-icon">👔</span>
+                <span class="tab-label">Employees</span>
+                <span class="tab-badge" id="tabBadgeEmp">0</span>
+            </button>
+            <button class="tab-btn" data-tab="students" onclick="switchTab('students')">
+                <span class="tab-icon">🎓</span>
+                <span class="tab-label">Students</span>
+                <span class="tab-badge" id="tabBadgeStd">0</span>
+            </button>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="filter-bar">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input"
+                    placeholder="Search by name, email, or phone..."
+                    autocomplete="off">
+                <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all" onclick="applyFilter('all')">
+                    All
+                </button>
+                <button class="filter-btn" data-filter="verified" onclick="applyFilter('verified')">
+                    ✅ Email Verified
+                </button>
+                <button class="filter-btn" data-filter="unverified" onclick="applyFilter('unverified')">
+                    ⚠️ Unverified
+                </button>
+            </div>
+        </div>
+
+        <!-- Employees List -->
+        <div class="tab-content active" id="tabEmployees">
+            <div class="list-container" id="employeesList">
+                <!-- Loading state -->
+                <div class="loading-state">
+                    <div class="loading-spinner-sm"></div>
+                    <p>Loading employees...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students List -->
+        <div class="tab-content" id="tabStudents">
+            <div class="list-container" id="studentsList">
+                <!-- Loading state -->
+                <div class="loading-state">
+                    <div class="loading-spinner-sm"></div>
+                    <p>Loading students...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 👁️ VIEW DETAILS MODAL                   -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span id="viewModalIcon">👤</span>
+                    <span id="viewModalTitle">User Details</span>
+                </h2>
+                <button class="modal-close" onclick="closeViewModal()">✕</button>
+            </div>
+            
+            <div class="modal-body" id="viewModalBody">
+                <!-- Dynamic content -->
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeViewModal()">Close</button>
+                <button class="btn btn-success" id="viewModalApproveBtn" onclick="approveFromView()">
+                    ✅ Approve
+                </button>
+                <button class="btn btn-danger" id="viewModalRejectBtn" onclick="rejectFromView()">
+                    ❌ Reject
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- ✅ APPROVE EMPLOYEE MODAL                -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay" id="approveEmpModal">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span>✅</span>
+                    <span>Approve Employee</span>
+                </h2>
+                <button class="modal-close" onclick="closeApproveEmpModal()">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Employee Info -->
+                <div class="approve-user-info" id="approveEmpInfo">
+                    <!-- Dynamic -->
+                </div>
+
+                <!-- Role Selection -->
+                <div class="form-group">
+                    <label class="form-label">
+                        Role <span class="required">*</span>
+                    </label>
+                    <select id="roleSelect" class="form-select" onchange="onRoleChange()">
+                        <option value="">Select a role...</option>
+                        <option value="Admin">👑 Admin</option>
+                        <option value="Manager">🧑‍💼 Manager</option>
+                        <option value="Cashier">💰 Cashier</option>
+                        <option value="Purchasing Officer">📦 Purchasing Officer</option>
+                        <option value="Head Chef">👨‍🍳 Head Chef</option>
+                        <option value="Call Operator">📞 Call Operator</option>
+                        <option value="Waiter">🧑‍🍽️ Waiter</option>
+                    </select>
+                </div>
+
+                <!-- Permissions Preview -->
+                <div class="form-group" id="permissionsPreview" style="display:none;">
+                    <label class="form-label">
+                        📋 Permissions Preview
+                        <span class="label-hint">(Auto-loaded by role)</span>
+                    </label>
+                    <div class="permissions-grid" id="permissionsGrid">
+                        <!-- Dynamic permissions list -->
+                    </div>
+                    
+                    <button type="button" class="btn-customize" onclick="toggleCustomPerms()">
+                        <span id="customizeBtnText">📝 Customize Permissions</span>
+                    </button>
+                </div>
+
+                <!-- Custom Permissions Panel -->
+                <div class="custom-perms-panel" id="customPermsPanel" style="display:none;">
+                    <div class="custom-perms-header">
+                        <h3>🛠️ Custom Permissions</h3>
+                        <p>Override default permissions for this user</p>
+                    </div>
+                    <div id="customPermsList">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeApproveEmpModal()">Cancel</button>
+                <button class="btn btn-success" id="confirmApproveEmpBtn" onclick="confirmApproveEmployee()" disabled>
+                    ✅ Approve Employee
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- ✅ APPROVE STUDENT MODAL (Simple)        -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay" id="approveStdModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span>✅</span>
+                    <span>Approve Student</span>
+                </h2>
+                <button class="modal-close" onclick="closeApproveStdModal()">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="approve-user-info" id="approveStdInfo">
+                    <!-- Dynamic -->
+                </div>
+
+                <div class="info-message">
+                    <span class="info-icon">ℹ️</span>
+                    <div>
+                        <strong>Quick Approval</strong>
+                        <p>This student will be approved as a pending student. Call Operator will assign batch, course, and fee in Student Management later.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeApproveStdModal()">Cancel</button>
+                <button class="btn btn-success" onclick="confirmApproveStudent()">
+                    ✅ Approve Student
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- ❌ REJECT MODAL                          -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="modal-overlay" id="rejectModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span>❌</span>
+                    <span>Reject Application</span>
+                </h2>
+                <button class="modal-close" onclick="closeRejectModal()">✕</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="approve-user-info" id="rejectUserInfo">
+                    <!-- Dynamic -->
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        Rejection Reason <span class="required">*</span>
+                        <span class="label-hint">(min 10 characters)</span>
+                    </label>
+                    <textarea 
+                        id="rejectReason" 
+                        class="form-textarea"
+                        placeholder="Type detailed reason for rejection..."
+                        rows="4"
+                        maxlength="500"></textarea>
+                    <div class="char-count">
+                        <span id="reasonCharCount">0</span> / 500
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Quick Reasons:</label>
+                    <div class="quick-reasons">
+                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Invalid or incomplete information provided in application.')">
+                            📝 Invalid Info
+                        </button>
+                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Duplicate account detected. Account already exists with these details.')">
+                            🔁 Duplicate Account
+                        </button>
+                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Suspicious activity detected. Unable to verify identity.')">
+                            ⚠️ Suspicious Activity
+                        </button>
+                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Unable to verify the provided promo code or credentials.')">
+                            🎫 Invalid Promo Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRejectModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmRejectBtn" onclick="confirmReject()" disabled>
+                    ❌ Confirm Rejection
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 🔔 TOAST NOTIFICATION                    -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon">ℹ️</span>
+        <span class="toast-message" id="toastMessage">Message</span>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 🎉 EMPTY STATE TEMPLATE (hidden)         -->
+    <!-- ════════════════════════════════════════ -->
+    <template id="emptyStateTemplate">
+        <div class="empty-state">
+            <div class="empty-icon">🎉</div>
+            <h3 class="empty-title">All caught up!</h3>
+            <p class="empty-message">No pending approvals at the moment.</p>
+            <div class="empty-decoration">☕ ✨ ☕</div>
+        </div>
+    </template>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- 🔥 FIREBASE SDK                          -->
+    <!-- ════════════════════════════════════════ -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <!-- ════════════════════════════════════════ -->
+    <!-- ⚙️ FIREBASE CONFIG                       -->
+    <!-- ════════════════════════════════════════ -->
+    <script src="firebase-config.js"></script>
+    
+    <!-- ════════════════════════════════════════ -->
+    <!-- 🚀 APPROVE SCRIPT                        -->
+    <!-- ════════════════════════════════════════ -->
+    <script src="approve-script.js"></script>
+
+</body>
+</html>
