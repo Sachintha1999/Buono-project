@@ -1,0 +1,18 @@
+[
+  {
+    "id": "6UlSn70rG5OnTBsKDXYN",
+    "createdByName": "Naveen",
+    "originalBillNumber": "12-R",
+    "returnId": "Z2W8u4drT3VAdgj4HIrZ",
+    "returnNumber": "RET-260608-597",
+    "amount": 30000,
+    "supplierName": "colombo street",
+    "originalPurchaseId": "YVrk7TlUbqCkYNpch5O6",
+    "createdBy": "Naveen",
+    "creditNoteNumber": "SCN-260608-806",
+    "createdAt": "2026-06-08T05:14:55.000Z",
+    "notes": "",
+    "supplierId": "M3VWG7YWQ4b65RJ1Keyf",
+    "status": "active"
+  }
+]

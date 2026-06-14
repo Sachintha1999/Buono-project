@@ -1,0 +1,27 @@
+[
+  {
+    "id": "cSEUqd59rJerKoHPcMyN",
+    "cardMachine": 4000,
+    "dayEndCash": 14000,
+    "cashierNickname": "siri",
+    "expectedCash": 20300,
+    "createdBy": "siri",
+    "totalExpenses": 1000,
+    "deposits": [],
+    "startingCash": 5000,
+    "cashierName": "Siriwardana AIya",
+    "date": "2026-06-05",
+    "shiftType": "Morning",
+    "createdAt": "2026-06-05T13:09:04.000Z",
+    "totalDeposits": 0,
+    "serviceCharge": 1300,
+    "expenses": [
+      {
+        "amount": 1000,
+        "description": "Transport"
+      }
+    ],
+    "posSale": 15000,
+    "shortExcess": -6300
+  }
+]

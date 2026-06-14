@@ -1,0 +1,772 @@
+[
+  {
+    "id": "3yoqM6pj9TpnvMxtCK3f",
+    "address": "",
+    "enrolledDate": "2026-06-12T06:16:12.000Z",
+    "createdAt": "2026-06-12T06:16:12.000Z",
+    "studentDocId": "Bc7jkYc9PXpog9xdpN0l",
+    "updatedAt": "2026-06-12T11:15:06.000Z",
+    "callAttempts": 0,
+    "whatsappHistory": [],
+    "phone": "+94750757438",
+    "status": "Enrolled",
+    "nic": "200018502239",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "name": "Dammika",
+    "callHistory": [],
+    "studentId": "BCA-W32-0001",
+    "email": "dammika@gmail.com",
+    "payment": {
+      "downMethod": "cash",
+      "installment1Paid": true,
+      "receiptNo": "BR-2026-06-001",
+      "downDate": "2026-06-12T06:16:12.000Z",
+      "downAmount": 18000,
+      "downPaid": true,
+      "install1Date": "2026-06-12T11:15:06.017Z"
+    },
+    "courseInterest": "SCA Foundation",
+    "createdBy": "Naveen"
+  },
+  {
+    "id": "Ar172qK7h7rq8vJVkY7K",
+    "lastUpdatedAt": "2026-06-12T13:07:29.000Z",
+    "updatedAt": "2026-06-12T13:07:29.000Z",
+    "callAttempts": 1,
+    "createdAt": "2026-06-10T07:44:23.000Z",
+    "phone": "+94751234567",
+    "status": "",
+    "notes": "",
+    "followUpDate": null,
+    "name": "naveen",
+    "source": "Walk In",
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "timestamp": 1781080189155,
+        "followUpDate": null,
+        "status": "Unable to join",
+        "dateStr": "Jun 10, 2026 01:59 PM",
+        "operator": "Naveen",
+        "notes": "none"
+      },
+      {
+        "status": "",
+        "dateStr": "Jun 12, 2026 06:37 PM",
+        "operator": "Naveen",
+        "timestamp": 1781269648830,
+        "notes": "(No notes)"
+      }
+    ],
+    "eventId": ""
+  },
+  {
+    "id": "CazoIu0BOEvY32qy9xD3",
+    "status": "Enrolled",
+    "phone": "+94771234567",
+    "notes": "",
+    "whatsappHistory": [],
+    "callAttempts": 2,
+    "updatedAt": "2026-06-12T12:38:50.000Z",
+    "lastUpdatedAt": "2026-06-11T20:26:02.000Z",
+    "studentDocId": "xKQXJkcw50V406eB8lJU",
+    "createdAt": "2026-06-10T14:35:09.000Z",
+    "enrolledDate": "2026-06-12T12:38:50.000Z",
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "payment": {
+      "downMethod": "cash",
+      "receiptNo": "BR-2026-06-002",
+      "downDate": "2026-06-12T12:38:50.000Z",
+      "downAmount": 20000,
+      "downPaid": true
+    },
+    "eventId": "",
+    "studentId": "BCA-W32-9804",
+    "callHistory": [
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781102138173,
+        "followUpDate": "2026-06-10T10:00",
+        "status": "Call back later",
+        "dateStr": "Jun 10, 2026 08:05 PM",
+        "operator": "Naveen"
+      },
+      {
+        "followUpDate": "2026-06-10T10:00",
+        "timestamp": 1781209562293,
+        "operator": "Naveen",
+        "dateStr": "Jun 12, 2026 01:56 AM",
+        "status": "Call back later",
+        "notes": "(No notes)"
+      }
+    ],
+    "updatedBy": "Naveen",
+    "followUpDate": "2026-06-10T10:00",
+    "name": "munasinghe",
+    "source": "Walk In",
+    "countryCode": "+94"
+  },
+  {
+    "id": "EzCOGi8B5TTTPBIlK6Ql",
+    "whatsappHistory": [],
+    "notes": "",
+    "phone": "+94546464456",
+    "status": "Need Call",
+    "createdAt": "2026-06-12T23:56:24.000Z",
+    "updatedAt": "2026-06-12T23:56:24.000Z",
+    "callAttempts": 0,
+    "callHistory": [],
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "countryCode": "+94",
+    "source": "Walk In",
+    "name": "Unknown"
+  },
+  {
+    "id": "LjRZEnyiMiLFZRPg1AQu",
+    "callHistory": [
+      {
+        "timestamp": 1781102820660,
+        "followUpDate": "2026-06-11T10:00",
+        "status": "User busy",
+        "dateStr": "Jun 10, 2026 08:17 PM",
+        "operator": "Naveen",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "status": "User busy",
+        "dateStr": "Jun 10, 2026 08:17 PM",
+        "operator": "Naveen",
+        "timestamp": 1781102834268,
+        "followUpDate": "2026-06-11T10:00"
+      },
+      {
+        "notes": "(No notes)",
+        "status": "User busy",
+        "dateStr": "Jun 10, 2026 08:17 PM",
+        "operator": "Naveen",
+        "timestamp": 1781102838688,
+        "followUpDate": "2026-06-11T10:00"
+      },
+      {
+        "notes": "(No notes)",
+        "operator": "Naveen",
+        "status": "User busy",
+        "dateStr": "Jun 10, 2026 08:17 PM",
+        "followUpDate": "2026-06-11T10:00",
+        "timestamp": 1781102845255
+      },
+      {
+        "timestamp": 1781269635216,
+        "operator": "Naveen",
+        "dateStr": "Jun 12, 2026 06:37 PM",
+        "status": "Hold",
+        "notes": "(No notes)"
+      }
+    ],
+    "updatedBy": "Naveen",
+    "eventId": "",
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "movedToHoldAt": "2026-06-10T14:47:32.000Z",
+    "name": "himali",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "followUpDate": "2026-06-11T10:00",
+    "notes": "",
+    "whatsappHistory": [],
+    "movedToHoldReason": "Max attempts reached",
+    "phone": "+94345353353",
+    "status": "Hold",
+    "createdAt": "2026-06-10T10:12:28.000Z",
+    "updatedAt": "2026-06-12T13:07:16.000Z",
+    "lastUpdatedAt": "2026-06-12T13:07:16.000Z",
+    "callAttempts": 4
+  },
+  {
+    "id": "Mxae2LY1RLJV4vixMZ1r",
+    "phone": "+94546546454565",
+    "status": "Need Call",
+    "notes": "",
+    "whatsappHistory": [],
+    "updatedAt": "2026-06-12T23:56:12.000Z",
+    "callAttempts": 0,
+    "createdAt": "2026-06-12T23:56:12.000Z",
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "callHistory": [],
+    "countryCode": "+94",
+    "source": "Walk In",
+    "name": "Unknown"
+  },
+  {
+    "id": "OEbzsYvzGXfNnt94Y9Tu",
+    "name": "Unknown",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "callHistory": [],
+    "callAttempts": 0,
+    "updatedAt": "2026-06-12T23:55:58.000Z",
+    "createdAt": "2026-06-12T23:55:58.000Z",
+    "status": "Need Call",
+    "phone": "+94576565765576576",
+    "notes": "",
+    "whatsappHistory": []
+  },
+  {
+    "id": "QV7tX1t5aXTr6D2aPywo",
+    "callAttempts": 1,
+    "updatedAt": "2026-06-12T11:06:55.000Z",
+    "studentDocId": "b47KZ9NnepCfswZxQP0z",
+    "enrolledDate": "2026-06-12T11:06:55.000Z",
+    "createdAt": "2026-06-10T08:46:08.000Z",
+    "status": "Enrolled",
+    "phone": "+94457473578",
+    "notes": "",
+    "whatsappHistory": [],
+    "followUpDate": null,
+    "name": "kamal",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "payment": {
+      "receiptNo": "BR-2026-06-002",
+      "downMethod": "bank",
+      "downPaid": true,
+      "downAmount": 20000,
+      "downDate": "2026-06-12T11:06:55.000Z"
+    },
+    "eventId": "",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "notes": "(No notes)",
+        "operator": "Naveen",
+        "status": "Might Join",
+        "dateStr": "Jun 10, 2026 02:24 PM",
+        "followUpDate": null,
+        "timestamp": 1781081684615
+      }
+    ],
+    "studentId": "BCA-W32-0001"
+  },
+  {
+    "id": "SDj791svqPe34dcLWWzO",
+    "notes": "",
+    "whatsappHistory": [],
+    "phone": "+9456575757",
+    "status": "Need Call",
+    "createdAt": "2026-06-10T10:12:31.000Z",
+    "updatedAt": "2026-06-10T10:12:31.000Z",
+    "callAttempts": 0,
+    "callHistory": [],
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "name": "Unknown"
+  },
+  {
+    "id": "SGlz6sRJg12F2ZzXOUL5",
+    "callHistory": [],
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "name": "Unknown",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "notes": "",
+    "whatsappHistory": [],
+    "status": "Need Call",
+    "phone": "+943232323232",
+    "createdAt": "2026-06-12T23:45:36.000Z",
+    "callAttempts": 0,
+    "updatedAt": "2026-06-12T23:45:36.000Z"
+  },
+  {
+    "id": "V1Kkm9yRLtnQn9bXbLhm",
+    "lastUpdatedAt": "2026-06-12T12:34:59.000Z",
+    "updatedAt": "2026-06-12T12:36:25.000Z",
+    "callAttempts": 2,
+    "enrolledDate": "2026-06-12T12:36:25.000Z",
+    "createdAt": "2026-06-10T07:24:09.000Z",
+    "studentDocId": "ZpYqyxlmgA8sKaRkZWjZ",
+    "phone": "+94750757432",
+    "status": "Enrolled",
+    "notes": "",
+    "whatsappHistory": [
+      {
+        "timestamp": 1781080087007,
+        "dateStr": "Jun 10, 2026 01:58 PM",
+        "preview": "Hi Unknown! 👋\n\nThank you for your interest in Buono Academy! 🎓\n\nPlease let us know which course yo...",
+        "type": "multi",
+        "sentBy": "Naveen"
+      }
+    ],
+    "followUpDate": null,
+    "source": "Walk In",
+    "name": "suranimal",
+    "lastWhatsAppSent": "2026-06-10T08:28:07.000Z",
+    "payment": {
+      "downMethod": "card",
+      "receiptNo": "BR-2026-06-001",
+      "downAmount": 20000,
+      "downDate": "2026-06-12T12:36:25.000Z",
+      "downPaid": true
+    },
+    "courseInterest": "SCA Foundation",
+    "createdBy": "Naveen",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "timestamp": 1781080173217,
+        "followUpDate": null,
+        "dateStr": "Jun 10, 2026 01:59 PM",
+        "status": "Might Join",
+        "operator": "Naveen",
+        "notes": "none"
+      },
+      {
+        "operator": "Naveen",
+        "status": "Might Join",
+        "dateStr": "Jun 12, 2026 06:04 PM",
+        "followUpDate": null,
+        "timestamp": 1781267697976,
+        "notes": "(No notes)"
+      }
+    ],
+    "studentId": "BCA-W32-4848",
+    "eventId": ""
+  },
+  {
+    "id": "WJhvL3GAmXLcCFYKgAMf",
+    "notes": "",
+    "whatsappHistory": [],
+    "status": "Hold",
+    "phone": "+94557578908",
+    "createdAt": "2026-06-10T08:46:22.000Z",
+    "callAttempts": 6,
+    "updatedAt": "2026-06-12T11:14:16.000Z",
+    "lastUpdatedAt": "2026-06-12T11:14:16.000Z",
+    "eventId": "",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781082735907,
+        "followUpDate": null,
+        "dateStr": "Jun 10, 2026 02:42 PM",
+        "status": "Might Join",
+        "operator": "Naveen"
+      },
+      {
+        "followUpDate": null,
+        "timestamp": 1781082747027,
+        "operator": "Naveen",
+        "status": "Might Join",
+        "dateStr": "Jun 10, 2026 02:42 PM",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781082761572,
+        "followUpDate": null,
+        "dateStr": "Jun 10, 2026 02:42 PM",
+        "status": "Might Join",
+        "operator": "Naveen"
+      },
+      {
+        "followUpDate": null,
+        "timestamp": 1781082779752,
+        "operator": "Naveen",
+        "dateStr": "Jun 10, 2026 02:42 PM",
+        "status": "Might Join",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781094847682,
+        "followUpDate": null,
+        "dateStr": "Jun 10, 2026 06:04 PM",
+        "status": "Might Join",
+        "operator": "Naveen"
+      },
+      {
+        "followUpDate": null,
+        "timestamp": 1781094864326,
+        "operator": "Naveen",
+        "dateStr": "Jun 10, 2026 06:04 PM",
+        "status": "Might Join",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "operator": "Naveen",
+        "status": "Might Join",
+        "dateStr": "Jun 10, 2026 07:57 PM",
+        "followUpDate": "2026-06-10T10:00",
+        "timestamp": 1781101651766
+      },
+      {
+        "timestamp": 1781101673614,
+        "followUpDate": "2026-06-10T10:00",
+        "status": "Might Join",
+        "dateStr": "Jun 10, 2026 07:57 PM",
+        "operator": "Naveen",
+        "notes": "(No notes)"
+      },
+      {
+        "timestamp": 1781262855818,
+        "followUpDate": "2026-06-10T10:00",
+        "status": "Hold",
+        "dateStr": "Jun 12, 2026 04:44 PM",
+        "operator": "Naveen",
+        "notes": "(No notes)"
+      }
+    ],
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "name": "Nimal",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "followUpDate": "2026-06-10T10:00"
+  },
+  {
+    "id": "Y1TyUr4XD1O3XjWcLDDr",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "status": "Might Join",
+        "dateStr": "Jun 12, 2026 11:09 PM",
+        "operator": "Naveen",
+        "timestamp": 1781285977251,
+        "followUpDate": "2026-06-15T10:00",
+        "notes": "(No notes)"
+      }
+    ],
+    "studentId": "BCA-W32-0003",
+    "eventId": "",
+    "courseInterest": "SCA Foundation",
+    "createdBy": "Naveen",
+    "countryCode": "+94",
+    "name": "Ranil",
+    "source": "WhatsApp",
+    "followUpDate": "2026-06-15T10:00",
+    "whatsappHistory": [],
+    "notes": "",
+    "phone": "+9476096843",
+    "status": "Enrolled",
+    "enrolledDate": "2026-06-12T17:40:57.000Z",
+    "createdAt": "2026-06-12T12:48:25.000Z",
+    "studentDocId": "dAGB5dFsNhPLS965AmOq",
+    "lastUpdatedAt": "2026-06-12T17:39:38.000Z",
+    "updatedAt": "2026-06-12T17:40:57.000Z",
+    "callAttempts": 1
+  },
+  {
+    "id": "ZMswyD0Lhnb2d0pj3n94",
+    "eventId": "",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "notes": "none",
+        "timestamp": 1781080219835,
+        "followUpDate": null,
+        "status": "Switch off",
+        "dateStr": "Jun 10, 2026 02:00 PM",
+        "operator": "Naveen"
+      },
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781082841397,
+        "followUpDate": null,
+        "dateStr": "Jun 10, 2026 02:44 PM",
+        "status": "Call back later",
+        "operator": "Naveen"
+      },
+      {
+        "operator": "Naveen",
+        "status": "Call back later",
+        "dateStr": "Jun 12, 2026 01:55 AM",
+        "followUpDate": null,
+        "timestamp": 1781209549443,
+        "notes": "(No notes)"
+      }
+    ],
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "source": "Walk In",
+    "name": "kulasinghe",
+    "followUpDate": null,
+    "notes": "",
+    "status": "Call back later",
+    "phone": "+94758907868",
+    "createdAt": "2026-06-10T07:44:43.000Z",
+    "callAttempts": 2,
+    "lastUpdatedAt": "2026-06-11T20:25:51.000Z",
+    "updatedAt": "2026-06-11T20:25:51.000Z"
+  },
+  {
+    "id": "giPsGZKGis8LnzeeRV6Z",
+    "studentDocId": "QBu8jptTgi0BbiOxUpF5",
+    "enrolledDate": "2026-06-12T12:50:41.000Z",
+    "createdAt": "2026-06-12T12:50:41.000Z",
+    "address": "",
+    "callAttempts": 0,
+    "updatedAt": "2026-06-12T23:45:07.000Z",
+    "lastUpdatedAt": "2026-06-12T23:45:07.000Z",
+    "whatsappHistory": [],
+    "status": "Enrolled",
+    "phone": "+94575858759",
+    "name": "saranaka",
+    "countryCode": "+94",
+    "source": "Walk In",
+    "nic": "",
+    "followUpDate": null,
+    "eventId": "",
+    "email": "",
+    "studentId": "BCA-W32-0002",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781307906698,
+        "followUpDate": null,
+        "status": "Enrolled",
+        "dateStr": "6/13/26, 5:15 AM",
+        "operator": "Naveen"
+      }
+    ],
+    "createdBy": "Naveen",
+    "courseInterest": "SCA Foundation",
+    "payment": {
+      "receiptNo": "BR-2026-06-002",
+      "downMethod": "cash",
+      "downPaid": true,
+      "downAmount": 20000,
+      "downDate": "2026-06-12T12:50:41.000Z"
+    }
+  },
+  {
+    "id": "lhlAz67ogIxof1Sq6kJD",
+    "callAttempts": 0,
+    "updatedAt": "2026-06-12T23:56:21.000Z",
+    "createdAt": "2026-06-12T23:56:21.000Z",
+    "status": "Need Call",
+    "phone": "+9446546546",
+    "notes": "",
+    "whatsappHistory": [],
+    "name": "Unknown",
+    "countryCode": "+94",
+    "source": "Walk In",
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "callHistory": []
+  },
+  {
+    "id": "liZgURHwqxfzASkDCJbo",
+    "studentDocId": "1wEFsDZLiBLtpVt0mU9R",
+    "address": "",
+    "enrolledDate": "2026-06-12T12:49:52.000Z",
+    "createdAt": "2026-06-12T12:49:52.000Z",
+    "callAttempts": 0,
+    "whatsappHistory": [],
+    "status": "Enrolled",
+    "phone": "+94755655997",
+    "countryCode": "+94",
+    "source": "Walk In",
+    "name": "Buddadasa",
+    "nic": "",
+    "callHistory": [],
+    "studentId": "BCA-W32-0001",
+    "email": "",
+    "courseInterest": "SCA Foundation",
+    "createdBy": "Naveen",
+    "payment": {
+      "downPaid": true,
+      "downDate": "2026-06-12T12:49:52.000Z",
+      "downAmount": 20000,
+      "receiptNo": "BR-2026-06-001",
+      "downMethod": "cash"
+    }
+  },
+  {
+    "id": "mFhuRReORgC9AmioOXdb",
+    "whatsappHistory": [],
+    "notes": "",
+    "phone": "+9432121321",
+    "status": "Need Call",
+    "createdAt": "2026-06-10T12:32:36.000Z",
+    "updatedAt": "2026-06-10T12:32:36.000Z",
+    "callAttempts": 0,
+    "callHistory": [],
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "name": "Unknown",
+    "source": "Walk In",
+    "countryCode": "+94"
+  },
+  {
+    "id": "pYMEOT0sGVCpeRRtxxFY",
+    "createdAt": "2026-06-12T23:56:08.000Z",
+    "updatedAt": "2026-06-12T23:56:08.000Z",
+    "callAttempts": 0,
+    "notes": "",
+    "whatsappHistory": [],
+    "phone": "+94454564546",
+    "status": "Need Call",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "name": "Unknown",
+    "callHistory": [],
+    "createdBy": "Naveen",
+    "courseInterest": ""
+  },
+  {
+    "id": "sYhF3Tbdpog8O28IVGlg",
+    "status": "Need Call",
+    "phone": "+9445464646",
+    "notes": "",
+    "whatsappHistory": [],
+    "callAttempts": 0,
+    "updatedAt": "2026-06-12T23:56:01.000Z",
+    "createdAt": "2026-06-12T23:56:01.000Z",
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "callHistory": [],
+    "name": "Unknown",
+    "source": "Walk In",
+    "countryCode": "+94"
+  },
+  {
+    "id": "uoQZpXH6XqpCqTgs00K2",
+    "createdAt": "2026-06-12T23:55:52.000Z",
+    "updatedAt": "2026-06-12T23:55:52.000Z",
+    "callAttempts": 0,
+    "notes": "",
+    "whatsappHistory": [],
+    "phone": "+94557657576",
+    "status": "Need Call",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "name": "Unknown",
+    "callHistory": [],
+    "createdBy": "Naveen",
+    "courseInterest": ""
+  },
+  {
+    "id": "xGE9fxowBNGLdXPuz02K",
+    "notes": "",
+    "whatsappHistory": [],
+    "status": "Hold",
+    "phone": "+94768686868",
+    "createdAt": "2026-06-10T10:12:24.000Z",
+    "callAttempts": 8,
+    "updatedAt": "2026-06-12T13:07:21.000Z",
+    "lastUpdatedAt": "2026-06-12T13:07:21.000Z",
+    "eventId": "",
+    "updatedBy": "Naveen",
+    "callHistory": [
+      {
+        "followUpDate": null,
+        "timestamp": 1781086370699,
+        "operator": "Naveen",
+        "dateStr": "Jun 10, 2026 03:42 PM",
+        "status": "Need Call",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "status": "Will decide and get back to us",
+        "dateStr": "Jun 10, 2026 03:43 PM",
+        "operator": "Naveen",
+        "timestamp": 1781086386106,
+        "followUpDate": null
+      },
+      {
+        "followUpDate": "2026-06-11T10:00",
+        "timestamp": 1781101716318,
+        "operator": "Naveen",
+        "dateStr": "Jun 10, 2026 07:58 PM",
+        "status": "Will decide and get back to us",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "dateStr": "Jun 10, 2026 07:59 PM",
+        "status": "Will decide and get back to us",
+        "operator": "Naveen",
+        "timestamp": 1781101779457,
+        "followUpDate": "2026-06-11T10:00"
+      },
+      {
+        "timestamp": 1781101794833,
+        "followUpDate": "2026-06-11T10:00",
+        "status": "Will decide and get back to us",
+        "dateStr": "Jun 10, 2026 07:59 PM",
+        "operator": "Naveen",
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "dateStr": "Jun 10, 2026 08:16 PM",
+        "status": "Will decide and get back to us",
+        "operator": "Naveen",
+        "timestamp": 1781102761596,
+        "followUpDate": "2026-06-11T10:00"
+      },
+      {
+        "operator": "Naveen",
+        "dateStr": "Jun 11, 2026 08:58 PM",
+        "status": "Will decide and get back to us",
+        "followUpDate": "2026-06-11T10:00",
+        "timestamp": 1781191694217,
+        "notes": "(No notes)"
+      },
+      {
+        "notes": "(No notes)",
+        "followUpDate": "2026-06-11T10:00",
+        "timestamp": 1781191711807,
+        "operator": "Naveen",
+        "status": "Hold",
+        "dateStr": "Jun 11, 2026 08:58 PM"
+      },
+      {
+        "notes": "(No notes)",
+        "timestamp": 1781269640779,
+        "status": "Hold",
+        "dateStr": "Jun 12, 2026 06:37 PM",
+        "operator": "Naveen"
+      }
+    ],
+    "createdBy": "Naveen",
+    "courseInterest": "",
+    "name": "sunil",
+    "source": "Walk In",
+    "countryCode": "+94",
+    "followUpDate": "2026-06-11T10:00"
+  },
+  {
+    "id": "xpmHaIVKltgJk7Z5Pe9u",
+    "updatedAt": "2026-06-12T23:56:04.000Z",
+    "callAttempts": 0,
+    "createdAt": "2026-06-12T23:56:04.000Z",
+    "phone": "+94345345354",
+    "status": "Need Call",
+    "notes": "",
+    "whatsappHistory": [],
+    "source": "Walk In",
+    "countryCode": "+94",
+    "name": "Unknown",
+    "courseInterest": "",
+    "createdBy": "Naveen",
+    "callHistory": []
+  }
+]

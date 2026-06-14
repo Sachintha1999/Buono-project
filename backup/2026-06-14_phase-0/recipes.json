@@ -1,0 +1,36 @@
+[
+  {
+    "id": "lrG6G8H4ZG5PdbRMrlMO",
+    "category": "Hot Beverages",
+    "sellingPrice": 0,
+    "margin": 0,
+    "fullCost": 402.5,
+    "updatedBy": "Naveen",
+    "createdBy": "Naveen",
+    "createdAt": "2026-06-06T14:22:12.000Z",
+    "ingredientCost": 287.5,
+    "recipeName": "Cappuchino",
+    "profit": -402.5,
+    "overhead": 115,
+    "updatedAt": "2026-06-06T14:22:12.000Z",
+    "notes": "",
+    "ingredients": [
+      {
+        "quantity": 0.018,
+        "itemId": "OFbAdoepWhY4qTcJyPjr",
+        "unit": "kg",
+        "itemName": "Coffe",
+        "pricePerUnit": 11000,
+        "cost": 197.99999999999997
+      },
+      {
+        "itemName": "Fresh Milk",
+        "pricePerUnit": 500,
+        "cost": 89.5,
+        "quantity": 0.179,
+        "unit": "L",
+        "itemId": "mlE18M4E7Gbi0ENBbmXC"
+      }
+    ]
+  }
+]

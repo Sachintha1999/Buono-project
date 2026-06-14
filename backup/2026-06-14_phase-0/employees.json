@@ -1,0 +1,252 @@
+[
+  {
+    "id": "HkBknlyRS7OXqPhQcHxm",
+    "naveenSetupAt": "2026-06-14T06:33:01.000Z",
+    "access": "Admin",
+    "migratedAt": "2026-06-14T06:32:57.000Z",
+    "permissions": {
+      "purchasingDB": {
+        "add": true,
+        "edit": true,
+        "view": true,
+        "delete": true,
+        "selfView": true
+      },
+      "dayEndReportDB": {
+        "delete": true,
+        "selfView": true,
+        "add": true,
+        "edit": true,
+        "view": true
+      },
+      "studentDB": {
+        "selfView": true,
+        "delete": true,
+        "edit": true,
+        "view": true,
+        "add": true
+      },
+      "reportsDB": {
+        "add": true,
+        "view": true,
+        "edit": true,
+        "delete": true,
+        "selfView": true
+      },
+      "inventoryDB": {
+        "delete": true,
+        "selfView": true,
+        "edit": true,
+        "view": true,
+        "add": true
+      },
+      "employeeDB": {
+        "delete": true,
+        "selfView": true,
+        "add": true,
+        "edit": true,
+        "view": true
+      },
+      "kitchenDB": {
+        "edit": true,
+        "view": true,
+        "add": true,
+        "selfView": true,
+        "delete": true
+      },
+      "paymentDB": {
+        "add": true,
+        "view": true,
+        "edit": true,
+        "selfView": true,
+        "delete": true
+      },
+      "callCenterDB": {
+        "add": true,
+        "edit": true,
+        "view": true,
+        "selfView": true,
+        "delete": true
+      },
+      "settingsDB": {
+        "delete": true,
+        "selfView": true,
+        "add": true,
+        "edit": true,
+        "view": true
+      }
+    },
+    "password": "1234",
+    "email": "snaveenkulasinghe@gmail.com",
+    "name": "Naveen",
+    "authUid": "BlP1hvnKspNh3QaEuDpp6pqUkVV2",
+    "createdAt": "2026-06-05T07:06:23.000Z",
+    "nickname": "Naveen",
+    "approvalStatus": "approved",
+    "emailVerified": true
+  },
+  {
+    "id": "ItTkxi79AlSb1HPcRxkH",
+    "access": "Cashier",
+    "migratedAt": "2026-06-14T06:32:57.000Z",
+    "password": "siri",
+    "permissions": {
+      "dayEndReportDB": {
+        "selfView": true,
+        "delete": false,
+        "view": false,
+        "edit": false,
+        "add": true
+      },
+      "employeeDB": {
+        "view": false,
+        "edit": false,
+        "add": false,
+        "delete": false,
+        "selfView": true
+      }
+    },
+    "name": "Siriwardana AIya",
+    "createdAt": "2026-06-05T11:23:02.000Z",
+    "authUid": "",
+    "approvalStatus": "approved",
+    "nickname": "siri"
+  },
+  {
+    "id": "UG13cZO9CfDNKukJnTcT",
+    "access": "Manager",
+    "migratedAt": "2026-06-14T06:32:58.000Z",
+    "permissions": {
+      "dayEndReportDB": {
+        "selfView": false,
+        "delete": true,
+        "add": false,
+        "view": true,
+        "edit": false
+      },
+      "reportsDB": {
+        "add": true,
+        "edit": true,
+        "view": true,
+        "selfView": true,
+        "delete": false
+      },
+      "inventoryDB": {
+        "delete": false,
+        "selfView": true,
+        "add": false,
+        "view": true,
+        "edit": false
+      },
+      "employeeDB": {
+        "selfView": true,
+        "delete": true,
+        "view": true,
+        "edit": true,
+        "add": true
+      },
+      "purchasingDB": {
+        "view": true,
+        "edit": false,
+        "add": false,
+        "selfView": true,
+        "delete": false
+      },
+      "kitchenDB": {
+        "selfView": true,
+        "delete": false,
+        "edit": false,
+        "view": true,
+        "add": false
+      }
+    },
+    "password": "owner",
+    "name": "TIshan",
+    "authUid": "",
+    "createdAt": "2026-06-05T07:31:52.000Z",
+    "approvalStatus": "approved",
+    "nickname": "Tishan"
+  },
+  {
+    "id": "mIKo5nBRtDIbjSe2YwMh",
+    "migratedAt": "2026-06-14T06:32:58.000Z",
+    "permissions": {
+      "inventoryDB": {
+        "selfView": true,
+        "delete": false,
+        "edit": false,
+        "view": true,
+        "add": true
+      },
+      "employeeDB": {
+        "edit": false,
+        "view": false,
+        "add": false,
+        "delete": false,
+        "selfView": true
+      },
+      "dayEndReportDB": {
+        "view": false,
+        "edit": false,
+        "add": false,
+        "selfView": false,
+        "delete": false
+      },
+      "kitchenDB": {
+        "view": false,
+        "edit": false,
+        "add": false,
+        "delete": false,
+        "selfView": false
+      }
+    },
+    "password": "chami123",
+    "access": "Purchasing Officer",
+    "nickname": "Chamika",
+    "approvalStatus": "approved",
+    "name": "Chamika",
+    "authUid": "",
+    "createdAt": "2026-06-07T04:41:34.000Z"
+  },
+  {
+    "id": "vlIMqTXBKNaPvl660Nlg",
+    "access": "Head Chef",
+    "migratedAt": "2026-06-14T06:32:59.000Z",
+    "permissions": {
+      "inventoryDB": {
+        "delete": false,
+        "selfView": false,
+        "edit": false,
+        "view": false,
+        "add": false
+      },
+      "employeeDB": {
+        "delete": false,
+        "selfView": true,
+        "view": false,
+        "edit": false,
+        "add": false
+      },
+      "dayEndReportDB": {
+        "delete": false,
+        "selfView": false,
+        "add": false,
+        "edit": false,
+        "view": false
+      },
+      "kitchenDB": {
+        "view": false,
+        "edit": false,
+        "add": true,
+        "delete": false,
+        "selfView": true
+      }
+    },
+    "password": "suji",
+    "name": "Sujith",
+    "authUid": "",
+    "createdAt": "2026-06-06T16:46:14.000Z",
+    "approvalStatus": "approved",
+    "nickname": "suji"
+  }
+]

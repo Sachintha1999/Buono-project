@@ -1,0 +1,34 @@
+[
+  {
+    "id": "IMWVMHKl0RN7Ob7bwkTt",
+    "updatedBy": "Naveen",
+    "paymentIntervalDays": 7,
+    "createdBy": "System",
+    "createdAt": "2026-06-12T15:48:27.000Z",
+    "downPayment": 20000,
+    "academy": "SCA",
+    "name": "SCA Foundation",
+    "installmentCount": 2,
+    "fee": 65000,
+    "updatedAt": "2026-06-12T15:50:07.000Z",
+    "duration": 1
+  },
+  {
+    "id": "cwgnykF8LIlXH2hcp6d0",
+    "downPayment": 35000,
+    "createdAt": "2026-06-12T15:48:27.000Z",
+    "academy": "SCA",
+    "name": "SCA Brewing",
+    "fee": 70000,
+    "createdBy": "System"
+  },
+  {
+    "id": "nm4k1WAu3J2IxhrSf5xT",
+    "academy": "SCA",
+    "name": "SCA Intermediate",
+    "downPayment": 50000,
+    "createdAt": "2026-06-12T15:48:27.000Z",
+    "createdBy": "System",
+    "fee": 130000
+  }
+]

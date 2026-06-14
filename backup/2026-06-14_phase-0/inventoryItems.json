@@ -1,0 +1,30 @@
+[
+  {
+    "id": "OFbAdoepWhY4qTcJyPjr",
+    "minStock": 0,
+    "createdAt": "2026-06-06T14:21:32.000Z",
+    "unit": "kg",
+    "currentStock": 6,
+    "updatedAt": "2026-06-08T05:14:55.000Z",
+    "itemName": "Coffe",
+    "category": "Supplies",
+    "notes": "",
+    "updatedBy": "Naveen",
+    "createdBy": "Naveen",
+    "pricePerUnit": 11000
+  },
+  {
+    "id": "mlE18M4E7Gbi0ENBbmXC",
+    "updatedAt": "2026-06-07T14:46:58.000Z",
+    "itemName": "Fresh Milk",
+    "category": "Dairy",
+    "currentStock": 6,
+    "unit": "L",
+    "createdAt": "2026-06-06T14:21:15.000Z",
+    "minStock": 0,
+    "pricePerUnit": 600,
+    "createdBy": "Naveen",
+    "notes": "",
+    "updatedBy": "Naveen"
+  }
+]

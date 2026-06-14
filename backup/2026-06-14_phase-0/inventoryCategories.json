@@ -1,0 +1,74 @@
+[
+  {
+    "id": "0YM4qfz0ukkZdw5dEDtw",
+    "name": "Cleaning",
+    "description": "Soap, Detergent",
+    "createdAt": "2026-06-06T08:11:02.000Z",
+    "createdBy": "Naveen",
+    "icon": "🧴"
+  },
+  {
+    "id": "E88YWNzKfpHcgy71zuhg",
+    "icon": "🌾",
+    "createdBy": "Naveen",
+    "name": "Dry Goods",
+    "createdAt": "2026-06-06T08:11:01.000Z",
+    "description": "Flour, Sugar, Rice, Salt"
+  },
+  {
+    "id": "N2HLGMGfbRCxTJLkn3p9",
+    "createdBy": "Naveen",
+    "icon": "❄️",
+    "name": "Frozen",
+    "description": "Ice cream, Frozen items",
+    "createdAt": "2026-06-06T08:11:02.000Z"
+  },
+  {
+    "id": "VsGJsblPdV8uDiT5rhdS",
+    "name": "Beverages",
+    "description": "Coffee, Tea, Juices",
+    "createdAt": "2026-06-06T08:10:59.000Z",
+    "createdBy": "Naveen",
+    "icon": "☕"
+  },
+  {
+    "id": "Z09QX6YwZzySS7Ag3Pey",
+    "name": "Meat & Seafood",
+    "description": "Chicken, Fish, Beef",
+    "createdAt": "2026-06-06T08:11:01.000Z",
+    "createdBy": "Naveen",
+    "icon": "🥩"
+  },
+  {
+    "id": "fLpIde6GDzPYcN5XxV7t",
+    "description": "Vegetables, Fruits",
+    "createdAt": "2026-06-06T08:11:02.000Z",
+    "name": "Fresh Produce",
+    "createdBy": "Naveen",
+    "icon": "🥬"
+  },
+  {
+    "id": "mT2x9UzWa7i1w2H07xiA",
+    "name": "Dairy",
+    "description": "Milk, Cheese, Butter",
+    "createdAt": "2026-06-06T08:11:00.000Z",
+    "createdBy": "Naveen",
+    "icon": "🥛"
+  },
+  {
+    "id": "oMxTyZreHP6dzCerYB7N",
+    "createdAt": "2026-06-06T08:11:00.000Z",
+    "description": "Bread, Cakes, Pastries",
+    "name": "Bakery",
+    "icon": "🍞",
+    "createdBy": "Naveen"
+  },
+  {
+    "id": "wm3dcU5bBdL1jySpXNGf",
+    "createdBy": "Naveen",
+    "icon": "📦",
+    "description": "Cups, Plates, Napkins",
+    "createdAt": "2026-06-06T08:11:03.000Z",
+    "name": "Supplies"
+  }
+]

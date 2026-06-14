@@ -1,0 +1,44 @@
+[
+  {
+    "id": "Z2W8u4drT3VAdgj4HIrZ",
+    "originalBillTotal": 42600,
+    "supplierName": "colombo street",
+    "reasonText": "Quality Issue",
+    "returnTotal": 30000,
+    "originalBillNumber": "12-R",
+    "originalPurchaseDate": "2026-06-07",
+    "reasonCode": "quality",
+    "supplierId": "M3VWG7YWQ4b65RJ1Keyf",
+    "approvalNotes": "",
+    "stockAdjusted": true,
+    "itemsCount": 1,
+    "notes": "",
+    "actionAt": "2026-06-08T05:14:55.000Z",
+    "createdAt": "2026-06-08T04:27:57.000Z",
+    "creditNoteNumber": "SCN-260608-806",
+    "actionByName": "Naveen",
+    "rejectedReason": "",
+    "originalPurchaseId": "YVrk7TlUbqCkYNpch5O6",
+    "returnNumber": "RET-260608-597",
+    "status": "approved",
+    "creditNoteCreated": true,
+    "creditNoteId": "6UlSn70rG5OnTBsKDXYN",
+    "performedBy": "Naveen",
+    "supplierPhone": "0754502681",
+    "updatedAt": "2026-06-08T04:27:57.000Z",
+    "performedByName": "Naveen",
+    "actionBy": "Naveen",
+    "items": [
+      {
+        "availableQuantity": 3,
+        "originalQuantity": 3,
+        "returnQuantity": 3,
+        "pricePerUnit": 10000,
+        "itemName": "Coffe",
+        "unit": "kg",
+        "itemId": "OFbAdoepWhY4qTcJyPjr",
+        "returnCost": 30000
+      }
+    ]
+  }
+]

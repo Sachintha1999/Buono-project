@@ -1,0 +1,39 @@
+[
+  {
+    "id": "academy",
+    "discountCodes": [
+      {
+        "code": "BCSAUGSRT",
+        "value": 10,
+        "type": "percentage"
+      }
+    ],
+    "defaultInstallments": 2,
+    "academyFullName": "Specialty Academy Ceylon",
+    "businessAddress": "",
+    "bankAccountName": "",
+    "businessWebsite": "",
+    "updatedAt": "2026-06-11T17:40:03.000Z",
+    "businessTagline": "",
+    "currentBatch": "W32",
+    "mCash": "",
+    "ezCash": "",
+    "bankName": "",
+    "paymentMethods": {
+      "online": true,
+      "card": true,
+      "bank": true,
+      "cash": true
+    },
+    "whatsappTemplate": "🎓 *{businessName}*\n\n✅ Payment Received!\n\nDear *{studentName}*,\n\nYour payment has been successfully recorded.\n\n📋 *Details:*\n• Receipt No: {receiptNo}\n• Course: {courseName}\n• Batch: {batchNo}\n• Amount Paid: Rs. {amount}\n• Balance: Rs. {balance}\n\n🆔 *Student ID:* {studentId}\n🔑 *Password:* {password}\n\nThank you! 🙏",
+    "businessPhone": "0750757432",
+    "studentIdPrefix": "BCA",
+    "businessEmail": "",
+    "updatedBy": "Naveen",
+    "bankAccountNumber": "",
+    "businessName": "Buono Cafe & Academy",
+    "academyShortName": "SAC",
+    "businessWhatsapp": "",
+    "bankBranch": ""
+  }
+]
