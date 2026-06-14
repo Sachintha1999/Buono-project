@@ -2,6 +2,18 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
+    
+    <!-- ⭐ AUTO-REDIRECT: Not logged in → Welcome page -->
+    <script>
+        (function() {
+            const user = sessionStorage.getItem('loggedInUser');
+            const student = sessionStorage.getItem('loggedInStudent');
+            if (!user && !student) {
+                window.location.replace('welcome.html');
+            }
+        })();
+    </script>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Employee Database</title>
     <link rel="stylesheet" href="style.css">

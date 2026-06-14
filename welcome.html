@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Buono Cafe & Academy - Sri Lanka's premier destination for specialty coffee and culinary education.">
+  <meta name="keywords" content="Buono, Cafe, Coffee Academy, Sri Lanka, Barista Training, Culinary School">
+  <meta name="author" content="Buono Cafe & Academy">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Buono - Cafe & Academy">
+  <meta property="og:description" content="Sri Lanka's premier destination for specialty coffee and culinary education.">
+  <meta property="og:type" content="website">
+  
+  <title>Buono - Cafe & Academy | Sri Lanka's Premier Coffee Destination</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="welcome-style.css">
+  
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       🌀 PAGE LOADER
+       ═══════════════════════════════════════════════ -->
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-content">
+      <div class="loader-logo">☕</div>
+      <div class="loader-spinner"></div>
+      <div class="loader-text">Brewing...</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       🫘 FLOATING COFFEE BEANS BACKGROUND
+       ═══════════════════════════════════════════════ -->
+  <div class="coffee-beans-bg" aria-hidden="true">
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       🧭 NAVIGATION
+       ═══════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      
+      <!-- Logo -->
+      <a href="#home" class="nav-logo">
+        <span class="nav-logo-icon">☕</span>
+        <span>Buono</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#menu" class="nav-link">Menu</a></li>
+        <li><a href="#academy" class="nav-link">Academy</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <!-- Desktop CTA -->
+      <div class="nav-cta">
+        <a href="login.html" class="nav-btn nav-btn-outline">Login</a>
+        <a href="signup.html" class="nav-btn nav-btn-filled">Sign Up</a>
+      </div>
+
+      <!-- Mobile Hamburger -->
+      <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+        ☰
+      </button>
+
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="nav-mobile-menu" id="navMobileMenu">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#menu" class="nav-link">Menu</a>
+      <a href="#academy" class="nav-link">Academy</a>
+      <a href="#contact" class="nav-link">Contact</a>
+      <div class="nav-cta">
+        <a href="login.html" class="nav-btn nav-btn-outline">Login</a>
+        <a href="signup.html" class="nav-btn nav-btn-filled">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       🏠 HERO SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-logo">☕</div>
+      <p class="hero-welcome" id="heroWelcome">Welcome to</p>
+      <h1 class="hero-brand" id="heroBrand">Buono</h1>
+      <p class="hero-tagline" id="heroTagline">Cafe & Academy</p>
+      <div class="hero-divider"></div>
+      <p class="hero-subtitle" id="heroSubtitle">Brewing Excellence Since 2024</p>
+      <p class="hero-description" id="heroDescription">
+        Sri Lanka's premier destination for specialty coffee and professional culinary education.
+      </p>
+      <div class="hero-cta">
+        <a href="#menu" class="hero-btn hero-btn-primary">
+          <span>☕</span>
+          <span id="heroCtaPrimary">Explore Menu</span>
+        </a>
+        <a href="#academy" class="hero-btn hero-btn-secondary">
+          <span>🎓</span>
+          <span id="heroCtaSecondary">Join Academy</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="hero-scroll-indicator">
+      <span>Scroll Down</span>
+      <span class="hero-scroll-arrow">↓</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       📖 ABOUT SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        
+        <!-- Content -->
+        <div class="about-content reveal-left">
+          <span class="section-title">About Buono</span>
+          <h2 id="aboutTitle">Our Story</h2>
+          <p id="aboutPara1">
+            Founded in 2024, Buono Cafe & Academy stands as Sri Lanka's most innovative culinary destination.
+          </p>
+          <p id="aboutPara2">
+            From our flagship cafe in Colombo to our world-class academy, we're committed to elevating coffee culture in Sri Lanka.
+          </p>
+          <p id="aboutPara3">
+            Every cup tells a story. Every student becomes a chapter in our journey of excellence.
+          </p>
+        </div>
+
+        <!-- Visual -->
+        <div class="about-visual reveal-right">
+          <div class="about-decoration top-right"></div>
+          <div class="about-image-box">
+            <span>☕</span>
+          </div>
+          <div class="about-decoration bottom-left"></div>
+        </div>
+
+      </div>
+
+      <!-- Stats -->
+      <div class="stats" id="statsContainer">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       ☕ MENU SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="menu" id="menu">
+    <div class="container">
+      
+      <div class="section-header reveal">
+        <span class="section-title">Our Selection</span>
+        <h2 class="section-heading" id="menuTitle">Menu Highlights</h2>
+        <p class="section-subtitle" id="menuSubtitle">
+          Discover our signature offerings crafted with passion
+        </p>
+      </div>
+
+      <div class="menu-grid" id="menuGrid">
+        <!-- Cards filled by JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       🎓 ACADEMY SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="academy" id="academy">
+    <div class="container">
+      
+      <div class="section-header reveal">
+        <span class="section-title">Education</span>
+        <h2 class="section-heading" id="academyTitle">Academy Programs</h2>
+        <p class="section-subtitle" id="academySubtitle">
+          Master the art of coffee and culinary excellence
+        </p>
+      </div>
+
+      <div class="academy-grid" id="academyGrid">
+        <!-- Cards filled by JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       🌟 WHY US SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="why-us">
+    <div class="container">
+      
+      <div class="section-header reveal">
+        <span class="section-title">Excellence</span>
+        <h2 class="section-heading" id="whyUsTitle">Why Choose Buono?</h2>
+        <p class="section-subtitle" id="whyUsSubtitle">
+          Excellence in every detail, passion in every cup
+        </p>
+      </div>
+
+      <div class="why-us-grid" id="whyUsGrid">
+        <!-- Cards filled by JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       💬 TESTIMONIALS SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="testimonials">
+    <div class="container">
+      
+      <div class="section-header reveal">
+        <span class="section-title">Reviews</span>
+        <h2 class="section-heading" id="testimonialsTitle">What Our Family Says</h2>
+        <p class="section-subtitle" id="testimonialsSubtitle">
+          Real stories from our customers and students
+        </p>
+      </div>
+
+      <div class="testimonials-carousel reveal">
+        <div class="testimonials-track" id="testimonialsTrack">
+          <!-- Cards filled by JS -->
+        </div>
+
+        <div class="testimonials-controls" id="testimonialsControls">
+          <!-- Dots filled by JS -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       📞 CONTACT SECTION
+       ═══════════════════════════════════════════════ -->
+  <section class="contact" id="contact">
+    <div class="container">
+      
+      <div class="section-header reveal">
+        <span class="section-title">Connect</span>
+        <h2 class="section-heading" id="contactTitle">Get In Touch</h2>
+        <p class="section-subtitle" id="contactSubtitle">
+          We'd love to hear from you
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        
+        <!-- Left: Contact Info -->
+        <div class="contact-info reveal-left">
+          
+          <div class="contact-item">
+            <span class="contact-item-icon">📍</span>
+            <div class="contact-item-content">
+              <h4>Visit Us</h4>
+              <p id="contactAddress">No. 42, Galle Road, Colombo 03, Sri Lanka</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-item-icon">📞</span>
+            <div class="contact-item-content">
+              <h4>Call Us</h4>
+              <p>
+                <a href="tel:+94112345678" id="contactPhone">+94 11 234 5678</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-item-icon">💬</span>
+            <div class="contact-item-content">
+              <h4>WhatsApp</h4>
+              <p>
+                <a href="https://wa.me/94771234567" id="contactWhatsapp" target="_blank">+94 77 123 4567</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-item-icon">✉️</span>
+            <div class="contact-item-content">
+              <h4>Email Us</h4>
+              <p>
+                <a href="mailto:hello@buonosrilanka.lk" id="contactEmail">hello@buonosrilanka.lk</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Hours + Socials -->
+        <div class="reveal-right">
+          
+          <div class="contact-hours">
+            <h4>⏰ Operating Hours</h4>
+            <ul class="contact-hours-list" id="contactHoursList">
+              <!-- Filled by JS -->
+            </ul>
+
+            <div class="contact-socials" id="contactSocials">
+              <!-- Filled by JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       🦶 FOOTER
+       ═══════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      
+      <!-- Brand -->
+      <div class="footer-brand-section">
+        <div class="footer-logo">
+          <span class="footer-logo-icon">☕</span>
+          <span class="footer-logo-text">Buono</span>
+        </div>
+        <p class="footer-tagline">Cafe & Academy</p>
+        <p class="footer-description" id="footerDescription">
+          Sri Lanka's premier destination for specialty coffee and culinary education.
+        </p>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h5>Subscribe to Newsletter</h5>
+          <form class="newsletter-form" id="newsletterForm" onsubmit="return false;">
+            <input 
+              type="email" 
+              class="newsletter-input" 
+              placeholder="Your email address"
+              id="newsletterEmail"
+              required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul class="footer-links" id="footerQuickLinks">
+          <!-- Filled by JS -->
+        </ul>
+      </div>
+
+      <!-- Services -->
+      <div class="footer-column">
+        <h4>Services</h4>
+        <ul class="footer-links" id="footerServices">
+          <!-- Filled by JS -->
+        </ul>
+      </div>
+
+      <!-- Get Started -->
+      <div class="footer-column">
+        <h4>Get Started</h4>
+        <ul class="footer-links">
+          <li><a href="login.html">🔐 Login</a></li>
+          <li><a href="signup.html">✨ Sign Up</a></li>
+          <li><a href="#academy">🎓 Enroll Course</a></li>
+          <li><a href="#contact">📞 Contact Us</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <p class="footer-copyright" id="footerCopyright">
+        © 2026 Buono Cafe & Academy. All rights reserved.
+      </p>
+      
+      <div class="footer-legal" id="footerLegal">
+        <!-- Filled by JS -->
+      </div>
+
+      <p class="footer-made-with" id="footerMadeWith">
+        Made with ☕ in Sri Lanka
+      </p>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════
+       ⬆️ BACK TO TOP BUTTON
+       ═══════════════════════════════════════════════ -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    ↑
+  </button>
+
+  <!-- ═══════════════════════════════════════════════
+       📜 SCRIPTS
+       ═══════════════════════════════════════════════ -->
+  <script src="welcome-data.js"></script>
+  <script src="welcome-script.js"></script>
+
+</body>
+</html>

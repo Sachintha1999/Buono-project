@@ -10,11 +10,12 @@
       "README.md"
     ],
     "rewrites": [
-      {
-        "source": "**",
-        "destination": "/login.html"
-      }
-    ]
+  {
+    "source": "**",
+    "destination": "/login.html"
+  }
+]
+    
   },
   "firestore": {
     "rules": "firestore.rules",

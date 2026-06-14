@@ -43,6 +43,20 @@
             ❌ Nickname or Password wrong!
         </p>
 
+        <!-- ===== NEW: SIGN UP SECTION ===== -->
+        <div class="login-divider">
+            <span>or</span>
+        </div>
+
+        <div class="signup-section">
+            <p class="signup-text">New to Buono?</p>
+            <a href="signup.html" class="signup-button">
+                <span class="signup-icon">✨</span>
+                <span>Create Account</span>
+            </a>
+        </div>
+        <!-- ===== END NEW SECTION ===== -->
+
         <!-- Login Help Box -->
         <div class="login-help-box">
             <div class="login-help-title">💡 Login Help:</div>
@@ -52,6 +66,50 @@
             </div>
         </div>
     </div>
+
+    <!-- ===== NEW: PENDING APPROVAL MODAL ===== -->
+    <div class="pending-modal-overlay" id="pendingModalOverlay">
+        <div class="pending-modal">
+            <div class="pending-icon">⏳</div>
+            <h2 class="pending-title">Approval Pending</h2>
+            <p class="pending-message" id="pendingMessage">
+                Your account is waiting for admin approval.
+            </p>
+            
+            <div class="pending-info-box">
+                <div class="pending-info-item">
+                    <span class="pending-info-icon">📧</span>
+                    <div class="pending-info-text">
+                        <strong>Email Verification</strong>
+                        <span id="emailVerifyStatus">Please verify your email</span>
+                    </div>
+                </div>
+                <div class="pending-info-item">
+                    <span class="pending-info-icon">⏳</span>
+                    <div class="pending-info-text">
+                        <strong>Admin Review</strong>
+                        <span>Awaiting approval from admin</span>
+                    </div>
+                </div>
+                <div class="pending-info-item">
+                    <span class="pending-info-icon">🔔</span>
+                    <div class="pending-info-text">
+                        <strong>Notification</strong>
+                        <span>You'll be notified once approved</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="pending-applied-date" id="pendingAppliedDate">
+                Applied: -
+            </p>
+
+            <button type="button" class="pending-close-btn" onclick="closePendingModal()">
+                OK, I'll Wait
+            </button>
+        </div>
+    </div>
+    <!-- ===== END PENDING MODAL ===== -->
 
     <!-- ===== FIREBASE SDK ===== -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>

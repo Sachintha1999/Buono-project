@@ -132,6 +132,9 @@ async function loginUser() {
 // ===================================
 // 👤 EMPLOYEE LOGIN
 // ===================================
+// ===================================
+// 👤 EMPLOYEE LOGIN (UPDATED!)
+// ===================================
 async function loginAsEmployee(nickname, password) {
     console.log('🔍 [LOGIN] Searching employee:', nickname);
 
@@ -150,6 +153,33 @@ async function loginAsEmployee(nickname, password) {
 
     if (userData.password !== password) {
         showError("❌ Wrong Password!");
+        setButtonLoading(false);
+        return;
+    }
+
+    // ⭐ NEW: APPROVAL STATUS CHECK
+    if (userData.approvalStatus === 'pending') {
+        console.log('⏳ [LOGIN] Account pending approval');
+        showPendingModal({
+            name: userData.name || nickname,
+            email: userData.email || '',
+            emailVerified: userData.emailVerified || false,
+            signupDate: userData.signupDate,
+            type: 'employee'
+        });
+        setButtonLoading(false);
+        return;
+    }
+
+    if (userData.approvalStatus === 'rejected') {
+        showError("❌ Your application was rejected. Contact admin.");
+        setButtonLoading(false);
+        return;
+    }
+
+    // ⭐ NEW: SUSPENDED CHECK (employees)
+    if (userData.status === 'Suspended') {
+        showError("⛔ Account suspended! Contact admin.");
         setButtonLoading(false);
         return;
     }
@@ -176,9 +206,13 @@ async function loginAsEmployee(nickname, password) {
         window.location.href = 'access.html';
     }, 800);
 }
+   
 
 // ===================================
 // 🎓 STUDENT LOGIN
+// ===================================
+// ===================================
+// 🎓 STUDENT LOGIN (UPDATED!)
 // ===================================
 async function loginAsStudent(studentId, password) {
     console.log('🔍 [LOGIN] Searching student:', studentId);
@@ -199,6 +233,26 @@ async function loginAsStudent(studentId, password) {
 
     if (studentData.password !== password) {
         showError("❌ Wrong Password!");
+        setButtonLoading(false);
+        return;
+    }
+
+    // ⭐ NEW: APPROVAL STATUS CHECK
+    if (studentData.approvalStatus === 'pending') {
+        console.log('⏳ [LOGIN] Student account pending approval');
+        showPendingModal({
+            name: studentData.name,
+            email: studentData.email || '',
+            emailVerified: studentData.emailVerified || false,
+            signupDate: studentData.signupDate,
+            type: 'student'
+        });
+        setButtonLoading(false);
+        return;
+    }
+
+    if (studentData.approvalStatus === 'rejected') {
+        showError("❌ Your application was rejected. Contact admin.");
         setButtonLoading(false);
         return;
     }
@@ -236,6 +290,7 @@ async function loginAsStudent(studentId, password) {
         window.location.href = 'student-portal.html';
     }, 1000);
 }
+      
 
 // ===================================
 // ⌨️ ENTER KEY SUPPORT
@@ -262,3 +317,72 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('🔐 [LOGIN] Script loaded! v3.0 - Optimized');
+
+// ═══════════════════════════════════════════════════
+// ⭐ NEW: PENDING APPROVAL MODAL FUNCTIONS
+// ═══════════════════════════════════════════════════
+
+function showPendingModal(userData) {
+    const overlay = document.getElementById('pendingModalOverlay');
+    const messageEl = document.getElementById('pendingMessage');
+    const emailVerifyEl = document.getElementById('emailVerifyStatus');
+    const appliedDateEl = document.getElementById('pendingAppliedDate');
+    
+    if (!overlay) {
+        console.warn('⚠️ [LOGIN] Pending modal element not found');
+        return;
+    }
+    
+    // Custom message
+    const typeText = userData.type === 'employee' ? 'employee' : 'student';
+    messageEl.textContent = `Hi ${userData.name}! Your ${typeText} account is under review by our admin team.`;
+    
+    // Email verification status
+    if (userData.emailVerified) {
+        emailVerifyEl.innerHTML = '✅ Email verified';
+        emailVerifyEl.style.color = '#51CF66';
+    } else {
+        emailVerifyEl.textContent = `Check ${userData.email} and verify`;
+    }
+    
+    // Applied date
+    if (userData.signupDate) {
+        const date = userData.signupDate.toDate 
+            ? userData.signupDate.toDate() 
+            : new Date(userData.signupDate);
+        appliedDateEl.textContent = `Applied: ${date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}`;
+    } else {
+        appliedDateEl.textContent = 'Applied recently';
+    }
+    
+    overlay.classList.add('active');
+}
+
+function closePendingModal() {
+    const overlay = document.getElementById('pendingModalOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
+    
+    // Clear form
+    document.getElementById('loginNickname').value = '';
+    document.getElementById('loginPassword').value = '';
+}
+
+// Close on overlay click
+document.addEventListener('DOMContentLoaded', function() {
+    const overlay = document.getElementById('pendingModalOverlay');
+    if (overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                closePendingModal();
+            }
+        });
+    }
+});
+
+console.log('⏳ [LOGIN] Pending approval system ready');

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join Buono Cafe & Academy - Create your account">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>Sign Up - Buono Cafe & Academy</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="signup-style.css">
+  
+  <!-- Firebase v8 (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+  <!-- Animated Coffee Beans Background -->
+  <div class="coffee-beans" aria-hidden="true">
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+    <div class="bean"></div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span class="toast-icon" id="toastIcon">ℹ️</span>
+    <span id="toastMessage">Message here</span>
+  </div>
+
+  <!-- Main Container -->
+  <div class="signup-container">
+    <div class="signup-card">
+      
+      <!-- Logo & Header -->
+      <div class="logo-section">
+        <div class="logo-cup">☕</div>
+        <div class="brand-name">Buono</div>
+        <div class="brand-tagline">Cafe & Academy</div>
+        <h1 class="page-title">Create Your Account</h1>
+        <p class="page-subtitle">Join the Buono family today</p>
+      </div>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" novalidate>
+        
+        <!-- ====== PROMO CODE SECTION ====== -->
+        <div class="form-section">
+          <div class="promo-code-group">
+            <div class="form-group">
+              <label class="form-label" for="promoCode">
+                🎫 Promo Code
+              </label>
+              <div class="promo-code-wrapper">
+                <input 
+                  type="text" 
+                  id="promoCode" 
+                  class="form-input promo-code-input"
+                  placeholder="ENTER CODE (OPTIONAL)"
+                  maxlength="25"
+                  autocomplete="off">
+              </div>
+              <p class="promo-hint">
+                💡 Have a code? Enter to unlock employee registration
+              </p>
+              <div id="promoStatus" class="promo-status"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== EMPLOYEE FIELDS (Hidden by default) ====== -->
+        <div id="employeeFields" class="employee-fields">
+          <div class="employee-badge">
+            <span>👔</span>
+            <span>Employee Registration</span>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="nickname">
+              Nickname <span class="required">*</span>
+              <small style="color: var(--text-muted); font-weight: normal;">(for login)</small>
+            </label>
+            <input 
+              type="text" 
+              id="nickname" 
+              class="form-input"
+              placeholder="Enter unique nickname"
+              autocomplete="username">
+            <div class="field-error" id="nicknameError">
+              Nickname is required
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== PERSONAL INFORMATION ====== -->
+        <div class="form-section">
+          <div class="section-title">
+            📝 Personal Information
+          </div>
+
+          <!-- Full Name -->
+          <div class="form-group">
+            <label class="form-label" for="fullName">
+              Full Name <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="fullName" 
+              class="form-input"
+              placeholder="Enter your full name"
+              autocomplete="name"
+              required>
+            <div class="field-error" id="fullNameError">
+              Please enter your full name
+            </div>
+          </div>
+
+          <!-- NIC Number -->
+          <div class="form-group">
+            <label class="form-label" for="nic">
+              NIC Number <span class="required">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="nic" 
+              class="form-input"
+              placeholder="200012345678 or 991234567V"
+              maxlength="12"
+              autocomplete="off"
+              required>
+            <div class="field-error" id="nicError">
+              Please enter a valid NIC number
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="email">
+              Email Address <span class="required">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              class="form-input"
+              placeholder="your.email@example.com"
+              autocomplete="email"
+              required>
+            <div class="field-error" id="emailError">
+              Please enter a valid email address
+            </div>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="form-group">
+            <label class="form-label" for="phone">
+              Phone Number <span class="required">*</span>
+            </label>
+            <input 
+              type="tel" 
+              id="phone" 
+              class="form-input"
+              placeholder="+94 77 123 4567"
+              autocomplete="tel"
+              required>
+            <div class="field-error" id="phoneError">
+              Please enter a valid phone number
+            </div>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="form-group">
+            <label class="form-label" for="dob">
+              Date of Birth
+            </label>
+            <input 
+              type="date" 
+              id="dob" 
+              class="form-input"
+              autocomplete="bday">
+          </div>
+
+          <!-- Address -->
+          <div class="form-group">
+            <label class="form-label" for="address">
+              Address
+            </label>
+            <textarea 
+              id="address" 
+              class="form-textarea"
+              placeholder="Enter your address"
+              rows="2"
+              autocomplete="street-address"></textarea>
+          </div>
+
+          <!-- How did you hear about us -->
+          <div class="form-group">
+            <label class="form-label" for="hearAboutUs">
+              How did you hear about us? <span class="required">*</span>
+            </label>
+            <select id="hearAboutUs" class="form-select" required>
+              <option value="">Select an option</option>
+              <option value="Facebook">📘 Facebook</option>
+              <option value="Instagram">📷 Instagram</option>
+              <option value="Friend">👥 Friend / Family</option>
+              <option value="Website">🌐 Website</option>
+              <option value="Walk In">🚶 Walk In</option>
+              <option value="Phone Inquiry">📞 Phone Inquiry</option>
+              <option value="Newspaper">📰 Newspaper / Ad</option>
+              <option value="Other">✨ Other</option>
+            </select>
+            <div class="field-error" id="hearAboutUsError">
+              Please select an option
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== ACCOUNT SECURITY ====== -->
+        <div class="form-section">
+          <div class="section-title">
+            🔐 Account Security
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="password">
+              Password <span class="required">*</span>
+            </label>
+            <div class="password-wrapper">
+              <input 
+                type="password" 
+                id="password" 
+                class="form-input"
+                placeholder="Minimum 8 characters"
+                minlength="8"
+                autocomplete="new-password"
+                required>
+              <button 
+                type="button" 
+                class="password-toggle" 
+                id="togglePassword"
+                aria-label="Toggle password visibility">
+                👁️
+              </button>
+            </div>
+            <div class="password-strength" id="passwordStrength">
+              <div class="strength-bar">
+                <div class="strength-fill" id="strengthFill"></div>
+              </div>
+              <div class="strength-text" id="strengthText">
+                Enter a password
+              </div>
+            </div>
+            <div class="field-error" id="passwordError">
+              Password must be at least 8 characters
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">
+              Confirm Password <span class="required">*</span>
+            </label>
+            <div class="password-wrapper">
+              <input 
+                type="password" 
+                id="confirmPassword" 
+                class="form-input"
+                placeholder="Re-enter your password"
+                autocomplete="new-password"
+                required>
+              <button 
+                type="button" 
+                class="password-toggle" 
+                id="toggleConfirmPassword"
+                aria-label="Toggle password visibility">
+                👁️
+              </button>
+            </div>
+            <div class="field-error" id="confirmPasswordError">
+              Passwords do not match
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== TERMS & CONDITIONS ====== -->
+        <div class="checkbox-group">
+          <div class="custom-checkbox" id="termsCheckbox" tabindex="0" role="checkbox" aria-checked="false"></div>
+          <label class="checkbox-label" for="termsCheckbox">
+            I agree to the <a href="#" id="termsLink">Terms & Conditions</a> 
+            and <a href="#" id="privacyLink">Privacy Policy</a>
+          </label>
+        </div>
+        <div class="field-error" id="termsError" style="margin-top: -15px; margin-bottom: 20px;">
+          Please accept the terms and conditions
+        </div>
+
+        <!-- ====== SUBMIT BUTTON ====== -->
+        <button type="submit" class="submit-button" id="submitButton">
+          <span class="button-text">✨ Create Account</span>
+          <div class="loader"></div>
+        </button>
+
+        <!-- ====== LOGIN LINK ====== -->
+        <div class="login-link-section">
+          <p class="login-link-text">Already have an account?</p>
+          <a href="login.html" class="login-button">
+            <span>🔐</span>
+            <span>Login Here</span>
+          </a>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ====== SUCCESS OVERLAY ====== -->
+  <div id="successOverlay" class="success-overlay">
+    <div class="success-content">
+      <div class="success-icon">🎉</div>
+      <h2 class="success-title">Welcome to Buono!</h2>
+      <p class="success-message" id="successMessage">
+        Your account has been created successfully.
+      </p>
+      
+      <div class="success-info-box">
+        <div class="success-info-item">
+          <span class="icon">📧</span>
+          <span>Verification email sent to your inbox</span>
+        </div>
+        <div class="success-info-item">
+          <span class="icon">✅</span>
+          <span>Please verify your email address</span>
+        </div>
+        <div class="success-info-item">
+          <span class="icon">⏳</span>
+          <span>Wait for admin approval</span>
+        </div>
+        <div class="success-info-item">
+          <span class="icon">🔔</span>
+          <span>You'll be notified once approved</span>
+        </div>
+      </div>
+
+      <a href="login.html" class="success-action-button">
+        Go to Login
+      </a>
+    </div>
+  </div>
+
+  <!-- ====== CONFETTI CONTAINER ====== -->
+  <div id="confettiContainer" class="confetti-container"></div>
+
+  <!-- ====== Firebase Config ====== -->
+  <script src="firebase-config.js"></script>
+  
+  <!-- ====== Sign Up Script ====== -->
+  <script src="signup-script.js"></script>
+
+</body>
+</html>
