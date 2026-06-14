@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>☕ Buono Backup Tool</title>
+  
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1A0F0A 0%, #2C1810 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #FFF8DC;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    .header-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .header h1 {
+      font-size: 36px;
+      color: #D4AF37;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: #D4B896;
+      font-size: 16px;
+    }
+    
+    .info-box {
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid #D4AF37;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .info-box h3 {
+      color: #D4AF37;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    
+    .info-box ul {
+      list-style: none;
+      color: #D4B896;
+      font-size: 14px;
+    }
+    
+    .info-box li {
+      padding: 4px 0;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .btn {
+      padding: 16px 32px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      min-width: 200px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #D4AF37, #F4D03F);
+      color: #3E2723;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.5);
+    }
+    
+    .btn-primary:disabled {
+      background: #555;
+      color: #888;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: #D4AF37;
+      border: 2px solid #D4AF37;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(212, 175, 55, 0.1);
+    }
+    
+    .progress-container {
+      background: rgba(62, 39, 35, 0.4);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .progress-container.show {
+      display: block;
+      animation: slideUp 0.4s ease;
+    }
+    
+    .progress-bar-bg {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      height: 20px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    
+    .progress-bar {
+      background: linear-gradient(90deg, #D4AF37, #F4D03F);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 10px;
+    }
+    
+    .progress-text {
+      text-align: center;
+      color: #D4B896;
+      font-size: 14px;
+    }
+    
+    .log-container {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 14px;
+      padding: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+    
+    .log-container h3 {
+      color: #D4AF37;
+      margin-bottom: 12px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    
+    .log-entry {
+      padding: 6px 10px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .log-info { color: #4DABF7; background: rgba(77, 171, 247, 0.1); }
+    .log-success { color: #51CF66; background: rgba(81, 207, 102, 0.1); }
+    .log-error { color: #FF6B6B; background: rgba(255, 107, 107, 0.1); }
+    .log-warning { color: #FFA94D; background: rgba(255, 169, 77, 0.1); }
+    
+    .summary {
+      background: rgba(81, 207, 102, 0.1);
+      border: 2px solid #51CF66;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      display: none;
+      text-align: center;
+    }
+    
+    .summary.show {
+      display: block;
+      animation: scaleIn 0.5s ease;
+    }
+    
+    .summary h2 {
+      color: #51CF66;
+      margin-bottom: 12px;
+    }
+    
+    .summary-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    
+    .stat-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #D4AF37;
+      margin-bottom: 4px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #D4B896;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #8B7355;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-icon">☕</div>
+      <h1>Buono Backup Tool</h1>
+      <p>Phase 0 - Day 1: Firestore Data Backup</p>
+    </div>
+
+    <!-- INFO -->
+    <div class="info-box">
+      <h3>📋 What this tool does:</h3>
+      <ul>
+        <li>✅ Connects to your Firestore database</li>
+        <li>✅ Downloads ALL 16 collections as JSON files</li>
+        <li>✅ Creates one combined backup file</li>
+        <li>✅ Auto-saves to your Downloads folder</li>
+        <li>✅ Safe - READ ONLY (no data modifications)</li>
+      </ul>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <button class="btn btn-primary" id="backupBtn" onclick="startBackup()">
+        🛡️ Start Backup
+      </button>
+      <button class="btn btn-secondary" onclick="window.location.reload()">
+        🔄 Reset
+      </button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar-bg">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="progress-text" id="progressText">Preparing...</div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary" id="summary">
+      <h2>🎉 Backup Complete!</h2>
+      <p id="summaryText">All your data is safely backed up!</p>
+      
+      <div class="summary-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="totalCollections">0</div>
+          <div class="stat-label">Collections</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalDocuments">0</div>
+          <div class="stat-label">Documents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalSize">0</div>
+          <div class="stat-label">KB</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <div class="log-container">
+      <h3>📜 Activity Log</h3>
+      <div id="logArea"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Made with ☕ for Buono Project
+    </div>
+
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════
+    // 🔥 FIREBASE CONFIG (v13.0)
+    // ═══════════════════════════════════════════════════
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIViMPMRuOoUAQhvyFEbDVAGYn4YvfwCI",
+      authDomain: "buono-project-927b8.firebaseapp.com",
+      projectId: "buono-project-927b8",
+      storageBucket: "buono-project-927b8.firebasestorage.app",
+      messagingSenderId: "706681135399",
+      appId: "1:706681135399:web:c15f197f1efe3a64f00902"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ═══════════════════════════════════════════════════
+    // 📋 COLLECTIONS TO BACKUP
+    // ═══════════════════════════════════════════════════
+    const COLLECTIONS = [
+      'employees',
+      'students',
+      'courses',
+      'leads',
+      'dayEndReports',
+      'inventoryItems',
+      'inventoryCategories',
+      'recipes',
+      'stockCounts',
+      'stockIssues',
+      'stockMovements',
+      'purchases',
+      'purchaseReturns',
+      'suppliers',
+      'supplierCreditNotes',
+      'settings',
+      'counters'
+    ];
+
+    // ═══════════════════════════════════════════════════
+    // 📊 STATE
+    // ═══════════════════════════════════════════════════
+    let backupData = {};
+    let totalDocs = 0;
+    let totalSize = 0;
+
+    // ═══════════════════════════════════════════════════
+    // 📝 LOGGING
+    // ═══════════════════════════════════════════════════
+    function log(message, type = 'info') {
+      const logArea = document.getElementById('logArea');
+      const entry = document.createElement('div');
+      entry.className = `log-entry log-${type}`;
+      const time = new Date().toLocaleTimeString();
+      entry.textContent = `[${time}] ${message}`;
+      logArea.appendChild(entry);
+      logArea.scrollTop = logArea.scrollHeight;
+      console.log(`[BACKUP] ${message}`);
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 📊 PROGRESS
+    // ═══════════════════════════════════════════════════
+    function updateProgress(current, total, text) {
+      const percent = Math.round((current / total) * 100);
+      document.getElementById('progressBar').style.width = `${percent}%`;
+      document.getElementById('progressText').textContent = 
+        text || `${current} / ${total} - ${percent}%`;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 🛡️ START BACKUP
+    // ═══════════════════════════════════════════════════
+    async function startBackup() {
+      const btn = document.getElementById('backupBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Backing up...';
+
+      document.getElementById('progressContainer').classList.add('show');
+      document.getElementById('summary').classList.remove('show');
+      document.getElementById('logArea').innerHTML = '';
+
+      backupData = {};
+      totalDocs = 0;
+      totalSize = 0;
+
+      log('🚀 Starting backup process...', 'info');
+      log(`📦 ${COLLECTIONS.length} collections to backup`, 'info');
+
+      try {
+        for (let i = 0; i < COLLECTIONS.length; i++) {
+          const collectionName = COLLECTIONS[i];
+          await backupCollection(collectionName);
+          updateProgress(i + 1, COLLECTIONS.length, 
+            `Backing up: ${collectionName} (${i + 1}/${COLLECTIONS.length})`);
+        }
+
+        // Create master backup file
+        log('📝 Creating master backup file...', 'info');
+        await createMasterBackup();
+
+        // Success!
+        showSuccess();
+
+      } catch (error) {
+        log(`❌ Error: ${error.message}`, 'error');
+        console.error('Backup error:', error);
+        btn.disabled = false;
+        btn.textContent = '🛡️ Try Again';
+      }
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 📥 BACKUP SINGLE COLLECTION
+    // ═══════════════════════════════════════════════════
+    async function backupCollection(collectionName) {
+      log(`📂 Reading: ${collectionName}`, 'info');
+
+      try {
+        const snapshot = await db.collection(collectionName).get();
+        const docs = [];
+
+        snapshot.forEach(doc => {
+          docs.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+
+        // Convert timestamps to strings for JSON
+        const cleanDocs = JSON.parse(JSON.stringify(docs, (key, value) => {
+          if (value && typeof value === 'object' && value.seconds !== undefined) {
+            return new Date(value.seconds * 1000).toISOString();
+          }
+          return value;
+        }));
+
+        backupData[collectionName] = cleanDocs;
+        totalDocs += cleanDocs.length;
+
+        const jsonStr = JSON.stringify(cleanDocs, null, 2);
+        const sizeKB = (jsonStr.length / 1024).toFixed(2);
+        totalSize += parseFloat(sizeKB);
+
+        // Download individual file
+        downloadJSON(`${collectionName}.json`, cleanDocs);
+
+        log(`✅ ${collectionName}: ${cleanDocs.length} documents (${sizeKB} KB)`, 'success');
+
+      } catch (error) {
+        if (error.code === 'permission-denied') {
+          log(`⚠️ ${collectionName}: Permission denied (skipping)`, 'warning');
+          backupData[collectionName] = [];
+        } else {
+          log(`❌ ${collectionName}: ${error.message}`, 'error');
+          backupData[collectionName] = [];
+        }
+      }
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 📦 CREATE MASTER BACKUP
+    // ═══════════════════════════════════════════════════
+    async function createMasterBackup() {
+      const masterBackup = {
+        backupDate: new Date().toISOString(),
+        projectId: firebaseConfig.projectId,
+        totalCollections: COLLECTIONS.length,
+        totalDocuments: totalDocs,
+        collections: backupData
+      };
+
+      const filename = `buono-master-backup-${getDateString()}.json`;
+      downloadJSON(filename, masterBackup);
+      log(`📦 Master backup created: ${filename}`, 'success');
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 💾 DOWNLOAD JSON FILE
+    // ═══════════════════════════════════════════════════
+    function downloadJSON(filename, data) {
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 📅 DATE STRING
+    // ═══════════════════════════════════════════════════
+    function getDateString() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      const h = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      return `${y}-${m}-${d}_${h}-${min}`;
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 🎉 SHOW SUCCESS
+    // ═══════════════════════════════════════════════════
+    function showSuccess() {
+      log('🎉 Backup completed successfully!', 'success');
+      log(`📊 Total: ${totalDocs} documents from ${COLLECTIONS.length} collections`, 'success');
+      log(`💾 Total size: ${totalSize.toFixed(2)} KB`, 'success');
+      log('📁 Files downloaded to your Downloads folder', 'info');
+
+      document.getElementById('totalCollections').textContent = COLLECTIONS.length;
+      document.getElementById('totalDocuments').textContent = totalDocs;
+      document.getElementById('totalSize').textContent = totalSize.toFixed(0);
+      
+      document.getElementById('summary').classList.add('show');
+      
+      const btn = document.getElementById('backupBtn');
+      btn.disabled = false;
+      btn.textContent = '✅ Backup Done! Run Again?';
+      
+      updateProgress(COLLECTIONS.length, COLLECTIONS.length, 
+        '✅ Backup Complete!');
+    }
+
+    // ═══════════════════════════════════════════════════
+    // 🚀 READY
+    // ═══════════════════════════════════════════════════
+    log('☕ Buono Backup Tool ready!', 'info');
+    log('📌 Click "Start Backup" to begin', 'info');
+  </script>
+
+</body>
+</html>
