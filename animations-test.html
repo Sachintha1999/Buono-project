@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buono - Animations Showcase</title>
+
+    <!-- Theme -->
+    <link rel="stylesheet" href="src/theme/theme-master.css">
+
+    <!-- Layout -->
+    <link rel="stylesheet" href="src/layout/layout.css">
+    <link rel="stylesheet" href="src/layout/components.css">
+
+    <!-- ★ Animations -->
+    <link rel="stylesheet" href="src/layout/animations.css">
+
+    <style>
+        .demo-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .demo-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--color-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .replay-btn {
+            font-size: 11px;
+            padding: 4px 10px;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <button class="hamburger" onclick="toggleSidebar()">☰</button>
+            <div class="topbar-brand">
+                <span class="topbar-brand-icon steam">☕</span>
+                <span>Buono</span>
+            </div>
+        </div>
+        <div class="topbar-center">
+            <div class="topbar-title">Animations Showcase</div>
+        </div>
+        <div class="topbar-right">
+            <div class="avatar avatar-sm anim-heartbeat">N</div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="appSidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <span class="sidebar-brand-icon">☕</span>
+                <span>BUONO</span>
+            </div>
+            <button class="sidebar-close" onclick="closeSidebar()">✖</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="layout-test.html" class="sidebar-item">
+                <span class="sidebar-icon">🎨</span>
+                <span class="sidebar-label">Components</span>
+            </a>
+            <div class="sidebar-item active">
+                <span class="sidebar-icon">🎬</span>
+                <span class="sidebar-label">Animations</span>
+            </div>
+        </nav>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- Main -->
+    <main class="page-wrapper">
+        <div class="container">
+
+            <div class="page-header anim-fade-down">
+                <div class="page-header-left">
+                    <h1 class="page-title"><span>🎬</span><span>Animations Showcase</span></h1>
+                    <p class="page-subtitle">Medium intensity + Coffee micro-animations ☕</p>
+                </div>
+            </div>
+
+            <!-- Top Nav -->
+            <nav class="section-nav anim-fade-up">
+                <a href="#sec-entrance" class="section-nav-item">Entrance</a>
+                <a href="#sec-attention" class="section-nav-item">Attention</a>
+                <a href="#sec-loaders" class="section-nav-item">Loaders</a>
+                <a href="#sec-hover" class="section-nav-item">Hover</a>
+                <a href="#sec-coffee" class="section-nav-item">☕ Coffee</a>
+                <a href="#sec-scroll" class="section-nav-item">Scroll</a>
+            </nav>
+
+            <!-- ENTRANCE -->
+            <section id="sec-entrance" class="section page-section">
+                <div class="section-header">
+                    <h2 class="section-title">✨ Entrance Animations</h2>
+                    <button class="btn btn-outline btn-sm" onclick="replay('entrance')">🔁 Replay</button>
+                </div>
+                <div class="grid-4" id="entranceGrid">
+                    <div><div class="demo-label">Fade In</div><div class="demo-box anim-fade-in">Fade</div></div>
+                    <div><div class="demo-label">Fade Up</div><div class="demo-box anim-fade-up">Up</div></div>
+                    <div><div class="demo-label">Fade Down</div><div class="demo-box anim-fade-down">Down</div></div>
+                    <div><div class="demo-label">Fade Left</div><div class="demo-box anim-fade-left">Left</div></div>
+                    <div><div class="demo-label">Fade Right</div><div class="demo-box anim-fade-right">Right</div></div>
+                    <div><div class="demo-label">Scale In</div><div class="demo-box anim-scale-in">Scale</div></div>
+                    <div><div class="demo-label">Zoom In</div><div class="demo-box anim-zoom-in">Zoom</div></div>
+                    <div><div class="demo-label">Flip In</div><div class="demo-box anim-flip-in">Flip</div></div>
+                </div>
+            </section>
+
+            <!-- ATTENTION -->
+            <section id="sec-attention" class="section page-section">
+                <div class="section-header">
+                    <h2 class="section-title">🔔 Attention Seekers</h2>
+                    <button class="btn btn-outline btn-sm" onclick="replay('attention')">🔁 Replay</button>
+                </div>
+                <div class="grid-4" id="attentionGrid">
+                    <div><div class="demo-label">Pulse</div><div class="demo-box anim-pulse">💛</div></div>
+                    <div><div class="demo-label">Bounce</div><div class="demo-box anim-bounce-infinite">⬆️</div></div>
+                    <div><div class="demo-label">Shake</div><div class="demo-box anim-shake">📳</div></div>
+                    <div><div class="demo-label">Tada</div><div class="demo-box anim-tada">🎉</div></div>
+                    <div><div class="demo-label">Heartbeat</div><div class="demo-box anim-heartbeat">❤️</div></div>
+                    <div><div class="demo-label">Ring</div><div class="demo-box anim-ring">🔔</div></div>
+                </div>
+            </section>
+
+            <!-- LOADERS -->
+            <section id="sec-loaders" class="section page-section">
+                <div class="section-header"><h2 class="section-title">⏳ Loaders</h2></div>
+                <div class="grid-4">
+                    <div>
+                        <div class="demo-label">Wave</div>
+                        <div class="demo-box">
+                            <div class="wave-loader">
+                                <span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="demo-label">Dots</div>
+                        <div class="demo-box">
+                            <div class="dots-loader"><span></span><span></span><span></span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="demo-label">Shimmer</div>
+                        <div class="demo-box" style="padding:0;">
+                            <div class="anim-shimmer" style="width:100%; height:100px; border-radius:12px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="demo-label">☕ Coffee Brew</div>
+                        <div class="demo-box"><div class="coffee-brew"></div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HOVER -->
+            <section id="sec-hover" class="section page-section">
+                <div class="section-header"><h2 class="section-title">🎯 Hover Effects (Hover me!)</h2></div>
+                <div class="grid-4">
+                    <div><div class="demo-label">Lift</div><div class="demo-box hover-lift">Hover ↑</div></div>
+                    <div><div class="demo-label">Glow</div><div class="demo-box hover-glow">Glow 💫</div></div>
+                    <div><div class="demo-label">Tilt</div><div class="demo-box hover-tilt">Tilt 3D</div></div>
+                    <div><div class="demo-label">Scale</div><div class="demo-box hover-scale">Zoom</div></div>
+                </div>
+            </section>
+
+            <!-- COFFEE -->
+            <section id="sec-coffee" class="section page-section">
+                <div class="section-header"><h2 class="section-title">☕ Coffee Micro-Animations</h2></div>
+                <div class="grid-4">
+                    <div>
+                        <div class="demo-label">Steam Rise ☁️</div>
+                        <div class="demo-box" style="font-size:48px; padding-top:50px;">
+                            <span class="steam">☕</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="demo-label">Coffee Drop 💧</div>
+                        <div class="demo-box" style="font-size:48px; padding-top:60px;">
+                            <span class="coffee-drop">☕</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="demo-label">Bean Bounce 🫘</div>
+                        <div class="demo-box" style="font-size:48px;">
+                            <span class="anim-bean-bounce">🫘</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="demo-label">Pour Effect</div>
+                        <div class="demo-box" style="padding:8px;">
+                            <div class="coffee-pour"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCROLL -->
+            <section id="sec-scroll" class="section page-section">
+                <div class="section-header"><h2 class="section-title">📜 Scroll Animations (Scroll down slowly)</h2></div>
+                <div class="grid-2">
+                    <div class="card scroll-fade">
+                        <h3 class="card-title">Fade on Scroll</h3>
+                        <p>මේක scroll වෙනකොට fade-in වෙනවා</p>
+                    </div>
+                    <div class="card scroll-reveal">
+                        <h3 class="card-title">Reveal on Scroll</h3>
+                        <p>Zoom-in style reveal</p>
+                    </div>
+                    <div class="card scroll-slide-up">
+                        <h3 class="card-title">Slide Up</h3>
+                        <p>From bottom slide-up</p>
+                    </div>
+                    <div class="card scroll-fade">
+                        <h3 class="card-title">More Content</h3>
+                        <p>Beautiful smooth animations</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Staggered demo -->
+            <section class="section page-section">
+                <div class="section-header"><h2 class="section-title">🌊 Staggered Children</h2></div>
+                <div class="stats-grid stagger-children">
+                    <div class="stat-card stat-gold"><div class="stat-card-value">1</div><div class="stat-card-label">One</div></div>
+                    <div class="stat-card stat-green"><div class="stat-card-value">2</div><div class="stat-card-label">Two</div></div>
+                    <div class="stat-card stat-blue"><div class="stat-card-value">3</div><div class="stat-card-label">Three</div></div>
+                    <div class="stat-card stat-orange"><div class="stat-card-value">4</div><div class="stat-card-label">Four</div></div>
+                    <div class="stat-card stat-purple"><div class="stat-card-value">5</div><div class="stat-card-label">Five</div></div>
+                </div>
+            </section>
+
+            <div class="alert alert-success">
+                <span class="alert-icon">🎉</span>
+                <div class="alert-content">
+                    <div class="alert-title">Phase 1 Day 4 — 100% COMPLETE!</div>
+                    <div class="alert-message">Layout + Components + Sidebar + Animations all working ☕</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script src="src/layout/sidebar.js"></script>
+
+<script>
+/* ───── Replay button ───── */
+function replay(gridId) {
+    const map = { entrance: 'entranceGrid', attention: 'attentionGrid' };
+    const grid = document.getElementById(map[gridId]);
+    if (!grid) return;
+
+    const items = grid.querySelectorAll('.demo-box');
+    items.forEach(function(el) {
+        const classes = Array.from(el.classList).filter(function(c) {
+            return c.startsWith('anim-');
+        });
+        classes.forEach(function(c) { el.classList.remove(c); });
+        void el.offsetWidth; /* reflow */
+        classes.forEach(function(c) { el.classList.add(c); });
+    });
+}
+
+/* ───── Scroll reveal observer ───── */
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+        }
+    });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.scroll-fade, .scroll-reveal, .scroll-slide-up').forEach(function(el) {
+    observer.observe(el);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,865 @@
+/* ═══════════════════════════════════════════════════════════════
+   BUONO ANIMATIONS LIBRARY v1.0
+   File: src/layout/animations.css
+   Purpose: Reusable animations - entrance, hover, coffee, scroll
+   Dependencies: theme-variables.css
+   Intensity: Medium Eye-Catching (Q1: B)
+   Coffee Micro-Animations: Enabled (Q2: A)
+   
+   Performance Rules:
+   - Only transform + opacity (GPU)
+   - prefers-reduced-motion support
+   - Max duration 600ms
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 0: TIMING & EASING VARIABLES
+   ═══════════════════════════════════════════════ */
+
+:root {
+    --anim-fast: 200ms;
+    --anim-normal: 350ms;
+    --anim-slow: 500ms;
+    --anim-slower: 600ms;
+
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-snap: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-coffee: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 1: ENTRANCE ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* --- Fade In --- */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.anim-fade-in {
+    animation: fadeIn var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Fade In Up --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.anim-fade-up {
+    animation: fadeInUp var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Fade In Down --- */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.anim-fade-down {
+    animation: fadeInDown var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Fade In Left --- */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.anim-fade-left {
+    animation: fadeInLeft var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Fade In Right --- */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.anim-fade-right {
+    animation: fadeInRight var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Scale In --- */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.anim-scale-in {
+    animation: scaleIn var(--anim-normal) var(--ease-coffee) both;
+}
+
+/* --- Zoom In --- */
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.anim-zoom-in {
+    animation: zoomIn var(--anim-slow) var(--ease-coffee) both;
+}
+
+/* --- Flip In --- */
+@keyframes flipIn {
+    from {
+        opacity: 0;
+        transform: perspective(400px) rotateX(-25deg);
+    }
+    to {
+        opacity: 1;
+        transform: perspective(400px) rotateX(0);
+    }
+}
+
+.anim-flip-in {
+    animation: flipIn var(--anim-slow) var(--ease-smooth) both;
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 2: EXIT ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* --- Fade Out --- */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+.anim-fade-out {
+    animation: fadeOut var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Slide Out --- */
+@keyframes slideOutUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.anim-slide-out {
+    animation: slideOutUp var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Scale Out --- */
+@keyframes scaleOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+.anim-scale-out {
+    animation: scaleOut var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Zoom Out --- */
+@keyframes zoomOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+}
+
+.anim-zoom-out {
+    animation: zoomOut var(--anim-normal) var(--ease-smooth) both;
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 3: ATTENTION SEEKERS
+   ═══════════════════════════════════════════════ */
+
+/* --- Pulse --- */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.85;
+    }
+}
+
+.anim-pulse {
+    animation: pulse 1.5s var(--ease-smooth) infinite;
+}
+
+/* --- Bounce --- */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-12px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-6px);
+    }
+}
+
+.anim-bounce {
+    animation: bounce var(--anim-slower) var(--ease-bounce) both;
+}
+
+.anim-bounce-infinite {
+    animation: bounce 1.5s var(--ease-bounce) infinite;
+}
+
+/* --- Shake --- */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+    20%, 40%, 60%, 80% { transform: translateX(6px); }
+}
+
+.anim-shake {
+    animation: shake var(--anim-slow) var(--ease-smooth) both;
+}
+
+/* --- Tada --- */
+@keyframes tada {
+    0%, 100% { transform: scale(1) rotate(0); }
+    10%, 20% { transform: scale(0.9) rotate(-3deg); }
+    30%, 50%, 70%, 90% { transform: scale(1.1) rotate(3deg); }
+    40%, 60%, 80% { transform: scale(1.1) rotate(-3deg); }
+}
+
+.anim-tada {
+    animation: tada var(--anim-slower) var(--ease-smooth) both;
+}
+
+/* --- Heartbeat (subtle) --- */
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14%, 42% { transform: scale(1.08); }
+    28%, 70% { transform: scale(1); }
+}
+
+.anim-heartbeat {
+    animation: heartbeat 1.4s var(--ease-smooth) infinite;
+}
+
+/* --- Ring (Bell shake) --- */
+@keyframes ring {
+    0%, 100% { transform: rotate(0); }
+    5%, 25% { transform: rotate(15deg); }
+    15%, 35% { transform: rotate(-15deg); }
+    40% { transform: rotate(0); }
+}
+
+.anim-ring {
+    animation: ring 1.5s var(--ease-smooth) infinite;
+    transform-origin: 50% 0;
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 4: LOADING ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* --- Shimmer (enhanced) --- */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.anim-shimmer {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(212, 175, 55, 0.18) 50%,
+        rgba(255, 255, 255, 0.04) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.8s linear infinite;
+}
+
+/* --- Wave Loader --- */
+@keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.wave-loader {
+    display: inline-flex;
+    gap: 5px;
+    align-items: flex-end;
+    height: 24px;
+}
+
+.wave-loader span {
+    display: inline-block;
+    width: 5px;
+    height: 100%;
+    background: var(--color-gold, #D4AF37);
+    border-radius: 3px;
+    animation: wave 1s var(--ease-smooth) infinite;
+}
+
+.wave-loader span:nth-child(2) { animation-delay: 0.1s; }
+.wave-loader span:nth-child(3) { animation-delay: 0.2s; }
+.wave-loader span:nth-child(4) { animation-delay: 0.3s; }
+.wave-loader span:nth-child(5) { animation-delay: 0.4s; }
+
+/* --- Dots Loader --- */
+@keyframes dotsBounce {
+    0%, 80%, 100% {
+        transform: scale(0.6);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.dots-loader {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.dots-loader span {
+    width: 9px;
+    height: 9px;
+    background: var(--color-gold, #D4AF37);
+    border-radius: 50%;
+    animation: dotsBounce 1.2s var(--ease-smooth) infinite;
+}
+
+.dots-loader span:nth-child(2) { animation-delay: 0.15s; }
+.dots-loader span:nth-child(3) { animation-delay: 0.3s; }
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 5: HOVER EFFECTS
+   ═══════════════════════════════════════════════ */
+
+/* --- Hover Lift --- */
+.hover-lift {
+    transition: transform var(--anim-fast) var(--ease-smooth),
+                box-shadow var(--anim-fast) var(--ease-smooth);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* --- Hover Glow --- */
+.hover-glow {
+    transition: box-shadow var(--anim-normal) var(--ease-smooth);
+}
+
+.hover-glow:hover {
+    box-shadow:
+        0 0 0 1px rgba(212, 175, 55, 0.4),
+        0 0 20px rgba(212, 175, 55, 0.35);
+}
+
+/* --- Hover Tilt --- */
+.hover-tilt {
+    transition: transform var(--anim-normal) var(--ease-coffee);
+    transform-style: preserve-3d;
+}
+
+.hover-tilt:hover {
+    transform: perspective(600px) rotateX(4deg) rotateY(-4deg) scale(1.02);
+}
+
+/* --- Hover Scale --- */
+.hover-scale {
+    transition: transform var(--anim-fast) var(--ease-coffee);
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+.hover-scale-sm {
+    transition: transform var(--anim-fast) var(--ease-coffee);
+}
+
+.hover-scale-sm:hover {
+    transform: scale(1.02);
+}
+
+/* --- Hover Gradient Shift --- */
+.hover-gradient {
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+    transition: background-position var(--anim-slow) var(--ease-smooth);
+}
+
+.hover-gradient:hover {
+    background-position: 100% 50%;
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 6: PAGE TRANSITIONS
+   ═══════════════════════════════════════════════ */
+
+/* --- Page Enter --- */
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.anim-page-enter {
+    animation: pageEnter var(--anim-slow) var(--ease-smooth) both;
+}
+
+/* --- Page Exit --- */
+@keyframes pageExit {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+}
+
+.anim-page-exit {
+    animation: pageExit var(--anim-normal) var(--ease-smooth) both;
+}
+
+/* --- Section Fade --- */
+@keyframes sectionFade {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.anim-section-fade {
+    animation: sectionFade var(--anim-slow) var(--ease-smooth) both;
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 7: ☕ COFFEE MICRO-ANIMATIONS (Premium)
+   ═══════════════════════════════════════════════ */
+
+/* --- ☕ Steam Rise (curling steam lines) --- */
+@keyframes steamRise {
+    0% {
+        opacity: 0;
+        transform: translateY(0) translateX(0) scale(0.8);
+    }
+    20% {
+        opacity: 0.7;
+    }
+    60% {
+        opacity: 0.4;
+        transform: translateY(-20px) translateX(4px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-40px) translateX(-3px) scale(1.3);
+    }
+}
+
+.steam {
+    position: relative;
+    display: inline-block;
+}
+
+.steam::before,
+.steam::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 6px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(to top,
+        rgba(255, 255, 255, 0.45),
+        rgba(255, 255, 255, 0));
+    filter: blur(2px);
+    animation: steamRise 2.5s var(--ease-smooth) infinite;
+    pointer-events: none;
+}
+
+.steam::before {
+    transform: translateX(-10px);
+    animation-delay: 0s;
+}
+
+.steam::after {
+    transform: translateX(4px);
+    animation-delay: 1.2s;
+}
+
+/* --- 💧 Coffee Drop (falling drop) --- */
+@keyframes coffeeDrop {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.5);
+    }
+    20% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+        transform: translateY(10px) scale(1);
+    }
+    85% {
+        transform: translateY(14px) scale(1.4, 0.6);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(18px) scale(1.6, 0.3);
+    }
+}
+
+.coffee-drop {
+    position: relative;
+    display: inline-block;
+}
+
+.coffee-drop::before {
+    content: '';
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    width: 8px;
+    height: 10px;
+    margin-left: -4px;
+    background: linear-gradient(to bottom,
+        #6F4E37,
+        #3E2723);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 0 6px rgba(111, 78, 55, 0.6);
+    animation: coffeeDrop 1.8s var(--ease-smooth) infinite;
+    pointer-events: none;
+}
+
+/* --- 🫘 Bean Bounce --- */
+@keyframes beanBounce {
+    0%, 100% {
+        transform: translateY(0) rotate(-12deg);
+    }
+    25% {
+        transform: translateY(-14px) rotate(0);
+    }
+    50% {
+        transform: translateY(0) rotate(12deg);
+    }
+    75% {
+        transform: translateY(-6px) rotate(0);
+    }
+}
+
+.anim-bean-bounce {
+    animation: beanBounce 1.4s var(--ease-bounce) infinite;
+    display: inline-block;
+    transform-origin: center;
+}
+
+/* --- ☕ Pour Effect (liquid stream pouring) --- */
+@keyframes pourStream {
+    0% {
+        height: 0;
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    100% {
+        height: 60px;
+        opacity: 1;
+    }
+}
+
+@keyframes pourFill {
+    0% { height: 0; }
+    100% { height: 28px; }
+}
+
+.coffee-pour {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 60px;
+    height: 90px;
+}
+
+.coffee-pour::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 3px;
+    margin-left: -1.5px;
+    background: linear-gradient(to bottom,
+        rgba(111, 78, 55, 0),
+        #6F4E37 30%,
+        #3E2723);
+    border-radius: 2px;
+    animation: pourStream 1.4s var(--ease-smooth) infinite;
+    pointer-events: none;
+}
+
+.coffee-pour::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    right: 8px;
+    height: 0;
+    background: linear-gradient(to bottom, #6F4E37, #3E2723);
+    border-radius: 0 0 6px 6px;
+    animation: pourFill 1.4s var(--ease-smooth) infinite;
+    pointer-events: none;
+}
+
+/* --- ☕ Coffee Brew Loader (spinning coffee circle) --- */
+@keyframes brewSpin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes brewPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.85); opacity: 0.7; }
+}
+
+.coffee-brew {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+}
+
+.coffee-brew::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 3px solid rgba(212, 175, 55, 0.2);
+    border-top-color: var(--color-gold, #D4AF37);
+    border-radius: 50%;
+    animation: brewSpin 1s linear infinite;
+}
+
+.coffee-brew::after {
+    content: '☕';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    animation: brewPulse 1.2s var(--ease-smooth) infinite;
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 8: SCROLL ANIMATIONS
+   ═══════════════════════════════════════════════ */
+
+/* --- Fade on Scroll (initial state) --- */
+.scroll-fade {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--anim-slower) var(--ease-smooth),
+                transform var(--anim-slower) var(--ease-smooth);
+}
+
+.scroll-fade.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Reveal on Scroll --- */
+.scroll-reveal {
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity var(--anim-slower) var(--ease-coffee),
+                transform var(--anim-slower) var(--ease-coffee);
+}
+
+.scroll-reveal.in-view {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* --- Slide-up on Scroll --- */
+.scroll-slide-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity var(--anim-slower) var(--ease-smooth),
+                transform var(--anim-slower) var(--ease-smooth);
+}
+
+.scroll-slide-up.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 9: UTILITY CLASSES
+   ═══════════════════════════════════════════════ */
+
+/* --- Delays --- */
+.delay-100 { animation-delay: 100ms !important; }
+.delay-200 { animation-delay: 200ms !important; }
+.delay-300 { animation-delay: 300ms !important; }
+.delay-400 { animation-delay: 400ms !important; }
+.delay-500 { animation-delay: 500ms !important; }
+.delay-700 { animation-delay: 700ms !important; }
+.delay-1000 { animation-delay: 1000ms !important; }
+
+/* --- Durations --- */
+.duration-fast { animation-duration: var(--anim-fast) !important; }
+.duration-normal { animation-duration: var(--anim-normal) !important; }
+.duration-slow { animation-duration: var(--anim-slow) !important; }
+.duration-slower { animation-duration: var(--anim-slower) !important; }
+
+/* --- Iterations --- */
+.anim-infinite { animation-iteration-count: infinite !important; }
+.anim-once { animation-iteration-count: 1 !important; }
+.anim-twice { animation-iteration-count: 2 !important; }
+
+/* --- Hover Trigger (only animate on hover) --- */
+.hover-trigger {
+    animation-play-state: paused;
+}
+
+.hover-trigger:hover {
+    animation-play-state: running;
+}
+
+/* --- Staggered children (auto delay) --- */
+.stagger-children > * {
+    animation: fadeInUp var(--anim-slow) var(--ease-smooth) both;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 80ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 160ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 320ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 480ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 560ms; }
+
+
+/* ═══════════════════════════════════════════════
+   SECTION 10: ACCESSIBILITY (Reduced Motion)
+   ═══════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .steam::before,
+    .steam::after,
+    .coffee-drop::before,
+    .coffee-pour::before,
+    .coffee-pour::after,
+    .coffee-brew::before,
+    .coffee-brew::after,
+    .anim-bean-bounce,
+    .anim-pulse,
+    .anim-heartbeat,
+    .anim-ring,
+    .anim-bounce-infinite,
+    .wave-loader span,
+    .dots-loader span {
+        animation: none !important;
+    }
+
+    .hover-lift:hover,
+    .hover-scale:hover,
+    .hover-scale-sm:hover,
+    .hover-tilt:hover {
+        transform: none !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   END OF ANIMATIONS.CSS v1.0
+   Total Sections: 10
+   ═══════════════════════════════════════════════ */

@@ -1,0 +1,415 @@
+/* ═══════════════════════════════════════════════════════════
+   ☕ BUONO MASTER THEME VARIABLES
+   File: theme-variables.css
+   Version: 1.0
+   
+   🎯 PURPOSE: Single source of truth for ALL design tokens
+   📌 USAGE: Import in HEAD of every page
+   ⚠️  RULE: NEVER use hardcoded colors - always use variables!
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ═══════════════════════════════════════════════════════
+     ☕ COFFEE COLOR PALETTE (Primary)
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Deep Coffee Tones */
+  --coffee-espresso:    #3E2723;    /* Deepest brown - main text */
+  --coffee-darkest:     #2C1810;    /* Almost black brown */
+  --coffee-bean:        #5D4037;    /* Coffee bean brown */
+  --coffee-mocha:       #6F4E37;    /* Warm mocha */
+  --coffee-cappuccino:  #8D6E63;    /* Medium brown */
+  
+  /* Light Coffee Tones */
+  --coffee-caramel:     #C69963;    /* Golden caramel */
+  --coffee-latte:       #D7CCC8;    /* Light cream */
+  --coffee-cream:       #EFEBE9;    /* Off white */
+  --coffee-foam:        #FFF8E1;    /* Cream white */
+  --coffee-milk:        #FFFFFF;    /* Pure white */
+
+  /* ═══════════════════════════════════════════════════════
+     🌟 GOLD ACCENTS (Premium Touch)
+     ═══════════════════════════════════════════════════════ */
+  
+  --gold-primary:       #D4AF37;    /* Main gold */
+  --gold-light:         #F4D03F;    /* Bright gold */
+  --gold-dark:          #B8941F;    /* Deep gold */
+  --gold-shimmer:       #FFD700;    /* Pure gold */
+  --gold-rose:          #B76E79;    /* Rose gold */
+
+  /* ═══════════════════════════════════════════════════════
+     🎯 SEMANTIC COLORS (States)
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Success (Mint Green) */
+  --color-success:        #51CF66;
+  --color-success-light:  #69DB7C;
+  --color-success-dark:   #37B24D;
+  --color-success-bg:     rgba(81, 207, 102, 0.1);
+  --color-success-border: rgba(81, 207, 102, 0.3);
+  
+  /* Warning (Honey Amber) */
+  --color-warning:        #FFA94D;
+  --color-warning-light:  #FFB870;
+  --color-warning-dark:   #FF922B;
+  --color-warning-bg:     rgba(255, 169, 77, 0.1);
+  --color-warning-border: rgba(255, 169, 77, 0.3);
+  
+  /* Error (Coffee Cherry Red) */
+  --color-error:          #FF6B6B;
+  --color-error-light:    #FF8787;
+  --color-error-dark:     #FA5252;
+  --color-error-bg:       rgba(255, 107, 107, 0.1);
+  --color-error-border:   rgba(255, 107, 107, 0.3);
+  
+  /* Info (Steam Blue) */
+  --color-info:           #4DABF7;
+  --color-info-light:     #74C0FC;
+  --color-info-dark:      #339AF0;
+  --color-info-bg:        rgba(77, 171, 247, 0.1);
+  --color-info-border:    rgba(77, 171, 247, 0.3);
+
+  /* ═══════════════════════════════════════════════════════
+     🎨 BACKGROUND COLORS
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Dark Theme Backgrounds (Default) */
+  --bg-primary:           #1A0F0A;                       /* Page background */
+  --bg-secondary:         #2C1810;                       /* Section background */
+  --bg-tertiary:          #3E2723;                       /* Card background */
+  --bg-card:              rgba(62, 39, 35, 0.4);         /* Glass card */
+  --bg-elevated:          rgba(62, 39, 35, 0.6);         /* Elevated surface */
+  --bg-glass:             rgba(255, 255, 255, 0.05);     /* Glass effect */
+  --bg-overlay:           rgba(0, 0, 0, 0.75);           /* Modal overlay */
+  --bg-input:             rgba(0, 0, 0, 0.3);            /* Form inputs */
+  --bg-hover:             rgba(212, 175, 55, 0.05);      /* Hover state */
+  
+  /* Gradients */
+  --gradient-coffee:      linear-gradient(135deg, #1A0F0A 0%, #2C1810 100%);
+  --gradient-warm:        linear-gradient(135deg, #2C1810 0%, #3E2723 100%);
+  --gradient-gold:        linear-gradient(135deg, #D4AF37 0%, #F4D03F 100%);
+  --gradient-caramel:     linear-gradient(135deg, #C69963 0%, #8D6E63 100%);
+  --gradient-espresso:    linear-gradient(135deg, #3E2723 0%, #1B0000 100%);
+  --gradient-cream:       linear-gradient(135deg, #EFEBE9 0%, #D7CCC8 100%);
+
+  /* ═══════════════════════════════════════════════════════
+     ✍️ TEXT COLORS
+     ═══════════════════════════════════════════════════════ */
+  
+  --text-primary:         #FFF8DC;    /* Main text */
+  --text-secondary:       #D4B896;    /* Secondary text */
+  --text-tertiary:        #B8A082;    /* Tertiary text */
+  --text-muted:           #8B7355;    /* Muted text */
+  --text-disabled:        #555555;    /* Disabled state */
+  --text-gold:            #D4AF37;    /* Gold accent text */
+  --text-on-gold:         #3E2723;    /* Text on gold bg */
+  --text-on-dark:         #FFF8DC;    /* Text on dark bg */
+  --text-on-light:        #3E2723;    /* Text on light bg */
+  --text-link:            #D4AF37;    /* Links */
+  --text-link-hover:      #F4D03F;    /* Link hover */
+
+  /* ═══════════════════════════════════════════════════════
+     🖼️ BORDERS
+     ═══════════════════════════════════════════════════════ */
+  
+  --border-subtle:        rgba(212, 175, 55, 0.1);
+  --border-light:         rgba(212, 175, 55, 0.2);
+  --border-medium:        rgba(212, 175, 55, 0.3);
+  --border-strong:        rgba(212, 175, 55, 0.5);
+  --border-gold:          #D4AF37;
+  --border-error:         #FF6B6B;
+  --border-success:       #51CF66;
+
+  /* ═══════════════════════════════════════════════════════
+     📐 BORDER RADIUS
+     ═══════════════════════════════════════════════════════ */
+  
+  --radius-xs:            4px;
+  --radius-sm:            8px;
+  --radius-md:            12px;
+  --radius-lg:            16px;
+  --radius-xl:            20px;
+  --radius-2xl:           24px;
+  --radius-3xl:           32px;
+  --radius-full:          9999px;     /* Pills/circles */
+
+  /* ═══════════════════════════════════════════════════════
+     🌑 SHADOWS
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Subtle shadows */
+  --shadow-xs:            0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm:            0 2px 4px rgba(0, 0, 0, 0.25);
+  --shadow-md:            0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg:            0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-xl:            0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-2xl:           0 24px 64px rgba(0, 0, 0, 0.6);
+  
+  /* Gold glow shadows */
+  --shadow-gold-sm:       0 2px 8px rgba(212, 175, 55, 0.2);
+  --shadow-gold-md:       0 4px 16px rgba(212, 175, 55, 0.3);
+  --shadow-gold-lg:       0 8px 32px rgba(212, 175, 55, 0.4);
+  --shadow-gold-glow:     0 0 40px rgba(212, 175, 55, 0.3);
+  
+  /* Color shadows */
+  --shadow-success:       0 4px 16px rgba(81, 207, 102, 0.3);
+  --shadow-error:         0 4px 16px rgba(255, 107, 107, 0.3);
+  --shadow-info:          0 4px 16px rgba(77, 171, 247, 0.3);
+  
+  /* Inner shadows */
+  --shadow-inner:         inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-focus:         0 0 0 3px rgba(212, 175, 55, 0.15);
+
+  /* ═══════════════════════════════════════════════════════
+     📏 SPACING SCALE
+     ═══════════════════════════════════════════════════════ */
+  
+  --space-0:              0;
+  --space-1:              4px;
+  --space-2:              8px;
+  --space-3:              12px;
+  --space-4:              16px;
+  --space-5:              20px;
+  --space-6:              24px;
+  --space-8:              32px;
+  --space-10:             40px;
+  --space-12:             48px;
+  --space-16:             64px;
+  --space-20:             80px;
+  --space-24:             96px;
+  --space-32:             128px;
+
+  /* ═══════════════════════════════════════════════════════
+     🔤 TYPOGRAPHY
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Font Families */
+  --font-primary:         'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-secondary:       'Inter', 'Segoe UI', sans-serif;
+  --font-mono:            'Courier New', 'Consolas', monospace;
+  --font-decorative:      'Playfair Display', 'Georgia', serif;
+  
+  /* Font Sizes */
+  --text-xs:              11px;
+  --text-sm:              12px;
+  --text-base:            14px;
+  --text-md:              15px;
+  --text-lg:              16px;
+  --text-xl:              18px;
+  --text-2xl:             20px;
+  --text-3xl:             24px;
+  --text-4xl:             28px;
+  --text-5xl:             32px;
+  --text-6xl:             40px;
+  --text-7xl:             48px;
+  --text-8xl:             56px;
+  --text-9xl:             72px;
+  
+  /* Font Weights */
+  --font-light:           300;
+  --font-normal:          400;
+  --font-medium:          500;
+  --font-semibold:        600;
+  --font-bold:            700;
+  --font-extrabold:       800;
+  --font-black:           900;
+  
+  /* Line Heights */
+  --leading-tight:        1.2;
+  --leading-snug:         1.4;
+  --leading-normal:       1.6;
+  --leading-relaxed:      1.75;
+  --leading-loose:        2;
+  
+  /* Letter Spacing */
+  --tracking-tighter:     -0.05em;
+  --tracking-tight:       -0.025em;
+  --tracking-normal:      0;
+  --tracking-wide:        0.025em;
+  --tracking-wider:       0.05em;
+  --tracking-widest:      0.1em;
+
+  /* ═══════════════════════════════════════════════════════
+     ⏱️ TRANSITIONS & ANIMATIONS
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Durations */
+  --duration-instant:     0.1s;
+  --duration-fast:        0.2s;
+  --duration-medium:      0.3s;
+  --duration-slow:        0.5s;
+  --duration-slower:      0.8s;
+  --duration-slowest:     1s;
+  
+  /* Easing Functions */
+  --ease-linear:          linear;
+  --ease-in:              cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:             cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:          cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce:          cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring:          cubic-bezier(0.5, 1.5, 0.5, 1);
+  
+  /* Common Transitions */
+  --transition-fast:      all var(--duration-fast) var(--ease-in-out);
+  --transition-medium:    all var(--duration-medium) var(--ease-in-out);
+  --transition-slow:      all var(--duration-slow) var(--ease-in-out);
+  --transition-bounce:    all var(--duration-medium) var(--ease-bounce);
+
+  /* ═══════════════════════════════════════════════════════
+     📐 LAYOUT
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Max Widths */
+  --container-xs:         480px;
+  --container-sm:         640px;
+  --container-md:         768px;
+  --container-lg:         1024px;
+  --container-xl:         1280px;
+  --container-2xl:        1536px;
+  
+  /* Breakpoints (reference only - use in @media) */
+  --breakpoint-mobile:    480px;
+  --breakpoint-tablet:    768px;
+  --breakpoint-laptop:    1024px;
+  --breakpoint-desktop:   1280px;
+  
+  /* Section Padding */
+  --section-padding-sm:   40px 16px;
+  --section-padding-md:   60px 20px;
+  --section-padding-lg:   80px 24px;
+  --section-padding-xl:   100px 32px;
+  
+  /* Heights */
+  --topbar-height:        64px;
+  --topbar-height-mobile: 56px;
+  --sidebar-width:        280px;
+  --footer-height:        auto;
+  
+  /* Z-Index Layers */
+  --z-base:               0;
+  --z-dropdown:           100;
+  --z-sticky:             200;
+  --z-fixed:              300;
+  --z-overlay:            400;
+  --z-modal:              500;
+  --z-popover:            600;
+  --z-tooltip:            700;
+  --z-toast:              800;
+  --z-loader:             9999;
+
+  /* ═══════════════════════════════════════════════════════
+     🎯 COMPONENT SPECIFIC
+     ═══════════════════════════════════════════════════════ */
+  
+  /* Buttons */
+  --btn-padding-sm:       8px 16px;
+  --btn-padding-md:       12px 24px;
+  --btn-padding-lg:       16px 32px;
+  --btn-radius:           var(--radius-md);
+  --btn-font-weight:      var(--font-semibold);
+  --btn-min-height:       44px;        /* Touch-friendly */
+  
+  /* Inputs */
+  --input-padding:        12px 16px;
+  --input-radius:         var(--radius-md);
+  --input-border-width:   1.5px;
+  --input-min-height:     44px;
+  
+  /* Cards */
+  --card-padding:         24px;
+  --card-radius:          var(--radius-lg);
+  --card-border-width:    1px;
+  
+  /* Modals */
+  --modal-radius:         var(--radius-xl);
+  --modal-padding:        32px;
+  --modal-max-width:      500px;
+
+  /* ═══════════════════════════════════════════════════════
+     🎨 BACKDROPS
+     ═══════════════════════════════════════════════════════ */
+  
+  --backdrop-blur-sm:     blur(4px);
+  --backdrop-blur-md:     blur(10px);
+  --backdrop-blur-lg:     blur(20px);
+
+  /* ═══════════════════════════════════════════════════════
+     📱 TOUCH TARGETS
+     ═══════════════════════════════════════════════════════ */
+  
+  --touch-target-min:     44px;        /* Apple HIG */
+  --touch-target-recommended: 48px;    /* Material */
+
+}
+
+/* ═══════════════════════════════════════════════════════════
+   🌈 OPTIONAL: LIGHT MODE OVERRIDE
+   Add class="light-mode" to <html> to activate
+   ═══════════════════════════════════════════════════════════ */
+
+.light-mode {
+  --bg-primary:           #FFF8E1;
+  --bg-secondary:         #EFEBE9;
+  --bg-tertiary:          #FFFFFF;
+  --bg-card:              rgba(255, 255, 255, 0.8);
+  --bg-elevated:          #FFFFFF;
+  --bg-input:             #F5F5F5;
+  
+  --text-primary:         #3E2723;
+  --text-secondary:       #5D4037;
+  --text-muted:           #8D6E63;
+  --text-on-dark:         #FFF8DC;
+  --text-on-light:        #3E2723;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ♿ ACCESSIBILITY - REDUCE MOTION
+   ═══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant:   0.01s;
+    --duration-fast:      0.01s;
+    --duration-medium:    0.01s;
+    --duration-slow:      0.01s;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   📝 USAGE EXAMPLES (Documentation)
+   ═══════════════════════════════════════════════════════════ */
+
+/*
+   ✅ CORRECT USAGE:
+   
+   .my-button {
+     background: var(--gold-primary);
+     color: var(--text-on-gold);
+     padding: var(--btn-padding-md);
+     border-radius: var(--btn-radius);
+     font-weight: var(--font-bold);
+     transition: var(--transition-medium);
+     box-shadow: var(--shadow-gold-md);
+   }
+   
+   .my-button:hover {
+     background: var(--gold-light);
+     box-shadow: var(--shadow-gold-lg);
+     transform: translateY(-2px);
+   }
+   
+   ❌ WRONG USAGE (Don't do this!):
+   
+   .my-button {
+     background: #D4AF37;        ❌ Hardcoded!
+     color: #3E2723;             ❌ Hardcoded!
+     padding: 12px 24px;         ❌ Hardcoded!
+     border-radius: 12px;        ❌ Hardcoded!
+   }
+*/
+
+/* ═══════════════════════════════════════════════════════════
+   END OF theme-variables.css
+   Version: 1.0 | Last Updated: 2026-06-14
+   ═══════════════════════════════════════════════════════════ */

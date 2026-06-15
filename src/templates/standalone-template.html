@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ═══════════════════════════════════════════════════
+         🔐 BUONO STANDALONE TEMPLATE v1.0
+         ═══════════════════════════════════════════════════
+         
+         Use this template for STANDALONE pages.
+         (Pages WITHOUT topbar/sidebar)
+         
+         📋 USE CASES:
+         - login.html
+         - signup.html
+         - welcome.html
+         - 404.html
+         - error pages
+         - landing pages
+         
+         📋 INSTRUCTIONS:
+         1. Copy this file to root: /your-page.html
+         2. Replace PAGE_TITLE with your page name
+         3. Replace PAGE-style.css with your CSS file
+         4. Replace PAGE-script.js with your JS file
+         5. Add your form/content inside main container
+         6. Customize colors via theme variables
+         
+         ═══════════════════════════════════════════════════ -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 PAGE_TITLE - Buono</title>
+    
+    <!-- ═══════════ 1. GLOBAL CSS ═══════════ -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
+    
+    <!-- ═══════════ 2. THEME SYSTEM (Day 1-2) ═══════════ -->
+    <link rel="stylesheet" href="src/theme/theme-variables.css">
+    <link rel="stylesheet" href="src/theme/theme-coffee.css">
+    <link rel="stylesheet" href="src/theme/theme-master.css">
+    <link rel="stylesheet" href="src/theme/theme-utilities.css">
+    
+    <!-- ═══════════ 3. LAYOUT SYSTEM (Day 3) ═══════════ -->
+    <link rel="stylesheet" href="src/layout/animations.css">
+    
+    <!-- ═══════════ 4. MOBILE SYSTEM (Day 4-5) ═══════════ -->
+    <link rel="stylesheet" href="src/mobile/mobile-responsive.css">
+    
+    <!-- ═══════════ 5. PAGE-SPECIFIC CSS ═══════════ -->
+    <link rel="stylesheet" href="PAGE-style.css">
+    
+</head>
+<body class="standalone-body">
+
+<!-- ═══════════════════════════════════════════════════
+     ⏳ LOADING OVERLAY
+     ═══════════════════════════════════════════════════ -->
+
+<div class="standalone-loading-overlay" id="loadingOverlay">
+    <div class="standalone-loading-wrap">
+        <div class="standalone-loading-ring"></div>
+        <div class="standalone-loading-text">Loading...</div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     📄 MAIN CONTAINER (Centered)
+     ═══════════════════════════════════════════════════ -->
+
+<div class="standalone-container" id="mainContent" style="opacity:0;">
+
+    <!-- Brand Header -->
+    <div class="standalone-header">
+        <span class="standalone-icon">🍴</span>
+        <h1>Buono</h1>
+        <p>PAGE_SUBTITLE</p>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         📝 EXAMPLE: LOGIN FORM
+         ═══════════════════════════════════════════════════
+         
+         Replace this section with your form/content
+         ═══════════════════════════════════════════════════ -->
+
+    <form id="mainForm" onsubmit="return false;">
+        
+        <div class="form-group">
+            <input type="text"
+                   id="inputField1"
+                   class="form-input"
+                   placeholder="Username or Email"
+                   autocomplete="off"
+                   required>
+        </div>
+
+        <div class="form-group">
+            <input type="password"
+                   id="inputField2"
+                   class="form-input"
+                   placeholder="Password"
+                   required>
+        </div>
+
+        <button type="button" 
+                id="submitBtn" 
+                class="btn-primary btn-full"
+                onclick="submitAction()">
+            🔐 Submit
+        </button>
+        
+    </form>
+
+    <!-- Error Message -->
+    <p id="errorMessage" class="error-message" style="display:none;">
+        ❌ Something went wrong!
+    </p>
+
+    <!-- Divider (Optional) -->
+    <div class="standalone-divider">
+        <span>or</span>
+    </div>
+
+    <!-- Alternative Action -->
+    <div class="standalone-alt-section">
+        <p class="standalone-alt-text">New here?</p>
+        <a href="signup.html" class="standalone-alt-button">
+            <span class="alt-icon">✨</span>
+            <span>Create Account</span>
+        </a>
+    </div>
+
+    <!-- Help Box (Optional) -->
+    <div class="standalone-help-box">
+        <div class="standalone-help-title">💡 Help:</div>
+        <div class="standalone-help-text">
+            👤 <strong>Users:</strong> Use your username<br>
+            🎓 <strong>Students:</strong> Use Student ID
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     📦 EXAMPLE: PENDING/INFO MODAL
+     ═══════════════════════════════════════════════════ -->
+
+<div class="standalone-modal-overlay" id="infoModalOverlay">
+    <div class="standalone-modal">
+        <div class="standalone-modal-icon">⏳</div>
+        <h2 class="standalone-modal-title">Modal Title</h2>
+        <p class="standalone-modal-message" id="modalMessage">
+            Modal description here.
+        </p>
+        
+        <!-- Info Items List -->
+        <div class="standalone-info-box">
+            <div class="standalone-info-item">
+                <span class="info-item-icon">📧</span>
+                <div class="info-item-text">
+                    <strong>Step 1</strong>
+                    <span>Step 1 description</span>
+                </div>
+            </div>
+            <div class="standalone-info-item">
+                <span class="info-item-icon">⏳</span>
+                <div class="info-item-text">
+                    <strong>Step 2</strong>
+                    <span>Step 2 description</span>
+                </div>
+            </div>
+            <div class="standalone-info-item">
+                <span class="info-item-icon">🔔</span>
+                <div class="info-item-text">
+                    <strong>Step 3</strong>
+                    <span>Step 3 description</span>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" 
+                class="btn-primary btn-full" 
+                onclick="closeInfoModal()">
+            OK
+        </button>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     🍞 TOAST CONTAINER
+     ═══════════════════════════════════════════════════ -->
+
+<div class="toast-container" id="toastContainer"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ⚡ SCRIPTS (Lighter loading - no storage)
+     ═══════════════════════════════════════════════════ -->
+
+<!-- 1. Firebase SDK (No storage needed for standalone) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<!-- 2. Firebase Config -->
+<script src="firebase-config.js"></script>
+
+<!-- 3. Page Script -->
+<script src="PAGE-script.js"></script>
+
+<!-- 4. Mobile Script -->
+<script src="mobile-script.js"></script>
+
+</body>
+</html>

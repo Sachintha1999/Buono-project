@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ═══════════════════════════════════════════════════
+         🪟 BUONO MODAL TEMPLATE v1.0
+         ═══════════════════════════════════════════════════
+         
+         This file contains 7 reusable modal patterns.
+         
+         📋 INSTRUCTIONS:
+         1. Open this file to view all modal examples
+         2. Copy the modal you need (full <div> block)
+         3. Paste into your page (before closing </body>)
+         4. Customize IDs, titles, and content
+         5. Use openModal(id) and closeModal(id) functions
+         
+         📋 MODAL TYPES INCLUDED:
+         1. Confirm Modal (sm)     - Delete/warning
+         2. Form Modal (md)        - Add/edit forms
+         3. Form Modal (lg)        - Large forms
+         4. Preview Modal (lg)     - Message preview
+         5. Receipt Modal          - Print receipts
+         6. Photo Fullscreen       - Image viewer
+         7. Upload Modal           - File upload
+         
+         💡 JAVASCRIPT HELPERS:
+         function openModal(id) {
+             document.getElementById(id).classList.add('active');
+         }
+         function closeModal(id) {
+             document.getElementById(id).classList.remove('active');
+         }
+         
+         ═══════════════════════════════════════════════════ -->
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪟 Modal Templates - Buono</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../mobile.css">
+    <link rel="stylesheet" href="../theme/theme-variables.css">
+    <link rel="stylesheet" href="../theme/theme-coffee.css">
+    <link rel="stylesheet" href="../theme/theme-master.css">
+    <link rel="stylesheet" href="../layout/layout.css">
+    <link rel="stylesheet" href="../layout/components.css">
+    <link rel="stylesheet" href="../layout/animations.css">
+    <link rel="stylesheet" href="../mobile/mobile-responsive.css">
+</head>
+<body>
+
+<!-- Preview Buttons (Remove in production) -->
+<div style="padding:20px; background:#1a1a2e; min-height:100vh;">
+    <h1 style="color:#f0a500;">🪟 Modal Templates Preview</h1>
+    <p style="color:#ccc;">Click buttons to preview each modal:</p>
+    
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+        <button class="btn-primary" onclick="openModal('confirmModal')">1. Confirm Modal (sm)</button>
+        <button class="btn-primary" onclick="openModal('formModalMd')">2. Form Modal (md)</button>
+        <button class="btn-primary" onclick="openModal('formModalLg')">3. Form Modal (lg)</button>
+        <button class="btn-primary" onclick="openModal('previewModal')">4. Preview Modal</button>
+        <button class="btn-primary" onclick="openModal('receiptModal')">5. Receipt Modal</button>
+        <button class="btn-primary" onclick="openPhotoFullscreen('https://via.placeholder.com/800')">6. Photo Modal</button>
+        <button class="btn-primary" onclick="openModal('uploadModal')">7. Upload Modal</button>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     1️⃣ CONFIRM MODAL (Small)
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: Delete confirmation, warnings, yes/no questions
+     EXAMPLE FROM: callcenter.html deleteModal
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-box modal-sm">
+        <div class="modal-header">
+            <h3>⚠️ Confirm Action?</h3>
+            <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            <p style="text-align:center; color:#ccc;">
+                <strong id="confirmItemName">Item Name</strong> action confirm කරන්නද?<br>
+                <small>This action cannot be undone!</small>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-danger" onclick="confirmAction()">🗑️ Yes, Confirm</button>
+            <button class="btn-secondary" onclick="closeModal('confirmModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     2️⃣ FORM MODAL (Medium)
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: Add/edit small forms (5-7 fields)
+     EXAMPLE FROM: callcenter.html courseModal, eventModal
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="formModalMd">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="formModalMdTitle">📝 Add New Item</h3>
+            <button class="modal-close" onclick="closeModal('formModalMd')">✕</button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="form-group">
+                <label>Name *</label>
+                <input type="text" id="fmName" class="form-input" placeholder="Enter name">
+            </div>
+            
+            <div class="form-group">
+                <label>Category</label>
+                <select id="fmCategory" class="form-select">
+                    <option value="">-- Select --</option>
+                    <option value="cat1">Category 1</option>
+                    <option value="cat2">Category 2</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Amount (Rs.)</label>
+                <input type="number" id="fmAmount" class="form-input" placeholder="0">
+            </div>
+            
+            <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="fmDate" class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea id="fmNotes" class="form-textarea" rows="3" placeholder="Optional notes..."></textarea>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="saveFormMd()">💾 Save</button>
+            <button class="btn-secondary" onclick="closeModal('formModalMd')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     3️⃣ FORM MODAL (Large)
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: Large forms with grid layout (8+ fields)
+     EXAMPLE FROM: callcenter.html leadModal
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="formModalLg">
+    <div class="modal-box modal-lg">
+        <div class="modal-header">
+            <h3 id="formModalLgTitle">➕ Add New Record</h3>
+            <button class="modal-close" onclick="closeModal('formModalLg')">✕</button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="form-grid-2">
+                
+                <div class="form-group">
+                    <label>👤 Full Name *</label>
+                    <input type="text" id="flName" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>📱 Phone *</label>
+                    <input type="tel" id="flPhone" class="form-input" placeholder="0771234567">
+                </div>
+                
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="flEmail" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>🆔 NIC</label>
+                    <input type="text" id="flNIC" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>📅 Date of Birth</label>
+                    <input type="date" id="flDOB" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label>📊 Status</label>
+                    <select id="flStatus" class="form-select">
+                        <option value="active">🟢 Active</option>
+                        <option value="pending">🟡 Pending</option>
+                        <option value="inactive">⚫ Inactive</option>
+                    </select>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>📍 Address</label>
+                    <textarea id="flAddress" class="form-textarea" rows="2"></textarea>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>📝 Notes</label>
+                    <textarea id="flNotes" class="form-textarea" rows="3"></textarea>
+                </div>
+                
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="saveFormLg()">💾 Save</button>
+            <button class="btn-secondary" onclick="closeModal('formModalLg')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     4️⃣ PREVIEW MODAL (Large)
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: WhatsApp preview, message preview, content review
+     EXAMPLE FROM: callcenter.html waPreviewModal
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="previewModal">
+    <div class="modal-box modal-lg">
+        <div class="modal-header">
+            <h3>📲 Message Preview</h3>
+            <button class="modal-close" onclick="closeModal('previewModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            
+            <!-- Multi-Select Options (Optional) -->
+            <div class="preview-options" style="margin-bottom:15px;">
+                <label style="color:#f0a500; font-weight:600; display:block; margin-bottom:10px;">
+                    📦 Select Templates to Include:
+                </label>
+                <div class="wa-checkboxes">
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="prevInclude1" checked onchange="rebuildPreview()">
+                        <span>📚 Template 1</span>
+                    </label>
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="prevInclude2" onchange="rebuildPreview()">
+                        <span>💳 Template 2</span>
+                    </label>
+                    <label class="wa-checkbox-label">
+                        <input type="checkbox" id="prevInclude3" onchange="rebuildPreview()">
+                        <span>📝 Template 3</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Editable Preview Text -->
+            <div class="form-group">
+                <label>📲 Message Preview (Edit කරන්න පුළුවන්):</label>
+                <textarea id="previewText" 
+                          class="form-textarea" 
+                          rows="12" 
+                          style="font-family:monospace;"></textarea>
+            </div>
+            
+            <!-- Info Footer -->
+            <div style="background:#0f3460; padding:10px; border-radius:8px; margin-top:10px;">
+                <small style="color:#888;">
+                    📱 To: <strong id="previewPhone" style="color:#2196F3;">-</strong><br>
+                    👤 Name: <strong id="previewName" style="color:#fff;">-</strong>
+                </small>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="sendPreview()">📲 Send</button>
+            <button class="btn-secondary" onclick="closeModal('previewModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     5️⃣ RECEIPT MODAL (Print-ready)
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: Payment receipts, invoices, printable docs
+     EXAMPLE FROM: payment.html receiptModal
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="receipt-modal-overlay" id="receiptModal">
+    <div class="receipt-modal">
+        
+        <!-- Print Area -->
+        <div class="receipt-print-area" id="receiptPrintArea">
+            
+            <!-- Header -->
+            <div class="receipt-header">
+                <div class="receipt-logo">🍴</div>
+                <div class="receipt-business-name">Buono</div>
+                <div class="receipt-business-sub">Academy</div>
+                <div class="receipt-business-contact">Contact: +94 77 XXX XXXX</div>
+                <div class="receipt-divider"></div>
+                <div class="receipt-title-row">
+                    <span class="receipt-title">PAYMENT RECEIPT</span>
+                    <span class="receipt-no" id="rcptNo">BR-0000-00-000</span>
+                </div>
+                <div class="receipt-date" id="rcptDate">Date: -</div>
+            </div>
+
+            <div class="receipt-type-badge">New Enrollment</div>
+
+            <!-- Customer Info -->
+            <div class="receipt-section">
+                <div class="receipt-section-title">👤 Customer Information</div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Name</span>
+                    <span class="receipt-value" id="rcptName">-</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Phone</span>
+                    <span class="receipt-value" id="rcptPhone">-</span>
+                </div>
+            </div>
+
+            <!-- Payment Info -->
+            <div class="receipt-section">
+                <div class="receipt-section-title">💳 Payment Information</div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Method</span>
+                    <span class="receipt-value" id="rcptMethod">-</span>
+                </div>
+                <div class="receipt-row total-row">
+                    <span class="receipt-label">Amount Paid</span>
+                    <span class="receipt-value total-value" id="rcptAmount">Rs. 0</span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="receipt-footer">
+                <div class="receipt-footer-msg">ස්තූතියි! Thank you! 🙏</div>
+                <div class="receipt-footer-note">This is an official receipt.</div>
+            </div>
+            
+        </div>
+
+        <!-- Action Buttons (Not Printed) -->
+        <div class="receipt-actions no-print">
+            <button class="receipt-btn print-btn" onclick="printReceipt()">🖨️ Print</button>
+            <button class="receipt-btn whatsapp-btn" onclick="sendReceiptWA()">📱 WhatsApp</button>
+            <button class="receipt-btn new-btn" onclick="closeReceiptAndNew()">➕ New</button>
+            <button class="receipt-btn close-btn" onclick="closeModal('receiptModal')">✕ Close</button>
+        </div>
+        
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     6️⃣ PHOTO FULLSCREEN MODAL
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: Image preview, photo gallery
+     EXAMPLE FROM: reports.html photoFullscreenModal
+     
+     💡 USAGE:
+     openPhotoFullscreen('image-url-here');
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="photo-fullscreen-modal" id="photoFullscreenModal">
+    <button class="photo-close-btn" onclick="closePhotoFullscreen()">✖</button>
+    <img id="fullscreenImg" src="" alt="Preview">
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     7️⃣ UPLOAD MODAL (with Camera + Gallery + URL)
+     ═══════════════════════════════════════════════════
+     
+     USE FOR: File uploads with multiple options
+     EXAMPLE FROM: reports.html markPaidModal (proof upload)
+     
+     ═══════════════════════════════════════════════════ -->
+
+<div class="modal-overlay" id="uploadModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>📸 Upload Proof / File</h3>
+            <button class="modal-close" onclick="closeModal('uploadModal')">✕</button>
+        </div>
+        <div class="modal-body">
+            
+            <!-- Upload Options -->
+            <div class="form-group">
+                <label>Choose Upload Method:</label>
+                <div style="display:flex; gap:8px; margin-top:8px;">
+                    <button onclick="document.getElementById('uploadCamera').click()" 
+                            class="btn-secondary" 
+                            style="flex:1;">
+                        📷 Camera
+                    </button>
+                    <button onclick="document.getElementById('uploadGallery').click()" 
+                            class="btn-secondary" 
+                            style="flex:1;">
+                        🖼️ Gallery
+                    </button>
+                </div>
+                
+                <!-- Hidden File Inputs -->
+                <input type="file" 
+                       id="uploadCamera" 
+                       accept="image/*" 
+                       capture="environment" 
+                       style="display:none" 
+                       onchange="handleUploadFile(this)">
+                       
+                <input type="file" 
+                       id="uploadGallery" 
+                       accept="image/*" 
+                       style="display:none" 
+                       onchange="handleUploadFile(this)">
+            </div>
+
+            <!-- Upload Progress -->
+            <div id="uploadProgress" style="display:none; margin-top:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:#aaa; margin-bottom:4px;">
+                    <span>📤 Uploading...</span>
+                    <span id="uploadPercent">0%</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.1); border-radius:4px; height:6px; overflow:hidden;">
+                    <div id="uploadBar" 
+                         style="background:#4CAF50; height:100%; width:0%; transition:width 0.3s;">
+                    </div>
+                </div>
+                <div id="uploadStatus" style="font-size:11px; color:#888; margin-top:4px;"></div>
+            </div>
+
+            <!-- Upload Preview -->
+            <div id="uploadPreview" 
+                 style="display:none; margin-top:10px; background:rgba(76,175,80,0.08); border:1px solid rgba(76,175,80,0.3); border-radius:8px; padding:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="color:#4CAF50; font-size:13px; font-weight:600;">✅ File Ready!</span>
+                    <div style="display:flex; gap:6px;">
+                        <button onclick="openPhotoFullscreen(document.getElementById('uploadImg').src)" 
+                                class="btn-secondary" 
+                                style="font-size:12px; padding:4px 10px;">
+                            🔍 View
+                        </button>
+                        <button onclick="removeUploadFile()" 
+                                class="btn-danger" 
+                                style="font-size:12px; padding:4px 10px;">
+                            🗑️ Remove
+                        </button>
+                    </div>
+                </div>
+                <img id="uploadImg" 
+                     src="" 
+                     style="width:100%; max-height:200px; object-fit:contain; border-radius:6px; cursor:pointer;" 
+                     onclick="openPhotoFullscreen(this.src)">
+            </div>
+
+            <!-- URL Option -->
+            <div class="form-group" style="margin-top:15px;">
+                <label>🔗 Or paste URL:</label>
+                <input type="url" 
+                       id="uploadUrl" 
+                       class="form-input" 
+                       placeholder="https://..." 
+                       oninput="previewUploadUrl()">
+            </div>
+
+            <!-- Notes -->
+            <div class="form-group">
+                <label>📝 Notes (Optional)</label>
+                <textarea id="uploadNotes" 
+                          class="form-textarea" 
+                          rows="2" 
+                          placeholder="Any additional notes..."></textarea>
+            </div>
+            
+        </div>
+        <div class="modal-footer">
+            <button class="btn-primary" onclick="confirmUpload()">✅ Confirm Upload</button>
+            <button class="btn-secondary" onclick="closeModal('uploadModal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     🍞 TOAST CONTAINER
+     ═══════════════════════════════════════════════════ -->
+
+<div class="toast-container" id="toastContainer"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ⚡ MODAL HELPER SCRIPTS
+     ═══════════════════════════════════════════════════ -->
+
+<script>
+// ═══════ Generic Modal Open/Close ═══════
+function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.add('active');
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove('active');
+}
+
+// ═══════ Photo Fullscreen ═══════
+function openPhotoFullscreen(url) {
+    const modal = document.getElementById('photoFullscreenModal');
+    const img = document.getElementById('fullscreenImg');
+    if (modal && img) {
+        img.src = url;
+        modal.classList.add('active');
+    }
+}
+
+function closePhotoFullscreen() {
+    const modal = document.getElementById('photoFullscreenModal');
+    if (modal) modal.classList.remove('active');
+}
+
+// ═══════ Receipt Print ═══════
+function printReceipt() {
+    window.print();
+}
+
+// ═══════ Demo Functions (Replace with real logic) ═══════
+function confirmAction() {
+    alert('Action confirmed!');
+    closeModal('confirmModal');
+}
+
+function saveFormMd() {
+    alert('Form saved!');
+    closeModal('formModalMd');
+}
+
+function saveFormLg() {
+    alert('Form saved!');
+    closeModal('formModalLg');
+}
+
+function sendPreview() {
+    alert('Sent!');
+    closeModal('previewModal');
+}
+
+function rebuildPreview() {
+    console.log('Rebuilding preview...');
+}
+
+function sendReceiptWA() {
+    alert('Sending via WhatsApp...');
+}
+
+function closeReceiptAndNew() {
+    closeModal('receiptModal');
+    alert('Ready for new entry!');
+}
+
+function handleUploadFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('uploadImg').src = e.target.result;
+        document.getElementById('uploadPreview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+}
+
+function previewUploadUrl() {
+    const url = document.getElementById('uploadUrl').value;
+    if (url) {
+        document.getElementById('uploadImg').src = url;
+        document.getElementById('uploadPreview').style.display = 'block';
+    }
+}
+
+function removeUploadFile() {
+    document.getElementById('uploadImg').src = '';
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('uploadCamera').value = '';
+    document.getElementById('uploadGallery').value = '';
+}
+
+function confirmUpload() {
+    alert('Upload confirmed!');
+    closeModal('uploadModal');
+}
+
+// ═══════ Close Modal on Background Click ═══════
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove('active');
+        }
+    });
+});
+
+// ═══════ Close Modal on ESC Key ═══════
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active, .photo-fullscreen-modal.active, .receipt-modal-overlay.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+});
+
+console.log('🪟 Modal Templates loaded - 7 modals ready');
+</script>
+
+</body>
+</html>
