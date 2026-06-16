@@ -1,434 +1,446 @@
 /* ═══════════════════════════════════════════════════════════
    ☕ BUONO APPROVALS - SCRIPT
    File: approve-script.js
-   Version: 1.0
-   Features: Real-time + Admin only + Approve/Reject
+   Version: 2.1 (DATABASES conflict fixed)
    ═══════════════════════════════════════════════════════════ */
 
-(function() {
+// ─────────────────────────────────────────
+// 🗄️ DATABASE LIST (uses global DATABASES if available)
+// ─────────────────────────────────────────
+const APPROVE_DATABASES = (typeof DATABASES !== 'undefined' && Array.isArray(DATABASES))
+    ? DATABASES.map(d => ({
+        id: d.id || d.collection || d.name,
+        shortName: d.shortName || d.name || d.id,
+        icon: d.icon || '📁'
+    }))
+    : [
+        { id: 'employeeDB',           shortName: 'Employee DB',    icon: '👥' },
+        { id: 'dayEndReportDB',       shortName: 'Day End Report', icon: '📊' },
+        { id: 'inventoryDB',          shortName: 'Inventory',      icon: '📦' },
+        { id: 'kitchenDB',            shortName: 'Kitchen',        icon: '🍳' },
+        { id: 'purchasingDB',         shortName: 'Purchasing',     icon: '🛒' },
+        { id: 'callCenterDB',         shortName: 'Call Center',    icon: '📞' },
+        { id: 'reportsDB',            shortName: 'Reports',        icon: '📈' },
+        { id: 'studentDB',            shortName: 'Student DB',     icon: '🎓' },
+        { id: 'paymentDB',            shortName: 'Payment',        icon: '💳' },
+        { id: 'settingsDB',           shortName: 'Settings',       icon: '⚙️' },
+        { id: 'installmentTrackerDB', shortName: 'Installment',    icon: '📅' }
+    ];
+
+// ─────────────────────────────────────────
+// 🏷️ ROLE PERMISSIONS
+// ─────────────────────────────────────────
+const ROLE_PERMISSIONS = {
+    'Admin': {
+        employeeDB:           { add: true, view: true, selfView: true, edit: true, delete: true },
+        dayEndReportDB:       { add: true, view: true, selfView: true, edit: true, delete: true },
+        inventoryDB:          { add: true, view: true, selfView: true, edit: true, delete: true },
+        kitchenDB:            { add: true, view: true, selfView: true, edit: true, delete: true },
+        purchasingDB:         { add: true, view: true, selfView: true, edit: true, delete: true },
+        callCenterDB:         { add: true, view: true, selfView: true, edit: true, delete: true },
+        reportsDB:            { add: true, view: true, selfView: true, edit: true, delete: true },
+        studentDB:            { add: true, view: true, selfView: true, edit: true, delete: true },
+        paymentDB:            { add: true, view: true, selfView: true, edit: true, delete: true },
+        settingsDB:           { add: true, view: true, selfView: true, edit: true, delete: true },
+        installmentTrackerDB: { add: true, view: true, selfView: true, edit: true, delete: true }
+    },
+    'Manager': {
+        employeeDB:           { add: true,  view: true, selfView: true, edit: true,  delete: false },
+        dayEndReportDB:       { add: true,  view: true, selfView: true, edit: true,  delete: false },
+        inventoryDB:          { add: true,  view: true, selfView: true, edit: true,  delete: false },
+        kitchenDB:            { add: true,  view: true, selfView: true, edit: true,  delete: false },
+        purchasingDB:         { add: true,  view: true, selfView: true, edit: true,  delete: false },
+        callCenterDB:         { add: true,  view: true, selfView: true, edit: true,  delete: false },
+        reportsDB:            { view: true },
+        studentDB:            { view: true, edit: true },
+        paymentDB:            { add: true,  view: true, edit: true },
+        settingsDB:           { view: true },
+        installmentTrackerDB: { add: true,  view: true, edit: true }
+    },
+    'Cashier': {
+        dayEndReportDB:       { add: true,  view: true, selfView: true, edit: false, delete: false },
+        paymentDB:            { add: true,  view: true, selfView: false, edit: false, delete: false },
+        studentDB:            { view: true },
+        installmentTrackerDB: { add: true,  view: true, edit: false }
+    },
+    'Purchasing Officer': {
+        purchasingDB:         { add: true,  view: true, selfView: true, edit: true, delete: false },
+        inventoryDB:          { add: true,  view: true, selfView: true, edit: true, delete: false }
+    },
+    'Head Chef': {
+        kitchenDB:            { add: true,  view: true, selfView: true, edit: true, delete: false },
+        inventoryDB:          { view: true, selfView: true },
+        purchasingDB:         { view: true }
+    },
+    'Call Operator': {
+        callCenterDB:         { add: true,  view: true, selfView: true, edit: true, delete: false },
+        paymentDB:            { add: true,  view: true, edit: false },
+        studentDB:            { view: true },
+        installmentTrackerDB: { add: true,  view: true, edit: false }
+    },
+    'Waiter': {
+        kitchenDB:            { selfView: true }
+    }
+};
+
+// ─────────────────────────────────────────
+// 🚀 MAIN INIT (Buono Loader pattern)
+// ─────────────────────────────────────────
+window.initApprovePage = function() {
     'use strict';
 
-    // ─────────────────────────────────────────
-    // ⏱️ PERFORMANCE TRACKER
-    // ─────────────────────────────────────────
     const startTime = performance.now();
-    console.log('☕ [APPROVE] Script loading...');
+    console.log('☕ [APPROVE] Initializing v2.1...');
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 🎯 STATE
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     const state = {
-        currentUser: null,
-        activeTab: 'employees',
-        activeFilter: 'all',
-        searchQuery: '',
+        currentUser:      null,
+        activeTab:        'employees',
+        activeFilter:     'all',
+        searchQuery:      '',
         pendingEmployees: [],
-        pendingStudents: [],
-        selectedUser: null,
-        unsubscribers: [],
-        customPermsMode: false
+        pendingStudents:  [],
+        selectedUser:     null,
+        unsubscribers:    [],
+        customPermsMode:  false
     };
 
-    // ─────────────────────────────────────────
-    // 🏷️ ROLE PERMISSIONS TEMPLATE
-    // ─────────────────────────────────────────
-    const ROLE_PERMISSIONS = {
-        'Admin': {
-            employeeDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            dayEndReportDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            inventoryDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            kitchenDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            purchasingDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            callCenterDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            reportsDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            studentDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            paymentDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            settingsDB: { add: true, view: true, selfView: true, edit: true, delete: true },
-            installmentTrackerDB: { add: true, view: true, selfView: true, edit: true, delete: true }
-        },
-        'Manager': {
-            employeeDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            dayEndReportDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            inventoryDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            kitchenDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            purchasingDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            callCenterDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            reportsDB: { view: true },
-            studentDB: { view: true, edit: true },
-            paymentDB: { add: true, view: true, edit: true },
-            settingsDB: { view: true },
-            installmentTrackerDB: { add: true, view: true, edit: true }
-        },
-        'Cashier': {
-            dayEndReportDB: { add: true, view: true, selfView: true, edit: false, delete: false },
-            paymentDB: { add: true, view: true, selfView: false, edit: false, delete: false },
-            studentDB: { view: true },
-            installmentTrackerDB: { add: true, view: true, edit: false }
-        },
-        'Purchasing Officer': {
-            purchasingDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            inventoryDB: { add: true, view: true, selfView: true, edit: true, delete: false }
-        },
-        'Head Chef': {
-            kitchenDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            inventoryDB: { view: true, selfView: true },
-            purchasingDB: { view: true }
-        },
-        'Call Operator': {
-            callCenterDB: { add: true, view: true, selfView: true, edit: true, delete: false },
-            paymentDB: { add: true, view: true, edit: false },
-            studentDB: { view: true },
-            installmentTrackerDB: { add: true, view: true, edit: false }
-        },
-        'Waiter': {
-            kitchenDB: { selfView: true }
-        }
+    // ─────────────────────────────────────
+    // 🌐 DOM CACHE
+    // ─────────────────────────────────────
+    const el = {
+        pageLoader:    document.getElementById('pageLoader'),
+        mainContent:   document.getElementById('mainContent'),
+        userName:      document.getElementById('userName'),
+
+        // Stats
+        empCount:      document.getElementById('empCount'),
+        stdCount:      document.getElementById('stdCount'),
+        totalCount:    document.getElementById('totalCount'),
+        todayCount:    document.getElementById('todayCount'),
+        tabBadgeEmp:   document.getElementById('tabBadgeEmp'),
+        tabBadgeStd:   document.getElementById('tabBadgeStd'),
+
+        // Search & Filter
+        searchInput:   document.getElementById('searchInput'),
+        searchClear:   document.getElementById('searchClear'),
+
+        // Lists
+        employeesList: document.getElementById('employeesList'),
+        studentsList:  document.getElementById('studentsList'),
+        tabEmployees:  document.getElementById('tabEmployees'),
+        tabStudents:   document.getElementById('tabStudents'),
+
+        // View Modal
+        viewModal:          document.getElementById('viewModal'),
+        viewModalIcon:      document.getElementById('viewModalIcon'),
+        viewModalTitle:     document.getElementById('viewModalTitle'),
+        viewModalBody:      document.getElementById('viewModalBody'),
+
+        // Approve Employee Modal
+        approveEmpModal:        document.getElementById('approveEmpModal'),
+        approveEmpInfo:         document.getElementById('approveEmpInfo'),
+        roleSelect:             document.getElementById('roleSelect'),
+        permissionsPreview:     document.getElementById('permissionsPreview'),
+        permissionsGrid:        document.getElementById('permissionsGrid'),
+        customizeBtnText:       document.getElementById('customizeBtnText'),
+        customPermsPanel:       document.getElementById('customPermsPanel'),
+        customPermsList:        document.getElementById('customPermsList'),
+        confirmApproveEmpBtn:   document.getElementById('confirmApproveEmpBtn'),
+
+        // Approve Student Modal
+        approveStdModal:  document.getElementById('approveStdModal'),
+        approveStdInfo:   document.getElementById('approveStdInfo'),
+
+        // Reject Modal
+        rejectModal:       document.getElementById('rejectModal'),
+        rejectUserInfo:    document.getElementById('rejectUserInfo'),
+        rejectReason:      document.getElementById('rejectReason'),
+        reasonCharCount:   document.getElementById('reasonCharCount'),
+        confirmRejectBtn:  document.getElementById('confirmRejectBtn'),
+
+        // Toast
+        toast:        document.getElementById('toast'),
+        toastIcon:    document.getElementById('toastIcon'),
+        toastMessage: document.getElementById('toastMessage')
     };
 
-    // ─────────────────────────────────────────
-    // 🌐 DOM ELEMENTS
-    // ─────────────────────────────────────────
-    let elements = {};
-
-    function cacheElements() {
-        elements = {
-            loadingOverlay: document.getElementById('loadingOverlay'),
-            mainContent: document.getElementById('mainContent'),
-            userName: document.getElementById('userName'),
-            
-            // Stats
-            empCount: document.getElementById('empCount'),
-            stdCount: document.getElementById('stdCount'),
-            totalCount: document.getElementById('totalCount'),
-            todayCount: document.getElementById('todayCount'),
-            tabBadgeEmp: document.getElementById('tabBadgeEmp'),
-            tabBadgeStd: document.getElementById('tabBadgeStd'),
-            
-            // Search & Filter
-            searchInput: document.getElementById('searchInput'),
-            searchClear: document.getElementById('searchClear'),
-            
-            // Lists
-            employeesList: document.getElementById('employeesList'),
-            studentsList: document.getElementById('studentsList'),
-            
-            // Tab contents
-            tabEmployees: document.getElementById('tabEmployees'),
-            tabStudents: document.getElementById('tabStudents'),
-            
-            // Modals
-            viewModal: document.getElementById('viewModal'),
-            viewModalIcon: document.getElementById('viewModalIcon'),
-            viewModalTitle: document.getElementById('viewModalTitle'),
-            viewModalBody: document.getElementById('viewModalBody'),
-            
-            approveEmpModal: document.getElementById('approveEmpModal'),
-            approveEmpInfo: document.getElementById('approveEmpInfo'),
-            roleSelect: document.getElementById('roleSelect'),
-            permissionsPreview: document.getElementById('permissionsPreview'),
-            permissionsGrid: document.getElementById('permissionsGrid'),
-            customizeBtnText: document.getElementById('customizeBtnText'),
-            customPermsPanel: document.getElementById('customPermsPanel'),
-            customPermsList: document.getElementById('customPermsList'),
-            confirmApproveEmpBtn: document.getElementById('confirmApproveEmpBtn'),
-            
-            approveStdModal: document.getElementById('approveStdModal'),
-            approveStdInfo: document.getElementById('approveStdInfo'),
-            
-            rejectModal: document.getElementById('rejectModal'),
-            rejectUserInfo: document.getElementById('rejectUserInfo'),
-            rejectReason: document.getElementById('rejectReason'),
-            reasonCharCount: document.getElementById('reasonCharCount'),
-            confirmRejectBtn: document.getElementById('confirmRejectBtn'),
-            
-            // Toast
-            toast: document.getElementById('toast'),
-            toastIcon: document.getElementById('toastIcon'),
-            toastMessage: document.getElementById('toastMessage')
-        };
-    }
-
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 🍞 TOAST
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     function showToast(message, type = 'info') {
         const icons = {
-            success: '✅',
-            error: '❌',
-            info: 'ℹ️',
-            warning: '⚠️'
+            success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️'
         };
-        elements.toast.className = `toast ${type} active`;
-        elements.toastIcon.textContent = icons[type] || icons.info;
-        elements.toastMessage.textContent = message;
-        setTimeout(() => elements.toast.classList.remove('active'), 4000);
+        el.toast.className = `toast ${type} active`;
+        el.toastIcon.textContent = icons[type] || icons.info;
+        el.toastMessage.textContent = message;
+        setTimeout(() => el.toast.classList.remove('active'), 4000);
     }
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
+    // 🔓 HIDE LOADER
+    // ─────────────────────────────────────
+    function hidePageLoader() {
+        // 1. Reveal body
+        document.body.classList.add('buono-ready');
+
+        // 2. Hide loader after short delay
+        setTimeout(() => {
+            if (el.pageLoader) el.pageLoader.classList.add('hidden');
+        }, 400);
+    }
+
+    // ─────────────────────────────────────
     // 🔐 AUTH CHECK
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     function checkAdminAuth() {
         const user = getCurrentUser();
-        
+
         if (!user) {
             console.warn('⚠️ [APPROVE] Not logged in');
             window.location.href = 'login.html';
             return false;
         }
-        
+
         if (user.access !== 'Admin') {
             console.warn('⛔ [APPROVE] Not admin, access denied');
             alert('⛔ Admin access required!');
             window.location.href = 'access.html';
             return false;
         }
-        
+
         state.currentUser = user;
         console.log('✅ [APPROVE] Admin authenticated:', user.name || user.nickname);
         return true;
     }
 
-    // ─────────────────────────────────────────
-    // 🚀 INIT
-    // ─────────────────────────────────────────
-    async function init() {
-        console.log('🚀 [APPROVE] Initializing...');
-        
-        if (typeof firebase === 'undefined' || typeof db === 'undefined') {
-            console.log('⏳ [APPROVE] Waiting for Firebase...');
-            setTimeout(init, 100);
+    // ─────────────────────────────────────
+    // 🔥 WAIT FOR FIREBASE
+    // ─────────────────────────────────────
+    function waitForFirebase(callback, retries = 0) {
+        if (typeof firebase !== 'undefined' && typeof db !== 'undefined') {
+            callback();
             return;
         }
-        
-        cacheElements();
-        
-        if (!checkAdminAuth()) return;
-        
-        // Update user name
-        elements.userName.textContent = state.currentUser.name || state.currentUser.nickname || 'Admin';
-        
-        // Setup event listeners
+        if (retries > 50) {
+            console.error('❌ [APPROVE] Firebase not loaded!');
+            showToast('Firebase connection failed', 'error');
+            return;
+        }
+        setTimeout(() => waitForFirebase(callback, retries + 1), 100);
+    }
+
+    // ─────────────────────────────────────
+    // 🚀 SETUP
+    // ─────────────────────────────────────
+    function setup() {
+        if (!checkAdminAuth()) {
+            hidePageLoader();
+            return;
+        }
+
+        el.userName.textContent = 
+            state.currentUser.name || 
+            state.currentUser.nickname || 
+            'Admin';
+
         attachEventListeners();
-        
-        // Start real-time listeners
         startRealtimeListeners();
-        
-        // Reveal page
-        revealPage();
-        
+        hidePageLoader();
+
         const elapsed = Math.round(performance.now() - startTime);
         console.log(`✅ [APPROVE] Ready! (${elapsed}ms)`);
     }
 
-    function revealPage() {
-        setTimeout(() => {
-            elements.loadingOverlay.classList.add('hidden');
-            elements.mainContent.style.opacity = '1';
-        }, 400);
-    }
-
-    // ─────────────────────────────────────────
-    // 🔥 REAL-TIME LISTENERS
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
+    // 📡 REAL-TIME LISTENERS
+    // ─────────────────────────────────────
     function startRealtimeListeners() {
-        console.log('📡 [APPROVE] Starting real-time listeners...');
-        
-        // Pending Employees
+        // Employees
         const empUnsub = db.collection('employees')
             .where('approvalStatus', '==', 'pending')
             .onSnapshot(snapshot => {
                 const wasEmpty = state.pendingEmployees.length === 0;
                 state.pendingEmployees = [];
-                
                 snapshot.forEach(doc => {
                     state.pendingEmployees.push({ id: doc.id, ...doc.data() });
                 });
-                
-                // Sort by signup date (newest first)
-                state.pendingEmployees.sort((a, b) => {
-                    const dateA = getDate(a.signupDate);
-                    const dateB = getDate(b.signupDate);
-                    return dateB - dateA;
-                });
-                
-                console.log(`👔 [APPROVE] Pending employees: ${state.pendingEmployees.length}`);
-                
-                // Show notification if new signup arrived
+                state.pendingEmployees.sort((a, b) => 
+                    getDate(b.signupDate) - getDate(a.signupDate)
+                );
                 if (!wasEmpty && snapshot.docChanges().some(c => c.type === 'added')) {
                     showToast('🔔 New employee signup!', 'info');
                 }
-                
                 updateStats();
                 renderEmployees();
-            }, error => {
-                console.error('❌ [APPROVE] Employees listener error:', error);
+            }, err => {
+                console.error('❌ [APPROVE] Employees error:', err);
                 showToast('Failed to load employees', 'error');
             });
-        
+
         state.unsubscribers.push(empUnsub);
-        
-        // Pending Students
+
+        // Students
         const stdUnsub = db.collection('students')
             .where('approvalStatus', '==', 'pending')
             .onSnapshot(snapshot => {
                 const wasEmpty = state.pendingStudents.length === 0;
                 state.pendingStudents = [];
-                
                 snapshot.forEach(doc => {
                     state.pendingStudents.push({ id: doc.id, ...doc.data() });
                 });
-                
-                state.pendingStudents.sort((a, b) => {
-                    const dateA = getDate(a.signupDate);
-                    const dateB = getDate(b.signupDate);
-                    return dateB - dateA;
-                });
-                
-                console.log(`🎓 [APPROVE] Pending students: ${state.pendingStudents.length}`);
-                
+                state.pendingStudents.sort((a, b) => 
+                    getDate(b.signupDate) - getDate(a.signupDate)
+                );
                 if (!wasEmpty && snapshot.docChanges().some(c => c.type === 'added')) {
                     showToast('🔔 New student signup!', 'info');
                 }
-                
                 updateStats();
                 renderStudents();
-            }, error => {
-                console.error('❌ [APPROVE] Students listener error:', error);
+            }, err => {
+                console.error('❌ [APPROVE] Students error:', err);
                 showToast('Failed to load students', 'error');
             });
-        
+
         state.unsubscribers.push(stdUnsub);
     }
 
-    // ─────────────────────────────────────────
-    // 📊 UPDATE STATS
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
+    // 📊 STATS
+    // ─────────────────────────────────────
     function updateStats() {
         const empCount = state.pendingEmployees.length;
         const stdCount = state.pendingStudents.length;
-        const total = empCount + stdCount;
-        
-        // Today's signups
+        const total    = empCount + stdCount;
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
+
         const todayCount = [...state.pendingEmployees, ...state.pendingStudents]
             .filter(u => {
-                const signup = getDate(u.signupDate);
-                return signup && signup >= today;
+                const d = getDate(u.signupDate);
+                return d && d >= today;
             }).length;
-        
-        elements.empCount.textContent = empCount;
-        elements.stdCount.textContent = stdCount;
-        elements.totalCount.textContent = total;
-        elements.todayCount.textContent = todayCount;
-        elements.tabBadgeEmp.textContent = empCount;
-        elements.tabBadgeStd.textContent = stdCount;
+
+        el.empCount.textContent   = empCount;
+        el.stdCount.textContent   = stdCount;
+        el.totalCount.textContent = total;
+        el.todayCount.textContent = todayCount;
+        el.tabBadgeEmp.textContent = empCount;
+        el.tabBadgeStd.textContent = stdCount;
     }
 
-    // ─────────────────────────────────────────
-    // 📋 RENDER EMPLOYEES
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
+    // 🔍 FILTERS
+    // ─────────────────────────────────────
+    function applyFilters(users) {
+        let filtered = [...users];
+
+        if (state.activeFilter === 'verified') {
+            filtered = filtered.filter(u => u.emailVerified);
+        } else if (state.activeFilter === 'unverified') {
+            filtered = filtered.filter(u => !u.emailVerified);
+        }
+
+        if (state.searchQuery) {
+            const q = state.searchQuery.toLowerCase();
+            filtered = filtered.filter(u =>
+                (u.name     || '').toLowerCase().includes(q) ||
+                (u.email    || '').toLowerCase().includes(q) ||
+                (u.phone    || '').toLowerCase().includes(q) ||
+                (u.nickname || '').toLowerCase().includes(q) ||
+                (u.nic      || '').toLowerCase().includes(q)
+            );
+        }
+
+        return filtered;
+    }
+
+    // ─────────────────────────────────────
+    // 🎨 RENDER CARDS
+    // ─────────────────────────────────────
     function renderEmployees() {
         const filtered = applyFilters(state.pendingEmployees);
-        
-        if (filtered.length === 0) {
-            elements.employeesList.innerHTML = renderEmptyState('employees');
-            return;
-        }
-        
-        elements.employeesList.innerHTML = filtered.map(emp => 
-            renderUserCard(emp, 'employee')
-        ).join('');
+        el.employeesList.innerHTML = filtered.length
+            ? filtered.map(e => renderCard(e, 'employee')).join('')
+            : renderEmpty('employees');
     }
 
-    // ─────────────────────────────────────────
-    // 📋 RENDER STUDENTS
-    // ─────────────────────────────────────────
     function renderStudents() {
         const filtered = applyFilters(state.pendingStudents);
-        
-        if (filtered.length === 0) {
-            elements.studentsList.innerHTML = renderEmptyState('students');
-            return;
-        }
-        
-        elements.studentsList.innerHTML = filtered.map(std => 
-            renderUserCard(std, 'student')
-        ).join('');
+        el.studentsList.innerHTML = filtered.length
+            ? filtered.map(s => renderCard(s, 'student')).join('')
+            : renderEmpty('students');
     }
 
-    // ─────────────────────────────────────────
-    // 🎨 RENDER USER CARD
-    // ─────────────────────────────────────────
-    function renderUserCard(user, type) {
-        const isEmployee = type === 'employee';
-        const avatar = (user.name || 'U').charAt(0).toUpperCase();
-        const signupDate = getDate(user.signupDate);
-        const timeAgo = getTimeAgo(signupDate);
-        const verified = user.emailVerified;
-        
+    function renderCard(user, type) {
+        const isEmp   = type === 'employee';
+        const avatar  = (user.name || 'U').charAt(0).toUpperCase();
+        const timeAgo = getTimeAgo(getDate(user.signupDate));
+
         const badges = [];
-        if (isEmployee) {
+        if (isEmp) {
             badges.push('<span class="badge badge-employee">👔 Employee</span>');
             if (user.signupPromoCode) {
-                badges.push(`<span class="badge badge-promo">🎫 ${user.signupPromoCode}</span>`);
+                badges.push(`<span class="badge badge-promo">🎫 ${esc(user.signupPromoCode)}</span>`);
             }
         } else {
             badges.push('<span class="badge badge-student">🎓 Student</span>');
         }
-        
-        if (verified) {
-            badges.push('<span class="badge badge-verified">✅ Verified</span>');
-        } else {
-            badges.push('<span class="badge badge-unverified">⚠️ Unverified</span>');
-        }
-        
+        badges.push(user.emailVerified
+            ? '<span class="badge badge-verified">✅ Verified</span>'
+            : '<span class="badge badge-unverified">⚠️ Unverified</span>'
+        );
+
         return `
-            <div class="user-card type-${type}" data-id="${user.id}" data-type="${type}">
+            <div class="user-card type-${type}">
                 <div class="user-card-header">
                     <div class="user-avatar">${avatar}</div>
-                    <div class="user-card-badges">
-                        ${badges.join('')}
-                    </div>
+                    <div class="user-card-badges">${badges.join('')}</div>
                 </div>
-                
-                <div class="user-card-name">${escapeHtml(user.name || 'Unnamed')}</div>
-                
+
+                <div class="user-card-name">${esc(user.name || 'Unnamed')}</div>
+
                 <div class="user-card-info">
                     <div class="user-info-item">
                         <span class="icon">📧</span>
-                        <span class="value">${escapeHtml(user.email || 'No email')}</span>
+                        <span class="value">${esc(user.email || 'No email')}</span>
                     </div>
                     <div class="user-info-item">
                         <span class="icon">📱</span>
-                        <span class="value">${escapeHtml(user.phone || 'No phone')}</span>
+                        <span class="value">${esc(user.phone || 'No phone')}</span>
                     </div>
-                    ${isEmployee && user.nickname ? `
+                    ${isEmp && user.nickname ? `
                     <div class="user-info-item">
                         <span class="icon">👤</span>
-                        <span class="value">@${escapeHtml(user.nickname)}</span>
+                        <span class="value">@${esc(user.nickname)}</span>
                     </div>` : ''}
-                    ${!isEmployee && user.nic ? `
+                    ${!isEmp && user.nic ? `
                     <div class="user-info-item">
                         <span class="icon">🆔</span>
-                        <span class="value">${escapeHtml(user.nic)}</span>
+                        <span class="value">${esc(user.nic)}</span>
                     </div>` : ''}
                 </div>
-                
+
                 <div class="user-card-meta">
                     <span>📅 Applied: ${timeAgo}</span>
-                    <span>${user.hearAboutUs ? '📢 ' + escapeHtml(user.hearAboutUs) : ''}</span>
+                    <span>${user.hearAboutUs ? '📢 ' + esc(user.hearAboutUs) : ''}</span>
                 </div>
-                
+
                 <div class="user-card-actions">
-                    <button class="action-btn action-btn-view" onclick="window.openViewModal('${user.id}', '${type}')">
+                    <button class="action-btn action-btn-view"
+                        onclick="window.openViewModal('${user.id}','${type}')">
                         👁️ View
                     </button>
-                    <button class="action-btn action-btn-approve" onclick="window.openApproveModal('${user.id}', '${type}')">
+                    <button class="action-btn action-btn-approve"
+                        onclick="window.openApproveModal('${user.id}','${type}')">
                         ✅ Approve
                     </button>
-                    <button class="action-btn action-btn-reject" onclick="window.openRejectModal('${user.id}', '${type}')">
+                    <button class="action-btn action-btn-reject"
+                        onclick="window.openRejectModal('${user.id}','${type}')">
                         ❌ Reject
                     </button>
                 </div>
@@ -436,164 +448,113 @@
         `;
     }
 
-    // ─────────────────────────────────────────
-    // 🎉 EMPTY STATE
-    // ─────────────────────────────────────────
-    function renderEmptyState(type) {
-        const messages = {
-            employees: 'No pending employee approvals',
-            students: 'No pending student approvals'
-        };
-        
+    function renderEmpty(type) {
+        const msg = type === 'employees'
+            ? 'No pending employee approvals'
+            : 'No pending student approvals';
         return `
             <div class="empty-state">
                 <div class="empty-icon">🎉</div>
                 <h3 class="empty-title">All caught up!</h3>
-                <p class="empty-message">${messages[type]}</p>
+                <p class="empty-message">${msg}</p>
                 <div class="empty-decoration">☕ ✨ ☕</div>
             </div>
         `;
     }
 
-    // ─────────────────────────────────────────
-    // 🔍 APPLY FILTERS
-    // ─────────────────────────────────────────
-    function applyFilters(users) {
-        let filtered = [...users];
-        
-        // Filter by verification
-        if (state.activeFilter === 'verified') {
-            filtered = filtered.filter(u => u.emailVerified);
-        } else if (state.activeFilter === 'unverified') {
-            filtered = filtered.filter(u => !u.emailVerified);
-        }
-        
-        // Filter by search
-        if (state.searchQuery) {
-            const query = state.searchQuery.toLowerCase();
-            filtered = filtered.filter(u => 
-                (u.name || '').toLowerCase().includes(query) ||
-                (u.email || '').toLowerCase().includes(query) ||
-                (u.phone || '').toLowerCase().includes(query) ||
-                (u.nickname || '').toLowerCase().includes(query) ||
-                (u.nic || '').toLowerCase().includes(query)
-            );
-        }
-        
-        return filtered;
-    }
-
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 🗂️ TAB SWITCHING
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     window.switchTab = function(tabName) {
         state.activeTab = tabName;
-        
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tabName);
         });
-        
-        document.querySelectorAll('.tab-content').forEach(content => {
-            content.classList.remove('active');
-        });
-        
-        if (tabName === 'employees') {
-            elements.tabEmployees.classList.add('active');
-        } else {
-            elements.tabStudents.classList.add('active');
-        }
+        el.tabEmployees.classList.toggle('active', tabName === 'employees');
+        el.tabStudents.classList.toggle('active',  tabName === 'students');
     };
 
-    // ─────────────────────────────────────────
-    // 🎚️ FILTERS
-    // ─────────────────────────────────────────
     window.applyFilter = function(filter) {
         state.activeFilter = filter;
-        
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.filter === filter);
         });
-        
         renderEmployees();
         renderStudents();
     };
 
     window.clearSearch = function() {
-        elements.searchInput.value = '';
+        el.searchInput.value = '';
         state.searchQuery = '';
-        elements.searchClear.style.display = 'none';
+        el.searchClear.style.display = 'none';
         renderEmployees();
         renderStudents();
     };
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 👁️ VIEW MODAL
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     window.openViewModal = function(userId, type) {
-        const list = type === 'employee' ? state.pendingEmployees : state.pendingStudents;
+        const list = type === 'employee'
+            ? state.pendingEmployees
+            : state.pendingStudents;
         const user = list.find(u => u.id === userId);
-        
-        if (!user) {
-            showToast('User not found', 'error');
-            return;
-        }
-        
+        if (!user) { showToast('User not found', 'error'); return; }
+
         state.selectedUser = { ...user, type };
-        
-        elements.viewModalIcon.textContent = type === 'employee' ? '👔' : '🎓';
-        elements.viewModalTitle.textContent = type === 'employee' ? 'Employee Details' : 'Student Details';
-        
-        elements.viewModalBody.innerHTML = renderUserDetails(user, type);
-        elements.viewModal.classList.add('active');
+        el.viewModalIcon.textContent  = type === 'employee' ? '👔' : '🎓';
+        el.viewModalTitle.textContent = type === 'employee' ? 'Employee Details' : 'Student Details';
+        el.viewModalBody.innerHTML    = buildDetailsHtml(user, type);
+        el.viewModal.classList.add('active');
     };
 
     window.closeViewModal = function() {
-        elements.viewModal.classList.remove('active');
+        el.viewModal.classList.remove('active');
     };
 
-    function renderUserDetails(user, type) {
+    function buildDetailsHtml(user, type) {
+        const isEmp     = type === 'employee';
         const signupDate = getDate(user.signupDate);
-        const isEmployee = type === 'employee';
-        
-        let html = `
+
+        return `
             <div class="approve-user-info">
                 <div class="info-row">
                     <span class="info-label">Name:</span>
-                    <span class="info-value">${escapeHtml(user.name || '-')}</span>
+                    <span class="info-value">${esc(user.name || '-')}</span>
                 </div>
-                ${isEmployee && user.nickname ? `
+                ${isEmp && user.nickname ? `
                 <div class="info-row">
                     <span class="info-label">Nickname:</span>
-                    <span class="info-value">@${escapeHtml(user.nickname)}</span>
+                    <span class="info-value">@${esc(user.nickname)}</span>
                 </div>` : ''}
                 <div class="info-row">
                     <span class="info-label">Email:</span>
-                    <span class="info-value">${escapeHtml(user.email || '-')}</span>
+                    <span class="info-value">${esc(user.email || '-')}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Phone:</span>
-                    <span class="info-value">${escapeHtml(user.phone || '-')}</span>
+                    <span class="info-value">${esc(user.phone || '-')}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">NIC:</span>
-                    <span class="info-value">${escapeHtml(user.nic || '-')}</span>
+                    <span class="info-value">${esc(user.nic || '-')}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">DOB:</span>
-                    <span class="info-value">${escapeHtml(user.dob || '-')}</span>
+                    <span class="info-value">${esc(user.dob || '-')}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Address:</span>
-                    <span class="info-value">${escapeHtml(user.address || '-')}</span>
+                    <span class="info-value">${esc(user.address || '-')}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Heard via:</span>
-                    <span class="info-value">${escapeHtml(user.hearAboutUs || '-')}</span>
+                    <span class="info-value">${esc(user.hearAboutUs || '-')}</span>
                 </div>
-                ${isEmployee && user.signupPromoCode ? `
+                ${isEmp && user.signupPromoCode ? `
                 <div class="info-row">
                     <span class="info-label">Promo Code:</span>
-                    <span class="info-value">🎫 ${escapeHtml(user.signupPromoCode)}</span>
+                    <span class="info-value">🎫 ${esc(user.signupPromoCode)}</span>
                 </div>` : ''}
                 <div class="info-row">
                     <span class="info-label">Email Verified:</span>
@@ -601,490 +562,459 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Signup Date:</span>
-                    <span class="info-value">${signupDate ? signupDate.toLocaleString() : '-'}</span>
+                    <span class="info-value">
+                        ${signupDate ? signupDate.toLocaleString() : '-'}
+                    </span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Auth UID:</span>
-                    <span class="info-value" style="font-size:11px;font-family:monospace;">${escapeHtml(user.authUid || '-')}</span>
+                    <span class="info-value" 
+                          style="font-size:11px;font-family:monospace;">
+                        ${esc(user.authUid || '-')}
+                    </span>
                 </div>
             </div>
         `;
-        
-        return html;
     }
 
     window.approveFromView = function() {
         if (!state.selectedUser) return;
         closeViewModal();
-        openApproveModal(state.selectedUser.id, state.selectedUser.type);
+        window.openApproveModal(state.selectedUser.id, state.selectedUser.type);
     };
 
     window.rejectFromView = function() {
         if (!state.selectedUser) return;
         closeViewModal();
-        openRejectModal(state.selectedUser.id, state.selectedUser.type);
+        window.openRejectModal(state.selectedUser.id, state.selectedUser.type);
     };
 
-    // ─────────────────────────────────────────
-    // ✅ APPROVE MODAL
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
+    // ✅ APPROVE MODALS
+    // ─────────────────────────────────────
     window.openApproveModal = function(userId, type) {
-        const list = type === 'employee' ? state.pendingEmployees : state.pendingStudents;
+        const list = type === 'employee'
+            ? state.pendingEmployees
+            : state.pendingStudents;
         const user = list.find(u => u.id === userId);
-        
-        if (!user) {
-            showToast('User not found', 'error');
-            return;
-        }
-        
+        if (!user) { showToast('User not found', 'error'); return; }
+
         state.selectedUser = { ...user, type };
-        
+
         if (type === 'employee') {
-            openApproveEmployeeModal(user);
+            el.approveEmpInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">${esc(user.name)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Nickname:</span>
+                    <span class="info-value">@${esc(user.nickname || '-')}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">${esc(user.email)}</span>
+                </div>
+            `;
+            el.roleSelect.value = '';
+            el.permissionsPreview.style.display = 'none';
+            el.customPermsPanel.style.display   = 'none';
+            el.confirmApproveEmpBtn.disabled     = true;
+            state.customPermsMode                = false;
+            el.approveEmpModal.classList.add('active');
         } else {
-            openApproveStudentModal(user);
+            el.approveStdInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value">${esc(user.name)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">${esc(user.email)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value">${esc(user.phone)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">NIC:</span>
+                    <span class="info-value">${esc(user.nic || '-')}</span>
+                </div>
+            `;
+            el.approveStdModal.classList.add('active');
         }
     };
-
-    function openApproveEmployeeModal(user) {
-        elements.approveEmpInfo.innerHTML = `
-            <div class="info-row">
-                <span class="info-label">Name:</span>
-                <span class="info-value">${escapeHtml(user.name)}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Nickname:</span>
-                <span class="info-value">@${escapeHtml(user.nickname || '-')}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Email:</span>
-                <span class="info-value">${escapeHtml(user.email)}</span>
-            </div>
-        `;
-        
-        // Reset
-        elements.roleSelect.value = '';
-        elements.permissionsPreview.style.display = 'none';
-        elements.customPermsPanel.style.display = 'none';
-        elements.confirmApproveEmpBtn.disabled = true;
-        state.customPermsMode = false;
-        
-        elements.approveEmpModal.classList.add('active');
-    }
-
-    function openApproveStudentModal(user) {
-        elements.approveStdInfo.innerHTML = `
-            <div class="info-row">
-                <span class="info-label">Name:</span>
-                <span class="info-value">${escapeHtml(user.name)}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Email:</span>
-                <span class="info-value">${escapeHtml(user.email)}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Phone:</span>
-                <span class="info-value">${escapeHtml(user.phone)}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">NIC:</span>
-                <span class="info-value">${escapeHtml(user.nic || '-')}</span>
-            </div>
-        `;
-        
-        elements.approveStdModal.classList.add('active');
-    }
 
     window.closeApproveEmpModal = function() {
-        elements.approveEmpModal.classList.remove('active');
+        el.approveEmpModal.classList.remove('active');
     };
 
     window.closeApproveStdModal = function() {
-        elements.approveStdModal.classList.remove('active');
+        el.approveStdModal.classList.remove('active');
     };
 
-    // ─────────────────────────────────────────
-    // 🎭 ROLE CHANGE
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
+    // 🎭 ROLE CHANGE → PERMISSIONS PREVIEW
+    // ─────────────────────────────────────
     window.onRoleChange = function() {
-        const role = elements.roleSelect.value;
-        
+        const role = el.roleSelect.value;
         if (!role) {
-            elements.permissionsPreview.style.display = 'none';
-            elements.customPermsPanel.style.display = 'none';
-            elements.confirmApproveEmpBtn.disabled = true;
+            el.permissionsPreview.style.display = 'none';
+            el.customPermsPanel.style.display   = 'none';
+            el.confirmApproveEmpBtn.disabled     = true;
             return;
         }
-        
-        // Show permissions preview
-        elements.permissionsPreview.style.display = 'block';
+        el.permissionsPreview.style.display = 'block';
         renderPermissionsPreview(role);
         renderCustomPermsList(role);
-        
-        elements.confirmApproveEmpBtn.disabled = false;
+        el.confirmApproveEmpBtn.disabled = false;
     };
 
     function renderPermissionsPreview(role) {
         const perms = ROLE_PERMISSIONS[role] || {};
-        const dbList = DATABASES.map(d => ({ id: d.id, name: d.shortName, icon: d.icon }));
-        
-        let html = '';
-        dbList.forEach(db => {
-            const p = perms[db.id];
+        el.permissionsGrid.innerHTML = APPROVE_DATABASES.map(dbDef => {
+            const p = perms[dbDef.id];
             if (!p) {
-                html += `
+                return `
                     <div class="permission-item" style="opacity:0.4;">
-                        <span class="perm-name">${db.icon} ${db.name}</span>
-                        <span style="color:var(--text-muted);font-size:11px;">No access</span>
+                        <span class="perm-name">${dbDef.icon} ${dbDef.shortName}</span>
+                        <span style="color:var(--text-muted,#6C757D);font-size:11px;">
+                            No access
+                        </span>
                     </div>
                 `;
-                return;
             }
-            
             let tags = '';
-            if (p.add) tags += '<span class="perm-tag perm-tag-add">Add</span>';
-            if (p.view) tags += '<span class="perm-tag perm-tag-view">View</span>';
-            if (p.edit) tags += '<span class="perm-tag perm-tag-edit">Edit</span>';
+            if (p.add)    tags += '<span class="perm-tag perm-tag-add">Add</span>';
+            if (p.view)   tags += '<span class="perm-tag perm-tag-view">View</span>';
+            if (p.edit)   tags += '<span class="perm-tag perm-tag-edit">Edit</span>';
             if (p.delete) tags += '<span class="perm-tag perm-tag-delete">Delete</span>';
-            
-            html += `
+
+            return `
                 <div class="permission-item">
-                    <span class="perm-name">${db.icon} ${db.name}</span>
-                    <div class="perm-actions">${tags || '<span style="color:var(--text-muted);font-size:11px;">View only</span>'}</div>
+                    <span class="perm-name">${dbDef.icon} ${dbDef.shortName}</span>
+                    <div class="perm-actions">
+                        ${tags || '<span style="color:var(--text-muted,#6C757D);font-size:11px;">View only</span>'}
+                    </div>
                 </div>
             `;
-        });
-        
-        elements.permissionsGrid.innerHTML = html;
+        }).join('');
     }
 
     function renderCustomPermsList(role) {
         const perms = ROLE_PERMISSIONS[role] || {};
-        
-        let html = '';
-        DATABASES.forEach(db => {
-            const p = perms[db.id] || {};
-            html += `
+        el.customPermsList.innerHTML = APPROVE_DATABASES.map(dbDef => {
+            const p = perms[dbDef.id] || {};
+            return `
                 <div class="perm-row">
-                    <span class="perm-row-label">${db.icon} ${db.shortName}</span>
+                    <span class="perm-row-label">${dbDef.icon} ${dbDef.shortName}</span>
                     <div class="perm-checkboxes">
                         <label class="perm-checkbox">
-                            <input type="checkbox" data-db="${db.id}" data-action="add" ${p.add ? 'checked' : ''}>
+                            <input type="checkbox" data-db="${dbDef.id}" 
+                                   data-action="add" ${p.add ? 'checked' : ''}>
                             Add
                         </label>
                         <label class="perm-checkbox">
-                            <input type="checkbox" data-db="${db.id}" data-action="view" ${p.view ? 'checked' : ''}>
+                            <input type="checkbox" data-db="${dbDef.id}" 
+                                   data-action="view" ${p.view ? 'checked' : ''}>
                             View
                         </label>
                         <label class="perm-checkbox">
-                            <input type="checkbox" data-db="${db.id}" data-action="edit" ${p.edit ? 'checked' : ''}>
+                            <input type="checkbox" data-db="${dbDef.id}" 
+                                   data-action="edit" ${p.edit ? 'checked' : ''}>
                             Edit
                         </label>
                         <label class="perm-checkbox">
-                            <input type="checkbox" data-db="${db.id}" data-action="delete" ${p.delete ? 'checked' : ''}>
+                            <input type="checkbox" data-db="${dbDef.id}" 
+                                   data-action="delete" ${p.delete ? 'checked' : ''}>
                             Delete
                         </label>
                     </div>
                 </div>
             `;
-        });
-        
-        elements.customPermsList.innerHTML = html;
+        }).join('');
     }
 
     window.toggleCustomPerms = function() {
         state.customPermsMode = !state.customPermsMode;
-        elements.customPermsPanel.style.display = state.customPermsMode ? 'block' : 'none';
-        elements.customizeBtnText.textContent = state.customPermsMode 
-            ? '✅ Use Default Permissions' 
+        el.customPermsPanel.style.display = state.customPermsMode ? 'block' : 'none';
+        el.customizeBtnText.textContent   = state.customPermsMode
+            ? '✅ Use Default Permissions'
             : '📝 Customize Permissions';
     };
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // ✅ CONFIRM APPROVE EMPLOYEE
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     window.confirmApproveEmployee = async function() {
         if (!state.selectedUser) return;
-        
-        const role = elements.roleSelect.value;
-        if (!role) {
-            showToast('Please select a role', 'error');
-            return;
-        }
-        
-        const btn = elements.confirmApproveEmpBtn;
-        btn.disabled = true;
+
+        const role = el.roleSelect.value;
+        if (!role) { showToast('Please select a role', 'error'); return; }
+
+        const btn = el.confirmApproveEmpBtn;
+        btn.disabled    = true;
         btn.textContent = '⏳ Approving...';
-        
+
         try {
-            // Get permissions (default or custom)
-            let permissions;
-            if (state.customPermsMode) {
-                permissions = collectCustomPermissions();
-            } else {
-                permissions = ROLE_PERMISSIONS[role] || {};
-            }
-            
-            // Update employee
-            await db.collection('employees').doc(state.selectedUser.id).update({
-                approvalStatus: 'approved',
-                access: role,
-                permissions: permissions,
-                status: 'Active',
-                approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                approvedBy: state.currentUser.name || state.currentUser.nickname,
-                approvedById: state.currentUser.id
-            });
-            
-            console.log('✅ [APPROVE] Employee approved:', state.selectedUser.name);
+            const permissions = state.customPermsMode
+                ? collectCustomPermissions()
+                : ROLE_PERMISSIONS[role] || {};
+
+            await db.collection('employees')
+                .doc(state.selectedUser.id)
+                .update({
+                    approvalStatus: 'approved',
+                    access:         role,
+                    permissions:    permissions,
+                    status:         'Active',
+                    approvedAt:     firebase.firestore.FieldValue.serverTimestamp(),
+                    approvedBy:     state.currentUser.name || state.currentUser.nickname,
+                    approvedById:   state.currentUser.id
+                });
+
             showToast(`✅ ${state.selectedUser.name} approved as ${role}!`, 'success');
-            
-            closeApproveEmpModal();
+            window.closeApproveEmpModal();
             state.selectedUser = null;
-            
-        } catch (error) {
-            console.error('❌ [APPROVE] Error:', error);
+
+        } catch (err) {
+            console.error('❌ [APPROVE] Approve employee error:', err);
             showToast('Failed to approve. Try again.', 'error');
-            btn.disabled = false;
+            btn.disabled    = false;
             btn.textContent = '✅ Approve Employee';
         }
     };
 
     function collectCustomPermissions() {
         const perms = {};
-        const checkboxes = elements.customPermsList.querySelectorAll('input[type="checkbox"]');
-        
-        checkboxes.forEach(cb => {
-            const dbId = cb.dataset.db;
-            const action = cb.dataset.action;
-            
-            if (!perms[dbId]) perms[dbId] = {};
-            perms[dbId][action] = cb.checked;
-        });
-        
-        // Remove empty perms (all false)
+        el.customPermsList
+            .querySelectorAll('input[type="checkbox"]')
+            .forEach(cb => {
+                const dbId   = cb.dataset.db;
+                const action = cb.dataset.action;
+                if (!perms[dbId]) perms[dbId] = {};
+                perms[dbId][action] = cb.checked;
+            });
+
+        // Remove all-false entries
         Object.keys(perms).forEach(dbId => {
-            const hasAny = Object.values(perms[dbId]).some(v => v === true);
-            if (!hasAny) delete perms[dbId];
+            if (!Object.values(perms[dbId]).some(v => v)) delete perms[dbId];
         });
-        
+
         return perms;
     }
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // ✅ CONFIRM APPROVE STUDENT
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     window.confirmApproveStudent = async function() {
         if (!state.selectedUser) return;
-        
+
         try {
-            await db.collection('students').doc(state.selectedUser.id).update({
-                approvalStatus: 'approved',
-                status: 'Pending', // Call Operator will activate after enrollment
-                approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                approvedBy: state.currentUser.name || state.currentUser.nickname,
-                approvedById: state.currentUser.id
-            });
-            
-            console.log('✅ [APPROVE] Student approved:', state.selectedUser.name);
-            showToast(`✅ ${state.selectedUser.name} approved! Call Operator can now enroll.`, 'success');
-            
-            closeApproveStdModal();
+            await db.collection('students')
+                .doc(state.selectedUser.id)
+                .update({
+                    approvalStatus: 'approved',
+                    status:         'Pending',
+                    approvedAt:     firebase.firestore.FieldValue.serverTimestamp(),
+                    approvedBy:     state.currentUser.name || state.currentUser.nickname,
+                    approvedById:   state.currentUser.id
+                });
+
+            showToast(
+                `✅ ${state.selectedUser.name} approved! Call Operator can now enroll.`,
+                'success'
+            );
+            window.closeApproveStdModal();
             state.selectedUser = null;
-            
-        } catch (error) {
-            console.error('❌ [APPROVE] Error:', error);
+
+        } catch (err) {
+            console.error('❌ [APPROVE] Approve student error:', err);
             showToast('Failed to approve. Try again.', 'error');
         }
     };
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // ❌ REJECT MODAL
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     window.openRejectModal = function(userId, type) {
-        const list = type === 'employee' ? state.pendingEmployees : state.pendingStudents;
+        const list = type === 'employee'
+            ? state.pendingEmployees
+            : state.pendingStudents;
         const user = list.find(u => u.id === userId);
-        
-        if (!user) {
-            showToast('User not found', 'error');
-            return;
-        }
-        
+        if (!user) { showToast('User not found', 'error'); return; }
+
         state.selectedUser = { ...user, type };
-        
-        elements.rejectUserInfo.innerHTML = `
+
+        el.rejectUserInfo.innerHTML = `
             <div class="info-row">
                 <span class="info-label">Type:</span>
-                <span class="info-value">${type === 'employee' ? '👔 Employee' : '🎓 Student'}</span>
+                <span class="info-value">
+                    ${type === 'employee' ? '👔 Employee' : '🎓 Student'}
+                </span>
             </div>
             <div class="info-row">
                 <span class="info-label">Name:</span>
-                <span class="info-value">${escapeHtml(user.name)}</span>
+                <span class="info-value">${esc(user.name)}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Email:</span>
-                <span class="info-value">${escapeHtml(user.email)}</span>
+                <span class="info-value">${esc(user.email)}</span>
             </div>
         `;
-        
-        // Reset
-        elements.rejectReason.value = '';
-        elements.reasonCharCount.textContent = '0';
-        elements.confirmRejectBtn.disabled = true;
-        
-        elements.rejectModal.classList.add('active');
+
+        el.rejectReason.value        = '';
+        el.reasonCharCount.textContent = '0';
+        el.confirmRejectBtn.disabled   = true;
+        el.rejectModal.classList.add('active');
     };
 
     window.closeRejectModal = function() {
-        elements.rejectModal.classList.remove('active');
+        el.rejectModal.classList.remove('active');
     };
 
     window.useQuickReason = function(reason) {
-        elements.rejectReason.value = reason;
-        elements.reasonCharCount.textContent = reason.length;
-        elements.confirmRejectBtn.disabled = reason.length < 10;
+        el.rejectReason.value          = reason;
+        el.reasonCharCount.textContent = reason.length;
+        el.confirmRejectBtn.disabled   = reason.length < 10;
     };
 
     window.confirmReject = async function() {
         if (!state.selectedUser) return;
-        
-        const reason = elements.rejectReason.value.trim();
+
+        const reason = el.rejectReason.value.trim();
         if (reason.length < 10) {
             showToast('Reason must be at least 10 characters', 'error');
             return;
         }
-        
-        const btn = elements.confirmRejectBtn;
-        btn.disabled = true;
+
+        const btn = el.confirmRejectBtn;
+        btn.disabled    = true;
         btn.textContent = '⏳ Rejecting...';
-        
+
         try {
-            const collection = state.selectedUser.type === 'employee' ? 'employees' : 'students';
-            
-            await db.collection(collection).doc(state.selectedUser.id).update({
-                approvalStatus: 'rejected',
-                rejectionReason: reason,
-                rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                rejectedBy: state.currentUser.name || state.currentUser.nickname,
-                rejectedById: state.currentUser.id
-            });
-            
-            console.log('❌ [APPROVE] User rejected:', state.selectedUser.name);
+            const col = state.selectedUser.type === 'employee'
+                ? 'employees' : 'students';
+
+            await db.collection(col)
+                .doc(state.selectedUser.id)
+                .update({
+                    approvalStatus:  'rejected',
+                    rejectionReason: reason,
+                    rejectedAt:      firebase.firestore.FieldValue.serverTimestamp(),
+                    rejectedBy:      state.currentUser.name || state.currentUser.nickname,
+                    rejectedById:    state.currentUser.id
+                });
+
             showToast(`❌ ${state.selectedUser.name} rejected`, 'warning');
-            
-            closeRejectModal();
+            window.closeRejectModal();
             state.selectedUser = null;
-            
-        } catch (error) {
-            console.error('❌ [APPROVE] Error:', error);
+
+        } catch (err) {
+            console.error('❌ [APPROVE] Reject error:', err);
             showToast('Failed to reject. Try again.', 'error');
-            btn.disabled = false;
+            btn.disabled    = false;
             btn.textContent = '❌ Confirm Rejection';
         }
     };
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 🧭 NAVIGATION
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     window.goHome = function() {
-        // Cleanup listeners
-        state.unsubscribers.forEach(unsub => unsub());
+        state.unsubscribers.forEach(u => u());
         window.location.href = 'access.html';
     };
 
-        window.handleLogout = function() {
+    window.handleLogout = function() {
         if (confirm('🚪 Logout කරන්න ඕනද?')) {
-            state.unsubscribers.forEach(unsub => unsub());
+            state.unsubscribers.forEach(u => u());
             sessionStorage.removeItem('loggedInUser');
             window.location.href = 'welcome.html';
         }
     };
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 🎯 EVENT LISTENERS
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     function attachEventListeners() {
         // Search
-        elements.searchInput.addEventListener('input', (e) => {
+        el.searchInput.addEventListener('input', e => {
             state.searchQuery = e.target.value.trim();
-            elements.searchClear.style.display = state.searchQuery ? 'block' : 'none';
+            el.searchClear.style.display = state.searchQuery ? 'block' : 'none';
             renderEmployees();
             renderStudents();
         });
-        
-        // Reject reason char count
-        elements.rejectReason.addEventListener('input', (e) => {
+
+        // Reject char count
+        el.rejectReason.addEventListener('input', e => {
             const len = e.target.value.length;
-            elements.reasonCharCount.textContent = len;
-            elements.confirmRejectBtn.disabled = len < 10;
+            el.reasonCharCount.textContent = len;
+            el.confirmRejectBtn.disabled   = len < 10;
         });
-        
-        // Close modals on overlay click
+
+        // Close modal on overlay click
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) {
-                    overlay.classList.remove('active');
-                }
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) overlay.classList.remove('active');
             });
         });
-        
+
         // ESC to close modals
-        document.addEventListener('keydown', (e) => {
+        document.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-overlay.active').forEach(m => {
-                    m.classList.remove('active');
-                });
+                document.querySelectorAll('.modal-overlay.active')
+                    .forEach(m => m.classList.remove('active'));
             }
         });
-        
-        // Cleanup on page unload
+
+        // Cleanup on unload
         window.addEventListener('beforeunload', () => {
-            state.unsubscribers.forEach(unsub => unsub());
+            state.unsubscribers.forEach(u => u());
         });
     }
 
-    // ─────────────────────────────────────────
+    // ─────────────────────────────────────
     // 🛠️ UTILITIES
-    // ─────────────────────────────────────────
-    function escapeHtml(text) {
+    // ─────────────────────────────────────
+    function esc(text) {
         if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        const d = document.createElement('div');
+        d.textContent = text;
+        return d.innerHTML;
     }
 
-    function getDate(timestamp) {
-        if (!timestamp) return null;
+    function getDate(ts) {
+        if (!ts) return null;
         try {
-            if (timestamp.toDate && typeof timestamp.toDate === 'function') {
-                return timestamp.toDate();
-            }
-            return new Date(timestamp);
-        } catch (e) {
-            return null;
-        }
+            if (ts.toDate) return ts.toDate();
+            return new Date(ts);
+        } catch { return null; }
     }
 
     function getTimeAgo(date) {
         if (!date) return 'Unknown';
-        
-        const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-        
-        if (seconds < 60) return 'Just now';
-        if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-        if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-        if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+        const sec = Math.floor((Date.now() - date.getTime()) / 1000);
+        if (sec < 60)     return 'Just now';
+        if (sec < 3600)   return `${Math.floor(sec / 60)}m ago`;
+        if (sec < 86400)  return `${Math.floor(sec / 3600)}h ago`;
+        if (sec < 604800) return `${Math.floor(sec / 86400)}d ago`;
         return date.toLocaleDateString();
     }
 
-    // ─────────────────────────────────────────
-    // 🚀 START
-    // ─────────────────────────────────────────
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    // ─────────────────────────────────────
+    // 🏁 KICK OFF
+    // ─────────────────────────────────────
+    waitForFirebase(setup);
 
-    console.log('☕ [APPROVE] Buono Approvals v1.0 loaded');
-})();
+    console.log('☕ [APPROVE] Buono Approvals v2.1 loaded');
+};
+
+// ─────────────────────────────────────────
+// ⚡ AUTO-EXECUTE
+// ─────────────────────────────────────────
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.initApprovePage());
+} else {
+    window.initApprovePage();
+}

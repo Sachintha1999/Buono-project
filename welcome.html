@@ -17,12 +17,44 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
   
-  <!-- Stylesheets -->
-<link rel="stylesheet" href="welcome-style.css">
-<link rel="stylesheet" href="welcome-mobile.css">
-
-<!-- Preconnect -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- ═══════════════════════════════════════════════
+       🎨 BUONO CORE CSS (Central Theme System)
+       ═══════════════════════════════════════════════ -->
+  <link rel="stylesheet" href="src/core/buono-core.css">
+  
+  <!-- ═══════════════════════════════════════════════
+       ✨ FOUC PREVENTION
+       Hide body until loader + CSS ready
+       ═══════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════
+       ✨ FOUC PREVENTION
+       Hide body until loader + CSS ready
+       ═══════════════════════════════════════════════ -->
+   <!-- ═══════════════════════════════════════════════
+       ✨ FOUC PREVENTION
+       Hide body until loader + CSS ready
+       Uses theme variables with safe fallbacks
+       ═══════════════════════════════════════════════ -->
+  <style>
+    html, body {
+      background: var(--bg-primary, #1A0F0A);  /* ✅ Theme-aware + fallback */
+      color: var(--text-primary, #FFF8DC);
+      margin: 0;
+      padding: 0;
+    }
+    /* Hide everything except page-loader until ready */
+    body > *:not(.page-loader) {
+      visibility: hidden;
+    }
+    body.buono-ready > * {
+      visibility: visible;
+    }
+    /* Page loader always visible during boot */
+    .page-loader {
+      visibility: visible !important;
+      background: var(--bg-primary, #1A0F0A);
+    }
+  </style>
 </head>
 <body>
 
@@ -35,19 +67,6 @@
       <div class="loader-spinner"></div>
       <div class="loader-text">Brewing...</div>
     </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════
-       🫘 FLOATING COFFEE BEANS BACKGROUND
-       ═══════════════════════════════════════════════ -->
-  <div class="coffee-beans-bg" aria-hidden="true">
-    <div class="bean"></div>
-    <div class="bean"></div>
-    <div class="bean"></div>
-    <div class="bean"></div>
-    <div class="bean"></div>
-    <div class="bean"></div>
-    <div class="bean"></div>
   </div>
 
   <!-- ═══════════════════════════════════════════════
@@ -426,12 +445,29 @@
   </button>
 
   <!-- ═══════════════════════════════════════════════
-       📜 SCRIPTS
+       🔥 FIREBASE SDK v8.10.1 (CRITICAL!)
+       Must load BEFORE buono-loader.js
        ═══════════════════════════════════════════════ -->
-  <!-- SCRIPTS -->
-<script src="welcome-data.js"></script>
-<script src="welcome-script.js"></script>
-<script src="welcome-extras.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- ═══════════════════════════════════════════════
+       📜 BUONO LOADER v2.3 (Central Script Manager)
+       
+       Auto-loads (in order):
+         🔥 Critical:   firebase-config.js
+         🏗️ Foundation: PerfTracker + SmartStorage
+         ⚡ Optional:    APICache + LazyLoader + ImageOpt + MobileTouch
+         🎨 Page CSS:   welcome-style.css + welcome-mobile.css
+         📊 Page Data:  welcome-data.js
+         📄 Page Main:  welcome-script.js
+         ✨ Page Extra: welcome-extras.js
+       ═══════════════════════════════════════════════ -->
+  <script src="src/core/buono-loader.js" 
+          data-page-css="welcome-style.css,welcome-mobile.css"
+          data-page-data="welcome-data.js"
+          data-page-script="welcome-script.js"
+          data-page-extras="welcome-extras.js"></script>
 
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="src/core/buono-core.css">
     <link rel="stylesheet" href="access-style.css">
     <title>Access - Buono</title>
 </head>
@@ -39,7 +39,6 @@
     </div>
 
     <div class="stat-row">
-        <!-- Skeleton stat cards -->
         <div class="stat-card skeleton-card" id="statCard1">
             <div class="stat-icon skeleton-icon"></div>
             <div class="stat-info">
@@ -73,7 +72,6 @@
     <div class="section-title">📂 Available Databases</div>
 
     <div class="db-cards-grid" id="dbCardsGrid">
-        <!-- Skeleton DB Cards -->
         <div class="db-card skeleton-db-card">
             <div class="db-card-header">
                 <div class="skeleton-icon large"></div>
@@ -105,11 +103,17 @@
 
 </div>
 
+<!-- 🔥 Firebase SDK (External libraries - must load first) -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-<script src="firebase-config.js"></script>
-<script src="access-script.js"></script>
-<script src="mobile-script.js"></script>
+
+<!-- 🚀 SMART LOADER (loads firebase-config + mobile-touch + page script in correct order) -->
+<script src="src/core/buono-loader.js" data-page-script="access-script.js"></script>
+
+<!-- ❌ OLD - replaced by loader -->
+<!-- <script src="firebase-config.js"></script> -->
+<!-- <script src="access-script.js"></script> -->
+<!-- <script src="mobile-script.js"></script> -->
 
 </body>
 </html>

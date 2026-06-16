@@ -1,13 +1,15 @@
 // ============================================
-// 🔐 LOGIN PAGE - OPTIMIZED SCRIPT
+// 🔐 LOGIN PAGE - LOADER SAFE SCRIPT
 // File: login-script.js
-// Version: 3.0 - Performance Optimized!
+// Version: 4.0 - Theme-Aware + Loader Safe
 // ============================================
 
 // ─── Perf Tracker ───
 const Perf = {
     _marks: {},
-    start(label) { this._marks[label] = performance.now(); },
+    start(label) {
+        this._marks[label] = performance.now();
+    },
     end(label) {
         const t = performance.now() - (this._marks[label] || 0);
         console.log(`⚡ [LOGIN] ${label}: ${t.toFixed(1)}ms`);
@@ -17,54 +19,128 @@ const Perf = {
 
 Perf.start('Total Init');
 
-// ─── Reveal Page ───
+let loginPageInitialized = false;
+
+// ===================================
+// 🔧 HELPERS
+// ===================================
+function hasLoginDependencies() {
+    return (
+        typeof db !== 'undefined' &&
+        typeof getCurrentUser === 'function' &&
+        typeof isStudentLogin === 'function'
+    );
+}
+
+function getLoginElements() {
+    return {
+        overlay: document.getElementById('loginLoadingOverlay'),
+        content: document.getElementById('loginMainContent'),
+        errorEl: document.getElementById('loginError'),
+        loginBtn: document.getElementById('loginBtn'),
+        nicknameInput: document.getElementById('loginNickname'),
+        passwordInput: document.getElementById('loginPassword'),
+        pendingOverlay: document.getElementById('pendingModalOverlay'),
+        pendingMessage: document.getElementById('pendingMessage'),
+        emailVerifyStatus: document.getElementById('emailVerifyStatus'),
+        pendingAppliedDate: document.getElementById('pendingAppliedDate')
+    };
+}
+
+function resetLoginButtonState() {
+    const { loginBtn } = getLoginElements();
+    if (!loginBtn) return;
+
+    loginBtn.classList.remove('login-btn-success-employee', 'login-btn-success-student');
+}
+
+function setLoginButtonSuccess(type, text) {
+    const { loginBtn } = getLoginElements();
+    if (!loginBtn) return;
+
+    resetLoginButtonState();
+
+    if (type === 'employee') {
+        loginBtn.classList.add('login-btn-success-employee');
+    } else if (type === 'student') {
+        loginBtn.classList.add('login-btn-success-student');
+    }
+
+    loginBtn.textContent = text;
+}
+
+// ===================================
+// 👁️ REVEAL PAGE
+// ===================================
 function revealLoginPage() {
     Perf.end('Total Init');
-    const overlay = document.getElementById('loginLoadingOverlay');
-    const content = document.getElementById('loginMainContent');
-    if (overlay) overlay.classList.add('hidden');
+
+    const { overlay, content } = getLoginElements();
+
+    if (overlay) {
+        overlay.classList.add('hidden');
+    }
+
     if (content) {
         content.style.opacity = '1';
         content.style.transform = 'translateY(0)';
     }
+
     console.log('✅ [LOGIN] Page ready!');
 }
 
-// ─── Smart Error Display ───
+// ===================================
+// ⚠️ ERROR UI
+// ===================================
 function showError(message) {
-    const errorEl = document.getElementById('loginError');
+    const { errorEl } = getLoginElements();
+    if (!errorEl) return;
+
     errorEl.textContent = message;
     errorEl.classList.remove('show');
-    // Force reflow to restart animation
     void errorEl.offsetWidth;
     errorEl.classList.add('show');
 }
 
 function hideError() {
-    const errorEl = document.getElementById('loginError');
+    const { errorEl } = getLoginElements();
+    if (!errorEl) return;
+
     errorEl.classList.remove('show');
 }
 
-// ─── Button Loading ───
+// ===================================
+// 🔘 BUTTON STATE
+// ===================================
 function setButtonLoading(isLoading) {
-    const loginBtn = document.getElementById('loginBtn');
+    const { loginBtn } = getLoginElements();
+    if (!loginBtn) return;
+
     if (isLoading) {
+        resetLoginButtonState();
         loginBtn.disabled = true;
         loginBtn.textContent = '⏳ Checking...';
     } else {
         loginBtn.disabled = false;
         loginBtn.textContent = '🔐 Login';
-        loginBtn.style.background = '';
+        resetLoginButtonState();
     }
 }
 
 // ===================================
-// 🚀 AUTO-REDIRECT (Smart!)
+// 🚀 AUTO REDIRECT
 // ===================================
-(function checkExistingLogin() {
+function checkExistingLogin() {
     Perf.start('Auto-redirect Check');
 
-    // Check Employee Login
+    if (!hasLoginDependencies()) {
+        console.error('❌ [LOGIN] Core dependencies not ready');
+        Perf.end('Auto-redirect Check');
+        setTimeout(revealLoginPage, 50);
+        return;
+    }
+
+    // Employee session
     if (getCurrentUser()) {
         console.log('✅ [LOGIN] Employee already logged in → access.html');
         Perf.end('Auto-redirect Check');
@@ -72,7 +148,7 @@ function setButtonLoading(isLoading) {
         return;
     }
 
-    // Check Student Login
+    // Student session
     const existingStudent = sessionStorage.getItem('loggedInStudent');
     if (existingStudent) {
         try {
@@ -81,28 +157,28 @@ function setButtonLoading(isLoading) {
             Perf.end('Auto-redirect Check');
             window.location.href = 'student-portal.html';
             return;
-        } catch (e) {
+        } catch (error) {
             sessionStorage.removeItem('loggedInStudent');
         }
     }
 
     Perf.end('Auto-redirect Check');
-
-    // No existing login - reveal page smoothly
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', revealLoginPage);
-    } else {
-        // Tiny delay for smooth transition
-        setTimeout(revealLoginPage, 50);
-    }
-})();
+    setTimeout(revealLoginPage, 50);
+}
 
 // ===================================
-// 🔐 SMART LOGIN FUNCTION
+// 🔐 LOGIN ENTRY
 // ===================================
 async function loginUser() {
-    const userId = document.getElementById('loginNickname').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
+    if (!hasLoginDependencies()) {
+        showError("⚠️ System still loading. Please wait...");
+        return;
+    }
+
+    const { nicknameInput, passwordInput } = getLoginElements();
+
+    const userId = nicknameInput ? nicknameInput.value.trim() : '';
+    const password = passwordInput ? passwordInput.value.trim() : '';
 
     hideError();
 
@@ -132,9 +208,6 @@ async function loginUser() {
 // ===================================
 // 👤 EMPLOYEE LOGIN
 // ===================================
-// ===================================
-// 👤 EMPLOYEE LOGIN (UPDATED!)
-// ===================================
 async function loginAsEmployee(nickname, password) {
     console.log('🔍 [LOGIN] Searching employee:', nickname);
 
@@ -157,7 +230,6 @@ async function loginAsEmployee(nickname, password) {
         return;
     }
 
-    // ⭐ NEW: APPROVAL STATUS CHECK
     if (userData.approvalStatus === 'pending') {
         console.log('⏳ [LOGIN] Account pending approval');
         showPendingModal({
@@ -177,14 +249,12 @@ async function loginAsEmployee(nickname, password) {
         return;
     }
 
-    // ⭐ NEW: SUSPENDED CHECK (employees)
     if (userData.status === 'Suspended') {
         showError("⛔ Account suspended! Contact admin.");
         setButtonLoading(false);
         return;
     }
 
-    // ✅ EMPLOYEE LOGIN SUCCESS
     const userInfo = {
         id: userDoc.id,
         name: userData.name,
@@ -195,9 +265,7 @@ async function loginAsEmployee(nickname, password) {
 
     sessionStorage.setItem('loggedInUser', JSON.stringify(userInfo));
 
-    const loginBtn = document.getElementById('loginBtn');
-    loginBtn.textContent = '✅ Welcome ' + userData.nickname + '!';
-    loginBtn.style.background = 'linear-gradient(135deg, #4CAF50, #2e7d32)';
+    setLoginButtonSuccess('employee', '✅ Welcome ' + userData.nickname + '!');
 
     Perf.end('Login Attempt');
     console.log('🎉 [LOGIN] Employee success:', userData.nickname);
@@ -206,13 +274,9 @@ async function loginAsEmployee(nickname, password) {
         window.location.href = 'access.html';
     }, 800);
 }
-   
 
 // ===================================
 // 🎓 STUDENT LOGIN
-// ===================================
-// ===================================
-// 🎓 STUDENT LOGIN (UPDATED!)
 // ===================================
 async function loginAsStudent(studentId, password) {
     console.log('🔍 [LOGIN] Searching student:', studentId);
@@ -237,7 +301,6 @@ async function loginAsStudent(studentId, password) {
         return;
     }
 
-    // ⭐ NEW: APPROVAL STATUS CHECK
     if (studentData.approvalStatus === 'pending') {
         console.log('⏳ [LOGIN] Student account pending approval');
         showPendingModal({
@@ -263,7 +326,6 @@ async function loginAsStudent(studentId, password) {
         return;
     }
 
-    // ✅ STUDENT LOGIN SUCCESS
     const studentInfo = {
         docId: studentDoc.id,
         studentId: studentData.studentId,
@@ -279,9 +341,7 @@ async function loginAsStudent(studentId, password) {
 
     sessionStorage.setItem('loggedInStudent', JSON.stringify(studentInfo));
 
-    const loginBtn = document.getElementById('loginBtn');
-    loginBtn.textContent = '🎓 Welcome ' + studentData.name + '!';
-    loginBtn.style.background = 'linear-gradient(135deg, #9C27B0, #6A1B9A)';
+    setLoginButtonSuccess('student', '🎓 Welcome ' + studentData.name + '!');
 
     Perf.end('Login Attempt');
     console.log('🎉 [LOGIN] Student success:', studentData.studentId);
@@ -290,99 +350,171 @@ async function loginAsStudent(studentId, password) {
         window.location.href = 'student-portal.html';
     }, 1000);
 }
-      
 
 // ===================================
 // ⌨️ ENTER KEY SUPPORT
 // ===================================
-document.addEventListener('keypress', function(e) {
+function handleEnterKey(e) {
     if (e.key === 'Enter') {
         loginUser();
     }
-});
+}
 
 // ===================================
-// 🔠 AUTO-UPPERCASE Student IDs
+// 🔠 AUTO UPPERCASE STUDENT IDs
 // ===================================
-document.addEventListener('DOMContentLoaded', function() {
-    const idInput = document.getElementById('loginNickname');
-    if (idInput) {
-        idInput.addEventListener('input', function(e) {
-            const val = e.target.value;
-            if (val.toUpperCase().startsWith('BCA') || val.toUpperCase().startsWith('B-')) {
-                e.target.value = val.toUpperCase();
-            }
-        });
-    }
-});
+function setupUppercaseInput() {
+    const { nicknameInput } = getLoginElements();
+    if (!nicknameInput) return;
 
-console.log('🔐 [LOGIN] Script loaded! v3.0 - Optimized');
+    nicknameInput.addEventListener('input', function (e) {
+        const val = e.target.value;
+        if (val.toUpperCase().startsWith('BCA') || val.toUpperCase().startsWith('B-')) {
+            e.target.value = val.toUpperCase();
+        }
+    });
+}
 
-// ═══════════════════════════════════════════════════
-// ⭐ NEW: PENDING APPROVAL MODAL FUNCTIONS
-// ═══════════════════════════════════════════════════
-
+// ===================================
+// ⏳ PENDING MODAL
+// ===================================
 function showPendingModal(userData) {
-    const overlay = document.getElementById('pendingModalOverlay');
-    const messageEl = document.getElementById('pendingMessage');
-    const emailVerifyEl = document.getElementById('emailVerifyStatus');
-    const appliedDateEl = document.getElementById('pendingAppliedDate');
-    
-    if (!overlay) {
-        console.warn('⚠️ [LOGIN] Pending modal element not found');
+    const {
+        pendingOverlay,
+        pendingMessage,
+        emailVerifyStatus,
+        pendingAppliedDate
+    } = getLoginElements();
+
+    if (!pendingOverlay || !pendingMessage || !emailVerifyStatus || !pendingAppliedDate) {
+        console.warn('⚠️ [LOGIN] Pending modal elements not found');
         return;
     }
-    
-    // Custom message
+
     const typeText = userData.type === 'employee' ? 'employee' : 'student';
-    messageEl.textContent = `Hi ${userData.name}! Your ${typeText} account is under review by our admin team.`;
-    
-    // Email verification status
+    pendingMessage.textContent = `Hi ${userData.name}! Your ${typeText} account is under review by our admin team.`;
+
+    emailVerifyStatus.classList.remove('email-verified');
+
     if (userData.emailVerified) {
-        emailVerifyEl.innerHTML = '✅ Email verified';
-        emailVerifyEl.style.color = '#51CF66';
+        emailVerifyStatus.textContent = '✅ Email verified';
+        emailVerifyStatus.classList.add('email-verified');
     } else {
-        emailVerifyEl.textContent = `Check ${userData.email} and verify`;
+        emailVerifyStatus.textContent = userData.email
+            ? `Check ${userData.email} and verify`
+            : 'Please verify your email';
     }
-    
-    // Applied date
+
     if (userData.signupDate) {
-        const date = userData.signupDate.toDate 
-            ? userData.signupDate.toDate() 
+        const date = userData.signupDate.toDate
+            ? userData.signupDate.toDate()
             : new Date(userData.signupDate);
-        appliedDateEl.textContent = `Applied: ${date.toLocaleDateString('en-US', {
+
+        pendingAppliedDate.textContent = `Applied: ${date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         })}`;
     } else {
-        appliedDateEl.textContent = 'Applied recently';
+        pendingAppliedDate.textContent = 'Applied recently';
     }
-    
-    overlay.classList.add('active');
+
+    pendingOverlay.classList.add('active');
 }
 
 function closePendingModal() {
-    const overlay = document.getElementById('pendingModalOverlay');
-    if (overlay) {
-        overlay.classList.remove('active');
+    const {
+        pendingOverlay,
+        nicknameInput,
+        passwordInput
+    } = getLoginElements();
+
+    if (pendingOverlay) {
+        pendingOverlay.classList.remove('active');
     }
-    
-    // Clear form
-    document.getElementById('loginNickname').value = '';
-    document.getElementById('loginPassword').value = '';
+
+    if (nicknameInput) nicknameInput.value = '';
+    if (passwordInput) passwordInput.value = '';
+
+    hideError();
+    setButtonLoading(false);
+
+    if (nicknameInput) {
+        nicknameInput.focus();
+    }
 }
 
-// Close on overlay click
-document.addEventListener('DOMContentLoaded', function() {
-    const overlay = document.getElementById('pendingModalOverlay');
-    if (overlay) {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                closePendingModal();
-            }
-        });
-    }
-});
+function setupPendingModalOverlay() {
+    const { pendingOverlay } = getLoginElements();
+    if (!pendingOverlay) return;
 
-console.log('⏳ [LOGIN] Pending approval system ready');
+    pendingOverlay.addEventListener('click', function (e) {
+        if (e.target === pendingOverlay) {
+            closePendingModal();
+        }
+    });
+}
+
+// ===================================
+// 🚀 INIT
+// ===================================
+function initLoginPage() {
+    if (loginPageInitialized) return;
+    loginPageInitialized = true;
+
+    document.addEventListener('keypress', handleEnterKey);
+    setupUppercaseInput();
+    setupPendingModalOverlay();
+
+    console.log('🔐 [LOGIN] Script loaded! v4.0 - Theme-Aware + Loader Safe');
+    console.log('⏳ [LOGIN] Pending approval system ready');
+
+    checkExistingLogin();
+}
+
+function waitForDomReady() {
+    return new Promise((resolve) => {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', resolve, { once: true });
+        } else {
+            resolve();
+        }
+    });
+}
+
+function waitForBuonoReady() {
+    if (window.BuonoReady === true) {
+        return Promise.resolve();
+    }
+
+    if (window.BuonoLoader && typeof window.BuonoLoader.whenReady === 'function') {
+        return window.BuonoLoader.whenReady();
+    }
+
+    return new Promise((resolve) => {
+        let done = false;
+
+        function finish() {
+            if (done) return;
+            done = true;
+            resolve();
+        }
+
+        document.addEventListener('buono:ready', finish, { once: true });
+        setTimeout(finish, 4000);
+    });
+}
+
+// Inline onclick support
+window.loginUser = loginUser;
+window.closePendingModal = closePendingModal;
+
+Promise.all([waitForDomReady(), waitForBuonoReady()])
+    .then(() => {
+        initLoginPage();
+    })
+    .catch((error) => {
+        console.error('❌ [LOGIN] Init failed:', error);
+        revealLoginPage();
+        showError("❌ Page loading failed! Please refresh.");
+    });

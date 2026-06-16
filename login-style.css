@@ -1,41 +1,93 @@
 /* ============================================
-   LOGIN PAGE - OPTIMIZED STYLES
+   LOGIN PAGE - THEME AWARE STYLES
    File: login-style.css
-   Version: 3.0 - Optimized!
+   Version: 4.0 - Theme-Aware + Core Compatible
+   Note: Uses buono-core.css variables with safe fallbacks
    ============================================ */
+
+/* ===== PAGE TOKENS ===== */
+:root {
+    --login-page-bg: var(--bg-primary, #1a1a2e);
+    --login-surface: var(--bg-card, #16213e);
+    --login-field-bg: var(--bg-secondary, #0f3460);
+
+    --login-accent: var(--gold-primary, #f0a500);
+    --login-accent-strong: var(--gold-secondary, #e09400);
+    --login-accent-deep: var(--gold-dark, #c07800);
+
+    --login-text-primary: var(--text-primary, #ffffff);
+    --login-text-secondary: var(--text-secondary, #cccccc);
+    --login-text-muted: var(--text-muted, #888888);
+    --login-text-soft: var(--text-muted, #aaaaaa);
+    --login-placeholder: var(--text-muted, #666666);
+
+    --login-border: var(--border-light, rgba(240, 165, 0, 0.3));
+    --login-border-subtle: var(--border-subtle, rgba(240, 165, 0, 0.2));
+    --login-border-strong: var(--border-strong, rgba(240, 165, 0, 0.45));
+
+    --login-accent-soft-bg: rgba(240, 165, 0, 0.05);
+    --login-accent-hover-bg: rgba(240, 165, 0, 0.1);
+    --login-accent-ring: rgba(240, 165, 0, 0.15);
+
+    --login-error: var(--color-error, #ff4444);
+    --login-error-bg: var(--color-error-bg, rgba(255, 68, 68, 0.1));
+    --login-error-border: var(--color-error-border, rgba(255, 68, 68, 0.3));
+
+    --login-success: var(--color-success, #51CF66);
+    --login-success-dark: var(--color-success-dark, #2e7d32);
+
+    --login-student: var(--color-info, #9C27B0);
+    --login-student-dark: var(--color-info-dark, #6A1B9A);
+
+    --login-overlay-bg: rgba(26, 26, 46, 0.95);
+
+    --login-shadow-card: var(--shadow-lg, 0 20px 60px rgba(0, 0, 0, 0.5));
+    --login-shadow-accent: var(--shadow-gold-sm, 0 8px 24px rgba(240, 165, 0, 0.4));
+    --login-shadow-accent-soft: 0 8px 24px rgba(240, 165, 0, 0.2);
+    --login-shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
 
 /* ===== LOADING OVERLAY ===== */
 .login-loading-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: #1a1a2e;
+    inset: 0;
+    background: var(--login-page-bg);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
+    z-index: var(--z-loader, 99999);
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
 .login-loading-overlay.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
-.login-loading-wrap { text-align: center; }
+
+.login-loading-wrap {
+    text-align: center;
+}
+
 .login-loading-ring {
     width: 48px;
     height: 48px;
-    border: 4px solid rgba(240,165,0,0.15);
-    border-top-color: #f0a500;
+    border: 4px solid var(--login-accent-ring);
+    border-top-color: var(--login-accent);
     border-radius: 50%;
     animation: loginSpin 0.8s linear infinite;
     margin: 0 auto 14px;
 }
+
 .login-loading-text {
-    color: #f0a500;
-    font-size: 14px;
-    font-weight: 600;
+    color: var(--login-accent);
+    font-size: var(--text-sm, 14px);
+    font-weight: var(--font-semibold, 600);
 }
-@keyframes loginSpin { to { transform: rotate(360deg); } }
+
+@keyframes loginSpin {
+    to { transform: rotate(360deg); }
+}
 
 /* ===== LOGIN BODY ===== */
 .login-body {
@@ -43,7 +95,8 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #1a1a2e;
+    background: var(--login-page-bg);
+    color: var(--login-text-primary);
     margin: 0;
     padding: 20px;
     box-sizing: border-box;
@@ -51,13 +104,13 @@
 
 /* ===== LOGIN CONTAINER ===== */
 .login-container {
-    background: #16213e;
-    border-radius: 20px;
+    background: var(--login-surface);
+    border-radius: var(--radius-xl, 20px);
     padding: 48px 40px;
     width: 100%;
     max-width: 400px;
-    border: 1px solid rgba(240, 165, 0, 0.3);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--login-border);
+    box-shadow: var(--login-shadow-card);
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
@@ -73,21 +126,22 @@
     margin-bottom: 12px;
     animation: loginLogoPulse 3s ease-in-out infinite;
 }
+
 @keyframes loginLogoPulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.12); }
 }
 
 .login-header h1 {
-    color: #f0a500;
+    color: var(--login-accent);
     font-size: 32px;
     margin: 0 0 8px 0;
     letter-spacing: 2px;
 }
 
 .login-header p {
-    color: #888;
-    font-size: 14px;
+    color: var(--login-text-muted);
+    font-size: var(--text-sm, 14px);
     margin: 0;
 }
 
@@ -95,10 +149,10 @@
 #loginForm input {
     width: 100%;
     padding: 14px 16px;
-    background: #0f3460;
-    border: 1px solid rgba(240, 165, 0, 0.3);
-    border-radius: 10px;
-    color: white;
+    background: var(--login-field-bg);
+    border: 1px solid var(--login-border);
+    border-radius: var(--radius-md, 10px);
+    color: var(--login-text-primary);
     font-size: 15px;
     margin-bottom: 16px;
     box-sizing: border-box;
@@ -107,25 +161,25 @@
 
 #loginForm input:focus {
     outline: none;
-    border-color: #f0a500;
-    box-shadow: 0 0 0 3px rgba(240, 165, 0, 0.15);
+    border-color: var(--login-accent);
+    box-shadow: 0 0 0 3px var(--login-accent-ring);
     transform: translateY(-1px);
 }
 
 #loginForm input::placeholder {
-    color: #666;
+    color: var(--login-placeholder);
 }
 
 /* ===== LOGIN BUTTON ===== */
 #loginBtn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #f0a500, #e09400);
+    background: linear-gradient(135deg, var(--login-accent), var(--login-accent-strong));
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius-md, 10px);
     color: white;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: var(--font-bold, 700);
     cursor: pointer;
     margin-top: 8px;
     transition: all 0.25s ease;
@@ -133,9 +187,9 @@
 }
 
 #loginBtn:hover {
-    background: linear-gradient(135deg, #e09400, #c07800);
+    background: linear-gradient(135deg, var(--login-accent-strong), var(--login-accent-deep));
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(240, 165, 0, 0.4);
+    box-shadow: var(--login-shadow-accent);
 }
 
 #loginBtn:active {
@@ -148,23 +202,43 @@
     transform: none;
 }
 
+#loginBtn.login-btn-success-employee {
+    background: linear-gradient(135deg, var(--login-success), var(--login-success-dark));
+}
+
+#loginBtn.login-btn-success-employee:hover {
+    background: linear-gradient(135deg, var(--login-success), var(--login-success-dark));
+    box-shadow: 0 8px 24px rgba(81, 207, 102, 0.35);
+}
+
+#loginBtn.login-btn-success-student {
+    background: linear-gradient(135deg, var(--login-student), var(--login-student-dark));
+}
+
+#loginBtn.login-btn-success-student:hover {
+    background: linear-gradient(135deg, var(--login-student), var(--login-student-dark));
+    box-shadow: 0 8px 24px rgba(156, 39, 176, 0.35);
+}
+
 /* ===== ERROR MESSAGE ===== */
 @keyframes errorShake {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-6px); }
     40%, 80% { transform: translateX(6px); }
 }
+
 #loginError {
-    color: #ff4444;
+    color: var(--login-error);
     text-align: center;
     margin-top: 16px;
-    font-size: 14px;
+    font-size: var(--text-sm, 14px);
     display: none;
     padding: 10px;
-    background: rgba(255, 68, 68, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 68, 68, 0.3);
+    background: var(--login-error-bg);
+    border-radius: var(--radius-sm, 8px);
+    border: 1px solid var(--login-error-border);
 }
+
 #loginError.show {
     display: block;
     animation: errorShake 0.45s cubic-bezier(.36,.07,.19,.97);
@@ -174,64 +248,38 @@
 .login-help-box {
     margin-top: 24px;
     padding: 14px 16px;
-    background: rgba(240, 165, 0, 0.05);
-    border-left: 3px solid #f0a500;
-    border-radius: 8px;
+    background: var(--login-accent-soft-bg);
+    border-left: 3px solid var(--login-accent);
+    border-radius: var(--radius-sm, 8px);
     text-align: left;
 }
 
 .login-help-title {
-    color: #f0a500;
-    font-size: 12px;
-    font-weight: 700;
+    color: var(--login-accent);
+    font-size: var(--text-xs, 12px);
+    font-weight: var(--font-bold, 700);
     margin-bottom: 8px;
     letter-spacing: 0.5px;
 }
 
 .login-help-text {
-    color: #aaa;
-    font-size: 12px;
+    color: var(--login-text-soft);
+    font-size: var(--text-xs, 12px);
     line-height: 1.7;
 }
 
 .login-help-text strong {
-    color: #ccc;
-    font-weight: 600;
+    color: var(--login-text-secondary);
+    font-weight: var(--font-semibold, 600);
 }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 480px) {
-    .login-container {
-        padding: 36px 24px;
-    }
-
-    .login-header h1 {
-        font-size: 28px;
-    }
-
-    .login-icon {
-        font-size: 44px;
-    }
-
-    .login-help-box {
-        padding: 12px 14px;
-    }
-
-    .login-help-text {
-        font-size: 11px;
-    }
-}
-/* ═══════════════════════════════════════════════════
-   ⭐ NEW: SIGN UP SECTION + PENDING MODAL STYLES
-   ═══════════════════════════════════════════════════ */
 
 /* ===== DIVIDER ===== */
 .login-divider {
     display: flex;
     align-items: center;
     margin: 24px 0 20px;
-    color: #666;
-    font-size: 12px;
+    color: var(--login-placeholder);
+    font-size: var(--text-xs, 12px);
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -241,13 +289,13 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(240, 165, 0, 0.2);
+    background: var(--login-border-subtle);
 }
 
 .login-divider span {
     padding: 0 16px;
-    color: #888;
-    font-weight: 600;
+    color: var(--login-text-muted);
+    font-weight: var(--font-semibold, 600);
 }
 
 /* ===== SIGN UP SECTION ===== */
@@ -257,7 +305,7 @@
 }
 
 .signup-text {
-    color: #aaa;
+    color: var(--login-text-soft);
     font-size: 13px;
     margin: 0 0 12px 0;
     font-weight: 500;
@@ -271,11 +319,11 @@
     width: 100%;
     padding: 13px 20px;
     background: transparent;
-    border: 2px solid #f0a500;
-    border-radius: 10px;
-    color: #f0a500;
+    border: 2px solid var(--login-accent);
+    border-radius: var(--radius-md, 10px);
+    color: var(--login-accent);
     font-size: 15px;
-    font-weight: 700;
+    font-weight: var(--font-bold, 700);
     text-decoration: none;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -284,9 +332,9 @@
 }
 
 .signup-button:hover {
-    background: rgba(240, 165, 0, 0.1);
+    background: var(--login-accent-hover-bg);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(240, 165, 0, 0.2);
+    box-shadow: var(--login-shadow-accent-soft);
 }
 
 .signup-button:active {
@@ -304,20 +352,14 @@
     75% { transform: rotate(-15deg) scale(1.1); }
 }
 
-/* ═══════════════════════════════════════════════════
-   ⏳ PENDING APPROVAL MODAL
-   ═══════════════════════════════════════════════════ */
-
+/* ===== PENDING APPROVAL MODAL ===== */
 .pending-modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(26, 26, 46, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 9999;
+    inset: 0;
+    background: var(--login-overlay-bg);
+    backdrop-filter: var(--backdrop-blur-md, blur(10px));
+    -webkit-backdrop-filter: var(--backdrop-blur-md, blur(10px));
+    z-index: var(--z-modal, 9999);
     display: none;
     align-items: center;
     justify-content: center;
@@ -336,13 +378,13 @@
 }
 
 .pending-modal {
-    background: #16213e;
-    border-radius: 20px;
+    background: var(--login-surface);
+    border-radius: var(--radius-xl, 20px);
     padding: 40px 32px;
     max-width: 480px;
     width: 100%;
-    border: 1px solid rgba(240, 165, 0, 0.3);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--login-border);
+    box-shadow: var(--login-shadow-modal);
     text-align: center;
     animation: pendingSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 90vh;
@@ -368,37 +410,31 @@
 }
 
 @keyframes pendingFloat {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    25% {
-        transform: translateY(-8px) rotate(-5deg);
-    }
-    75% {
-        transform: translateY(-8px) rotate(5deg);
-    }
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-8px) rotate(-5deg); }
+    75% { transform: translateY(-8px) rotate(5deg); }
 }
 
 .pending-title {
-    color: #f0a500;
+    color: var(--login-accent);
     font-size: 28px;
-    font-weight: 700;
+    font-weight: var(--font-bold, 700);
     margin: 0 0 12px 0;
     letter-spacing: 1px;
 }
 
 .pending-message {
-    color: #ccc;
+    color: var(--login-text-secondary);
     font-size: 15px;
     line-height: 1.6;
     margin: 0 0 28px 0;
 }
 
-/* Info Box */
+/* ===== INFO BOX ===== */
 .pending-info-box {
-    background: rgba(240, 165, 0, 0.05);
-    border: 1px solid rgba(240, 165, 0, 0.15);
-    border-radius: 12px;
+    background: var(--login-accent-soft-bg);
+    border: 1px solid var(--login-border-subtle);
+    border-radius: var(--radius-md, 12px);
     padding: 20px;
     margin-bottom: 24px;
     text-align: left;
@@ -409,7 +445,7 @@
     align-items: flex-start;
     gap: 14px;
     padding: 12px 0;
-    border-bottom: 1px solid rgba(240, 165, 0, 0.1);
+    border-bottom: 1px solid var(--login-border-subtle);
 }
 
 .pending-info-item:last-child {
@@ -430,36 +466,40 @@
 }
 
 .pending-info-text strong {
-    color: #f0a500;
+    color: var(--login-accent);
     font-size: 13px;
-    font-weight: 700;
+    font-weight: var(--font-bold, 700);
     letter-spacing: 0.5px;
 }
 
 .pending-info-text span {
-    color: #aaa;
+    color: var(--login-text-soft);
     font-size: 13px;
     line-height: 1.5;
 }
 
-/* Applied Date */
+.pending-info-text span.email-verified {
+    color: var(--login-success) !important;
+}
+
+/* ===== APPLIED DATE ===== */
 .pending-applied-date {
-    color: #888;
+    color: var(--login-text-muted);
     font-size: 12px;
     font-style: italic;
     margin: 0 0 24px 0;
 }
 
-/* Close Button */
+/* ===== CLOSE BUTTON ===== */
 .pending-close-btn {
     width: 100%;
     padding: 14px 24px;
-    background: linear-gradient(135deg, #f0a500, #e09400);
+    background: linear-gradient(135deg, var(--login-accent), var(--login-accent-strong));
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius-md, 10px);
     color: white;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: var(--font-bold, 700);
     cursor: pointer;
     transition: all 0.25s ease;
     letter-spacing: 0.5px;
@@ -467,55 +507,75 @@
 }
 
 .pending-close-btn:hover {
-    background: linear-gradient(135deg, #e09400, #c07800);
+    background: linear-gradient(135deg, var(--login-accent-strong), var(--login-accent-deep));
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(240, 165, 0, 0.4);
+    box-shadow: var(--login-shadow-accent);
 }
 
 .pending-close-btn:active {
     transform: translateY(0);
 }
 
-/* ===== RESPONSIVE (Mobile) ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
+    .login-container {
+        padding: 36px 24px;
+    }
+
+    .login-header h1 {
+        font-size: 28px;
+    }
+
+    .login-icon {
+        font-size: 44px;
+    }
+
+    .login-help-box {
+        padding: 12px 14px;
+    }
+
+    .login-help-text {
+        font-size: 11px;
+    }
+
     .signup-button {
         padding: 12px 16px;
         font-size: 14px;
     }
-    
+
     .signup-icon {
         font-size: 16px;
     }
-    
+
     .pending-modal {
         padding: 30px 22px;
         border-radius: 16px;
     }
-    
+
     .pending-icon {
         font-size: 60px;
     }
-    
+
     .pending-title {
         font-size: 22px;
     }
-    
+
     .pending-message {
         font-size: 14px;
     }
-    
+
     .pending-info-box {
         padding: 16px;
     }
-    
+
     .pending-info-text strong {
         font-size: 12px;
     }
-    
+
     .pending-info-text span {
         font-size: 12px;
     }
-    
+
     .pending-close-btn {
         padding: 13px 20px;
         font-size: 14px;

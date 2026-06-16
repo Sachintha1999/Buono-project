@@ -1,22 +1,27 @@
 /* ═══════════════════════════════════════════════════════════
-   📱 BUONO WELCOME PAGE - PREMIUM MOBILE EXPERIENCE
+   📱 BUONO WELCOME PAGE - MOBILE EXPERIENCE
    File: welcome-mobile.css
-   Version: 2.0 - Snap Scroll + Premium Animations
-   Purpose: Welcome page mobile only (NOT for other pages!)
-   Last Updated: 2026-06-14
+   Version: 3.0 - Theme-Aware Edition
+   Date: 2026-06-16
+   
+   🎯 PURPOSE: 
+   - Welcome page mobile-specific styles ONLY
+   - Fonts → controlled by theme-coffee.css (Poppins)
+   - Common things → src/theme/* central control
+   
+   📦 INCLUDES:
+   1. Section content reveal (PC + Mobile)
+   2. Mobile breakpoint (≤768px)
+   3. Small mobile (≤480px)
+   4. Landscape mobile
    ═══════════════════════════════════════════════════════════ */
+
 
 /* ═══════════════════════════════════════════════════════════
-   🎨 MODERN FONT IMPORT (Google Fonts)
-   ═══════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
-
-/* ═══════════════════════════════════════════════════════════
-   ✨ SECTION CONTENT REVEAL (PC + Mobile!)
-   When section visible → content slides up with animation
+   ✨ SECTION CONTENT REVEAL (PC + Mobile)
+   Used by: welcome-extras.js IntersectionObserver
    ═══════════════════════════════════════════════════════════ */
 
-/* Section content - hidden initially */
 .section-animate-in {
     opacity: 0;
     transform: translateY(40px);
@@ -29,9 +34,9 @@
     transform: translateY(0);
 }
 
-/* Staggered children */
+/* Staggered children animation */
 .section-animate-in.in-view > * {
-    animation: childFadeUp 0.6s ease both;
+    animation: welcomeChildFadeUp 0.6s ease both;
 }
 
 .section-animate-in.in-view > *:nth-child(1) { animation-delay: 0.1s; }
@@ -41,7 +46,7 @@
 .section-animate-in.in-view > *:nth-child(5) { animation-delay: 0.5s; }
 .section-animate-in.in-view > *:nth-child(6) { animation-delay: 0.6s; }
 
-@keyframes childFadeUp {
+@keyframes welcomeChildFadeUp {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -52,52 +57,11 @@
     }
 }
 
+
 /* ═══════════════════════════════════════════════════════════
    📱 MOBILE STYLES (768px and below)
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-
-    /* ─────────────────────────────────────────────────
-       🎨 FONT OVERRIDE (Modern Clean Font!)
-    ───────────────────────────────────────────────── */
-    body,
-    .nav-link,
-    .nav-btn,
-    .hero-welcome,
-    .hero-subtitle,
-    .hero-description,
-    .section-title,
-    .section-subtitle,
-    .menu-card-name,
-    .menu-card-description,
-    .academy-card-name,
-    .academy-card-description,
-    .feature-title,
-    .feature-description,
-    .testimonial-text,
-    .testimonial-name,
-    .contact-item-content h4,
-    .contact-item-content p,
-    .footer-description,
-    .footer-links a,
-    .stat-label,
-    .menu-card-category,
-    .academy-card-code {
-        font-family: 'Poppins', 'Inter', -apple-system, 
-                     BlinkMacSystemFont, 'Segoe UI', 
-                     Roboto, sans-serif !important;
-        letter-spacing: 0.3px;
-    }
-
-    .hero-brand,
-    .section-heading,
-    .about-content h2,
-    .stat-number,
-    .footer-logo-text {
-        font-family: 'Poppins', 'Inter', sans-serif !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.5px !important;
-    }
 
     /* ─────────────────────────────────────────────────
        🌐 GLOBAL MOBILE FOUNDATIONS
@@ -110,8 +74,8 @@
     }
 
     body {
-        font-size: 14px;
-        line-height: 1.6;
+        font-size: var(--text-base, 14px);
+        line-height: var(--leading-normal, 1.6);
         overflow-x: hidden;
     }
 
@@ -140,32 +104,49 @@
     }
 
     .nav-logo {
-        font-size: 20px !important;
+        font-size: var(--text-2xl, 20px) !important;
         gap: 8px !important;
     }
 
     .nav-logo-icon {
-        font-size: 26px !important;
+        font-size: var(--text-4xl, 26px) !important;
     }
 
     .nav-hamburger {
-        font-size: 24px !important;
+        font-size: var(--text-3xl, 24px) !important;
         padding: 8px !important;
         min-height: auto !important;
     }
 
     .nav-mobile-menu {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: var(--bg-secondary, rgba(26, 15, 10, 0.95)) !important;
+        backdrop-filter: var(--backdrop-blur-lg, blur(20px));
+        -webkit-backdrop-filter: var(--backdrop-blur-lg, blur(20px));
+        border-bottom: 1px solid var(--border-medium, rgba(212, 175, 55, 0.3));
         padding: 24px 20px !important;
-        top: 60px !important;
+        transform: translateY(-150%);
+        transition: transform var(--transition-medium, 0.3s ease);
+        z-index: var(--z-fixed, 999);
+    }
+
+    .nav-mobile-menu.active {
+        transform: translateY(0);
     }
 
     .nav-mobile-menu .nav-link {
-        font-size: 15px !important;
+        display: block;
+        font-size: var(--text-md, 15px) !important;
         padding: 14px 0 !important;
-        font-weight: 500 !important;
+        font-weight: var(--font-medium, 500) !important;
+        border-bottom: 1px solid var(--border-light, rgba(212, 175, 55, 0.2));
     }
 
     .nav-mobile-menu .nav-cta {
+        display: flex !important;
         flex-direction: row !important;
         gap: 10px !important;
         margin-top: 16px !important;
@@ -174,7 +155,7 @@
     .nav-mobile-menu .nav-btn {
         flex: 1;
         padding: 12px 20px !important;
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
         text-align: center;
     }
 
@@ -192,10 +173,10 @@
     }
 
     .hero-welcome {
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
         letter-spacing: 4px !important;
         margin-bottom: 10px !important;
-        font-weight: 500 !important;
+        font-weight: var(--font-medium, 500) !important;
     }
 
     .hero-brand {
@@ -205,10 +186,10 @@
     }
 
     .hero-tagline {
-        font-size: 14px !important;
+        font-size: var(--text-base, 14px) !important;
         letter-spacing: 4px !important;
         margin-bottom: 20px !important;
-        font-weight: 400 !important;
+        font-weight: var(--font-normal, 400) !important;
     }
 
     .hero-divider {
@@ -217,13 +198,13 @@
     }
 
     .hero-subtitle {
-        font-size: 15px !important;
+        font-size: var(--text-md, 15px) !important;
         margin-bottom: 12px !important;
     }
 
     .hero-description {
-        font-size: 13px !important;
-        line-height: 1.7 !important;
+        font-size: var(--text-sm, 13px) !important;
+        line-height: var(--leading-relaxed, 1.7) !important;
         margin-bottom: 30px !important;
         padding: 0 10px;
     }
@@ -239,19 +220,19 @@
     .hero-btn {
         width: 100% !important;
         padding: 14px 24px !important;
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
         justify-content: center !important;
         letter-spacing: 1px !important;
     }
 
     .hero-scroll-indicator {
         bottom: 20px !important;
-        font-size: 11px !important;
+        font-size: var(--text-xs, 11px) !important;
         letter-spacing: 2px !important;
     }
 
     .hero-scroll-arrow {
-        font-size: 20px !important;
+        font-size: var(--text-2xl, 20px) !important;
     }
 
     /* ─────────────────────────────────────────────────
@@ -262,37 +243,38 @@
     }
 
     .about-grid {
+        grid-template-columns: 1fr !important;
         gap: 40px !important;
     }
 
     .section-title {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         letter-spacing: 3px !important;
         margin-bottom: 12px !important;
     }
 
     .about-content h2 {
-        font-size: 28px !important;
+        font-size: var(--text-4xl, 28px) !important;
         line-height: 1.3 !important;
         margin-bottom: 18px !important;
     }
 
     .about-content p {
-        font-size: 14px !important;
-        line-height: 1.7 !important;
+        font-size: var(--text-base, 14px) !important;
+        line-height: var(--leading-relaxed, 1.7) !important;
         margin-bottom: 14px !important;
     }
 
     .about-image-box {
         height: 240px !important;
         font-size: 100px !important;
-        border-radius: 16px !important;
+        border-radius: var(--radius-lg, 16px) !important;
     }
 
     .about-decoration {
         width: 120px !important;
         height: 120px !important;
-        border-radius: 16px !important;
+        border-radius: var(--radius-lg, 16px) !important;
     }
 
     .about-decoration.top-right {
@@ -316,16 +298,16 @@
 
     .stat-card {
         padding: 20px 12px !important;
-        border-radius: 14px !important;
+        border-radius: var(--radius-lg, 14px) !important;
     }
 
     .stat-icon {
-        font-size: 28px !important;
+        font-size: var(--text-4xl, 28px) !important;
         margin-bottom: 10px !important;
     }
 
     .stat-number {
-        font-size: 28px !important;
+        font-size: var(--text-4xl, 28px) !important;
         margin-bottom: 6px !important;
     }
 
@@ -346,24 +328,25 @@
     }
 
     .section-heading {
-        font-size: 28px !important;
+        font-size: var(--text-4xl, 28px) !important;
         line-height: 1.3 !important;
         margin-bottom: 14px !important;
     }
 
     .section-subtitle {
-        font-size: 13px !important;
-        line-height: 1.6 !important;
+        font-size: var(--text-sm, 13px) !important;
+        line-height: var(--leading-normal, 1.6) !important;
         padding: 0 20px;
     }
 
     .menu-grid {
+        grid-template-columns: 1fr !important;
         gap: 16px !important;
     }
 
     .menu-card {
         padding: 24px 20px !important;
-        border-radius: 16px !important;
+        border-radius: var(--radius-lg, 16px) !important;
     }
 
     .menu-card-badge {
@@ -384,23 +367,23 @@
     }
 
     .menu-card-name {
-        font-size: 18px !important;
+        font-size: var(--text-xl, 18px) !important;
         margin-bottom: 10px !important;
     }
 
     .menu-card-description {
-        font-size: 13px !important;
-        line-height: 1.6 !important;
+        font-size: var(--text-sm, 13px) !important;
+        line-height: var(--leading-normal, 1.6) !important;
         min-height: auto !important;
         margin-bottom: 16px !important;
     }
 
     .menu-card-price {
-        font-size: 18px !important;
+        font-size: var(--text-xl, 18px) !important;
     }
 
     .menu-card-rating {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
     }
 
     /* ─────────────────────────────────────────────────
@@ -411,12 +394,13 @@
     }
 
     .academy-grid {
+        grid-template-columns: 1fr !important;
         gap: 16px !important;
     }
 
     .academy-card {
         padding: 24px 20px !important;
-        border-radius: 16px !important;
+        border-radius: var(--radius-lg, 16px) !important;
     }
 
     .academy-card-icon {
@@ -429,18 +413,18 @@
     }
 
     .academy-card-code {
-        font-size: 11px !important;
+        font-size: var(--text-xs, 11px) !important;
         letter-spacing: 1.5px !important;
     }
 
     .academy-card-name {
-        font-size: 20px !important;
+        font-size: var(--text-2xl, 20px) !important;
         margin-bottom: 12px !important;
     }
 
     .academy-card-description {
-        font-size: 13px !important;
-        line-height: 1.6 !important;
+        font-size: var(--text-sm, 13px) !important;
+        line-height: var(--leading-normal, 1.6) !important;
         margin-bottom: 18px !important;
     }
 
@@ -456,21 +440,31 @@
     }
 
     .academy-meta-value {
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
     }
 
     .academy-card-features li {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         padding: 4px 0 !important;
     }
 
     .academy-card-fee {
-        font-size: 20px !important;
+        font-size: var(--text-2xl, 20px) !important;
     }
 
     .academy-card-btn {
         padding: 10px 20px !important;
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
+    }
+
+    .academy-card-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .academy-card-btn {
+        text-align: center;
     }
 
     /* ─────────────────────────────────────────────────
@@ -487,7 +481,7 @@
 
     .feature-card {
         padding: 24px 14px !important;
-        border-radius: 14px !important;
+        border-radius: var(--radius-lg, 14px) !important;
     }
 
     .feature-icon {
@@ -496,12 +490,12 @@
     }
 
     .feature-title {
-        font-size: 14px !important;
+        font-size: var(--text-base, 14px) !important;
         margin-bottom: 10px !important;
     }
 
     .feature-description {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         line-height: 1.5 !important;
     }
 
@@ -518,23 +512,23 @@
 
     .testimonial-card {
         padding: 30px 20px !important;
-        border-radius: 18px !important;
+        border-radius: var(--radius-xl, 18px) !important;
     }
 
     .testimonial-quote-icon {
-        font-size: 36px !important;
+        font-size: var(--text-6xl, 36px) !important;
         margin-bottom: 14px !important;
     }
 
     .testimonial-text {
-        font-size: 14px !important;
-        line-height: 1.7 !important;
+        font-size: var(--text-base, 14px) !important;
+        line-height: var(--leading-relaxed, 1.7) !important;
         margin-bottom: 22px !important;
         min-height: 80px !important;
     }
 
     .testimonial-stars {
-        font-size: 16px !important;
+        font-size: var(--text-lg, 16px) !important;
         margin-bottom: 14px !important;
     }
 
@@ -544,11 +538,11 @@
     }
 
     .testimonial-name {
-        font-size: 15px !important;
+        font-size: var(--text-md, 15px) !important;
     }
 
     .testimonial-role {
-        font-size: 11px !important;
+        font-size: var(--text-xs, 11px) !important;
     }
 
     .testimonials-controls {
@@ -573,6 +567,7 @@
     }
 
     .contact-grid {
+        grid-template-columns: 1fr !important;
         gap: 30px !important;
     }
 
@@ -583,36 +578,36 @@
     .contact-item {
         padding: 18px 16px !important;
         gap: 14px !important;
-        border-radius: 12px !important;
+        border-radius: var(--radius-md, 12px) !important;
     }
 
     .contact-item-icon {
-        font-size: 24px !important;
+        font-size: var(--text-3xl, 24px) !important;
     }
 
     .contact-item-content h4 {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         margin-bottom: 4px !important;
     }
 
     .contact-item-content p {
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
         line-height: 1.5 !important;
     }
 
     .contact-hours {
         padding: 22px 18px !important;
-        border-radius: 14px !important;
+        border-radius: var(--radius-lg, 14px) !important;
     }
 
     .contact-hours h4 {
-        font-size: 15px !important;
+        font-size: var(--text-md, 15px) !important;
         margin-bottom: 16px !important;
     }
 
     .contact-hours-list li {
         padding: 10px 0 !important;
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
     }
 
     .contact-socials {
@@ -623,7 +618,7 @@
     .contact-social-link {
         width: 42px !important;
         height: 42px !important;
-        font-size: 20px !important;
+        font-size: var(--text-2xl, 20px) !important;
     }
 
     /* ─────────────────────────────────────────────────
@@ -634,8 +629,14 @@
     }
 
     .footer-grid {
+        grid-template-columns: 1fr !important;
         gap: 30px !important;
         margin-bottom: 30px !important;
+    }
+
+    .footer-brand-section {
+        grid-column: span 1;
+        max-width: 100%;
     }
 
     .footer-logo {
@@ -644,33 +645,33 @@
     }
 
     .footer-logo-icon {
-        font-size: 32px !important;
+        font-size: var(--text-5xl, 32px) !important;
     }
 
     .footer-logo-text {
-        font-size: 24px !important;
+        font-size: var(--text-3xl, 24px) !important;
     }
 
     .footer-tagline {
-        font-size: 11px !important;
+        font-size: var(--text-xs, 11px) !important;
         letter-spacing: 1.5px !important;
         margin-bottom: 14px !important;
     }
 
     .footer-description {
-        font-size: 13px !important;
-        line-height: 1.6 !important;
+        font-size: var(--text-sm, 13px) !important;
+        line-height: var(--leading-normal, 1.6) !important;
         margin-bottom: 20px !important;
     }
 
     .footer-newsletter h5 {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         margin-bottom: 12px !important;
     }
 
     .newsletter-form {
         flex-direction: column !important;
-        border-radius: 14px !important;
+        border-radius: var(--radius-lg, 14px) !important;
         gap: 8px !important;
         border: none !important;
         background: transparent !important;
@@ -678,20 +679,20 @@
 
     .newsletter-input {
         padding: 12px 16px !important;
-        font-size: 13px !important;
-        border-radius: 25px !important;
-        border: 1px solid var(--border-medium) !important;
-        background: var(--bg-glass) !important;
+        font-size: var(--text-sm, 13px) !important;
+        border-radius: var(--radius-full, 25px) !important;
+        border: 1px solid var(--border-medium, rgba(212, 175, 55, 0.3)) !important;
+        background: var(--bg-glass, rgba(255, 255, 255, 0.05)) !important;
     }
 
     .newsletter-btn {
         padding: 12px 20px !important;
-        font-size: 12px !important;
-        border-radius: 25px !important;
+        font-size: var(--text-sm, 12px) !important;
+        border-radius: var(--radius-full, 25px) !important;
     }
 
     .footer-column h4 {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         margin-bottom: 14px !important;
     }
 
@@ -700,26 +701,29 @@
     }
 
     .footer-links a {
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
     }
 
     .footer-bottom {
         padding-top: 20px !important;
         gap: 12px !important;
+        flex-direction: column !important;
         text-align: center !important;
     }
 
     .footer-copyright,
     .footer-made-with {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
     }
 
     .footer-legal {
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 16px !important;
     }
 
     .footer-legal a {
-        font-size: 11px !important;
+        font-size: var(--text-xs, 11px) !important;
     }
 
     /* ─────────────────────────────────────────────────
@@ -728,16 +732,9 @@
     .back-to-top {
         width: 42px !important;
         height: 42px !important;
-        font-size: 18px !important;
+        font-size: var(--text-xl, 18px) !important;
         bottom: 20px !important;
         right: 16px !important;
-    }
-
-    /* ─────────────────────────────────────────────────
-       🫘 COFFEE BEANS - Less on mobile
-    ───────────────────────────────────────────────── */
-    .coffee-beans-bg .bean:nth-child(n+5) {
-        display: none;
     }
 
     /* ─────────────────────────────────────────────────
@@ -759,6 +756,7 @@
     }
 }
 
+
 /* ═══════════════════════════════════════════════════════════
    📱 SMALL MOBILE (≤ 480px)
    ═══════════════════════════════════════════════════════════ */
@@ -769,13 +767,13 @@
     }
 
     .hero-tagline {
-        font-size: 12px !important;
+        font-size: var(--text-sm, 12px) !important;
         letter-spacing: 3px !important;
     }
 
     .section-heading,
     .about-content h2 {
-        font-size: 24px !important;
+        font-size: var(--text-3xl, 24px) !important;
     }
 
     .about-image-box {
@@ -788,7 +786,7 @@
     }
 
     .stat-number {
-        font-size: 24px !important;
+        font-size: var(--text-3xl, 24px) !important;
     }
 
     .menu-card,
@@ -802,9 +800,10 @@
     }
 
     .testimonial-text {
-        font-size: 13px !important;
+        font-size: var(--text-sm, 13px) !important;
     }
 }
+
 
 /* ═══════════════════════════════════════════════════════════
    📱 LANDSCAPE MOBILE
@@ -825,6 +824,8 @@
     }
 }
 
+
 /* ═══════════════════════════════════════════════════════════
-   END OF welcome-mobile.css
+   END OF welcome-mobile.css v3.0
+   Theme-Aware Edition | 2026-06-16
    ═══════════════════════════════════════════════════════════ */

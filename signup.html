@@ -5,21 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Join Buono Cafe & Academy - Create your account">
   <meta name="robots" content="noindex, nofollow">
-  
+
   <title>Sign Up - Buono Cafe & Academy</title>
-  
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
-  
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="signup-style.css">
-  
+
+  <!-- ✅ FOUC PREVENTION - Instant background + boot loader -->
+  <style>
+    html, body {
+      background: #1A0F0A;
+      margin: 0;
+      padding: 0;
+    }
+    body { visibility: hidden; }
+    body.buono-ready { visibility: visible; }
+
+    .signup-boot-loader {
+      position: fixed;
+      inset: 0;
+      background: #1A0F0A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      visibility: visible !important;
+      transition: opacity 0.3s ease;
+    }
+    .signup-boot-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .signup-boot-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(212, 175, 55, 0.2);
+      border-top-color: #D4AF37;
+      border-radius: 50%;
+      animation: bootSpin 0.8s linear infinite;
+    }
+    @keyframes bootSpin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
   <!-- Firebase v8 (compat) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Buono Loader -->
+  <script src="src/core/buono-loader.js"
+          data-page-css="signup-style.css"
+          data-page-script="signup-script.js"></script>
 </head>
-<body>
+<body class="signup-body">
+
+  <!-- ✅ Boot Loader (removed when ready) -->
+  <div class="signup-boot-loader" id="signupBootLoader">
+    <div class="signup-boot-spinner"></div>
+  </div>
 
   <!-- Animated Coffee Beans Background -->
   <div class="coffee-beans" aria-hidden="true">
@@ -40,7 +85,7 @@
   <!-- Main Container -->
   <div class="signup-container">
     <div class="signup-card">
-      
+
       <!-- Logo & Header -->
       <div class="logo-section">
         <div class="logo-cup">☕</div>
@@ -52,8 +97,8 @@
 
       <!-- Sign Up Form -->
       <form id="signupForm" novalidate>
-        
-        <!-- ====== PROMO CODE SECTION ====== -->
+
+        <!-- PROMO CODE SECTION -->
         <div class="form-section">
           <div class="promo-code-group">
             <div class="form-group">
@@ -61,9 +106,9 @@
                 🎫 Promo Code
               </label>
               <div class="promo-code-wrapper">
-                <input 
-                  type="text" 
-                  id="promoCode" 
+                <input
+                  type="text"
+                  id="promoCode"
                   class="form-input promo-code-input"
                   placeholder="ENTER CODE (OPTIONAL)"
                   maxlength="25"
@@ -77,21 +122,20 @@
           </div>
         </div>
 
-        <!-- ====== EMPLOYEE FIELDS (Hidden by default) ====== -->
+        <!-- EMPLOYEE FIELDS -->
         <div id="employeeFields" class="employee-fields">
           <div class="employee-badge">
             <span>👔</span>
             <span>Employee Registration</span>
           </div>
-          
           <div class="form-group">
             <label class="form-label" for="nickname">
               Nickname <span class="required">*</span>
-              <small style="color: var(--text-muted); font-weight: normal;">(for login)</small>
+              <small style="color: var(--su-text-muted); font-weight: normal;">(for login)</small>
             </label>
-            <input 
-              type="text" 
-              id="nickname" 
+            <input
+              type="text"
+              id="nickname"
               class="form-input"
               placeholder="Enter unique nickname"
               autocomplete="username">
@@ -101,20 +145,17 @@
           </div>
         </div>
 
-        <!-- ====== PERSONAL INFORMATION ====== -->
+        <!-- PERSONAL INFORMATION -->
         <div class="form-section">
-          <div class="section-title">
-            📝 Personal Information
-          </div>
+          <div class="section-title">📝 Personal Information</div>
 
-          <!-- Full Name -->
           <div class="form-group">
             <label class="form-label" for="fullName">
               Full Name <span class="required">*</span>
             </label>
-            <input 
-              type="text" 
-              id="fullName" 
+            <input
+              type="text"
+              id="fullName"
               class="form-input"
               placeholder="Enter your full name"
               autocomplete="name"
@@ -124,14 +165,13 @@
             </div>
           </div>
 
-          <!-- NIC Number -->
           <div class="form-group">
             <label class="form-label" for="nic">
               NIC Number <span class="required">*</span>
             </label>
-            <input 
-              type="text" 
-              id="nic" 
+            <input
+              type="text"
+              id="nic"
               class="form-input"
               placeholder="200012345678 or 991234567V"
               maxlength="12"
@@ -142,14 +182,13 @@
             </div>
           </div>
 
-          <!-- Email -->
           <div class="form-group">
             <label class="form-label" for="email">
               Email Address <span class="required">*</span>
             </label>
-            <input 
-              type="email" 
-              id="email" 
+            <input
+              type="email"
+              id="email"
               class="form-input"
               placeholder="your.email@example.com"
               autocomplete="email"
@@ -159,14 +198,13 @@
             </div>
           </div>
 
-          <!-- Phone Number -->
           <div class="form-group">
             <label class="form-label" for="phone">
               Phone Number <span class="required">*</span>
             </label>
-            <input 
-              type="tel" 
-              id="phone" 
+            <input
+              type="tel"
+              id="phone"
               class="form-input"
               placeholder="+94 77 123 4567"
               autocomplete="tel"
@@ -176,32 +214,25 @@
             </div>
           </div>
 
-          <!-- Date of Birth -->
           <div class="form-group">
-            <label class="form-label" for="dob">
-              Date of Birth
-            </label>
-            <input 
-              type="date" 
-              id="dob" 
+            <label class="form-label" for="dob">Date of Birth</label>
+            <input
+              type="date"
+              id="dob"
               class="form-input"
               autocomplete="bday">
           </div>
 
-          <!-- Address -->
           <div class="form-group">
-            <label class="form-label" for="address">
-              Address
-            </label>
-            <textarea 
-              id="address" 
+            <label class="form-label" for="address">Address</label>
+            <textarea
+              id="address"
               class="form-textarea"
               placeholder="Enter your address"
               rows="2"
               autocomplete="street-address"></textarea>
           </div>
 
-          <!-- How did you hear about us -->
           <div class="form-group">
             <label class="form-label" for="hearAboutUs">
               How did you hear about us? <span class="required">*</span>
@@ -223,29 +254,26 @@
           </div>
         </div>
 
-        <!-- ====== ACCOUNT SECURITY ====== -->
+        <!-- ACCOUNT SECURITY -->
         <div class="form-section">
-          <div class="section-title">
-            🔐 Account Security
-          </div>
+          <div class="section-title">🔐 Account Security</div>
 
-          <!-- Password -->
           <div class="form-group">
             <label class="form-label" for="password">
               Password <span class="required">*</span>
             </label>
             <div class="password-wrapper">
-              <input 
-                type="password" 
-                id="password" 
+              <input
+                type="password"
+                id="password"
                 class="form-input"
                 placeholder="Minimum 8 characters"
                 minlength="8"
                 autocomplete="new-password"
                 required>
-              <button 
-                type="button" 
-                class="password-toggle" 
+              <button
+                type="button"
+                class="password-toggle"
                 id="togglePassword"
                 aria-label="Toggle password visibility">
                 👁️
@@ -255,31 +283,28 @@
               <div class="strength-bar">
                 <div class="strength-fill" id="strengthFill"></div>
               </div>
-              <div class="strength-text" id="strengthText">
-                Enter a password
-              </div>
+              <div class="strength-text" id="strengthText">Enter a password</div>
             </div>
             <div class="field-error" id="passwordError">
               Password must be at least 8 characters
             </div>
           </div>
 
-          <!-- Confirm Password -->
           <div class="form-group">
             <label class="form-label" for="confirmPassword">
               Confirm Password <span class="required">*</span>
             </label>
             <div class="password-wrapper">
-              <input 
-                type="password" 
-                id="confirmPassword" 
+              <input
+                type="password"
+                id="confirmPassword"
                 class="form-input"
                 placeholder="Re-enter your password"
                 autocomplete="new-password"
                 required>
-              <button 
-                type="button" 
-                class="password-toggle" 
+              <button
+                type="button"
+                class="password-toggle"
                 id="toggleConfirmPassword"
                 aria-label="Toggle password visibility">
                 👁️
@@ -291,25 +316,27 @@
           </div>
         </div>
 
-        <!-- ====== TERMS & CONDITIONS ====== -->
+        <!-- TERMS -->
         <div class="checkbox-group">
-          <div class="custom-checkbox" id="termsCheckbox" tabindex="0" role="checkbox" aria-checked="false"></div>
+          <div class="custom-checkbox" id="termsCheckbox"
+               tabindex="0" role="checkbox" aria-checked="false"></div>
           <label class="checkbox-label" for="termsCheckbox">
-            I agree to the <a href="#" id="termsLink">Terms & Conditions</a> 
+            I agree to the <a href="#" id="termsLink">Terms & Conditions</a>
             and <a href="#" id="privacyLink">Privacy Policy</a>
           </label>
         </div>
-        <div class="field-error" id="termsError" style="margin-top: -15px; margin-bottom: 20px;">
+        <div class="field-error" id="termsError"
+             style="margin-top: -15px; margin-bottom: 20px;">
           Please accept the terms and conditions
         </div>
 
-        <!-- ====== SUBMIT BUTTON ====== -->
+        <!-- SUBMIT -->
         <button type="submit" class="submit-button" id="submitButton">
           <span class="button-text">✨ Create Account</span>
           <div class="loader"></div>
         </button>
 
-        <!-- ====== LOGIN LINK ====== -->
+        <!-- LOGIN LINK -->
         <div class="login-link-section">
           <p class="login-link-text">Already have an account?</p>
           <a href="login.html" class="login-button">
@@ -319,11 +346,10 @@
         </div>
 
       </form>
-
     </div>
   </div>
 
-  <!-- ====== SUCCESS OVERLAY ====== -->
+  <!-- SUCCESS OVERLAY -->
   <div id="successOverlay" class="success-overlay">
     <div class="success-content">
       <div class="success-icon">🎉</div>
@@ -331,7 +357,6 @@
       <p class="success-message" id="successMessage">
         Your account has been created successfully.
       </p>
-      
       <div class="success-info-box">
         <div class="success-info-item">
           <span class="icon">📧</span>
@@ -350,21 +375,12 @@
           <span>You'll be notified once approved</span>
         </div>
       </div>
-
-      <a href="login.html" class="success-action-button">
-        Go to Login
-      </a>
+      <a href="login.html" class="success-action-button">Go to Login</a>
     </div>
   </div>
 
-  <!-- ====== CONFETTI CONTAINER ====== -->
+  <!-- CONFETTI -->
   <div id="confettiContainer" class="confetti-container"></div>
-
-  <!-- ====== Firebase Config ====== -->
-  <script src="firebase-config.js"></script>
-  
-  <!-- ====== Sign Up Script ====== -->
-  <script src="signup-script.js"></script>
 
 </body>
 </html>

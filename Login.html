@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Login</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/core/buono-core.css">
     <link rel="stylesheet" href="login-style.css">
-    <link rel="stylesheet" href="mobile.css">
 </head>
 <body class="login-body">
 
@@ -43,7 +42,7 @@
             ❌ Nickname or Password wrong!
         </p>
 
-        <!-- ===== NEW: SIGN UP SECTION ===== -->
+        <!-- ===== SIGN UP SECTION ===== -->
         <div class="login-divider">
             <span>or</span>
         </div>
@@ -55,7 +54,6 @@
                 <span>Create Account</span>
             </a>
         </div>
-        <!-- ===== END NEW SECTION ===== -->
 
         <!-- Login Help Box -->
         <div class="login-help-box">
@@ -67,7 +65,7 @@
         </div>
     </div>
 
-    <!-- ===== NEW: PENDING APPROVAL MODAL ===== -->
+    <!-- ===== PENDING APPROVAL MODAL ===== -->
     <div class="pending-modal-overlay" id="pendingModalOverlay">
         <div class="pending-modal">
             <div class="pending-icon">⏳</div>
@@ -109,18 +107,13 @@
             </button>
         </div>
     </div>
-    <!-- ===== END PENDING MODAL ===== -->
 
     <!-- ===== FIREBASE SDK ===== -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="firebase-config.js"></script>
 
-    <!-- ===== LOGIN SCRIPT ===== -->
-    <script src="login-script.js"></script>
-
-    <!-- ===== MOBILE SCRIPT ===== -->
-    <script src="mobile-script.js"></script>
+    <!-- ===== BUONO LOADER ===== -->
+    <script src="src/core/buono-loader.js" data-page-script="login-script.js"></script>
 
 </body>
 </html>

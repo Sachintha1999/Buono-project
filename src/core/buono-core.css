@@ -1,0 +1,54 @@
+/*
+ * ═══════════════════════════════════════════
+ * ☕ BUONO CORE - CENTRAL ENTRY POINT
+ * Version: 2.1 - Performance Layer Added
+ * Date: 2026-06-16
+ * 
+ * 🎯 ONE FILE = WHOLE SYSTEM LOADS
+ * 
+ * Add to any page <head>:
+ * <link rel="stylesheet" href="src/core/buono-core.css">
+ * 
+ * Load Order:
+ *   1. Theme System    (variables, coffee, utilities)
+ *   2. Base Styles     (buttons, tables, modals)
+ *   3. Layout System   (layout, components, animations)
+ *   4. Mobile          (responsive)
+ *   5. Performance     (skeleton loading)
+ * ═══════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════
+   1️⃣ THEME SYSTEM (Master Entry)
+   Loads: variables + coffee + utilities
+   ═══════════════════════════════════ */
+@import url('../theme/theme-master.css');
+
+/* ═══════════════════════════════════
+   2️⃣ BASE STYLES (Buttons, Tables, Modals)
+   ═══════════════════════════════════ */
+@import url('../theme/theme-base.css');
+
+/* ═══════════════════════════════════
+   3️⃣ LAYOUT SYSTEM
+   ═══════════════════════════════════ */
+@import url('../layout/layout.css');
+@import url('../layout/components.css');
+@import url('../layout/animations.css');
+
+/* ═══════════════════════════════════
+   4️⃣ MOBILE RESPONSIVE
+   ═══════════════════════════════════ */
+@import url('../mobile/mobile-responsive.css');
+
+/* ═══════════════════════════════════
+   5️⃣ PERFORMANCE (Skeleton Loading)
+   Used by: lazy-loader.js skeleton templates
+   Note: Loads AFTER animations.css so
+         skeleton-specific overrides win
+   ═══════════════════════════════════ */
+@import url('../performance/skeleton-loading.css');
+
+/* ═══════════════════════════════════
+   END OF BUONO CORE v2.1
+   ═══════════════════════════════════ */

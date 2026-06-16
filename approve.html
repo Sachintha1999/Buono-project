@@ -10,24 +10,55 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E☕%3C/text%3E%3C/svg%3E">
     
-    <!-- Google Fonts: Poppins (Premium) -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ✅ FOUC Prevention -->
+    <style>
+        html, body {
+            background: var(--bg-primary, #1A0F0A);
+            color: var(--text-primary, #FFF8DC);
+            margin: 0;
+            padding: 0;
+        }
+        body > *:not(.page-loader) {
+            visibility: hidden;
+        }
+        body.buono-ready > * {
+            visibility: visible;
+        }
+        .page-loader {
+            visibility: visible !important;
+        }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="approve-style.css">
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Buono Loader -->
+    <script 
+        src="src/core/buono-loader.js"
+        data-page-css="approve-style.css"
+        data-page-script="approve-script.js">
+    </script>
 </head>
 <body>
 
     <!-- ════════════════════════════════════════ -->
-    <!-- 🌀 LOADING OVERLAY                       -->
+    <!-- 🌀 PAGE LOADER (Buono Standard)          -->
     <!-- ════════════════════════════════════════ -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="loading-coffee">☕</div>
-            <div class="loading-ring"></div>
-            <div class="loading-text">Loading approvals...</div>
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-coffee">☕</div>
+            <div class="loader-ring"></div>
+            <div class="loader-text">Loading approvals...</div>
         </div>
     </div>
 
@@ -60,7 +91,7 @@
     <!-- ════════════════════════════════════════ -->
     <!-- 📦 MAIN CONTENT                          -->
     <!-- ════════════════════════════════════════ -->
-    <div class="main-content" id="mainContent" style="opacity:0;">
+    <div class="main-content" id="mainContent">
         
         <!-- Welcome Section -->
         <div class="welcome-section">
@@ -73,7 +104,7 @@
 
         <!-- Stats Cards -->
         <div class="stats-grid">
-            <div class="stat-card stat-employees" id="statEmployees">
+            <div class="stat-card stat-employees">
                 <div class="stat-icon">👔</div>
                 <div class="stat-info">
                     <div class="stat-value" id="empCount">0</div>
@@ -81,7 +112,7 @@
                 </div>
             </div>
             
-            <div class="stat-card stat-students" id="statStudents">
+            <div class="stat-card stat-students">
                 <div class="stat-icon">🎓</div>
                 <div class="stat-info">
                     <div class="stat-value" id="stdCount">0</div>
@@ -89,7 +120,7 @@
                 </div>
             </div>
             
-            <div class="stat-card stat-total" id="statTotal">
+            <div class="stat-card stat-total">
                 <div class="stat-icon">⏳</div>
                 <div class="stat-info">
                     <div class="stat-value" id="totalCount">0</div>
@@ -97,7 +128,7 @@
                 </div>
             </div>
             
-            <div class="stat-card stat-today" id="statToday">
+            <div class="stat-card stat-today">
                 <div class="stat-icon">📅</div>
                 <div class="stat-info">
                     <div class="stat-value" id="todayCount">0</div>
@@ -130,26 +161,23 @@
                     class="search-input"
                     placeholder="Search by name, email, or phone..."
                     autocomplete="off">
-                <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none;">✕</button>
+                <button class="search-clear" id="searchClear" 
+                        onclick="clearSearch()" style="display:none;">✕</button>
             </div>
             
             <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all" onclick="applyFilter('all')">
-                    All
-                </button>
-                <button class="filter-btn" data-filter="verified" onclick="applyFilter('verified')">
-                    ✅ Email Verified
-                </button>
-                <button class="filter-btn" data-filter="unverified" onclick="applyFilter('unverified')">
-                    ⚠️ Unverified
-                </button>
+                <button class="filter-btn active" data-filter="all" 
+                        onclick="applyFilter('all')">All</button>
+                <button class="filter-btn" data-filter="verified" 
+                        onclick="applyFilter('verified')">✅ Email Verified</button>
+                <button class="filter-btn" data-filter="unverified" 
+                        onclick="applyFilter('unverified')">⚠️ Unverified</button>
             </div>
         </div>
 
         <!-- Employees List -->
         <div class="tab-content active" id="tabEmployees">
             <div class="list-container" id="employeesList">
-                <!-- Loading state -->
                 <div class="loading-state">
                     <div class="loading-spinner-sm"></div>
                     <p>Loading employees...</p>
@@ -160,7 +188,6 @@
         <!-- Students List -->
         <div class="tab-content" id="tabStudents">
             <div class="list-container" id="studentsList">
-                <!-- Loading state -->
                 <div class="loading-state">
                     <div class="loading-spinner-sm"></div>
                     <p>Loading students...</p>
@@ -182,19 +209,13 @@
                 </h2>
                 <button class="modal-close" onclick="closeViewModal()">✕</button>
             </div>
-            
-            <div class="modal-body" id="viewModalBody">
-                <!-- Dynamic content -->
-            </div>
-            
+            <div class="modal-body" id="viewModalBody"></div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeViewModal()">Close</button>
-                <button class="btn btn-success" id="viewModalApproveBtn" onclick="approveFromView()">
-                    ✅ Approve
-                </button>
-                <button class="btn btn-danger" id="viewModalRejectBtn" onclick="rejectFromView()">
-                    ❌ Reject
-                </button>
+                <button class="btn btn-success" id="viewModalApproveBtn" 
+                        onclick="approveFromView()">✅ Approve</button>
+                <button class="btn btn-danger" id="viewModalRejectBtn" 
+                        onclick="rejectFromView()">❌ Reject</button>
             </div>
         </div>
     </div>
@@ -213,12 +234,8 @@
             </div>
             
             <div class="modal-body">
-                <!-- Employee Info -->
-                <div class="approve-user-info" id="approveEmpInfo">
-                    <!-- Dynamic -->
-                </div>
+                <div class="approve-user-info" id="approveEmpInfo"></div>
 
-                <!-- Role Selection -->
                 <div class="form-group">
                     <label class="form-label">
                         Role <span class="required">*</span>
@@ -235,36 +252,30 @@
                     </select>
                 </div>
 
-                <!-- Permissions Preview -->
                 <div class="form-group" id="permissionsPreview" style="display:none;">
                     <label class="form-label">
                         📋 Permissions Preview
                         <span class="label-hint">(Auto-loaded by role)</span>
                     </label>
-                    <div class="permissions-grid" id="permissionsGrid">
-                        <!-- Dynamic permissions list -->
-                    </div>
-                    
+                    <div class="permissions-grid" id="permissionsGrid"></div>
                     <button type="button" class="btn-customize" onclick="toggleCustomPerms()">
                         <span id="customizeBtnText">📝 Customize Permissions</span>
                     </button>
                 </div>
 
-                <!-- Custom Permissions Panel -->
                 <div class="custom-perms-panel" id="customPermsPanel" style="display:none;">
                     <div class="custom-perms-header">
                         <h3>🛠️ Custom Permissions</h3>
                         <p>Override default permissions for this user</p>
                     </div>
-                    <div id="customPermsList">
-                        <!-- Dynamic -->
-                    </div>
+                    <div id="customPermsList"></div>
                 </div>
             </div>
             
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeApproveEmpModal()">Cancel</button>
-                <button class="btn btn-success" id="confirmApproveEmpBtn" onclick="confirmApproveEmployee()" disabled>
+                <button class="btn btn-success" id="confirmApproveEmpBtn" 
+                        onclick="confirmApproveEmployee()" disabled>
                     ✅ Approve Employee
                 </button>
             </div>
@@ -272,7 +283,7 @@
     </div>
 
     <!-- ════════════════════════════════════════ -->
-    <!-- ✅ APPROVE STUDENT MODAL (Simple)        -->
+    <!-- ✅ APPROVE STUDENT MODAL                 -->
     <!-- ════════════════════════════════════════ -->
     <div class="modal-overlay" id="approveStdModal">
         <div class="modal">
@@ -285,15 +296,14 @@
             </div>
             
             <div class="modal-body">
-                <div class="approve-user-info" id="approveStdInfo">
-                    <!-- Dynamic -->
-                </div>
-
+                <div class="approve-user-info" id="approveStdInfo"></div>
                 <div class="info-message">
                     <span class="info-icon">ℹ️</span>
                     <div>
                         <strong>Quick Approval</strong>
-                        <p>This student will be approved as a pending student. Call Operator will assign batch, course, and fee in Student Management later.</p>
+                        <p>This student will be approved as a pending student. 
+                           Call Operator will assign batch, course, and fee 
+                           in Student Management later.</p>
                     </div>
                 </div>
             </div>
@@ -321,9 +331,7 @@
             </div>
             
             <div class="modal-body">
-                <div class="approve-user-info" id="rejectUserInfo">
-                    <!-- Dynamic -->
-                </div>
+                <div class="approve-user-info" id="rejectUserInfo"></div>
 
                 <div class="form-group">
                     <label class="form-label">
@@ -344,16 +352,20 @@
                 <div class="form-group">
                     <label class="form-label">Quick Reasons:</label>
                     <div class="quick-reasons">
-                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Invalid or incomplete information provided in application.')">
+                        <button type="button" class="quick-reason-btn" 
+                            onclick="useQuickReason('Invalid or incomplete information provided in application.')">
                             📝 Invalid Info
                         </button>
-                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Duplicate account detected. Account already exists with these details.')">
+                        <button type="button" class="quick-reason-btn" 
+                            onclick="useQuickReason('Duplicate account detected. Account already exists with these details.')">
                             🔁 Duplicate Account
                         </button>
-                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Suspicious activity detected. Unable to verify identity.')">
+                        <button type="button" class="quick-reason-btn" 
+                            onclick="useQuickReason('Suspicious activity detected. Unable to verify identity.')">
                             ⚠️ Suspicious Activity
                         </button>
-                        <button type="button" class="quick-reason-btn" onclick="useQuickReason('Unable to verify the provided promo code or credentials.')">
+                        <button type="button" class="quick-reason-btn" 
+                            onclick="useQuickReason('Unable to verify the provided promo code or credentials.')">
                             🎫 Invalid Promo Code
                         </button>
                     </div>
@@ -362,7 +374,8 @@
             
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeRejectModal()">Cancel</button>
-                <button class="btn btn-danger" id="confirmRejectBtn" onclick="confirmReject()" disabled>
+                <button class="btn btn-danger" id="confirmRejectBtn" 
+                        onclick="confirmReject()" disabled>
                     ❌ Confirm Rejection
                 </button>
             </div>
@@ -370,41 +383,12 @@
     </div>
 
     <!-- ════════════════════════════════════════ -->
-    <!-- 🔔 TOAST NOTIFICATION                    -->
+    <!-- 🔔 TOAST                                 -->
     <!-- ════════════════════════════════════════ -->
     <div class="toast" id="toast">
         <span class="toast-icon" id="toastIcon">ℹ️</span>
         <span class="toast-message" id="toastMessage">Message</span>
     </div>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- 🎉 EMPTY STATE TEMPLATE (hidden)         -->
-    <!-- ════════════════════════════════════════ -->
-    <template id="emptyStateTemplate">
-        <div class="empty-state">
-            <div class="empty-icon">🎉</div>
-            <h3 class="empty-title">All caught up!</h3>
-            <p class="empty-message">No pending approvals at the moment.</p>
-            <div class="empty-decoration">☕ ✨ ☕</div>
-        </div>
-    </template>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- 🔥 FIREBASE SDK                          -->
-    <!-- ════════════════════════════════════════ -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    
-    <!-- ════════════════════════════════════════ -->
-    <!-- ⚙️ FIREBASE CONFIG                       -->
-    <!-- ════════════════════════════════════════ -->
-    <script src="firebase-config.js"></script>
-    
-    <!-- ════════════════════════════════════════ -->
-    <!-- 🚀 APPROVE SCRIPT                        -->
-    <!-- ════════════════════════════════════════ -->
-    <script src="approve-script.js"></script>
 
 </body>
 </html>

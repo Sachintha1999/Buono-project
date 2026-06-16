@@ -1,23 +1,37 @@
 /* ═══════════════════════════════════════════════════════════
    ☕ BUONO WELCOME - PREMIUM MOBILE EXTRAS
    File: welcome-extras.js
-   Version: 1.0
-   Purpose: 
-     1. Click outside → close mobile menu
-     2. Premium section content animations
-   Note: Runs AFTER welcome-script.js (safe, additive)
+   Version: 2.0 - Loader-Safe Edition
+   Date: 2026-06-16
+   
+   🎯 PURPOSE: 
+   1. Click outside → close mobile menu
+   2. ESC key → close mobile menu
+   3. Premium section content animations
+   
+   📋 NOTES:
+   - Runs AFTER welcome-script.js (safe, additive)
+   - Loader-safe init via BuonoLoader.whenReady()
+   - All features wait for DOM + Loader ready
    ═══════════════════════════════════════════════════════════ */
 
-(function() {
+(function () {
     'use strict';
 
-    console.log('✨ [WELCOME-EXTRAS] Loading premium features...');
+    console.log('✨ [WELCOME-EXTRAS] Script loading...');
+
+    // ═══════════════════════════════════════════════════════
+    // 🎯 STATE
+    // ═══════════════════════════════════════════════════════
+    const state = {
+        initialized: false
+    };
 
     // ═══════════════════════════════════════════════════════
     // 🎯 FEATURE 1: Click Outside to Close Mobile Menu
     // ═══════════════════════════════════════════════════════
     function initClickOutsideMenu() {
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const mobileMenu = document.getElementById('navMobileMenu');
             const hamburger = document.getElementById('navHamburger');
 
@@ -39,7 +53,7 @@
         });
 
         // Also close on ESC key (bonus!)
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const mobileMenu = document.getElementById('navMobileMenu');
                 const hamburger = document.getElementById('navHamburger');
@@ -56,7 +70,6 @@
     // ═══════════════════════════════════════════════════════
     // 🎬 FEATURE 2: Premium Section Content Animations
     // When section visible → trigger content animation
-    // Works on PC + Mobile (smooth, premium feel)
     // ═══════════════════════════════════════════════════════
     function initSectionAnimations() {
         // Target sections
@@ -87,7 +100,7 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('in-view');
-                    
+
                     // Once shown, don't re-trigger
                     observer.unobserve(entry.target);
                 }
@@ -106,26 +119,102 @@
     }
 
     // ═══════════════════════════════════════════════════════
-    // 🚀 INITIALIZATION
+    // 🚀 MAIN INITIALIZATION
     // ═══════════════════════════════════════════════════════
-    function init() {
+    function initExtras() {
+        if (state.initialized) {
+            console.warn('⚠️ [WELCOME-EXTRAS] Already initialized, skipping');
+            return;
+        }
+        state.initialized = true;
+
         const startTime = performance.now();
 
-        initClickOutsideMenu();
-        initSectionAnimations();
+        try {
+            initClickOutsideMenu();
+            initSectionAnimations();
 
-        const elapsed = Math.round(performance.now() - startTime);
-        console.log(`✅ [WELCOME-EXTRAS] Ready! Init time: ${elapsed}ms`);
-        console.log('✨ [WELCOME-EXTRAS] Premium UX activated!');
+            const elapsed = Math.round(performance.now() - startTime);
+            console.log(`✅ [WELCOME-EXTRAS] Ready! Init time: ${elapsed}ms`);
+            console.log('✨ [WELCOME-EXTRAS] Premium UX activated! (v2.0)');
+        } catch (error) {
+            console.error('❌ [WELCOME-EXTRAS] Init error:', error);
+        }
     }
 
-    // Wait for DOM + small delay (let welcome-script.js init first!)
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(init, 100);
+    // ═══════════════════════════════════════════════════════
+    // ⏳ LOADER-SAFE INIT PATTERN
+    // ═══════════════════════════════════════════════════════
+
+    function waitForDomReady() {
+        return new Promise((resolve) => {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => resolve(), { once: true });
+            } else {
+                resolve();
+            }
         });
-    } else {
-        setTimeout(init, 100);
     }
+
+    function waitForBuonoReady() {
+        return new Promise((resolve) => {
+            // Already ready
+            if (window.BuonoReady === true) {
+                resolve();
+                return;
+            }
+
+            // Use loader's official API
+            if (window.BuonoLoader && typeof BuonoLoader.whenReady === 'function') {
+                BuonoLoader.whenReady().then(() => resolve());
+                return;
+            }
+
+            // Fallback: listen for event
+            document.addEventListener('buono:ready', () => resolve(), { once: true });
+
+            // Last resort timeout
+            setTimeout(() => {
+                console.warn('⚠️ [WELCOME-EXTRAS] BuonoLoader timeout, proceeding anyway');
+                resolve();
+            }, 5000);
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════
+    // 🎬 START
+    // Wait for: DOM + BuonoLoader + small delay (let welcome-script.js init first)
+    // ═══════════════════════════════════════════════════════
+    Promise.all([
+        waitForDomReady(),
+        waitForBuonoReady()
+    ])
+        .then(() => {
+            console.log('✅ [WELCOME-EXTRAS] DOM + BuonoLoader ready');
+            
+            // Small delay to let welcome-script.js finish rendering first
+            // (extras are additive enhancements, not critical)
+            setTimeout(initExtras, 150);
+        })
+        .catch(error => {
+            console.error('❌ [WELCOME-EXTRAS] Init promise failed:', error);
+            // Try to init anyway as fallback
+            setTimeout(initExtras, 200);
+        });
+
+    // ═══════════════════════════════════════════════════════
+    // 🌐 PUBLIC API (for debugging)
+    // ═══════════════════════════════════════════════════════
+    window.WelcomeExtras = {
+        version: '2.0',
+        state: state,
+        initSectionAnimations: initSectionAnimations,
+        initClickOutsideMenu: initClickOutsideMenu
+    };
 
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   END OF welcome-extras.js v2.0
+   Loader-Safe Edition | 2026-06-16
+   ═══════════════════════════════════════════════════════════ */
