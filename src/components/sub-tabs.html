@@ -1,0 +1,35 @@
+<!-- ═══════════════════════════════════════════════════════════
+     SUB-TABS COMPONENT (Filter Chips)
+     File: src/components/sub-tabs.html
+     Version: 1.0
+     Usage: <div data-component="sub-tabs"></div>
+     
+     Note: This is an empty container.
+     buono-page-builder.js fills it based on config.subTabs[tabId]
+     
+     Sub-tabs Features:
+     - Pill-shaped filter chips
+     - Live count badges (color variants)
+     - Auto-filter data via 'buono:subtab-changed' event
+     - Mobile: horizontal scroll
+     - Active state with gold gradient
+     
+     Example config:
+     subTabs: {
+       employees: [
+         { id: 'all',       label: 'All',       icon: '👥', filter: 'all',       count: 25 },
+         { id: 'active',    label: 'Active',    icon: '✅', filter: 'active',    count: 18, countColor: 'success' },
+         { id: 'suspended', label: 'Suspended', icon: '⏸️', filter: 'suspended', count: 3,  countColor: 'warning' },
+         { id: 'leavers',   label: 'Leavers',   icon: '👋', filter: 'leavers',   count: 4,  countColor: 'error' }
+       ]
+     }
+     
+     Update counts dynamically:
+     BuonoPageBuilder.updateSubTabCounts('employees', {
+       all: 30, active: 22, suspended: 4, leavers: 4
+     });
+     ═══════════════════════════════════════════════════════════ -->
+
+<div class="sub-tabs hidden" id="subTabs">
+    <!-- Sub-tabs will be dynamically inserted by BuonoPageBuilder -->
+</div>

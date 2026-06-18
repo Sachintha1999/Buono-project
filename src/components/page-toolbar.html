@@ -1,0 +1,31 @@
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE TOOLBAR COMPONENT
+     File: src/components/page-toolbar.html
+     Version: 1.0
+     Usage: <div data-component="page-toolbar"></div>
+     
+     Note: This is an empty container.
+     buono-page-builder.js fills it based on config.toolbar[tabId]
+     
+     Toolbar Features:
+     - Per-tab contextual content
+     - Search box (with auto-debounce 200ms)
+     - Action buttons (primary/secondary/danger)
+     - Auto-hide on scroll down (slides up smoothly)
+     - Auto-show on tab switch (if tab has toolbar)
+     - Mobile: search full-width, actions wrap
+     
+     Example config:
+     toolbar: {
+       employees: {
+         search: { placeholder: 'Search...' },
+         actions: [
+           { id: 'addBtn', label: '+ Add', style: 'primary', onclick: 'openAddModal()' }
+         ]
+       }
+     }
+     ═══════════════════════════════════════════════════════════ -->
+
+<div class="page-toolbar hidden" id="pageToolbar">
+    <!-- Toolbar content will be dynamically inserted by BuonoPageBuilder -->
+</div>

@@ -1,33 +1,17 @@
 /* ═══════════════════════════════════════════════════════════
    ☕ BUONO MASTER THEME ENTRY POINT
    File: theme-master.css
-   Version: 1.0
+   Version: 2.0 - Added Components
    
    🎯 PURPOSE: Single import for entire theme system
-   📌 USAGE: Add ONLY this file in <head> of every page
-   ⚠️  RULE: Never import individual theme files in pages!
+   📌 USAGE: Auto-loaded by buono-loader.js v2.5+
    
-   ═══════════════════════════════════════════════════════════
-   
-   ✅ HOW TO USE:
-   
-   In every HTML page <head>, add ONLY this line:
-   
-   <link rel="stylesheet" href="src/theme/theme-master.css">
-   
-   That's it! Everything else loads automatically.
-   
-   ═══════════════════════════════════════════════════════════
-   
-   📦 IMPORT ORDER (IMPORTANT):
-   
-   1. theme-variables.css  → Design tokens (MUST be first!)
-   2. theme-coffee.css     → Base coffee skin
-   3. theme-utilities.css  → Utility classes
-   
-   ⚠️ DO NOT change this order!
-   Variables must load first so other files can use them.
-   
+   📦 IMPORT ORDER:
+   1. theme-variables.css   → Design tokens (MUST be first!)
+   2. theme-coffee.css      → Base coffee skin
+   3. theme-base.css        → Basic components (btn, badge, table, modal)
+   4. theme-components.css  → 🆕 Page components (DB switcher, permissions, etc.)
+   5. theme-utilities.css   → Utility classes
    ═══════════════════════════════════════════════════════════ */
 
 
@@ -44,64 +28,25 @@
 
 
 /* ═══════════════════════════════════════════════════════
-   3️⃣ UTILITY CLASSES
+   3️⃣ BASE COMPONENTS (Buttons, Badges, Tables, Modals)
+   ═══════════════════════════════════════════════════════ */
+@import url('./theme-base.css');
+
+
+/* ═══════════════════════════════════════════════════════
+   4️⃣ PAGE COMPONENTS (NEW v2.0!)
+   DB Switcher, Permissions, Multi-Row, Reports, etc.
+   ═══════════════════════════════════════════════════════ */
+@import url('./theme-components.css');
+
+
+/* ═══════════════════════════════════════════════════════
+   5️⃣ UTILITY CLASSES
    ═══════════════════════════════════════════════════════ */
 @import url('./theme-utilities.css');
 
 
 /* ═══════════════════════════════════════════════════════════
-   🔮 FUTURE THEME FILES (Uncomment when ready)
-   ═══════════════════════════════════════════════════════════ */
-
-/* Layout System (Day 4) */
-/* @import url('../layout/layout.css'); */
-/* @import url('../layout/components.css'); */
-/* @import url('../layout/animations.css'); */
-
-/* Mobile Responsive (Day 5) */
-/* @import url('../mobile/mobile-responsive.css'); */
-
-
-/* ═══════════════════════════════════════════════════════════
-   🎨 THEME MODE SWITCHING (Optional - Future Use)
-   ═══════════════════════════════════════════════════════════
-   
-   To switch themes, just change the variables file import:
-   
-   // Coffee Theme (Default)
-   @import url('./theme-variables.css');
-   
-   // Future: Blue Theme
-   @import url('./theme-variables-blue.css');
-   
-   // Future: Green Theme
-   @import url('./theme-variables-green.css');
-   
-   ═══════════════════════════════════════════════════════════ */
-
-
-/* ═══════════════════════════════════════════════════════════
-   📝 PAGE-LEVEL OVERRIDE NOTE
-   ═══════════════════════════════════════════════════════════
-   
-   If a specific page needs custom styles, create a separate
-   page CSS and load AFTER theme-master.css:
-   
-   <link rel="stylesheet" href="src/theme/theme-master.css">
-   <link rel="stylesheet" href="my-page-style.css">
-   
-   This way:
-   - Theme stays consistent everywhere
-   - Page-specific tweaks remain isolated
-   - Easy to maintain and update
-   
-   ═══════════════════════════════════════════════════════════ */
-
-
-/* ═══════════════════════════════════════════════════════════
    END OF theme-master.css
-   Version: 1.0 | Last Updated: 2026-06-14
-   
-   🎉 CONGRATULATIONS!
-   You now have a complete, scalable theme system!
+   Version: 2.0 | Date: 2026-06-16
    ═══════════════════════════════════════════════════════════ */

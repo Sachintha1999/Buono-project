@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     
-    <!-- ⭐ AUTO-REDIRECT: Not logged in → Welcome page -->
     <script>
         (function() {
             const user = sessionStorage.getItem('loggedInUser');
@@ -16,259 +15,380 @@
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buono - Employee Database</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mobile.css">
-    <link rel="stylesheet" href="index-style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        html, body {
+            background: var(--bg-primary, #1A0F0A);
+            color: var(--text-primary, #FFF8DC);
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+        body > *:not(.page-loader) {
+            visibility: hidden;
+        }
+        body.buono-ready > * {
+            visibility: visible;
+        }
+        .page-loader {
+            visibility: visible !important;
+        }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script
+        src="src/core/buono-loader.js"
+        data-page-css="index-style.css"
+        data-page-script="index-script.js">
+    </script>
 </head>
 <body>
 
-    <div class="topbar">
-        <div class="topbar-left">
-            <span class="topbar-icon">🍴</span>
-            <h2 style="margin-right:15px;">Buono</h2>
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-coffee">☕</div>
+            <div class="loader-ring"></div>
+            <div class="loader-text">Loading Employee Database...</div>
+        </div>
+    </div>
+
+    <div class="app-shell">
+
+        <!-- ═══ TOPBAR ═══ -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+                <a class="topbar-brand" href="access.html">
+                    <span class="topbar-brand-icon">☕</span>
+                    <span>Buono</span>
+                </a>
+                <span class="topbar-page-label">
+                    <span class="topbar-page-icon">📂</span>
+                    <span>Employee Database</span>
+                </span>
+            </div>
             
-            <div class="db-switcher" id="dbSwitcher">
-                <span class="db-switcher-icon">📂</span>
-                <span class="db-switcher-name">Employee Database</span>
-                <span class="db-switcher-arrow">▼</span>
+            <div class="topbar-right">
+                <span id="welcomeUser" class="hide-mobile">👋 Welcome</span>
+                <button class="btn btn-danger btn-sm" onclick="logout()" aria-label="Logout">
+                    🚪 <span class="hide-mobile">Logout</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ═══ SIDEBAR ═══ -->
+        <aside id="appSidebar" class="sidebar">
+            
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <span class="sidebar-brand-icon">☕</span>
+                    <span>Buono</span>
+                </div>
+                <button class="sidebar-close" onclick="closeSidebar()" aria-label="Close">✕</button>
+            </div>
+
+            <nav class="sidebar-nav">
                 
-                <div class="db-switcher-dropdown" id="dbDropdown">
-                    <div class="db-dropdown-title">📂 Switch to:</div>
-                    <div id="dbDropdownList"></div>
-                    <div class="db-dropdown-divider"></div>
-                    <a href="access.html" class="db-dropdown-item">
-                        <span>🏠</span>
-                        <span>Access Home</span>
+                <div class="sidebar-group-label">📍 Main</div>
+                
+                <a href="access.html" class="sidebar-item">
+                    <span class="sidebar-icon">🏠</span>
+                    <span class="sidebar-label">Access Home</span>
+                </a>
+
+                <a href="index.html" class="sidebar-item active">
+                    <span class="sidebar-icon">👥</span>
+                    <span class="sidebar-label">Employee Database</span>
+                </a>
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-group-label">📂 Other Modules</div>
+                
+                <a href="cashier.html" class="sidebar-item">
+                    <span class="sidebar-icon">💰</span>
+                    <span class="sidebar-label">Cashier</span>
+                </a>
+                <a href="inventory.html" class="sidebar-item">
+                    <span class="sidebar-icon">📦</span>
+                    <span class="sidebar-label">Inventory</span>
+                </a>
+                <a href="kitchen.html" class="sidebar-item">
+                    <span class="sidebar-icon">🍳</span>
+                    <span class="sidebar-label">Kitchen</span>
+                </a>
+                <a href="purchasing.html" class="sidebar-item">
+                    <span class="sidebar-icon">🛒</span>
+                    <span class="sidebar-label">Purchasing</span>
+                </a>
+                <a href="callcenter.html" class="sidebar-item">
+                    <span class="sidebar-icon">📞</span>
+                    <span class="sidebar-label">Call Center</span>
+                </a>
+                <a href="reports.html" class="sidebar-item">
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Reports</span>
+                </a>
+                <a href="approve.html" class="sidebar-item">
+                    <span class="sidebar-icon">✅</span>
+                    <span class="sidebar-label">Approvals</span>
+                </a>
+
+                <div class="sidebar-divider"></div>
+
+                <div class="sidebar-group-label">⚙️ System</div>
+                <a href="settings.html" class="sidebar-item">
+                    <span class="sidebar-icon">⚙️</span>
+                    <span class="sidebar-label">Settings</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-danger btn-block" onclick="logout()">
+                    🚪 Logout
+                </button>
+            </div>
+        </aside>
+
+        <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+        <!-- ═══ MAIN CONTENT ═══ -->
+        <main class="page-wrapper">
+            <div class="container">
+
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1 class="page-title">📂 Employee Database</h1>
+                        <p class="page-subtitle">HR Management Module - Manage all employees and permissions</p>
+                    </div>
+                </div>
+
+                <!-- Section Nav (Sticky Pills) -->
+                <nav class="section-nav">
+                    <a href="#section-overview" class="section-nav-item active">
+                        <span class="section-nav-icon">📊</span>
+                        <span>Overview</span>
                     </a>
-                </div>
+                    <a href="#section-employees" class="section-nav-item">
+                        <span class="section-nav-icon">👥</span>
+                        <span>All Employees</span>
+                        <span class="section-nav-count" id="empCountBadge">0</span>
+                    </a>
+                    <a href="#section-add" class="section-nav-item" id="addSectionLink" style="display:none;">
+                        <span class="section-nav-icon">➕</span>
+                        <span>Add New</span>
+                    </a>
+                </nav>
+
+                <!-- ═══ SECTION 1: OVERVIEW ═══ -->
+                <section id="section-overview" class="page-section section">
+                    <div class="section-header">
+                        <h2 class="section-title">📊 Overview</h2>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card stat-gold">
+                            <div class="stat-card-icon">👥</div>
+                            <div class="stat-card-value" id="totalEmployees">0</div>
+                            <div class="stat-card-label">Total Employees</div>
+                        </div>
+
+                        <div class="stat-card stat-blue">
+                            <div class="stat-card-icon">📅</div>
+                            <div class="stat-card-value" id="todayDate">-</div>
+                            <div class="stat-card-label">Today</div>
+                        </div>
+
+                        <div class="stat-card stat-green">
+                            <div class="stat-card-icon">⏰</div>
+                            <div class="stat-card-value" id="currentTime">-</div>
+                            <div class="stat-card-label">Current Time</div>
+                        </div>
+
+                        <div class="stat-card stat-purple">
+                            <div class="stat-card-icon">🔑</div>
+                            <div class="stat-card-value" id="myAccess">-</div>
+                            <div class="stat-card-label">Access Level</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ═══ SECTION 2: ALL EMPLOYEES ═══ -->
+                <section id="section-employees" class="page-section section">
+                    <div class="section-header">
+                        <h2 class="section-title" id="empListTitle">👥 All Employees</h2>
+                        <button class="btn btn-primary" id="addBtn" 
+                            onclick="openAddModal()" style="display:none;">
+                            ➕ Add New Employee
+                        </button>
+                    </div>
+
+                    <div class="search-box mb-4" id="searchBar">
+                        <span class="search-box-icon">🔍</span>
+                        <input type="text" 
+                            class="search-box-input" 
+                            id="searchEmployee"
+                            placeholder="Search by name, nickname or access..."
+                            onkeyup="onSearchKeyup()">
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="table mobile-card-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Nickname</th>
+                                    <th>Access Type</th>
+                                    <th>Permissions</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding:30px;">
+                                        <div class="spinner spinner-sm"></div>
+                                        <span style="margin-left:10px; color: var(--text-muted);">Loading...</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="empPaginationWrap" style="display:none; margin-top:20px; text-align:center;">
+                        <div id="empCounter" style="color: var(--text-muted); font-size:13px; margin-bottom:10px;"></div>
+                        <button class="btn btn-secondary" id="btnLoadMoreEmp" onclick="loadMoreEmployees()">
+                            ⬇️ Load More
+                        </button>
+                    </div>
+                </section>
+
+                <!-- ═══ SECTION 3: ADD NEW ═══ -->
+                <section id="section-add" class="page-section section" style="display:none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">➕ Add New Employee</h2>
+                        </div>
+                        <div class="card-body">
+                            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                                Click the button below to open the employee creation form with all permission options.
+                            </p>
+                            <button class="btn btn-primary btn-lg" onclick="openAddModal()">
+                                ➕ Open Add Employee Form
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
             </div>
-        </div>
-        
-        <div class="topbar-right">
-            <span id="welcomeUser">👋 Welcome</span>
-            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
-        </div>
-    </div>
-
-    <!-- LOADING OVERLAY -->
-    <div class="idx-loading-overlay" id="idxLoadingOverlay">
-        <div class="idx-loading-wrap">
-            <div class="idx-loading-ring"></div>
-            <div class="idx-loading-text">Loading Employee Database...</div>
-        </div>
-    </div>
-
-    <div class="dashboard-container" id="idxMainContent" style="opacity:0">
-
-        <div class="stats-row">
-            <div class="stat-card skeleton-stat" id="idxStatCard1">
-                <div class="stat-icon idx-sk-icon"></div>
-                <div class="stat-info">
-                    <h3 class="idx-sk-text idx-sk-short" id="totalEmployees">0</h3>
-                    <p class="idx-sk-text">Total Employees</p>
-                </div>
-            </div>
-
-            <div class="stat-card skeleton-stat" id="idxStatCard2">
-                <div class="stat-icon idx-sk-icon"></div>
-                <div class="stat-info">
-                    <h3 class="idx-sk-text idx-sk-short" id="todayDate">-</h3>
-                    <p class="idx-sk-text">Today</p>
-                </div>
-            </div>
-
-            <div class="stat-card skeleton-stat" id="idxStatCard3">
-                <div class="stat-icon idx-sk-icon"></div>
-                <div class="stat-info">
-                    <h3 class="idx-sk-text idx-sk-short" id="currentTime">-</h3>
-                    <p class="idx-sk-text">Current Time</p>
-                </div>
-            </div>
-
-            <div class="stat-card skeleton-stat" id="idxStatCard4">
-                <div class="stat-icon idx-sk-icon"></div>
-                <div class="stat-info">
-                    <h3 class="idx-sk-text idx-sk-short" id="myAccess">-</h3>
-                    <p class="idx-sk-text">Access Level</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-header" style="margin-bottom: 15px;">
-            <h2>📂 Employee Database (HR Module)</h2>
-        </div>
-
-        <div class="search-bar" id="searchBar">
-            <input type="text" id="searchEmployee" 
-                placeholder="🔍 Search employee name, nickname or access..." 
-                onkeyup="onSearchKeyup()">
-        </div>
-
-        <div class="section-header">
-            <h2 id="empListTitle">👥 All Employees</h2>
-            <button class="btn-primary" id="addBtn" 
-                onclick="openAddModal()" style="display:none;">
-                ➕ Add New Employee
-            </button>
-        </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Nickname</th>
-                        <th>Access Type</th>
-                        <th>Permissions</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="employeeTableBody">
-                    <!-- Skeleton rows -->
-                    <tr class="idx-sk-row">
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                    </tr>
-                    <tr class="idx-sk-row">
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                    </tr>
-                    <tr class="idx-sk-row">
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                        <td><span class="idx-sk-text idx-sk-medium"></span></td>
-                        <td><span class="idx-sk-text idx-sk-short"></span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination wrap -->
-        <div id="empPaginationWrap" style="display:none; margin-top:20px; text-align:center;">
-            <div id="empCounter" style="color:#888; font-size:13px; margin-bottom:10px;"></div>
-            <button class="btn-secondary" id="btnLoadMoreEmp" onclick="loadMoreEmployees()">
-                ⬇️ Load More
-            </button>
-        </div>
+        </main>
     </div>
 
     <!-- ADD / EDIT EMPLOYEE MODAL -->
-    <div id="employeeModal" class="modal" style="display: none;">
-        <div class="modal-content" style="width: 600px;">
+    <div id="employeeModal" class="modal-overlay">
+        <div class="modal modal-lg">
             <div class="modal-header">
-                <h2 id="modalTitle">➕ Add New Employee</h2>
+                <h2 class="modal-title" id="modalTitle">➕ Add New Employee</h2>
                 <button class="modal-close" onclick="closeModal()">✖</button>
             </div>
 
-            <form id="employeeForm" onsubmit="return false;">
+            <div class="modal-body">
+                <form id="employeeForm" onsubmit="return false;">
 
-                <label>👤 Full Name:</label>
-                <input type="text" id="empName" 
-                    placeholder="Enter full name" required>
-
-                <label>🏷️ Nickname (for login):</label>
-                <input type="text" id="empNickname" 
-                    placeholder="Enter unique nickname" required>
-
-                <label>🔒 Password:</label>
-                <input type="text" id="empPassword" 
-                    placeholder="Enter password" required>
-
-                <label>🔑 Access Type:</label>
-                <select id="empAccess" required onchange="handleAccessChange()">
-                    <option value="">-- Select Access --</option>
-                    <option value="Admin">👨‍💼 Admin</option>
-                    <option value="Manager">🧑‍💼 Manager</option>
-                    <option value="Cashier">💰 Cashier</option>
-                    <option value="Purchasing Officer">📦 Purchasing Officer</option>
-                    <option value="Head Chef">👨‍🍳 Head Chef</option>
-                    <option value="Call Operator">📞 Call Operator</option>
-                    <option value="Waiter">🍽️ Waiter</option>
-                </select>
-
-                <input type="hidden" id="editDocId" value="">
-
-                <div id="permissionsSection" style="margin-top: 25px;">
-
-                    <div style="background: #0f3460; padding: 12px 18px; 
-                        border-radius: 10px; margin-bottom: 15px;">
-                        <h3 style="color: #f0a500; font-size: 16px; margin: 0;">
-                            🔐 Database Permissions
-                        </h3>
-                        <p style="color: #8892b0; font-size: 12px; margin-top: 4px;">
-                            💡 Admin selected කරොත් සියලු permissions auto enable වෙනවා
-                        </p>
+                    <div class="form-group">
+                        <label class="form-label required">👤 Full Name</label>
+                        <input type="text" class="input" id="empName" placeholder="Enter full name" required>
                     </div>
 
-                    <div id="permissionsContainer"></div>
-
-                    <div style="background: #1a1a2e; padding: 12px 15px; 
-                        border-radius: 8px; margin-top: 12px; 
-                        border: 1px dashed #4CAF50;">
-                        <p style="color: #4CAF50; font-size: 12px; 
-                            text-align: center; margin: 0;">
-                            ✅ All Databases auto-included! Custom permissions ready!
-                        </p>
+                    <div class="form-group">
+                        <label class="form-label required">🏷️ Nickname (for login)</label>
+                        <input type="text" class="input" id="empNickname" placeholder="Enter unique nickname" required>
                     </div>
 
-                </div>
+                    <div class="form-group">
+                        <label class="form-label required">🔒 Password</label>
+                        <input type="text" class="input" id="empPassword" placeholder="Enter password" required>
+                    </div>
 
-                <div class="modal-buttons">
-                    <button type="button" class="btn-primary" 
-                        id="saveBtn" onclick="saveEmployee()">
-                        💾 Save
-                    </button>
-                    <button type="button" class="btn-secondary" 
-                        onclick="closeModal()">
-                        ❌ Cancel
-                    </button>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label required">🔑 Access Type</label>
+                        <select class="select" id="empAccess" required onchange="handleAccessChange()">
+                            <option value="">-- Select Access --</option>
+                            <option value="Admin">👨‍💼 Admin</option>
+                            <option value="Manager">🧑‍💼 Manager</option>
+                            <option value="Cashier">💰 Cashier</option>
+                            <option value="Purchasing Officer">📦 Purchasing Officer</option>
+                            <option value="Head Chef">👨‍🍳 Head Chef</option>
+                            <option value="Call Operator">📞 Call Operator</option>
+                            <option value="Waiter">🍽️ Waiter</option>
+                        </select>
+                    </div>
 
-            </form>
+                    <input type="hidden" id="editDocId" value="">
+
+                    <div id="permissionsSection" style="margin-top: 25px;">
+                        <div style="background: var(--bg-elevated); padding: 12px 18px; 
+                            border-radius: var(--radius-md); margin-bottom: 15px;">
+                            <h3 style="color: var(--gold-primary); font-size: 16px; margin: 0;">
+                                🔐 Database Permissions
+                            </h3>
+                            <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">
+                                💡 Admin selected කරොත් සියලු permissions auto enable වෙනවා
+                            </p>
+                        </div>
+
+                        <div id="permissionsContainer"></div>
+
+                        <div style="background: var(--bg-secondary); padding: 12px 15px; 
+                            border-radius: var(--radius-sm); margin-top: 12px; 
+                            border: 1px dashed var(--color-success);">
+                            <p style="color: var(--color-success); font-size: 12px; 
+                                text-align: center; margin: 0;">
+                                ✅ All Databases auto-included! Custom permissions ready!
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">❌ Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveBtn" onclick="saveEmployee()">💾 Save</button>
+            </div>
         </div>
     </div>
 
     <!-- DELETE CONFIRM MODAL -->
-    <div id="deleteModal" class="modal" style="display: none;">
-        <div class="modal-content modal-small">
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal modal-sm">
             <div class="modal-header">
-                <h2>⚠️ Delete Employee</h2>
+                <h2 class="modal-title">⚠️ Delete Employee</h2>
                 <button class="modal-close" onclick="closeDeleteModal()">✖</button>
             </div>
-            <p style="text-align: center; font-size: 16px; margin: 20px 0;">
-                Are you sure you want to delete 
-                <strong id="deleteEmpName">this employee</strong>?
-            </p>
-            <p style="text-align: center; color: #ff4444; font-size: 14px;">
-                ⚠️ This action cannot be undone!
-            </p>
-            <div class="modal-buttons">
-                <button class="btn-danger" onclick="confirmDelete()">
-                    🗑️ Yes, Delete
-                </button>
-                <button class="btn-secondary" onclick="closeDeleteModal()">
-                    ❌ Cancel
-                </button>
+            <div class="modal-body">
+                <p style="text-align: center; font-size: 16px; margin: 20px 0;">
+                    Are you sure you want to delete 
+                    <strong id="deleteEmpName" style="color: var(--gold-primary);">this employee</strong>?
+                </p>
+                <p style="text-align: center; color: var(--color-error); font-size: 14px;">
+                    ⚠️ This action cannot be undone!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">❌ Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">🗑️ Yes, Delete</button>
             </div>
         </div>
     </div>
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="index-script.js"></script>
-    <script src="mobile-script.js"></script>
 
 </body>
 </html>

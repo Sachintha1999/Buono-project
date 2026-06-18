@@ -1,0 +1,58 @@
+<!-- ═══════════════════════════════════════════════════════════
+     TOPBAR COMPONENT
+     File: src/components/topbar.html
+     Version: 2.0 - Pure HTML (no inline scripts)
+     Events handled by: buono-page-builder.js (single source)
+     ═══════════════════════════════════════════════════════════ -->
+
+<header class="topbar">
+    <!-- LEFT: Hamburger + Brand -->
+    <div class="topbar-left">
+        <button class="topbar-hamburger" 
+                id="topbarHamburger"
+                type="button"
+                aria-label="Toggle menu"
+                title="Menu">
+            ☰
+        </button>
+        
+        <a href="#" 
+           class="topbar-brand" 
+           id="topbarBrand"
+           data-page="access.html"
+           title="Buono Home">
+            <span class="topbar-brand-icon">☕</span>
+            <span class="topbar-brand-text">Buono</span>
+        </a>
+    </div>
+    
+    <!-- CENTER: Dynamic welcome message -->
+    <div class="topbar-welcome">
+        <span class="topbar-welcome-icon">👋</span>
+        <span class="topbar-welcome-text">Loading...</span>
+    </div>
+    
+    <!-- RIGHT: Info chip + Logout -->
+    <div class="topbar-right">
+        <div class="topbar-info-chip">
+            <span class="info-icon">📅</span>
+            <span class="info-date">--</span>
+            <span class="info-divider"></span>
+            <span class="info-icon">🕐</span>
+            <span class="info-clock">--:--</span>
+        </div>
+        
+        <button class="topbar-logout" 
+                id="topbarLogout"
+                type="button"
+                aria-label="Logout"
+                title="Logout">
+            🚪
+        </button>
+    </div>
+</header>
+
+<!-- ❌ NO INLINE SCRIPTS!
+     All events handled by: buono-page-builder.js setupGlobalEvents()
+     This prevents double binding bugs.
+-->

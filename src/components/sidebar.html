@@ -1,0 +1,195 @@
+<!-- ═══════════════════════════════════════════════════════════
+     SIDEBAR COMPONENT
+     File: src/components/sidebar.html
+     Version: 2.0 - Path fixing only (no event bindings)
+     Events handled by: buono-page-builder.js + sidebar.js
+     ═══════════════════════════════════════════════════════════ -->
+
+<!-- Backdrop -->
+<div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+<!-- Sidebar -->
+<aside id="appSidebar" class="sidebar">
+    
+    <!-- Header -->
+    <div class="sidebar-header">
+        <div class="sidebar-brand">
+            <span class="sidebar-brand-icon">☕</span>
+            <span>Buono</span>
+        </div>
+        <button class="sidebar-close" 
+                id="sidebarCloseBtn" 
+                type="button"
+                aria-label="Close menu">
+            ✕
+        </button>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+        
+        <!-- 🏠 Home -->
+        <div class="sidebar-group">
+            <a href="#" class="sidebar-item" data-page="access.html">
+                <span class="sidebar-icon">🏠</span>
+                <span class="sidebar-label">Home / Access</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-divider"></div>
+        
+        <!-- 👥 HR Module -->
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">HR Management</div>
+            
+            <a href="#" class="sidebar-item" data-page="pages/hr/employees/employees.html">
+                <span class="sidebar-icon">👥</span>
+                <span class="sidebar-label">Employees</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="approve.html">
+                <span class="sidebar-icon">✅</span>
+                <span class="sidebar-label">Approvals</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="settings.html">
+                <span class="sidebar-icon">⚙️</span>
+                <span class="sidebar-label">Settings</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-divider"></div>
+        
+        <!-- 🍴 Operations Module -->
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Operations</div>
+            
+            <a href="#" class="sidebar-item" data-page="cashier.html">
+                <span class="sidebar-icon">💰</span>
+                <span class="sidebar-label">Cashier</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="kitchen.html">
+                <span class="sidebar-icon">🍳</span>
+                <span class="sidebar-label">Kitchen</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="inventory.html">
+                <span class="sidebar-icon">📦</span>
+                <span class="sidebar-label">Inventory</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="purchasing.html">
+                <span class="sidebar-icon">🛒</span>
+                <span class="sidebar-label">Purchasing</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="callcenter.html">
+                <span class="sidebar-icon">📞</span>
+                <span class="sidebar-label">Call Center</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-divider"></div>
+        
+        <!-- 💵 Finance Module -->
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Finance</div>
+            
+            <a href="#" class="sidebar-item" data-page="payment.html">
+                <span class="sidebar-icon">💳</span>
+                <span class="sidebar-label">Payments</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="reports.html">
+                <span class="sidebar-icon">📊</span>
+                <span class="sidebar-label">Reports</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="installment-tracker.html">
+                <span class="sidebar-icon">📅</span>
+                <span class="sidebar-label">Installments</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-divider"></div>
+        
+        <!-- 🎓 Academy Module -->
+        <div class="sidebar-group">
+            <div class="sidebar-group-label">Academy</div>
+            
+            <a href="#" class="sidebar-item" data-page="student-management.html">
+                <span class="sidebar-icon">🎓</span>
+                <span class="sidebar-label">Students</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="student-portal.html">
+                <span class="sidebar-icon">📚</span>
+                <span class="sidebar-label">Student Portal</span>
+            </a>
+            
+            <a href="#" class="sidebar-item" data-page="manager.html">
+                <span class="sidebar-icon">👔</span>
+                <span class="sidebar-label">Manager</span>
+            </a>
+        </div>
+        
+    </nav>
+    
+    <!-- Footer -->
+    <div class="sidebar-footer">
+        <div style="text-align: center; font-size: 11px; color: var(--text-muted); padding: 8px;">
+            ☕ Buono v3.0<br>
+            <span style="opacity: 0.7;">© 2026 All rights reserved</span>
+        </div>
+    </div>
+    
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════════
+     INIT SCRIPT - Path fixing ONLY (no event bindings!)
+     All events handled by: buono-page-builder.js
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+    'use strict';
+    
+    // Auto-detect base path depth
+    var depth = window.location.pathname.split('/').filter(function(p) { 
+        return p && p.indexOf('.') === -1; 
+    }).length;
+    var prefix = '';
+    for (var i = 0; i < depth; i++) prefix += '../';
+    
+    // Fix all sidebar links with correct paths
+    var links = document.querySelectorAll('#appSidebar .sidebar-item[data-page], #topbarBrand[data-page]');
+    links.forEach(function(link) {
+        var page = link.getAttribute('data-page');
+        if (page) {
+            link.href = prefix + page;
+        }
+    });
+    
+    // Mark active page
+    var currentFile = window.location.pathname.split('/').pop() || 'index.html';
+    
+    document.querySelectorAll('#appSidebar .sidebar-item[data-page]').forEach(function(link) {
+        var page = link.getAttribute('data-page') || '';
+        var linkFile = page.split('/').pop();
+        if (linkFile === currentFile) {
+            link.classList.add('active');
+        }
+    });
+    
+    // Mobile: close sidebar on link click (only thing we bind here)
+    document.querySelectorAll('#appSidebar .sidebar-item').forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768 && typeof window.closeSidebar === 'function') {
+                window.closeSidebar();
+            }
+        });
+    });
+    
+    console.log('[Sidebar Component] ✓ Paths fixed (' + links.length + ' links)');
+})();
+</script>

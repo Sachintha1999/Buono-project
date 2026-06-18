@@ -1,0 +1,84 @@
+<!-- ═══════════════════════════════════════════════════════════
+     EMPTY STATE COMPONENT
+     File: src/components/empty-state.html
+     Version: 1.0
+     Usage: <div data-component="empty-state"></div>
+     
+     Note: This is a reusable template.
+     Customize via data attributes on the element:
+     
+     <div data-component="empty-state" 
+          data-icon="📭" 
+          data-title="No Data" 
+          data-text="Nothing to display"
+          data-action-label="+ Add New"
+          data-action-onclick="openAddModal()">
+     </div>
+     
+     Or use the .tab-empty-state class directly in your HTML.
+     ═══════════════════════════════════════════════════════════ -->
+
+<div class="tab-empty-state" id="emptyState">
+    <div class="tab-empty-state-icon">📭</div>
+    <div class="tab-empty-state-title">No data found</div>
+    <div class="tab-empty-state-text">
+        There's nothing to display here yet.<br>
+        Try adjusting your filters or add new items.
+    </div>
+    <div class="tab-empty-state-action" id="emptyStateAction" style="display: none;">
+        <button class="toolbar-btn toolbar-btn-primary" id="emptyStateActionBtn">
+            + Add New
+        </button>
+    </div>
+</div>
+
+<script>
+    // Auto-customize from data attributes
+    (function() {
+        const container = document.currentScript.parentElement;
+        if (!container) return;
+        
+        const wrapper = container.closest('[data-component="empty-state"]') 
+                     || container.closest('[data-component-loaded="empty-state"]');
+        
+        if (!wrapper) return;
+        
+        // Custom icon
+        const customIcon = wrapper.getAttribute('data-icon');
+        if (customIcon) {
+            const iconEl = container.querySelector('.tab-empty-state-icon');
+            if (iconEl) iconEl.textContent = customIcon;
+        }
+        
+        // Custom title
+        const customTitle = wrapper.getAttribute('data-title');
+        if (customTitle) {
+            const titleEl = container.querySelector('.tab-empty-state-title');
+            if (titleEl) titleEl.textContent = customTitle;
+        }
+        
+        // Custom text
+        const customText = wrapper.getAttribute('data-text');
+        if (customText) {
+            const textEl = container.querySelector('.tab-empty-state-text');
+            if (textEl) textEl.innerHTML = customText;
+        }
+        
+        // Custom action button
+        const actionLabel = wrapper.getAttribute('data-action-label');
+        const actionOnclick = wrapper.getAttribute('data-action-onclick');
+        
+        if (actionLabel) {
+            const actionWrap = container.querySelector('#emptyStateAction');
+            const actionBtn = container.querySelector('#emptyStateActionBtn');
+            
+            if (actionWrap && actionBtn) {
+                actionBtn.textContent = actionLabel;
+                if (actionOnclick) {
+                    actionBtn.setAttribute('onclick', actionOnclick);
+                }
+                actionWrap.style.display = 'block';
+            }
+        }
+    })();
+</script>

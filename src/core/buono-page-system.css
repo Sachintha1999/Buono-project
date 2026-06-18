@@ -1,0 +1,884 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ * 🎨 BUONO PAGE SYSTEM CSS
+ * File: src/core/buono-page-system.css
+ * Version: 1.0
+ * Date: 2026-06-17
+ * 
+ * Purpose: Styles for the new component system
+ *   - Topbar (welcome + clock)
+ *   - Tab Bar (replaces .section-nav)
+ *   - Page Toolbar (search + actions)
+ *   - Sub-tabs (filter chips with badges)
+ *   - Scroll hide/show behavior
+ *   - Tab content visibility
+ * 
+ * Dependencies: theme-variables.css (CSS vars)
+ * ═══════════════════════════════════════════════════════════
+ */
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 1: TOPBAR ENHANCEMENTS
+   Welcome message (center) + Live clock (right)
+   ═══════════════════════════════════════════════ */
+
+/* Topbar welcome message (center) */
+.topbar-welcome {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 20px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.topbar-welcome-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.topbar-welcome-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary, #D4B896);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.2px;
+}
+
+.topbar-welcome-text strong {
+    color: var(--gold-primary, #D4AF37);
+    font-weight: 700;
+}
+
+/* Topbar info chip (date + time) */
+.topbar-info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid var(--border-light, rgba(212, 175, 55, 0.2));
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary, #D4B896);
+    flex-shrink: 0;
+}
+
+.topbar-info-chip .info-icon {
+    font-size: 14px;
+}
+
+.topbar-info-chip .info-divider {
+    width: 1px;
+    height: 14px;
+    background: var(--border-light, rgba(212, 175, 55, 0.2));
+}
+
+.topbar-info-chip .info-clock {
+    font-family: 'Courier New', monospace;
+    color: var(--gold-primary, #D4AF37);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-width: 50px;
+}
+
+/* Logout button */
+.topbar-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    color: var(--color-error, #FF6B6B);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.topbar-logout:hover {
+    background: var(--color-error, #FF6B6B);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 2: TAB BAR (Replaces .section-nav)
+   Main navigation tabs with auto-hide on scroll
+   ═══════════════════════════════════════════════ */
+
+.page-tabs {
+    position: sticky;
+    top: 64px;                           /* Below topbar */
+    z-index: 90;
+    margin: 16px 0 0 0;
+    padding: 8px;
+    background: linear-gradient(135deg,
+        rgba(62, 39, 35, 0.96) 0%,
+        rgba(45, 28, 20, 0.96) 100%);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-light, rgba(212, 175, 55, 0.25));
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+    
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+    will-change: transform;
+}
+
+.page-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* Auto-hide on scroll down */
+.page-tabs.scroll-hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Individual tab button */
+.page-tab {
+    flex: 1;
+    min-width: max-content;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--text-secondary, #D4B896);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    font-family: inherit;
+    user-select: none;
+}
+
+.page-tab:hover:not(.active) {
+    background: rgba(212, 175, 55, 0.08);
+    color: var(--gold-primary, #D4AF37);
+    border-color: var(--border-light, rgba(212, 175, 55, 0.2));
+    transform: translateY(-1px);
+}
+
+.page-tab.active {
+    background: linear-gradient(135deg,
+        var(--gold-primary, #D4AF37) 0%,
+        #B8941F 100%);
+    color: #1A0F0A;
+    border-color: var(--gold-primary, #D4AF37);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+    font-weight: 700;
+}
+
+.page-tab-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.page-tab-label {
+    font-size: 13px;
+}
+
+/* Tab badge (notification count) */
+.page-tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: rgba(0, 0, 0, 0.3);
+    color: inherit;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.page-tab.active .page-tab-badge {
+    background: rgba(0, 0, 0, 0.25);
+    color: #1A0F0A;
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 3: PAGE TOOLBAR
+   Contextual toolbar (search + actions per tab)
+   ═══════════════════════════════════════════════ */
+
+.page-toolbar {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--bg-card, rgba(62, 39, 35, 0.5));
+    border: 1px solid var(--border-light, rgba(212, 175, 55, 0.15));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease,
+                max-height 0.35s ease,
+                margin-top 0.35s ease,
+                padding 0.35s ease;
+    will-change: transform;
+}
+
+/* Hidden state (when tab has no toolbar) */
+.page-toolbar.hidden {
+    display: none;
+}
+
+/* Auto-hide on scroll */
+.page-toolbar.scroll-hidden {
+    transform: translateY(-30px);
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Search box inside toolbar */
+.page-toolbar-search {
+    flex: 1;
+    min-width: 240px;
+    position: relative;
+}
+
+.page-toolbar-search input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    background: var(--bg-secondary, #2C1810);
+    border: 1.5px solid var(--border-light, rgba(212, 175, 55, 0.2));
+    border-radius: 10px;
+    color: var(--text-primary, #FFF8DC);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.page-toolbar-search input:focus {
+    border-color: var(--gold-primary, #D4AF37);
+    background: var(--bg-tertiary, #3E2723);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+}
+
+.page-toolbar-search input::placeholder {
+    color: var(--text-muted, #8B7355);
+}
+
+.page-toolbar-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--gold-primary, #D4AF37);
+    pointer-events: none;
+}
+
+/* Toolbar actions group */
+.page-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Toolbar buttons */
+.toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: none;
+    white-space: nowrap;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+}
+
+.toolbar-btn-primary {
+    background: linear-gradient(135deg,
+        var(--gold-primary, #D4AF37) 0%,
+        #B8941F 100%);
+    color: #1A0F0A;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.toolbar-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+}
+
+.toolbar-btn-secondary {
+    background: var(--bg-elevated, rgba(62, 39, 35, 0.6));
+    color: var(--text-secondary, #D4B896);
+    border: 1px solid var(--border-light, rgba(212, 175, 55, 0.2));
+}
+
+.toolbar-btn-secondary:hover {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-primary, #D4AF37);
+    border-color: var(--gold-primary, #D4AF37);
+}
+
+.toolbar-btn-danger {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--color-error, #FF6B6B);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.toolbar-btn-danger:hover {
+    background: var(--color-error, #FF6B6B);
+    color: #fff;
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 4: SUB-TABS (Filter Chips)
+   Live count badges per filter
+   ═══════════════════════════════════════════════ */
+
+.sub-tabs {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease;
+}
+
+.sub-tabs.hidden {
+    display: none;
+}
+
+.sub-tabs.scroll-hidden {
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Individual sub-tab chip */
+.sub-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--bg-elevated, rgba(62, 39, 35, 0.5));
+    border: 1px solid var(--border-light, rgba(212, 175, 55, 0.15));
+    border-radius: 9999px;
+    color: var(--text-secondary, #D4B896);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    user-select: none;
+}
+
+.sub-tab:hover:not(.active) {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-primary, #D4AF37);
+    border-color: var(--gold-primary, #D4AF37);
+    transform: translateY(-1px);
+}
+
+.sub-tab.active {
+    background: linear-gradient(135deg,
+        var(--gold-primary, #D4AF37) 0%,
+        #B8941F 100%);
+    color: #1A0F0A;
+    border-color: var(--gold-primary, #D4AF37);
+    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
+    font-weight: 700;
+}
+
+.sub-tab-icon {
+    font-size: 14px;
+    line-height: 1;
+}
+
+.sub-tab-label {
+    font-size: 12px;
+}
+
+/* Live count badge */
+.sub-tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 18px;
+    padding: 0 6px;
+    background: rgba(0, 0, 0, 0.35);
+    color: inherit;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.sub-tab.active .sub-tab-count {
+    background: rgba(0, 0, 0, 0.25);
+    color: #1A0F0A;
+}
+
+/* Count badge color variants */
+.sub-tab-count.count-success { background: rgba(81, 207, 102, 0.25); color: #51CF66; }
+.sub-tab-count.count-warning { background: rgba(255, 169, 77, 0.25); color: #FFA94D; }
+.sub-tab-count.count-error   { background: rgba(255, 107, 107, 0.25); color: #FF6B6B; }
+.sub-tab-count.count-info    { background: rgba(77, 171, 247, 0.25); color: #4DABF7; }
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 5: TAB CONTENT
+   Show/hide tab contents
+   ═══════════════════════════════════════════════ */
+
+[data-tab-content] {
+    display: none;
+    animation: tabContentFadeIn 0.35s ease;
+    margin-top: 20px;
+}
+
+[data-tab-content].active {
+    display: block;
+}
+
+@keyframes tabContentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 6: PAGE WRAPPER ADJUSTMENTS
+   Compensate for sticky tab bar
+   ═══════════════════════════════════════════════ */
+
+/* When tab bar is present, sections need more scroll offset */
+.page-section,
+[data-tab-content] .section,
+[data-tab-content] section {
+    scroll-margin-top: 180px;   /* topbar(64) + tabs(60) + toolbar(60) buffer */
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 7: EMPTY STATE INSIDE TAB
+   ═══════════════════════════════════════════════ */
+
+.tab-empty-state {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--text-muted, #8B7355);
+}
+
+.tab-empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.tab-empty-state-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-secondary, #D4B896);
+    margin: 0 0 8px 0;
+}
+
+.tab-empty-state-text {
+    font-size: 14px;
+    color: var(--text-muted, #8B7355);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.tab-empty-state-action {
+    margin-top: 20px;
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 8: PAGE LOADER (Component System)
+   Used when components are loading
+   ═══════════════════════════════════════════════ */
+
+body:not(.components-ready) [data-component]:not([data-component-loaded]) {
+    min-height: 60px;
+    background: linear-gradient(
+        90deg,
+        rgba(62, 39, 35, 0.3) 0%,
+        rgba(212, 175, 55, 0.05) 50%,
+        rgba(62, 39, 35, 0.3) 100%);
+    background-size: 200% 100%;
+    animation: componentShimmer 1.5s linear infinite;
+    border-radius: 10px;
+    margin: 8px 0;
+}
+
+@keyframes componentShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 9: HAMBURGER BUTTON
+   Sidebar toggle
+   ═══════════════════════════════════════════════ */
+
+.topbar-hamburger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--border-light, rgba(212, 175, 55, 0.2));
+    color: var(--gold-primary, #D4AF37);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.topbar-hamburger:hover {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: var(--gold-primary, #D4AF37);
+    transform: scale(1.05);
+}
+
+.topbar-hamburger:active {
+    transform: scale(0.95);
+}
+
+/* Topbar brand */
+.topbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gold-primary, #D4AF37);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.topbar-brand-icon {
+    font-size: 22px;
+}
+
+.topbar-brand-text {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 10: RESPONSIVE - TABLET (1024px)
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+    .topbar-welcome-text {
+        font-size: 13px;
+    }
+    
+    .topbar-info-chip {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .page-tab {
+        padding: 10px 14px;
+        font-size: 12px;
+    }
+    
+    .page-toolbar {
+        padding: 12px 14px;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 11: RESPONSIVE - MOBILE (768px)
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    /* Topbar mobile */
+    .topbar-welcome {
+        padding: 0 8px;
+    }
+    
+    .topbar-welcome-text {
+        font-size: 12px;
+    }
+    
+    /* Hide welcome icon on small screens */
+    .topbar-welcome-icon {
+        display: none;
+    }
+    
+    /* Compact info chip */
+    .topbar-info-chip {
+        padding: 5px 10px;
+        gap: 8px;
+        font-size: 11px;
+    }
+    
+    .topbar-info-chip .info-date {
+        display: none;   /* Show only clock on mobile */
+    }
+    
+    .topbar-info-chip .info-divider {
+        display: none;
+    }
+    
+    /* Tab bar mobile */
+    .page-tabs {
+        top: 56px;                       /* Mobile topbar smaller */
+        margin-top: 12px;
+        padding: 6px;
+        border-radius: 12px;
+        overflow-x: auto;
+        gap: 4px;
+    }
+    
+    .page-tab {
+        padding: 9px 14px;
+        font-size: 12px;
+        flex-shrink: 0;
+        flex: 0 0 auto;
+    }
+    
+    .page-tab-icon {
+        font-size: 14px;
+    }
+    
+    .page-tab-badge {
+        min-width: 18px;
+        height: 18px;
+        font-size: 10px;
+    }
+    
+    /* Toolbar mobile */
+    .page-toolbar {
+        padding: 10px 12px;
+        margin-top: 10px;
+        gap: 8px;
+        border-radius: 10px;
+    }
+    
+    .page-toolbar-search {
+        min-width: 100%;
+        order: 1;
+    }
+    
+    .page-toolbar-actions {
+        width: 100%;
+        order: 2;
+        flex-wrap: wrap;
+    }
+    
+    .toolbar-btn {
+        flex: 1;
+        min-width: max-content;
+        padding: 9px 14px;
+        font-size: 12px;
+    }
+    
+    /* Sub-tabs mobile */
+    .sub-tabs {
+        margin-top: 10px;
+        gap: 6px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+    }
+    
+    .sub-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .sub-tab {
+        padding: 7px 13px;
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+    
+    .sub-tab-count {
+        min-width: 18px;
+        height: 16px;
+        font-size: 9px;
+    }
+    
+    /* Section scroll offset mobile */
+    .page-section,
+    [data-tab-content] .section,
+    [data-tab-content] section {
+        scroll-margin-top: 150px;
+    }
+    
+    /* Hamburger/logout smaller on mobile */
+    .topbar-hamburger,
+    .topbar-logout {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+    
+    .topbar-brand-text {
+        display: none;       /* Show only icon on mobile */
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 12: RESPONSIVE - SMALL MOBILE (480px)
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+    .topbar-welcome {
+        padding: 0 4px;
+    }
+    
+    .topbar-welcome-text {
+        font-size: 11px;
+    }
+    
+    .topbar-info-chip {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .topbar-info-chip .info-clock {
+        font-size: 10px;
+        min-width: 40px;
+    }
+    
+    .page-tabs {
+        margin-top: 10px;
+        padding: 5px;
+    }
+    
+    .page-tab {
+        padding: 8px 12px;
+    }
+    
+    .page-tab-label {
+        font-size: 11px;
+    }
+    
+    .toolbar-btn {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 13: ACCESSIBILITY
+   ═══════════════════════════════════════════════ */
+
+/* Focus states */
+.page-tab:focus-visible,
+.sub-tab:focus-visible,
+.toolbar-btn:focus-visible,
+.topbar-hamburger:focus-visible,
+.topbar-logout:focus-visible {
+    outline: 2px solid var(--gold-primary, #D4AF37);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .page-tabs,
+    .page-toolbar,
+    .sub-tabs,
+    [data-tab-content],
+    .page-tab,
+    .sub-tab,
+    .toolbar-btn,
+    .topbar-hamburger,
+    .topbar-logout {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .page-tabs.scroll-hidden,
+    .page-toolbar.scroll-hidden,
+    .sub-tabs.scroll-hidden {
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════
+   📋 SECTION 14: PRINT
+   ═══════════════════════════════════════════════ */
+
+@media print {
+    .page-tabs,
+    .page-toolbar,
+    .sub-tabs,
+    .topbar-hamburger,
+    .topbar-logout {
+        display: none !important;
+    }
+    
+    [data-tab-content] {
+        display: block !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   🏁 END OF BUONO-PAGE-SYSTEM.CSS v1.0
+   Sections: 14
+   ═══════════════════════════════════════════════════════════ */
